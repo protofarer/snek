@@ -100,9 +100,6 @@ export default class Snek {
 
     this.ctx.beginPath()
     
-    this.ctx.arc(this.state.getMouthCoords().x, this.state.getMouthCoords().y, 1, 0, 2 * Math.PI)
-    this.ctx.fillStyle = 'blue'
-    this.ctx.fill()
   }
 }
 

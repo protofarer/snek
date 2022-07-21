@@ -1,15 +1,15 @@
 import GUI from 'lil-gui'
 import CONSTANTS from './Constants'
 import { resetGame, } from '.'
-
 export default class DebugGUI {
 
   frames = { fps: 0, times: []}
 
-  constructor(game) {
+  constructor(game, clock) {
     const gui = new GUI()
     this.gui = gui
     this.game = game
+    this.clock = clock
 
     this.params = {
       isDebugOn: false,
@@ -18,6 +18,7 @@ export default class DebugGUI {
     }
 
     this.setParamsFromSessionStorage()
+    this.setupBooleanTogglers()
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -35,8 +36,8 @@ export default class DebugGUI {
     guiGameState.add(this.game, 'phase').name('phase').listen()
 
     gui.add(this.frames, 'fps').listen()
-    // gui.add(this.game, 'debugOverlay').listen()
 
+    // Game Test Params and Functions
     const guiGameTest = gui.addFolder('GameTest')
     guiGameTest.add({ resetGame }, 
       'resetGame')
@@ -52,33 +53,6 @@ export default class DebugGUI {
     }
 
     guiGameTest.add({ endGame }, 'endGame')
-
-    const addSessionBooleanToggle = (obj, name) => { 
-      return () => {
-        if (
-          window.sessionStorage.getItem(name) === 'false'
-          || !window.sessionStorage.getItem(name)
-        ) {
-          obj[name] = true
-          window.sessionStorage.setItem(name, 'true')
-        } else {
-          obj[name] = false
-          window.sessionStorage.setItem(name, 'false')
-        }
-      }
-    }
-     
-    // Manually set and persist debug state changes
-    const setupBooleanToggler = (obj, name) => {
-      const toggleSessionObjBoolean = addSessionBooleanToggle(obj, name)
-      guiGameTest.add(obj, name).onChange(toggleSessionObjBoolean)
-    }
-    setupBooleanToggler(this.params, 'isDebugOn')
-    setupBooleanToggler(this.params, 'isTurningRandomly')
-    // const toggleDebugGame = addSessionBooleanToggle(this.game, 'debugGame')
-    // guiGameTest.add({ toggleDebugGame }, 'toggleDebugGame')
-    // guiGameTest.add(this.game, 'debugGame').onChange(toggleDebugGame)
-
     guiGameTest.add(this.game, 'gamespeed', 0.1, 1, 0.1)
 
     // const guiPointerTracking = gui.addFolder('PointerTracking')
@@ -94,7 +68,6 @@ export default class DebugGUI {
     // guiPointerTracking.show(false)
     guiGamePositioning.show(false)
 
-    const guiDebugState = gui.addFolder('DebugState')
 
     document.addEventListener('keydown', (e) => {
       switch (e.key) {
@@ -121,18 +94,52 @@ export default class DebugGUI {
 
   setParamsFromSessionStorage() {
     // Read debug and game params from sessionStorage for persistence across game runs
+    const setBooleanParam = (name) => {
+      const isTrueFromSession = window.sessionStorage.getItem(name)
+      let isParamTrue
 
-    // Debug
-    const setDebugBoolean = (name) => {
-      const isTrue = window.sessionStorage.getItem(name) 
-        === 'true' ? true : false
-      this.params[name] = isTrue
+      if (isTrueFromSession === 'true') {
+        isParamTrue = true
+      } else if (isTrueFromSession === 'false') {
+        isParamTrue = false
+      } else {
+        isParamTrue = this.params[name]
+      }
+      this.params[name] = isParamTrue
     }
+
     for (const key of Object.keys(this.params)) {
-      setDebugBoolean(key)
+      setBooleanParam(key)
+    }
+  }
+
+  setupBooleanTogglers() {
+    const toggleSessionBoolean = (obj, name) => { 
+      return () => {
+        if (
+          window.sessionStorage.getItem(name) === 'false'
+          || !window.sessionStorage.getItem(name)
+        ) {
+          obj[name] = true
+          window.sessionStorage.setItem(name, 'true')
+        } else {
+          obj[name] = false
+          window.sessionStorage.setItem(name, 'false')
+        }
+        console.info(`sessionStorage and params[${name}] set to`, obj[name])
+      }
     }
 
-    // Game
+    const setupBooleanToggler = (obj, name, guiFolder ) => {
+      const handleSessionBoolean = toggleSessionBoolean(obj, name)
+      guiFolder.add(obj, name).onChange(handleSessionBoolean)
+    }
+
+    const guiTestParams = this.gui.addFolder('TestParams')
+    setupBooleanToggler(this.params, 'isDebugOn', guiTestParams)
+    setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams)
+    setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams)
+
   }
 
   calcFPS(t) {
@@ -143,49 +150,40 @@ export default class DebugGUI {
     this.frames.fps = this.frames.times.length
   }
   
-  drawClock() {
-    if (this.params.isClockDrawn) {
-      this.ctx.beginPath()
-      this.ctx.moveTo(30, 5)
-      this.ctx.lineTo(30, 10)
-
-      if (this.cyclicFrame > 0 && this.cyclicFrame < 5){
-        this.ctx.moveTo(55, 30)
-        this.ctx.arc(30, 30, 25, 0, 2 * Math.PI)
-      }
-  
-      this.ctx.save()
-      this.ctx.translate(30, 30)
-      this.ctx.moveTo(0,0)
-      this.ctx.rotate((this.cyclicFrame * 2 * Math.PI / 60) - 0.5 * Math.PI)
-      this.ctx.lineTo(20,0)
-      this.ctx.lineWidth = 3
-      this.ctx.strokeStyle = 'red'
-      this.ctx.stroke()
-      this.ctx.restore()
-    }
-  }
-
   step() {
+    // Debug only
     if (this.params.isDebugOn){
+      // Reset Game on hit border
       if (this.game.entities.snek.state.getMouthCoords().y <= 0) {
         this.game.entities.snek.state.headCoords = { x: 400, y: 400 }
         resetGame()
       }
+
+      // Show hitareas
       this.game.entities.world.objects.apples.forEach(
         a => {
           a.isEaten !== true && a.drawHitArea()
         }
       )
-      // if (this.game.debugState.randomTurns) {
-      //   const q = Math.random()
-      //   if (q < 0.25) {
-      //     this.game.entities.snek.turnLeft()
-      //   } else if (q < 0.50){
-      //     this.game.entitities.snek.turnRight()
-      //   }
-      // }
+      this.drawOverlays()
     }
-    this.drawClock()
+
+    // Make snek turn randomly
+    if (this.params.isTurningRandomly) {
+      const q = Math.random()
+      if (q < 0.25) {
+        this.game.entities.snek.turnLeft()
+      } else if (q < 0.50){
+        this.game.entities.snek.turnRight()
+      }
+    }
+
+    this.clock.step()
+  }
+
+  drawOverlays() {
+    this.game.ctx.arc(this.game.entities.snek.state.getMouthCoords().x, this.game.entities.snek.state.getMouthCoords().y, 1, 0, 2 * Math.PI)
+    this.game.ctx.fillStyle = 'blue'
+    this.game.ctx.fill()
   }
 }

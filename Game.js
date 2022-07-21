@@ -25,9 +25,6 @@ export default class Game {
 
     // trigger steppers from components: may include draw and other forcing functions
     this.steppables = []
-
-    this.cyclicFrame = 0
-
     this.steppers = []
     this.entities = {}
 
@@ -51,7 +48,6 @@ export default class Game {
   }
 
   step() {
-    this.cyclicFrame = this.cyclicFrame === 60 ? 0 : this.cyclicFrame + 1
     this.drawAll()
     this.steppables.forEach(steppable => steppable.step())
     this.steppers.forEach(stepper => stepper())
