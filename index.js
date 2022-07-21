@@ -18,20 +18,13 @@ const container = document.createElement('div')
 container.id = 'container'
 document.body.appendChild(container)
 
-let initGameInDebug
-const isDebugOn = window.sessionStorage.getItem('isDebugOn')
-if (isDebugOn === 'true') {
-  initGameInDebug = true
-} else {
-  initGameInDebug = false
-}
 
 // **********************************************************************
 // * Play Game: PHASE_PLAY
 // **********************************************************************
 
 
-export function startNewGame(startInDebug=false) {
+export function startNewGame() {
   new Background(container, 'hsl(52, 40%, 50%)')
   let game = new Game(container)
   let snek = new Snek(game.canvas)
@@ -41,7 +34,7 @@ export function startNewGame(startInDebug=false) {
   game.addEntity('snek', snek)
   game.addEntity('world', world)
 
-  let debugGUI = import.meta.env.DEV ? new DebugGUI(game, startInDebug) : null
+  let debugGUI = import.meta.env.DEV ? new DebugGUI(game) : null
 
   let loopID = requestAnimationFrame(draw)
   let start
@@ -69,7 +62,7 @@ export function startNewGame(startInDebug=false) {
   }
   return this
 }
-startNewGame(initGameInDebug)
+startNewGame()
 
 export function resetGame(toDebug=false) {
   const currURL = new URL(window.location.href)

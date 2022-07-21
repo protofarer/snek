@@ -6,18 +6,18 @@ export default class DebugGUI {
 
   frames = { fps: 0, times: []}
 
-  constructor(game, isDebugOn) {
+  constructor(game) {
     const gui = new GUI()
     this.gui = gui
     this.game = game
-    
+
     this.params = {
-      isDebugOn,
+      isDebugOn: false,
       isClockDrawn: false,
-      randomTurns: false,
+      isTurningRandomly: false,
     }
 
-    this.setStateFromSessionStorage()
+    this.setParamsFromSessionStorage()
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -73,8 +73,8 @@ export default class DebugGUI {
       const toggleSessionObjBoolean = addSessionBooleanToggle(obj, name)
       guiGameTest.add(obj, name).onChange(toggleSessionObjBoolean)
     }
-    setupBooleanToggler(this.game, 'debugGame')
-    setupBooleanToggler(this.game.debugState, 'randomTurns')
+    setupBooleanToggler(this.params, 'isDebugOn')
+    setupBooleanToggler(this.params, 'isTurningRandomly')
     // const toggleDebugGame = addSessionBooleanToggle(this.game, 'debugGame')
     // guiGameTest.add({ toggleDebugGame }, 'toggleDebugGame')
     // guiGameTest.add(this.game, 'debugGame').onChange(toggleDebugGame)
@@ -95,7 +95,6 @@ export default class DebugGUI {
     guiGamePositioning.show(false)
 
     const guiDebugState = gui.addFolder('DebugState')
-    guiDebugState.add(game.debugState, 'isCycleClockDrawn')
 
     document.addEventListener('keydown', (e) => {
       switch (e.key) {
@@ -120,15 +119,20 @@ export default class DebugGUI {
     this.game.addObjectToStep(this)
   }
 
-  setStateFromSessionStorage() {
-    // Read debug state from sessionStorage for persistence across game runs
-    function setDebugBoolean(name) {
+  setParamsFromSessionStorage() {
+    // Read debug and game params from sessionStorage for persistence across game runs
+
+    // Debug
+    const setDebugBoolean = (name) => {
       const isTrue = window.sessionStorage.getItem(name) 
         === 'true' ? true : false
       this.params[name] = isTrue
     }
+    for (const key of Object.keys(this.params)) {
+      setDebugBoolean(key)
+    }
 
-    setDebugBoolean('isClockDrawn')
+    // Game
   }
 
   calcFPS(t) {
@@ -140,7 +144,7 @@ export default class DebugGUI {
   }
   
   drawClock() {
-    if (this.game.debugState.isClockDrawn) {
+    if (this.params.isClockDrawn) {
       this.ctx.beginPath()
       this.ctx.moveTo(30, 5)
       this.ctx.lineTo(30, 10)
@@ -163,7 +167,7 @@ export default class DebugGUI {
   }
 
   step() {
-    if (this.game.debugGame){
+    if (this.params.isDebugOn){
       if (this.game.entities.snek.state.getMouthCoords().y <= 0) {
         this.game.entities.snek.state.headCoords = { x: 400, y: 400 }
         resetGame()
