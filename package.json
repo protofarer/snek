@@ -1,0 +1,16 @@
+{
+  "name": "a-new-game",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "NODE_ENV=production vite build",
+    "preview": "vite preview",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "lil-gui": "^0.16.1",
+    "vite": "^3"
+  }
+}
