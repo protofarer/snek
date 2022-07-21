@@ -43,6 +43,20 @@ export default class DebugGUI {
     }
 
     guiGameTest.add({ endGame }, 'endGame')
+    const toggleDebugGame = () => { 
+      if (
+        window.sessionStorage.getItem('debugGame') === 'false'
+        || !window.sessionStorage.getItem('debugGame')
+      ) {
+        this.game.debugGame = true
+        window.sessionStorage.setItem('debugGame', 'true')
+      } else {
+        this.game.debugGame = false
+        window.sessionStorage.setItem('debugGame', 'false')
+      }
+    } 
+    guiGameTest.add({ toggleDebugGame }, 'toggleDebugGame')
+    guiGameTest.add(this.game, 'gamespeed', 0.1, 1, 0.1)
 
     // const guiPointerTracking = gui.addFolder('PointerTracking')
     // guiPointerTracking.add(this.game.pointerCoords.client, 'x').name('client.x').listen()

@@ -6,10 +6,11 @@ export default class World {
       apples: [],
     }
     this.createFieldOfApples()
+    this.objects.apples.push(new Apple(this.canvas, {x:400,y:380}))
   }
 
   createFieldOfApples() {
-    const n = 7
+    const n = 10
     for(let i = 0; i < n; i++) {
       this.objects.apples.push(new Apple(
         this.canvas,
@@ -41,10 +42,28 @@ class Apple {
     this.canvas = canvas
     this.ctx = this.canvas.getContext('2d')
     this.position = position
+    this.setHitArea()
+  }
+
+  getPerimeterCoords() {
+    const l = this.r * 0.8
+    return {
+      top: { x: this.position.x,y: this.position.y - l},
+      bot: { x: this.position.x, y: this.position.y + l},
+      left: { x:this.position.x - l, y: this.position.y},
+      right: { x:this.position.x + l, y:this.position.y}
+    }
+  }
+
+  drawHitArea() {
+    this.ctx.fillStyle = 'blue'
+    this.ctx.fill(this.perimeter)
   }
 
   setHitArea(newPosition = null) {
     let hitPosition = newPosition ? newPosition : this.position
+    console.log(`hitposition`, hitPosition)
+    
     this.perimeter = new Path2D()
     this.perimeter.moveTo(
       hitPosition.x - this.r * 0.8, 

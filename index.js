@@ -18,35 +18,56 @@ const container = document.createElement('div')
 container.id = 'container'
 document.body.appendChild(container)
 
-let initDebugGame = window.location.hash === '#debuggame' ? true : false
+let initDebugGame
+if (window.sessionStorage.getItem('debugGame') === 'true') {
+  initDebugGame = true
+} else if (!window.sessionStorage.getItem('debugGame')) {
+  initDebugGame = window.location.hash === '#debuggame' ? true : false
+} else if (window.sessionStorage.getItem('debugGame') === 'false') {
+  initDebugGame = false
+}
 
 // **********************************************************************
 // * Play Game: PHASE_PLAY
 // **********************************************************************
+
 
 export function startNewGame(debugGame=false) {
   new Background(container, 'hsl(55, 60%, 70%)')
   let game = new Game(container, debugGame)
   let snek = new Snek(game.canvas)
   let world = new World(game.canvas)
-  game.addToStep(snek)
-  game.addToStep(world)
+  game.addObjectToStep(snek)
+  game.addObjectToStep(world)
+
+  game.addEntity('snek', snek)
+  game.addEntity('world', world)
+
 
   let debugGUI = import.meta.env.DEV ? new DebugGUI(game) : null
 
   let loopID = requestAnimationFrame(draw)
+  let start
   function draw(t) {
-    game.clr()
-    game.step()
+    if (start === undefined) {
+      start = t
+    }
 
     loopID = requestAnimationFrame(draw)
 
-    debugGUI ?? debugGUI.calcFPS(t)
-
-    // * Enter PHASE_END via game.checkEndCondition()
-    if (game.phase === CONSTANTS.PHASE_END) {
-      cancelAnimationFrame(loopID)
-      game.end()
+    const elapsed = t - start
+    if (elapsed > 16 / game.gamespeed) {
+      start = t
+      game.clr()
+      game.step()
+  
+      debugGUI ?? debugGUI.calcFPS(t)
+  
+      // * Enter PHASE_END via game.checkEndCondition()
+      if (game.phase === CONSTANTS.PHASE_END) {
+        cancelAnimationFrame(loopID)
+        game.end()
+      }
     }
   }
   return this

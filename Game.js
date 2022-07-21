@@ -1,5 +1,6 @@
 import CONSTANTS from './Constants'
 import Panel from './Panel'
+import { resetGame } from '.'
 // import EndDialog from './components-canvas/EndDialog'
 
 export default class Game {
@@ -36,22 +37,60 @@ export default class Game {
     this.container.appendChild(this.panel.panelContainer)
 
     // trigger steppers from components: may include draw and other forcing functions
-    this.substeps = []
-    this.panel.init(this)
+    this.steppables = []
 
     this.cyclicFrame = 0
+
+    this.steppers = []
+    this.entities = {}
+
+    this.gamespeed = 1
+    this.panel.init(this)
+  }
+  // Entites are important, feature-full objects that are
+  //  highly interactive with each other
+  addEntity(name, ent) {
+    this.entities[name] = ent
+    name === 'snek' && console.log(`snek mouf`, ent.state.getMouthCoords() )
   }
 
-  addToStep(substep) {
-    this.substeps.push(substep)
+  // Steppables are things that can step
+  addObjectToStep(steppable) {
+    this.steppables.push(steppable)
+  }
+
+
+  addFunctionToStep(f) {
+    this.steppers.push(f)
   }
 
   step() {
     this.cyclicFrame = this.cyclicFrame === 60 ? 0 : this.cyclicFrame + 1
     this.drawAll()
+    this.steppables.forEach(steppable => steppable.step())
+    this.steppers.forEach(stepper => stepper())
+
+    this.entities.world.objects.apples = this.entities.world.objects.apples
+      .filter( a => !this.isContactingMouth(
+        this.entities.snek.state.getMouthCoords(), 
+        a.perimeter
+      ))
+
+    if (this.debugGame){
+      if (this.entities.snek.state.headCoords.y <= 380) {
+        this.entities.snek.state.headCoords = { x: 400, y: 400 }
+      }
+      if (this.entities.snek.state.getMouthCoords().y <= 380) {
+        resetGame()
+      }
+    }
+
     // this.checkEndCondition()
     // this.turnCount++
-    this.substeps.forEach(substep => substep.step())
+  }
+  
+  isContactingMouth(mouthCoords, objPerimeter) {
+    return this.ctx.isPointInPath(objPerimeter, mouthCoords.x, mouthCoords.y)
   }
 
   checkEndCondition() {
