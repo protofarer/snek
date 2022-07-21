@@ -1,4 +1,5 @@
 export default class Snek {
+  name = 'snek'
   state = {
     r: 7,
     headCoords: { x: 400, y: 400 },
@@ -12,6 +13,7 @@ export default class Snek {
         y: this.headCoords.y + this.r * Math.sin(this.directionRad()),
       }
     },
+    exp: 0,
   }
 
   constructor(canvas) {
@@ -25,10 +27,10 @@ export default class Snek {
     const handleKeyDown = (e) => {
       switch (e.key) {
         case 'd':
-          this.state.directionAngle += this.state.turnRate() * 1
+          this.turnRight()
           break
         case 'a':
-          this.state.directionAngle += this.state.turnRate() * -1
+          this.turnLeft()
           break
         default:
           break
@@ -38,6 +40,13 @@ export default class Snek {
     document.addEventListener('keydown', handleKeyDown)
   }
 
+  turnLeft() {
+    this.state.directionAngle += this.state.turnRate() * -1
+  }
+
+  turnRight() {
+    this.state.directionAngle += this.state.turnRate() * 1
+  }
 
   step() {
     this.state.headCoords.x += this.state.slitherSpeed 
@@ -50,7 +59,7 @@ export default class Snek {
       || this.state.headCoords.y >= this.canvas.height 
       || this.state.headCoords.y <= 0
     ) {
-      this.state.headCoords = { x: 400, y: 400 }
+      // TODO kill snake
     }
     // console.log(`this.state.turnRate()`, this.state.turnRate)
     // console.log(`direction`, this.state.directionRad)
@@ -58,6 +67,17 @@ export default class Snek {
     
     this.drawSnake()
     this.body.step(this.state.headCoords)
+  }
+
+  consume(entity) {
+    switch (entity.name) {
+      case 'apple':
+        this.body.nSegments += 1
+        this.exp += 1
+        break
+      default:
+        console.info(`snek.consume() defaulted`, )
+    }
   }
 
   drawSnake() {

@@ -8,7 +8,17 @@ export default class DebugGUI {
 
   constructor(game) {
     const gui = new GUI()
+    this.gui = gui
     this.game = game
+
+    // Set debug state from sessionStorage
+    function setDebugBoolean(name) {
+      const isTrue = window.sessionStorage.getItem(name) 
+        === 'true' ? true : false
+      this.game.debugState[name] = isTrue
+    }
+
+    
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -43,19 +53,33 @@ export default class DebugGUI {
     }
 
     guiGameTest.add({ endGame }, 'endGame')
-    const toggleDebugGame = () => { 
-      if (
-        window.sessionStorage.getItem('debugGame') === 'false'
-        || !window.sessionStorage.getItem('debugGame')
-      ) {
-        this.game.debugGame = true
-        window.sessionStorage.setItem('debugGame', 'true')
-      } else {
-        this.game.debugGame = false
-        window.sessionStorage.setItem('debugGame', 'false')
+
+    const addSessionBooleanToggle = (obj, name) => { 
+      return () => {
+        if (
+          window.sessionStorage.getItem(name) === 'false'
+          || !window.sessionStorage.getItem(name)
+        ) {
+          obj[name] = true
+          window.sessionStorage.setItem(name, 'true')
+        } else {
+          obj[name] = false
+          window.sessionStorage.setItem(name, 'false')
+        }
       }
-    } 
-    guiGameTest.add({ toggleDebugGame }, 'toggleDebugGame')
+    }
+     
+    // Manually set and persist debug state changes
+    const setupBooleanToggler = (obj, name) => {
+      const toggleSessionObjBoolean = addSessionBooleanToggle(obj, name)
+      guiGameTest.add(obj, name).onChange(toggleSessionObjBoolean)
+    }
+    setupBooleanToggler(this.game, 'debugGame')
+    setupBooleanToggler(this.game.debugState, 'randomTurns')
+    // const toggleDebugGame = addSessionBooleanToggle(this.game, 'debugGame')
+    // guiGameTest.add({ toggleDebugGame }, 'toggleDebugGame')
+    // guiGameTest.add(this.game, 'debugGame').onChange(toggleDebugGame)
+
     guiGameTest.add(this.game, 'gamespeed', 0.1, 1, 0.1)
 
     // const guiPointerTracking = gui.addFolder('PointerTracking')
@@ -74,12 +98,16 @@ export default class DebugGUI {
     const guiDebugState = gui.addFolder('DebugState')
     guiDebugState.add(game.debugState, 'isCycleClockDrawn')
 
-    gui.hide()
-
     document.addEventListener('keydown', (e) => {
       switch (e.key) {
         case '`':
-          gui._hidden === false ? gui.hide() : gui.show()
+          if (gui._hidden === true) {
+            gui.show()
+            window.sessionStorage.setItem('isDebugGUIHidden', 'true' )
+          } else {
+            gui.hide()
+            window.sessionStorage.setItem('isDebugGUIHidden', 'false' )
+          }
           break
         case 'r':
           resetGame()

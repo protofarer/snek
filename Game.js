@@ -8,10 +8,10 @@ export default class Game {
     this.container = container
 
     this.debugGame = debugGame
-    this.debugDiscPositionMarker = ''
 
     this.debugState = {
       isCycleClockDrawn: false,
+      randomTurns: false,
     }
 
     this.canvas = document.createElement('canvas')
@@ -23,10 +23,6 @@ export default class Game {
     this.ctx = this.canvas.getContext('2d')
     this.rect = this.canvas.getBoundingClientRect()
 
-    this.board = this.debugGame
-      ? CONSTANTS.BOARD_INIT_DEBUG
-      : CONSTANTS.BOARD_INIT_PROD
-    
     this.msg = ''
     this.turnCount = 1
     this.phase = CONSTANTS.PHASE_PLAY    // new, playing, end
@@ -70,18 +66,37 @@ export default class Game {
     this.steppables.forEach(steppable => steppable.step())
     this.steppers.forEach(stepper => stepper())
 
-    this.entities.world.objects.apples = this.entities.world.objects.apples
-      .filter( a => !this.isContactingMouth(
-        this.entities.snek.state.getMouthCoords(), 
-        a.perimeter
-      ))
+    this.entities.world.objects.apples.forEach( 
+      apple => {
+        if (!apple.isEaten) {
+          if (this.isContactingMouth(
+            this.entities.snek.state.getMouthCoords(), 
+            apple.perimeter
+          )) {
+            this.entities.snek.consume(apple)
+            apple.getEaten()
+          }
+        }
+      }
+    )
 
     if (this.debugGame){
-      if (this.entities.snek.state.headCoords.y <= 380) {
+      if (this.entities.snek.state.getMouthCoords().y <= 0) {
         this.entities.snek.state.headCoords = { x: 400, y: 400 }
-      }
-      if (this.entities.snek.state.getMouthCoords().y <= 380) {
         resetGame()
+      }
+      this.entities.world.objects.apples.forEach(
+        a => {
+          a.isEaten !== true && a.drawHitArea()
+        }
+      )
+      if (this.debugGame.randomTurns) {
+        const q = Math.random()
+        if (q < 0.25) {
+          this.entities.snek.turnLeft()
+        } else if (q < 0.50){
+          this.entitities.snek.turnRight()
+        }
       }
     }
 
