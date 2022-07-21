@@ -5,9 +5,8 @@ export default class Snek {
   state = {
     headCoords: { x: 400, y: 400 },
     direction: -90,
-    slitherSpeed: 1,
-    // turnRate: function () { return this.slitherSpeed }
-    turnRate: 10
+    slitherSpeed: 2,
+    turnRate: function () { return this.slitherSpeed + 10 }
   }
 
   constructor(canvas) {
@@ -20,10 +19,10 @@ export default class Snek {
     const handleKeyDown = (e) => {
       switch (e.key) {
         case 'd':
-          this.state.direction += this.state.turnRate * 1
+          this.state.direction += this.state.turnRate() * 1
           break
         case 'a':
-          this.state.direction += this.state.turnRate * -1
+          this.state.direction += this.state.turnRate() * -1
           break
         default:
           break
