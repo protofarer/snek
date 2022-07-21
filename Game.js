@@ -1,18 +1,9 @@
 import CONSTANTS from './Constants'
 import Panel from './Panel'
-import { resetGame } from '.'
-// import EndDialog from './components-canvas/EndDialog'
 
 export default class Game {
-  constructor (container, debugGame=false) {
+  constructor (container) {
     this.container = container
-
-    this.debugGame = debugGame
-
-    this.debugState = {
-      isCycleClockDrawn: false,
-      randomTurns: false,
-    }
 
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'layerGame'
@@ -55,7 +46,6 @@ export default class Game {
     this.steppables.push(steppable)
   }
 
-
   addFunctionToStep(f) {
     this.steppers.push(f)
   }
@@ -79,27 +69,6 @@ export default class Game {
         }
       }
     )
-
-    if (this.debugGame){
-      if (this.entities.snek.state.getMouthCoords().y <= 0) {
-        this.entities.snek.state.headCoords = { x: 400, y: 400 }
-        resetGame()
-      }
-      this.entities.world.objects.apples.forEach(
-        a => {
-          a.isEaten !== true && a.drawHitArea()
-        }
-      )
-      if (this.debugGame.randomTurns) {
-        const q = Math.random()
-        if (q < 0.25) {
-          this.entities.snek.turnLeft()
-        } else if (q < 0.50){
-          this.entitities.snek.turnRight()
-        }
-      }
-    }
-
     // this.checkEndCondition()
     // this.turnCount++
   }
@@ -122,32 +91,7 @@ export default class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
-  // TODO add to debugGUI
-  drawGameCycle() {
-    if (this.debugState.isCycleClockDrawn) {
-      this.ctx.beginPath()
-      this.ctx.moveTo(30, 5)
-      this.ctx.lineTo(30, 10)
-
-      if (this.cyclicFrame > 0 && this.cyclicFrame < 5){
-        this.ctx.moveTo(55, 30)
-        this.ctx.arc(30, 30, 25, 0, 2 * Math.PI)
-      }
-  
-      this.ctx.save()
-      this.ctx.translate(30, 30)
-      this.ctx.moveTo(0,0)
-      this.ctx.rotate((this.cyclicFrame * 2 * Math.PI / 60) - 0.5 * Math.PI)
-      this.ctx.lineTo(20,0)
-      this.ctx.lineWidth = 3
-      this.ctx.strokeStyle = 'red'
-      this.ctx.stroke()
-      this.ctx.restore()
-    }
-  }
-
   drawAll() {
-    this.drawGameCycle()
     // this.panel.draw()
   }
 }

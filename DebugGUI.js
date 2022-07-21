@@ -6,19 +6,18 @@ export default class DebugGUI {
 
   frames = { fps: 0, times: []}
 
-  constructor(game) {
+  constructor(game, isDebugOn) {
     const gui = new GUI()
     this.gui = gui
     this.game = game
-
-    // Set debug state from sessionStorage
-    function setDebugBoolean(name) {
-      const isTrue = window.sessionStorage.getItem(name) 
-        === 'true' ? true : false
-      this.game.debugState[name] = isTrue
+    
+    this.params = {
+      isDebugOn,
+      isClockDrawn: false,
+      randomTurns: false,
     }
 
-    
+    this.setStateFromSessionStorage()
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -41,11 +40,11 @@ export default class DebugGUI {
     const guiGameTest = gui.addFolder('GameTest')
     guiGameTest.add({ resetGame }, 
       'resetGame')
-      .name('reset - prod')
+      .name('reset: normal')
 
     guiGameTest.add({ debugreset() { resetGame(true)} }, 
       'debugreset')
-      .name('reset - full debug')
+      .name('reset: debug')
 
     const endGame = () => {
       // for debug
@@ -112,10 +111,24 @@ export default class DebugGUI {
         case 'r':
           resetGame()
           break
+        case 'q':
+          break
         default:
           break
       }
     })
+    this.game.addObjectToStep(this)
+  }
+
+  setStateFromSessionStorage() {
+    // Read debug state from sessionStorage for persistence across game runs
+    function setDebugBoolean(name) {
+      const isTrue = window.sessionStorage.getItem(name) 
+        === 'true' ? true : false
+      this.params[name] = isTrue
+    }
+
+    setDebugBoolean('isClockDrawn')
   }
 
   calcFPS(t) {
@@ -124,5 +137,51 @@ export default class DebugGUI {
     }
     this.frames.times.push(t)
     this.frames.fps = this.frames.times.length
+  }
+  
+  drawClock() {
+    if (this.game.debugState.isClockDrawn) {
+      this.ctx.beginPath()
+      this.ctx.moveTo(30, 5)
+      this.ctx.lineTo(30, 10)
+
+      if (this.cyclicFrame > 0 && this.cyclicFrame < 5){
+        this.ctx.moveTo(55, 30)
+        this.ctx.arc(30, 30, 25, 0, 2 * Math.PI)
+      }
+  
+      this.ctx.save()
+      this.ctx.translate(30, 30)
+      this.ctx.moveTo(0,0)
+      this.ctx.rotate((this.cyclicFrame * 2 * Math.PI / 60) - 0.5 * Math.PI)
+      this.ctx.lineTo(20,0)
+      this.ctx.lineWidth = 3
+      this.ctx.strokeStyle = 'red'
+      this.ctx.stroke()
+      this.ctx.restore()
+    }
+  }
+
+  step() {
+    if (this.game.debugGame){
+      if (this.game.entities.snek.state.getMouthCoords().y <= 0) {
+        this.game.entities.snek.state.headCoords = { x: 400, y: 400 }
+        resetGame()
+      }
+      this.game.entities.world.objects.apples.forEach(
+        a => {
+          a.isEaten !== true && a.drawHitArea()
+        }
+      )
+      // if (this.game.debugState.randomTurns) {
+      //   const q = Math.random()
+      //   if (q < 0.25) {
+      //     this.game.entities.snek.turnLeft()
+      //   } else if (q < 0.50){
+      //     this.game.entitities.snek.turnRight()
+      //   }
+      // }
+    }
+    this.drawClock()
   }
 }
