@@ -90,21 +90,26 @@ class Apple {
     
     this.ctx.moveTo(0,0)
     this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
+
+    this.ctx.save()
+    this.ctx.rotate(Math.PI / 3)
+    this.ctx.arc(this.r/6, 0, this.r, 0, 2 * Math.PI)
+    this.ctx.arc(-this.r/6, 0, this.r, 0, 2 * Math.PI)
     this.ctx.fillStyle = 'red'
     this.ctx.fill()
+    this.ctx.restore()
 
     this.ctx.save()
     this.ctx.rotate(-Math.PI/4)
     this.ctx.translate(this.r, 0)
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.r / 2, 0, 2 * Math.PI)
-    this.ctx.fillStyle = 'lightgreen'
+    this.ctx.fillStyle = 'lawngreen'
     this.ctx.fill()
     this.ctx.restore()
 
-    this.ctx.rotate(-3 * Math.PI / 4)
-    this.ctx.translate(this.r / 2, 0)
+    this.ctx.rotate(-2 * Math.PI / 3)
+    this.ctx.translate(this.r * 0.8, 0)
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.r / 3, 0, 2 * Math.PI)
     this.ctx.fillStyle = 'white'

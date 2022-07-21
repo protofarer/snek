@@ -33,7 +33,7 @@ if (window.sessionStorage.getItem('debugGame') === 'true') {
 
 
 export function startNewGame(debugGame=false) {
-  new Background(container, 'hsl(55, 60%, 70%)')
+  new Background(container, 'hsl(52, 40%, 50%)')
   let game = new Game(container, debugGame)
   let snek = new Snek(game.canvas)
   let world = new World(game.canvas)
