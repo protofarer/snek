@@ -15,14 +15,22 @@ body {
   height: 100%;
 }
 
+#layerBackground {
+  position: absolute;
+  width: 80vh;
+  height: 80vh;
+  z-index: 1;
+}
+
 #layerGame {
   /* border: 5vh solid hsl(28, 55%, 55%); */
-  background-color: black;
+  background-color: transparent;
   touch-action: none;
   width: calc(80vh);
   height: calc(80vh);
 
   flex: 0 0 0%;
+  z-index: 2;
 }
 
 #layerUI {

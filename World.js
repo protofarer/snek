@@ -9,7 +9,7 @@ export default class World {
   }
 
   createFieldOfApples() {
-    const n = 5
+    const n = 7
     for(let i = 0; i < n; i++) {
       this.objects.apples.push(new Apple(
         this.canvas,
@@ -32,8 +32,6 @@ export default class World {
   step() {
     this.draw()
   }
-
-
 }
 
 class Apple {

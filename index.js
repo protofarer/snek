@@ -3,6 +3,7 @@ import DebugGUI from './DebugGUI.js'
 import CONSTANTS from './Constants.js'
 import Snek from './Snek.js'
 import World from './World.js'
+import Background from './Background.js'
 
 export const ENV = new (function() {
   this.MODE = import.meta.env ? import.meta.env.MODE : 'production' 
@@ -24,6 +25,7 @@ let initDebugGame = window.location.hash === '#debuggame' ? true : false
 // **********************************************************************
 
 export function startNewGame(debugGame=false) {
+  new Background(container, 'hsl(55, 60%, 70%)')
   let game = new Game(container, debugGame)
   let snek = new Snek(game.canvas)
   let world = new World(game.canvas)
