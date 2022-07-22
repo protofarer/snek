@@ -20,7 +20,7 @@ document.body.appendChild(container)
 // * Play Game: PHASE_PLAY
 
 export function startNewGame() {
-  new Background(container, 'hsl(52, 40%, 50%)')
+  new Background(container, 'hsl(53, 60%, 18%)')
   let game = new Game(container)
   let snek = new Snek(game.ctx)
   let world = new World(game.ctx)

@@ -62,12 +62,15 @@ export default class Snek {
     this.body.step(this.state.headCoords)
   }
 
-  consume(entity) {
-    switch (entity.name) {
+  swallow(entity) {
+    switch (entity.class) {
       case 'apple':
         this.body.nSegments += 1
-        this.exp += 1
+        this.exp += 2
         // TODO add apple to body segment(s) for digestion
+        break
+      case 'pebble':
+        this.exp += 1
         break
       default:
         console.info(`snek.consume() defaulted`, )

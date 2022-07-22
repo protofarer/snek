@@ -2,14 +2,14 @@ export default class Apple {
   class = 'apple'
   position = { x: 0, y: 0 }
   r = 4
-  isEaten = false
+  isSwallowed = false
   constructor(canvas, position, parentEnt=null, id=null) {
     this.canvas = canvas
     this.ctx = this.canvas.getContext('2d')
     this.parentEnt = parentEnt
     this.position = position
     this.id = id
-    this.hitSideLength = this.r
+    this.hitSideLength = this.r + 1
     this.setHitArea()
   }
 
@@ -27,8 +27,8 @@ export default class Apple {
     return { x: this.position.x, y: this.position.y + this.hitSideLength }
   }
 
-  getEaten() {
-    this.isEaten = true
+  getSwallowed() {
+    this.isSwallowed = true
     this.nullifyHit()
   }
 
@@ -53,7 +53,7 @@ export default class Apple {
     )
   }
   step() {
-    if (!this.isEaten) {
+    if (!this.isSwallowed) {
       this.draw()
     }
   }

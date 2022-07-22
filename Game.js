@@ -71,16 +71,16 @@ export default class Game {
       this.ents.snek.state.headCoords.y = this.canvas.height
     }
     this.ents.world.fieldEnts.forEach( 
-      apple => {
-        if (!apple.isEaten) {
+      fieldEnt => {
+        if (!fieldEnt.isSwallowed) {
           if (this.isContactingMouth(
             this.ents.snek.state.getMouthCoords(), 
-            apple.perimeter
+            fieldEnt.perimeter
           )) {
-            this.ents.snek.consume(apple)
+            this.ents.snek.swallow(fieldEnt)
             this.ents.snek.state.exp++
             this.state.score++
-            apple.getEaten()
+            fieldEnt.getSwallowed()
           }
         }
       }
