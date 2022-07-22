@@ -83,6 +83,7 @@ export default class DebugGUI {
           resetGame()
           break
         case 'q':
+          this.params.isDebugOn = !this.params.isDebugOn
           break
         default:
           break
