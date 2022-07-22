@@ -14,5 +14,4 @@ export default class Background {
     this.ctx.fillStyle = this.color
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
   }
-
 }

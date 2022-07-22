@@ -3,22 +3,26 @@ export default class Snek {
   state = {
     r: 7,
     headCoords: { x: 400, y: 400 },
-    directionAngle: -90,
-    directionRad: function () { return this.directionAngle * Math.PI / 180 },
     slitherSpeed: 2,
+    directionAngle: -90,
+    set directionRad(val) {
+      this.directionAngle = val * 180 / Math.PI
+    },
+    get directionRad() { return this.directionAngle * Math.PI / 180 },
     turnRate: function () { return this.slitherSpeed + 10 },
     getMouthCoords: function () {
       return {
-        x: this.headCoords.x + this.r * Math.cos(this.directionRad()),
-        y: this.headCoords.y + this.r * Math.sin(this.directionRad()),
+        x: this.headCoords.x + this.r * Math.cos(this.directionRad),
+        y: this.headCoords.y + this.r * Math.sin(this.directionRad),
       }
     },
     exp: 0,
   }
 
-  constructor(canvas) {
-    this.canvas = canvas
-    this.ctx = canvas.getContext('2d')
+  constructor(ctx, parentEnt=null) {
+    this.ctx = ctx
+    this.canvas = this.ctx.canvas
+    this.parentEnt = parentEnt
     this.initEventListeners()
     this.body = new Body(this.ctx, this.state, 1)
   }
@@ -50,9 +54,9 @@ export default class Snek {
 
   step() {
     this.state.headCoords.x += this.state.slitherSpeed 
-      * Math.cos(this.state.directionRad())
+      * Math.cos(this.state.directionRad)
     this.state.headCoords.y += this.state.slitherSpeed 
-      * Math.sin(this.state.directionRad())
+      * Math.sin(this.state.directionRad)
     if (
       this.state.headCoords.x >= this.canvas.width 
       || this.state.headCoords.x <= 0 
@@ -61,9 +65,6 @@ export default class Snek {
     ) {
       // TODO kill snake
     }
-    // console.log(`this.state.turnRate()`, this.state.turnRate)
-    // console.log(`direction`, this.state.directionRad)
-    // console.log(`headcoords`, this.state.headCoords)
     
     this.drawSnake()
     this.body.step(this.state.headCoords)
@@ -74,6 +75,7 @@ export default class Snek {
       case 'apple':
         this.body.nSegments += 1
         this.exp += 1
+        // TODO add apple to body segment(s) for digestion
         break
       default:
         console.info(`snek.consume() defaulted`, )
@@ -90,7 +92,7 @@ export default class Snek {
     this.ctx.fillStyle = 'green'
     this.ctx.fill()
 
-    this.ctx.rotate(this.state.directionRad())
+    this.ctx.rotate(this.state.directionRad)
     this.ctx.translate(0.8 * this.state.r, 0)
     this.ctx.beginPath()
     this.ctx.fillStyle = 'pink'

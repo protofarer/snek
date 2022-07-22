@@ -5,9 +5,9 @@ export default class Panel {
   gameInfo = document.createElement('div')
   statusMsg = document.createElement('div')
   newGameButton = document.createElement('button')
-  game = null
 
-  constructor() {
+  constructor(game) {
+    this.game = game
     this.panelContainer.id = 'panel'
 
     this.infobox.id = 'infobox'
@@ -28,13 +28,12 @@ export default class Panel {
   
   
     // before init, for debug
+    this.infobox.style.color = 'lawngreen'
     this.statusMsg.innerText = '$msg'
+    this.score.innerText = '$score'
+    this.gameInfo.innerText = '$exp'
     console.info('%cUI initializing', 'color: orange')
-  }
 
-  init(game) {
-    // Call after game is initialized
-    this.game = game
     this.setupEventListeners()
     this.update()
   }
@@ -45,10 +44,17 @@ export default class Panel {
     })
   }
 
+  // Full panel display update outside of step
   update() {
-    this.statusMsg.innerHTML = `${this.game.msg}`
+    this.statusMsg.innerHTML = `${this.game.state.msg}`
+    
     const delayClr = (delay) => new Promise(res => setTimeout(res, delay))
     delayClr(4000)
       .then(() => this.statusMsg.innerHTML = '')
+  }
+
+  step() {
+    this.gameInfo.innerHTML = `exp: ${this.game.ents.snek?.state.exp}`
+    this.score.innerHTML = `score: ${this.game.state.score}`
   }
 }

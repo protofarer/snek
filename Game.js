@@ -10,63 +10,65 @@ export default class Game {
     this.canvas.width = this.canvas.height = 800
     this.container.appendChild(this.canvas)
 
-
     this.ctx = this.canvas.getContext('2d')
     this.rect = this.canvas.getBoundingClientRect()
 
-    this.msg = ''
-    this.turnCount = 1
-    this.phase = CONSTANTS.PHASE_PLAY    // new, playing, end
+    // * Related to normal game flow and info directly relevant to player
+    this.state = {
+      msg: '',
+      phase: CONSTANTS.PHASE_PLAY,
+      score: 0,
+    }
 
-    // this.endDialog = new EndDialog(this)
+    // * Adjustable parameters for testing design, performance, and debugging
+    this.params = {
+      speed: 1,
+    }
 
-    this.panel = new Panel()
+    this.ents = {}
+
+    // Step code not belonging to entity
+    this.stepFunctions = []
+
+    this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
-
-    // trigger steppers from components: may include draw and other forcing functions
-    this.steppables = []
-    this.steppers = []
-    this.entities = {}
-
-    this.gamespeed = 1
-    this.panel.init(this)
   }
   // Entites are important, feature-full objects that are
   //  highly interactive with each other
-  addEntity(name, ent) {
-    this.entities[name] = ent
+  addEnt(ent, name=null) {
+    this.ents[name ?? ent.name ?? 'noName'] = ent
     name === 'snek' && console.log(`snek mouf`, ent.state.getMouthCoords() )
-  }
-
-  // Steppables are things that can step
-  addObjectToStep(steppable) {
-    this.steppables.push(steppable)
+    ent.parentEnt = this
   }
 
   addFunctionToStep(f) {
-    this.steppers.push(f)
+    this.stepFunctions.push(f)
   }
 
   step() {
-    this.drawAll()
-    this.steppables.forEach(steppable => steppable.step())
-    this.steppers.forEach(stepper => stepper())
+    this.stepFunctions.forEach(f => f())
 
-    this.entities.world.objects.apples.forEach( 
+    this.ents.world.objects.apples.forEach( 
       apple => {
         if (!apple.isEaten) {
           if (this.isContactingMouth(
-            this.entities.snek.state.getMouthCoords(), 
+            this.ents.snek.state.getMouthCoords(), 
             apple.perimeter
           )) {
-            this.entities.snek.consume(apple)
+            this.ents.snek.consume(apple)
+            this.ents.snek.state.exp++
+            this.state.score++
             apple.getEaten()
           }
         }
       }
     )
-    // this.checkEndCondition()
-    // this.turnCount++
+
+    // ! seems problematic
+    for(const ent of Object.values(this.ents)) {
+      ent?.step?.()
+    }
+    this.panel.step()
   }
   
   isContactingMouth(mouthCoords, objPerimeter) {
@@ -78,16 +80,10 @@ export default class Game {
   }
 
   end() {
-    // exec end game phase
-    console.log(`IN end()`, )
-    // this.endDialog.show()
+    console.log(`Ending game...`, )
   }
 
   clr() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-  }
-
-  drawAll() {
-    // this.panel.draw()
   }
 }

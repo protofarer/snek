@@ -1,8 +1,7 @@
 import GUI from 'lil-gui'
-import CONSTANTS from './Constants'
-import { resetGame, } from '.'
+import CONSTANTS from '../Constants'
+import { resetGame, } from '..'
 export default class DebugGUI {
-
   frames = { fps: 0, times: []}
 
   constructor(game, clock) {
@@ -10,6 +9,7 @@ export default class DebugGUI {
     this.gui = gui
     this.game = game
     this.clock = clock
+    this.parentEnt = null
 
     this.params = {
       isDebugOn: false,
@@ -32,8 +32,7 @@ export default class DebugGUI {
     guiGamePositioning.add(this.game.canvas,'height').name('canvas.height')
 
     const guiGameState = gui.addFolder('GameState')
-    guiGameState.add(this.game, 'turnCount').name('turnCount').listen()
-    guiGameState.add(this.game, 'phase').name('phase').listen()
+    guiGameState.add(this.game.state, 'phase').name('phase').listen()
 
     gui.add(this.frames, 'fps').listen()
 
@@ -53,7 +52,7 @@ export default class DebugGUI {
     }
 
     guiGameTest.add({ endGame }, 'endGame')
-    guiGameTest.add(this.game, 'gamespeed', 0.1, 1, 0.1)
+    guiGameTest.add(this.game.params, 'speed', 0.1, 1, 0.1)
 
     // const guiPointerTracking = gui.addFolder('PointerTracking')
     // guiPointerTracking.add(this.game.pointerCoords.client, 'x').name('client.x').listen()
@@ -89,7 +88,7 @@ export default class DebugGUI {
           break
       }
     })
-    this.game.addObjectToStep(this)
+    this.game.addEnt(this)
   }
 
   setParamsFromSessionStorage() {
@@ -154,13 +153,13 @@ export default class DebugGUI {
     // Debug only
     if (this.params.isDebugOn){
       // Reset Game on hit border
-      if (this.game.entities.snek.state.getMouthCoords().y <= 0) {
-        this.game.entities.snek.state.headCoords = { x: 400, y: 400 }
+      if (this.game.ents.snek.state.getMouthCoords().y <= 0) {
+        this.game.ents.snek.state.headCoords = { x: 400, y: 400 }
         resetGame()
       }
 
       // Show hitareas
-      this.game.entities.world.objects.apples.forEach(
+      this.game.ents.world.objects.apples.forEach(
         a => {
           a.isEaten !== true && a.drawHitArea()
         }
@@ -172,17 +171,16 @@ export default class DebugGUI {
     if (this.params.isTurningRandomly) {
       const q = Math.random()
       if (q < 0.25) {
-        this.game.entities.snek.turnLeft()
+        this.game.ents.snek.turnLeft()
       } else if (q < 0.50){
-        this.game.entities.snek.turnRight()
+        this.game.ents.snek.turnRight()
       }
     }
-
-    this.clock.step()
   }
 
   drawOverlays() {
-    this.game.ctx.arc(this.game.entities.snek.state.getMouthCoords().x, this.game.entities.snek.state.getMouthCoords().y, 1, 0, 2 * Math.PI)
+    this.game.ctx.beginPath()
+    this.game.ctx.arc(this.game.ents.snek.state.getMouthCoords().x, this.game.ents.snek.state.getMouthCoords().y, 1, 0, 2 * Math.PI)
     this.game.ctx.fillStyle = 'blue'
     this.game.ctx.fill()
   }

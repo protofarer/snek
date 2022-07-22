@@ -3,8 +3,9 @@ export default class Clock {
   clockCycle5Min = 0
   isClockDrawn = false
 
-  constructor(ctx) {
+  constructor(ctx, parentEnt=null) {
     this.ctx = ctx
+    this.parentEntity = parentEnt
   }
 
   show() {

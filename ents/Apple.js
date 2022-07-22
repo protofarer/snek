@@ -3,23 +3,28 @@ export default class Apple {
   position = { x: 0, y: 0 }
   r = 4
   isEaten = false
-  constructor(canvas, position, id=null) {
+  constructor(canvas, position, parentEnt=null, id=null) {
     this.canvas = canvas
     this.ctx = this.canvas.getContext('2d')
+    this.parentEntity = parentEnt
     this.position = position
     this.id = id
     this.hitSideLength = this.r
     this.setHitArea()
   }
 
-  getPerimeterCoords() {
-    const l = this.hitSideLength
-    return {
-      top: { x: this.position.x,y: this.position.y - l},
-      bot: { x: this.position.x, y: this.position.y + l},
-      left: { x:this.position.x - l, y: this.position.y},
-      right: { x:this.position.x + l, y:this.position.y}
-    }
+  // Collision helper
+  left() {
+    return { x:this.position.x - this.hitSideLength, y: this.position.y}
+  }
+  right() {
+    return { x:this.position.x + this.hitSideLength, y:this.position.y}
+  }
+  top() {
+    return { x: this.position.x,y: this.position.y - this.hitSideLength }
+  }
+  bottom() {
+    return { x: this.position.x, y: this.position.y + this.hitSideLength }
   }
 
   getEaten() {
@@ -38,26 +43,14 @@ export default class Apple {
 
   setHitArea(newPosition = null) {
     let hitPosition = newPosition ? newPosition : this.position
-    console.log(`hitposition`, hitPosition)
     
     this.perimeter = new Path2D()
-    this.perimeter.moveTo(
+    this.perimeter.rect(
       hitPosition.x - this.hitSideLength, 
-      hitPosition.y - this.hitSideLength
+      hitPosition.y - this.hitSideLength,
+      2 * this.hitSideLength,
+      2 * this.hitSideLength
     )
-    this.perimeter.lineTo(
-      hitPosition.x + this.hitSideLength, 
-      hitPosition.y - this.hitSideLength
-    )
-    this.perimeter.lineTo(
-      hitPosition.x + this.hitSideLength, 
-      hitPosition.y + this.hitSideLength
-    )
-    this.perimeter.lineTo(
-      hitPosition.x - this.hitSideLength, 
-      hitPosition.y + this.hitSideLength
-    )
-    this.perimeter.closePath()
   }
 
   draw() {
@@ -65,7 +58,6 @@ export default class Apple {
       this.ctx.save()
       this.ctx.translate(this.position.x, this.position.y)
       
-      this.ctx.moveTo(0,0)
       this.ctx.beginPath()
   
       this.ctx.save()
