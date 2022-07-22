@@ -70,7 +70,7 @@ export default class Game {
     } else if (this.ents.snek.state.headCoords.y <= 0) {
       this.ents.snek.state.headCoords.y = this.canvas.height
     }
-    this.ents.world.objects.apples.forEach( 
+    this.ents.world.fieldEnts.forEach( 
       apple => {
         if (!apple.isEaten) {
           if (this.isContactingMouth(

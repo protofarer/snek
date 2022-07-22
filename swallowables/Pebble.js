@@ -1,5 +1,5 @@
 export default class Pebble {
-  name = 'pebble'
+  class = 'pebble'
   position = { x: 0, y: 0 }
   r = 4
   isEaten = false
@@ -54,7 +54,6 @@ export default class Pebble {
   }
 
   draw() {
-    if (!this.isEaten) {
       this.ctx.save()
       this.ctx.translate(this.position.x, this.position.y)
       
@@ -68,14 +67,12 @@ export default class Pebble {
       this.ctx.fill()
       this.ctx.restore()
   
-      this.ctx.rotate(-2 * Math.PI / 3)
-      this.ctx.translate(this.r, 0)
-      this.ctx.beginPath()
-      this.ctx.arc(0, 0, this.r / 3, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'grey'
-      this.ctx.fill()
-  
       this.ctx.restore()
+  }
+
+  step() {
+    if (!this.isEaten) {
+      this.draw()
     }
   }
 }

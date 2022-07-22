@@ -93,7 +93,7 @@ export default class DebugGUI {
     })
 
     if (this.params.isDebugOn) {
-      this.game.ents.world.objects.apples.push(new Apple(this.game.canvas, {x:400,y:300}, this, this.game.ents.world.childId++))
+      this.game.ents.world.fieldEnts.push(new Apple(this.game.canvas, {x:400,y:300}, this, this.game.ents.world.childId++))
     }
   }
 
@@ -166,7 +166,7 @@ export default class DebugGUI {
       }
 
       // Show hitareas
-      this.game.ents.world.objects.apples.forEach(
+      this.game.ents.world.fieldEnts.forEach(
         a => {
           a.isEaten !== true && a.drawHitArea()
         }

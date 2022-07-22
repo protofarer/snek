@@ -1,5 +1,5 @@
 export default class Apple {
-  name = 'apple'
+  class = 'apple'
   position = { x: 0, y: 0 }
   r = 4
   isEaten = false
