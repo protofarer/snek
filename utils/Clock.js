@@ -2,10 +2,16 @@ export default class Clock {
   clockCycle60 = 0
   clockCycle5Min = 0
   isClockDrawn = false
+  elapsed = 0
+  t
   
   constructor(ctx, parentEnt=null) {
     this.ctx = ctx
     this.parentEnt = parentEnt
+  }
+
+  getElapsedSeconds() {
+    return Math.floor(this.t / 1000)
   }
 
   show() {

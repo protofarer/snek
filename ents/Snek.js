@@ -81,20 +81,16 @@ export default class Snek {
     this.ctx.save()
 
     this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
-    const k = 0.3
-    
-    this.ctx.scale(
-      1-Math.abs(k*Math.sin(this.state.directionRad)),
-      1-Math.abs(k*Math.cos(this.state.directionRad))
-    )
+    this.ctx.rotate(this.state.directionRad)
 
     this.ctx.beginPath()
+    const k = 0.8
+    this.ctx.scale(1,k)
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.lineWidth = 2
-    this.ctx.fillStyle = 'green'
+    this.ctx.fillStyle = 'lawngreen'
     this.ctx.fill()
 
-    this.ctx.rotate(this.state.directionRad)
     this.ctx.beginPath()
     this.ctx.strokeStyle = 'red'
     this.ctx.lineWidth = 3
@@ -142,14 +138,20 @@ class Body {
       if (i % this.linkLength === 0) {
         this.ctx.save()
         this.ctx.translate(this.headTrail[i].x, this.headTrail[i].y)
-        const k = 0.2
-        this.ctx.scale(
-          1-Math.abs(k*Math.sin(this.snekState.directionRad)),
-          1-Math.abs(k*Math.cos(this.snekState.directionRad))
-        )
+        let dy, dx
+        if (i === 1) {
+          dy = this.snekState.headCoords.y - this.headTrail[i].y
+          dx = this.snekState.headCoords.x - this.headTrail[i].x
+        } else {
+          dy = this.headTrail[i-1].y - this.headTrail[i].y
+          dx = this.headTrail[i-1].x - this.headTrail[i].x
+        }
+        const segmentAngle = Math.atan(dy/dx)
+        this.ctx.rotate(segmentAngle)
+        this.ctx.scale(1, 0.8)
         this.ctx.beginPath()
         this.ctx.arc(0, 0, this.snekState.r * 0.8, 0, 2 * Math.PI)
-        this.ctx.fillStyle = 'green'
+        this.ctx.fillStyle = 'lawngreen'
         this.ctx.fill()
         this.ctx.restore()
       }

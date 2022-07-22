@@ -7,8 +7,8 @@ export default class World {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.fieldEnts = []
-    this.createFieldOf('apple', 40)
-    this.createFieldOf('pebble', 40)
+    this.createFieldOf('apple', 90)
+    this.createFieldOf('pebble', 90)
   }
 
   createFieldOf(name, n) {

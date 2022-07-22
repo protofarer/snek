@@ -39,6 +39,7 @@ export function startNewGame() {
     if (start === undefined) {
       start = t
     }
+    clock.t = t
 
     loopID = requestAnimationFrame(draw)
 
@@ -64,7 +65,7 @@ startNewGame()
 export function resetGame(toDebug=false) {
   const currURL = new URL(window.location.href)
   if (import.meta.env.DEV) {
-    currURL.hash = toDebug ? '#debuggame' : '#nodebug'
+    window.sessionStorage.setItem('isDebugOn', toDebug)
   }
   location.replace(currURL.toString())
   location.reload()
