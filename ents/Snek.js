@@ -81,6 +81,13 @@ export default class Snek {
     this.ctx.save()
 
     this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
+    const k = 0.3
+    
+    this.ctx.scale(
+      1-Math.abs(k*Math.sin(this.state.directionRad)),
+      1-Math.abs(k*Math.cos(this.state.directionRad))
+    )
+
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.lineWidth = 2
@@ -88,10 +95,20 @@ export default class Snek {
     this.ctx.fill()
 
     this.ctx.rotate(this.state.directionRad)
-    this.ctx.translate(0.8 * this.state.r, 0)
     this.ctx.beginPath()
-    this.ctx.fillStyle = 'pink'
-    this.ctx.fillRect(-this.state.r/2, -this.state.r/2, this.state.r/2, this.state.r)
+    this.ctx.strokeStyle = 'red'
+    this.ctx.lineWidth = 3
+    this.ctx.arc(0, 0, this.state.r * 0.5, -Math.PI / 3, Math.PI / 3)
+    this.ctx.stroke()
+
+    this.ctx.beginPath()
+    this.ctx.moveTo(this.state.r * 0.5, -0.4 * this.state.r)
+    this.ctx.strokeStyle = 'white'
+    this.ctx.lineWidth = 2
+    this.ctx.lineTo(this.state.r * 0.9, -0.4 * this.state.r)
+    this.ctx.moveTo(this.state.r * 0.5, 0.4 * this.state.r)
+    this.ctx.lineTo(this.state.r * 0.9, 0.4 * this.state.r)
+    this.ctx.stroke()
 
     this.ctx.restore()
 
@@ -106,7 +123,7 @@ class Body {
     this.ctx = ctx
     this.snekState = snekState
     this.nSegments = nSegments 
-    this.linkLength = Math.floor(snekState.r * 0.9)
+    this.linkLength = Math.floor(snekState.r * 0.6)
   }
 
   step(headCoords) {
@@ -125,8 +142,13 @@ class Body {
       if (i % this.linkLength === 0) {
         this.ctx.save()
         this.ctx.translate(this.headTrail[i].x, this.headTrail[i].y)
+        const k = 0.2
+        this.ctx.scale(
+          1-Math.abs(k*Math.sin(this.snekState.directionRad)),
+          1-Math.abs(k*Math.cos(this.snekState.directionRad))
+        )
         this.ctx.beginPath()
-        this.ctx.arc(0, 0, this.snekState.r, 0, 2 * Math.PI)
+        this.ctx.arc(0, 0, this.snekState.r * 0.8, 0, 2 * Math.PI)
         this.ctx.fillStyle = 'green'
         this.ctx.fill()
         this.ctx.restore()

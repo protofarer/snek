@@ -168,7 +168,7 @@ export default class DebugGUI {
       // Show hitareas
       this.game.ents.world.fieldEnts.forEach(
         a => {
-          a.isEaten !== true && a.drawHitArea()
+          a.isSwallowed !== true && a.drawHitArea()
         }
       )
       this.drawOverlays()
