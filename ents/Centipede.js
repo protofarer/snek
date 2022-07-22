@@ -88,12 +88,7 @@ export default class Centipede {
     this.ctx.beginPath()
   }
 
-  step() {
-    this.state.headCoords.x += this.state.slitherSpeed 
-      * Math.cos(this.state.directionRad)
-    this.state.headCoords.y += this.state.slitherSpeed 
-      * Math.sin(this.state.directionRad)
-
+  turnRandomlySmoothly() {
     const rng = Math.random()
     if (rng < 0.15) {
       this.turnDirection = 0
@@ -107,6 +102,15 @@ export default class Centipede {
     } else if (this.turnDirection === 1) {
       this.turnRight()
     }
+  }
+
+  step() {
+    this.state.headCoords.x += this.state.slitherSpeed 
+      * Math.cos(this.state.directionRad)
+    this.state.headCoords.y += this.state.slitherSpeed 
+      * Math.sin(this.state.directionRad)
+
+    this.turnRandomlySmoothly()
 
     this.draw()
     this.body.step(this.state.headCoords)

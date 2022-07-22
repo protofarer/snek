@@ -2,6 +2,7 @@ import GUI from 'lil-gui'
 import CONSTANTS from '../Constants'
 import { resetGame, } from '..'
 import Apple from '../swallowables/Apple'
+import Mango from '../swallowables/Mango'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
@@ -81,7 +82,7 @@ export default class DebugGUI {
           }
           break
         case 'r':
-          resetGame()
+          resetGame(this.params.isDebugOn)
           break
         case 'q':
           this.params.isDebugOn = !this.params.isDebugOn
@@ -100,7 +101,7 @@ export default class DebugGUI {
     })
 
     if (this.params.isDebugOn) {
-      this.game.ents.world.fieldEnts.push(new Apple(this.game.canvas, {x:400,y:300}, this, this.game.ents.world.childId++))
+      this.game.ents.world.fieldEnts.push(new Mango(this.game.canvas, {x:400,y:300}, this, this.game.ents.world.childId++))
     }
   }
 
@@ -169,7 +170,7 @@ export default class DebugGUI {
       // Reset Game on hit border
       if (this.game.ents.snek.state.getMouthCoords().y <= 0) {
         this.game.ents.snek.state.headCoords = { x: 400, y: 400 }
-        resetGame()
+        resetGame(true)
       }
 
       // Show hitareas

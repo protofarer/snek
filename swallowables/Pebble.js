@@ -1,7 +1,7 @@
 export default class Pebble {
   class = 'pebble'
   position = { x: 0, y: 0 }
-  r = 4
+  r = 6
   isSwallowed = false
   constructor(canvas, position, parentEnt=null, id=null) {
     this.canvas = canvas

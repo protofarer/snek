@@ -1,8 +1,9 @@
 export default class Apple {
   class = 'apple'
   position = { x: 0, y: 0 }
-  r = 4
+  r = 6
   isSwallowed = false
+  primaryColor = 'red'
   constructor(canvas, position, parentEnt=null, id=null) {
     this.canvas = canvas
     this.ctx = this.canvas.getContext('2d')
@@ -58,37 +59,50 @@ export default class Apple {
     }
   }
 
+  drawBody(color=null) {
+    this.ctx.save()
+    this.ctx.rotate(Math.PI / 4)
+    this.ctx.scale(0.8, 1)
+    this.ctx.arc(this.r*0.3, 0, this.r, 0, 2 * Math.PI)
+    this.ctx.arc(-this.r*0.3, 0, this.r, 0, 2 * Math.PI)
+    this.ctx.fillStyle = color || this.primaryColor || 'red'
+    this.ctx.fill()
+    this.ctx.restore()
+  }
+
+  drawLeaf(color=null) {
+    this.ctx.save()
+    this.ctx.rotate(-Math.PI/4)
+    this.ctx.translate(this.r*0.8, 0)
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, this.r / 2, 0, 2 * Math.PI)
+    this.ctx.fillStyle = color || 'lawngreen'
+    this.ctx.fill()
+    this.ctx.restore()
+  }
+
+  drawHighlight(color=null) {
+    this.ctx.rotate(-2 * Math.PI / 3)
+    this.ctx.translate(this.r*0.8, 0)
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, this.r / 3, 0, 2 * Math.PI)
+    this.ctx.fillStyle = color || 'white'
+    this.ctx.fill()
+  }
+
+  drawComponents() {
+    this.drawBody()
+    this.drawLeaf()
+    this.drawHighlight()
+  }
+
   draw() {
-      this.ctx.save()
-      this.ctx.translate(this.position.x, this.position.y)
-      
-      this.ctx.beginPath()
-  
-      this.ctx.save()
-      this.ctx.rotate(Math.PI / 4)
-      this.ctx.scale(0.8, 1)
-      this.ctx.arc(this.r*0.3, 0, this.r, 0, 2 * Math.PI)
-      this.ctx.arc(-this.r*0.3, 0, this.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'red'
-      this.ctx.fill()
-      this.ctx.restore()
-  
-      this.ctx.save()
-      this.ctx.rotate(-Math.PI/4)
-      this.ctx.translate(this.r*0.8, 0)
-      this.ctx.beginPath()
-      this.ctx.arc(0, 0, this.r / 2, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'lawngreen'
-      this.ctx.fill()
-      this.ctx.restore()
-  
-      this.ctx.rotate(-2 * Math.PI / 3)
-      this.ctx.translate(this.r*0.8, 0)
-      this.ctx.beginPath()
-      this.ctx.arc(0, 0, this.r / 3, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'white'
-      this.ctx.fill()
-  
-      this.ctx.restore()
+    this.ctx.save()
+    this.ctx.translate(this.position.x, this.position.y)
+    this.ctx.beginPath()
+
+    this.drawComponents()
+
+    this.ctx.restore()
   }
 }

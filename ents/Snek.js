@@ -2,7 +2,7 @@ export default class Snek {
   name = 'snek'
   mobile = true
   state = {
-    r: 7,
+    r: 10,
     headCoords: { x: 400, y: 400 },
     slitherSpeed: 2,
     directionAngle: -90,
