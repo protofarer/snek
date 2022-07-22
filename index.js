@@ -6,7 +6,7 @@ import World from './ents/World.js'
 import Clock from './utils/Clock.js'
 
 import Background from './Background.js'
-import Centipede from './ents/Centipede.js'
+// import Centipede from './ents/Centipede.js'
 
 export const ENV = new (function() {
   this.MODE = import.meta.env ? import.meta.env.MODE : 'production' 
@@ -39,11 +39,17 @@ export function startNewGame() {
 
   let loopID = requestAnimationFrame(draw)
   let start
-  function draw(t) {
+  async function draw(t) {
+    if (game.phase === CONSTANTS.PHASE_PAUSE) {
+      console.log('%c**** Next tick in 3 sec ****', 'color: orange')
+      await new Promise (res => { setTimeout(res, 3000) })
+      console.log('%c****    Game Ticked    ****', 'color: orange')
+    }
     if (start === undefined) {
       start = t
     }
     clock.t = t
+
 
     loopID = requestAnimationFrame(draw)
 
@@ -54,6 +60,7 @@ export function startNewGame() {
       game.step()
   
       debugGUI ?? debugGUI.calcFPS(t)
+
   
       // * Enter PHASE_END via game.checkEndCondition()
       if (game.phase === CONSTANTS.PHASE_END) {

@@ -71,13 +71,20 @@ export default class Game {
   }
 
   getMobs() {
-    return this.ents.filter( e => e.mobile === true)
+    let mobs = []
+    for(let [key, val] of Object.entries(this.ents)) {
+      val.mobile === true && mobs.push(this.ents[key])
+    }
+    return mobs
+  }
+
+  getFieldEnts() {
+    return this.ents.world.fieldEnts
   }
 
   step() {
     this.stepFunctions.forEach(f => f())
-    this.seamlessSneks(this.ents.snek)
-    this.seamlessSneks(this.ents.centipede)
+    this.getMobs().forEach(m => this.seamlessSneks(m))
 
     this.ents.world.fieldEnts.forEach( 
       fieldEnt => {

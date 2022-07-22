@@ -53,7 +53,7 @@ export default class DebugGUI {
     }
 
     guiGameTest.add({ endGame }, 'endGame')
-    guiGameTest.add(this.game.params, 'speed', 0.1, 1, 0.1)
+    guiGameTest.add(this.game.params, 'speed', 0.05, 1, 0.05)
 
     // const guiPointerTracking = gui.addFolder('PointerTracking')
     // guiPointerTracking.add(this.game.pointerCoords.client, 'x').name('client.x').listen()
@@ -69,7 +69,7 @@ export default class DebugGUI {
     guiGamePositioning.show(false)
 
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', async (e) => {
       switch (e.key) {
         case '`':
           if (gui._hidden === true) {
@@ -86,6 +86,13 @@ export default class DebugGUI {
         case 'q':
           this.params.isDebugOn = !this.params.isDebugOn
           window.sessionStorage.setItem('isDebugOn', this.params.isDebugOn)
+          break
+        case 'b':
+          this.game.phase = this.game.phase === CONSTANTS.PHASE_PAUSE 
+            ? CONSTANTS.PHASE_PLAY
+            : CONSTANTS.PHASE_PAUSE
+          console.log(`%c*************** Game ${this.game.phase === CONSTANTS.PHASE_PAUSE ? 'Slowed' : 'Set to Play'} ***************`, 'color: orange')
+          
           break
         default:
           break
