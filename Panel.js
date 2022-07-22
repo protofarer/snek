@@ -55,6 +55,6 @@ export default class Panel {
 
   step() {
     this.score.innerHTML = `score: ${this.game.state.score}`
-    this.gameInfo.innerHTML = `exp: ${this.game.ents.snek?.state.exp}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.ents.clock.getElapsedSeconds()}s`
+    this.gameInfo.innerHTML = `exp: ${this.game.snek?.state.exp}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
   }
 }

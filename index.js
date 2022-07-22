@@ -1,12 +1,7 @@
 import Game from './Game.js'
 import DebugGUI from './tools/DebugGUI.js'
 import CONSTANTS from './Constants.js'
-import Snek from './ents/Snek.js'
-import World from './ents/World.js'
-import Clock from './utils/Clock.js'
-
 import Background from './Background.js'
-// import Centipede from './ents/Centipede.js'
 
 export const ENV = new (function() {
   this.MODE = import.meta.env ? import.meta.env.MODE : 'production' 
@@ -24,17 +19,8 @@ export function startNewGame() {
   new Background(container, 'hsl(51, 50%, 26%)')
 
   let game = new Game(container)
-  let snek = new Snek(game.ctx, null, game)
-  let world = new World(game.ctx, game)
-  let clock = new Clock(game.ctx, game)
-  // let centipede = new Centipede(game.ctx)
 
-  game.addEnt(snek)
-  game.addEnt(world)
-  game.addEnt(clock, 'clock')
-
-  let debugGUI = import.meta.env.DEV ? new DebugGUI(game, clock) : null
-  game.addEnt(debugGUI, 'debugGUI')
+  let debugGUI = import.meta.env.DEV ? new DebugGUI(game) : null
 
   let loopID = requestAnimationFrame(draw)
   let start
@@ -48,22 +34,21 @@ export function startNewGame() {
     if (start === undefined) {
       start = t
     }
-    clock.t = t
-
-
-    loopID = requestAnimationFrame(draw)
+    game.clock.t = t
 
     const elapsed = t - start
     if (elapsed > 16 / game.params.speed) {
       start = t
       game.clr()
       game.step()
-      if (debugGUI.params.isGameDoubleSpeed) {
+      debugGUI ?? debugGUI.step()
+
+      if (debugGUI?.params.isGameDoubleSpeed) {
         game.step()
+        debugGUI.step()
       }
   
       debugGUI ?? debugGUI.calcFPS(t)
-
   
       // * Enter PHASE_END via game.checkEndCondition()
       if (game.phase === CONSTANTS.PHASE_END) {
@@ -71,6 +56,8 @@ export function startNewGame() {
         game.end()
       }
     }
+
+    loopID = requestAnimationFrame(draw)
   }
   return this
 }

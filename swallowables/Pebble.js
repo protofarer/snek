@@ -1,7 +1,6 @@
 export default class Pebble {
   typename = 'pebble'
   r = 6
-  isSwallowed = false
 
   constructor(ctx, position=null, parentEnt=null, id=null) {
     this.ctx = ctx
@@ -27,27 +26,16 @@ export default class Pebble {
     return { x: this.position.x, y: this.position.y + this.hitSideLength }
   }
 
-  getSwallowed() {
-    this.isSwallowed = true
-    this.nullifyHit()
-  }
-
-  nullifyHit() {
-    this.perimeter = null
-  }
-
   drawHitArea() {
     this.ctx.strokeStyle = 'blue'
-    this.ctx.stroke(this.perimeter)
+    this.ctx.stroke(this.hitArea)
   }
 
-  setHitArea(newPosition = null) {
-    let hitPosition = newPosition ? newPosition : this.position
-    
-    this.perimeter = new Path2D()
-    this.perimeter.rect(
-      hitPosition.x - this.hitSideLength, 
-      hitPosition.y - this.hitSideLength,
+  setHitArea() {
+    this.hitArea = new Path2D()
+    this.hitArea.rect(
+      this.position.x - this.hitSideLength, 
+      this.position.y - this.hitSideLength,
       2 * this.hitSideLength,
       2 * this.hitSideLength
     )

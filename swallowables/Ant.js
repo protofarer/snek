@@ -29,7 +29,8 @@ export default class Ant {
     this.canvas = this.ctx.canvas
     this.state.position = startPosition || {x:400, y:270}
     this.parentEnt = parentEnt
-    this.step()
+    this.hitSideLength = this.state.r
+    this.setHitArea()
   }
 
   turnLeft() {
@@ -66,9 +67,19 @@ export default class Ant {
     this.turnErratically()
   }
 
-  step() {
-    this.move()
-    this.draw()
+  drawHitArea() {
+    this.ctx.strokeStyle = 'blue'
+    this.ctx.stroke(this.hitArea)
+  }
+
+  setHitArea() {
+    this.hitArea = new Path2D()
+    this.hitArea.rect(
+      this.state.position.x - 0.5 * this.hitSideLength,
+      this.state.position.y - 1 * this.hitSideLength, 
+      1 * this.hitSideLength,
+      2 * this.hitSideLength
+    )
   }
 
   swallow(entity) {
@@ -140,5 +151,13 @@ export default class Ant {
     ctx.stroke()
 
     ctx.restore()
+  }
+
+  step() {
+    if (this.mobile) {
+      this.setHitArea
+      this.move()
+    }
+    this.draw()
   }
 }

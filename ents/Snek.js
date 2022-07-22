@@ -66,8 +66,13 @@ export default class Snek {
     this.body.step(this.state.headCoords)
   }
 
-  swallow(entity) {
-    switch (entity.typename) {
+  swallow(ent) {
+    // TODO segment carry and digest logic
+    ent.parentEnt = this.body
+    ent.state.position = {x: -1000, y: -1000}
+    ent.hitArea = null
+
+    switch (ent.typename) {
       case 'apple':
         this.body.nSegments += 1
         this.exp += 2
@@ -75,6 +80,11 @@ export default class Snek {
         break
       case 'pebble':
         this.exp += 1
+        break
+      case 'ant':
+        this.exp += 3
+        this.body.nSegments += 1
+        console.log(`swallow ant`, )
         break
       default:
         console.info(`snek.consume() defaulted`, )

@@ -5,14 +5,14 @@ import Apple from '../swallowables/Apple'
 import Mango from '../swallowables/Mango'
 import Centipede from '../ents/Centipede'
 import Ant from '../swallowables/Ant'
+import Snek from '../ents/Snek'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
-  constructor(game, clock) {
+  constructor(game) {
     const gui = new GUI()
     this.gui = gui
     this.game = game
-    this.clock = clock
     this.parentEnt = null
 
     this.params = {
@@ -158,10 +158,7 @@ export default class DebugGUI {
     setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
     setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
     setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
-
   }
-
-
 
   calcFPS(t) {
     while (this.frames.times.length > 0 && this.frames.times[0] <= t - 1000) {
@@ -175,17 +172,19 @@ export default class DebugGUI {
     // Debug only
     if (this.params.isDebugOn){
       // Reset Game on hit border
-      if (this.game.ents.snek.state.getMouthCoords().y <= 0) {
-        this.game.ents.snek.state.headCoords = { x: 400, y: 400 }
+      if (this.game.snek.state.getMouthCoords().y <= 0) {
+        this.game.snek.state.headCoords = { x: 400, y: 400 }
         resetGame(true)
       }
 
       // Show hitareas
-      this.game.ents.world.fieldEnts.forEach(
-        a => {
-          a.isSwallowed !== true && a.drawHitArea()
-        }
+      this.game.world.fieldEnts.forEach(
+        a => a.drawHitArea() )
+
+      this.game.mobs.forEach(
+        a => {a.drawHitArea() }
       )
+
       this.drawOverlays()
     }
 
@@ -193,34 +192,28 @@ export default class DebugGUI {
     if (this.params.isTurningRandomly) {
       const q = Math.random()
       if (q < 0.25) {
-        this.game.ents.snek.turnLeft()
+        this.game.snek.turnLeft()
       } else if (q < 0.50){
-        this.game.ents.snek.turnRight()
+        this.game.snek.turnRight()
       }
     }
   }
 
   drawOverlays() {
     this.game.ctx.beginPath()
-    this.game.ctx.arc(this.game.ents.snek.state.getMouthCoords().x, this.game.ents.snek.state.getMouthCoords().y, 1, 0, 2 * Math.PI)
+    this.game.ctx.arc(this.game.snek.state.getMouthCoords().x, this.game.snek.state.getMouthCoords().y, 2, 0, 2 * Math.PI)
     this.game.ctx.fillStyle = 'blue'
     this.game.ctx.fill()
   }
 
   addTestObjects() {
     if (this.params.isDebugOn) {
-      // this.game.ents.world.fieldEnts.push(new Mango(this.game.ctx, {x:400,y:300}, this, this.game.ents.world.childId++))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
-      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.snek = new Snek(this.game.ctx, null, this.game)
+      // this.game.world.fieldEnts.push(new Mango(this.game.ctx, {x:400,y:300}, this, this.game.world.childId++))
+      // const ant = new Ant(this.game.ctx, null, this)
+      // ant.mobile = false
+      // this.game.mobs.push(ant)
+      this.game.addImmob(new Apple(this.game.ctx, null, this.game))
     }
   }
 }

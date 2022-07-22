@@ -1,68 +1,57 @@
 export default class Apple {
   typename = 'apple'
-  position = { x: 0, y: 0 }
+  state = {
+    position: { x: 0, y: 0 }
+  }
   r = 6
-  isSwallowed = false
   primaryColor = 'red'
   constructor(ctx, startPosition=null, parentEnt=null, id=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
-    this.position = startPosition || {x:400,y:330}
+    this.state.position = startPosition || {x:400,y:330}
     this.id = id
     this.hitSideLength = this.r + 1
+    
     this.setHitArea()
   }
 
   // Collision helper
   left() {
-    return { x:this.position.x - this.hitSideLength, y: this.position.y}
+    return { x:this.state.position.x - this.hitSideLength, y: this.state.position.y}
   }
   right() {
-    return { x:this.position.x + this.hitSideLength, y:this.position.y}
+    return { x:this.state.position.x + this.hitSideLength, y:this.state.position.y}
   }
   top() {
-    return { x: this.position.x,y: this.position.y - this.hitSideLength }
+    return { x: this.state.position.x,y: this.state.position.y - this.hitSideLength }
   }
   bottom() {
-    return { x: this.position.x, y: this.position.y + this.hitSideLength }
-  }
-
-  getSwallowed() {
-    this.isSwallowed = true
-    this.nullifyHit()
-  }
-
-  nullifyHit() {
-    this.perimeter = null
+    return { x: this.state.position.x, y: this.state.position.y + this.hitSideLength }
   }
 
   drawHitArea() {
     this.ctx.strokeStyle = 'blue'
-    this.ctx.stroke(this.perimeter)
+    this.ctx.stroke(this.hitArea)
   }
 
-  setHitArea(newPosition = null) {
-    let hitPosition = newPosition ? newPosition : this.position
-    
-    this.perimeter = new Path2D()
-    this.perimeter.rect(
-      hitPosition.x - this.hitSideLength, 
-      hitPosition.y - this.hitSideLength,
+  setHitArea() {
+    this.hitArea = new Path2D()
+    this.hitArea.rect(
+      this.state.position.x - this.hitSideLength, 
+      this.state.position.y - this.hitSideLength,
       2 * this.hitSideLength,
       2 * this.hitSideLength
     )
   }
-  step() {
-    if (!this.isSwallowed) {
-      this.draw()
-    }
-  }
 
+  step() {
+    this.draw()
+  }
 
   drawInitWrapper(radians=null) {
     this.ctx.save()
-    this.ctx.translate(this.position.x, this.position.y)
+    this.ctx.translate(this.state.position.x, this.state.position.y)
 
     radians && this.ctx.rotate(radians)
 
