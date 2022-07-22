@@ -1,16 +1,17 @@
 export default class Snek {
-  name = 'snek'
+  typename = 'snek'
   mobile = true
+  swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
   state = {
     r: 10,
-    headCoords: { x: 400, y: 400 },
-    slitherSpeed: 2,
+    headCoords: { x: 0, y: 0 },
+    moveSpeed: 2,
     directionAngle: -90,
     set directionRad(val) {
       this.directionAngle = val * 180 / Math.PI
     },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
-    turnRate: function () { return this.slitherSpeed + 10 },
+    turnRate: function () { return this.moveSpeed + 10 },
     getMouthCoords: function () {
       return {
         x: this.headCoords.x + this.r * Math.cos(this.directionRad),
@@ -21,9 +22,10 @@ export default class Snek {
     scaleColor: 'hsl(90, 80%, 50%)',
   }
 
-  constructor(ctx, parentEnt=null) {
+  constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
+    this.state.headCoords = startPosition || {x:400,y:400}
     this.parentEnt = parentEnt
     this.initEventListeners()
     this.body = new Body(this.ctx, this.state, 1)
@@ -55,9 +57,9 @@ export default class Snek {
   }
 
   step() {
-    this.state.headCoords.x += this.state.slitherSpeed 
+    this.state.headCoords.x += this.state.moveSpeed 
       * Math.cos(this.state.directionRad)
-    this.state.headCoords.y += this.state.slitherSpeed 
+    this.state.headCoords.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
     
     this.drawSnake()
@@ -65,7 +67,7 @@ export default class Snek {
   }
 
   swallow(entity) {
-    switch (entity.class) {
+    switch (entity.typename) {
       case 'apple':
         this.body.nSegments += 1
         this.exp += 2

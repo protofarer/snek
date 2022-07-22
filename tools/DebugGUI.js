@@ -3,6 +3,8 @@ import CONSTANTS from '../Constants'
 import { resetGame, } from '..'
 import Apple from '../swallowables/Apple'
 import Mango from '../swallowables/Mango'
+import Centipede from '../ents/Centipede'
+import Ant from '../swallowables/Ant'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
@@ -17,10 +19,12 @@ export default class DebugGUI {
       isDebugOn: false,
       isClockDrawn: false,
       isTurningRandomly: false,
+      isGameDoubleSpeed: false,
     }
 
     this.setParamsFromSessionStorage()
     this.setupBooleanTogglers()
+
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -41,12 +45,15 @@ export default class DebugGUI {
     // Game Test Params and Functions
     const guiGameTest = gui.addFolder('GameTest')
     guiGameTest.add({ resetGame }, 
-      'resetGame')
-      .name('reset: normal')
+      'resetGame').name('reset: normal')
 
     guiGameTest.add({ debugreset() { resetGame(true)} }, 
-      'debugreset')
-      .name('reset: debug')
+      'debugreset').name('reset: debug')
+
+    const addCentipede = () => {
+      this.game.addMob(new Centipede(this.game.ctx))
+    }
+    guiGameTest.add({ addCentipede }, 'addCentipede')
 
     const endGame = () => {
       // for debug
@@ -99,10 +106,7 @@ export default class DebugGUI {
           break
       }
     })
-
-    if (this.params.isDebugOn) {
-      this.game.ents.world.fieldEnts.push(new Mango(this.game.canvas, {x:400,y:300}, this, this.game.ents.world.childId++))
-    }
+    this.addTestObjects()
   }
 
   setBooleanParam = (name) => {
@@ -144,17 +148,20 @@ export default class DebugGUI {
       }
     }
 
-    const setupBooleanToggler = (obj, name, guiFolder ) => {
+    const setupBooleanToggler = (obj, name, guiFolder, label=null ) => {
       const handleSessionBoolean = toggleSessionBoolean(obj, name)
-      guiFolder.add(obj, name).onChange(handleSessionBoolean).listen()
+      guiFolder.add(obj, name).onChange(handleSessionBoolean).listen().name(label || name)
     }
 
     const guiTestParams = this.gui.addFolder('TestParams')
-    setupBooleanToggler(this.params, 'isDebugOn', guiTestParams)
-    setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams)
-    setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams)
+    setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
+    setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
+    setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
+    setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
 
   }
+
+
 
   calcFPS(t) {
     while (this.frames.times.length > 0 && this.frames.times[0] <= t - 1000) {
@@ -198,5 +205,22 @@ export default class DebugGUI {
     this.game.ctx.arc(this.game.ents.snek.state.getMouthCoords().x, this.game.ents.snek.state.getMouthCoords().y, 1, 0, 2 * Math.PI)
     this.game.ctx.fillStyle = 'blue'
     this.game.ctx.fill()
+  }
+
+  addTestObjects() {
+    if (this.params.isDebugOn) {
+      // this.game.ents.world.fieldEnts.push(new Mango(this.game.ctx, {x:400,y:300}, this, this.game.ents.world.childId++))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+      this.game.mobs.push(new Ant(this.game.ctx, null, this))
+    }
   }
 }

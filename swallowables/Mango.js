@@ -1,17 +1,16 @@
 import Apple from './Apple'
 
 export default class Mango extends Apple {
-  constructor(canvas, position, parentEnt=null, id=null) {
-    super(canvas, position, parentEnt, id)
+  constructor(ctx, position, parentEnt=null, id=null) {
+    super(ctx, position, parentEnt, id)
     this.primaryColor = 'hsl(35, 100%, 60%)'
+    this.typename = 'mango'
+    // self frames for animation
   }
 
   drawLeaf() {}
-  drawBody() {
-    this.ctx.save()
-    this.ctx.rotate(-Math.PI)
-    this.ctx.scale(.7, 1)
-    super.drawBody()
-    this.ctx.restore()
+
+  draw() {
+    super.draw(-0.4)
   }
 }

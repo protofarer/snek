@@ -1,18 +1,19 @@
 import { Body } from './Snek'
 
 export default class Centipede {
-  name = 'centipede'
+  typename = 'centipede'
   mobile = true
+  swallowables = ['snek', 'ant']
   state = {
     r: 7,
-    headCoords: { x: 700, y: 200 },
-    slitherSpeed: 5,
+    headCoords: { x: 0, y: 0 },
+    moveSpeed: 5,
     directionAngle: -90,
     set directionRad(val) {
       this.directionAngle = val * 180 / Math.PI
     },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
-    turnRate: function () { return this.slitherSpeed + 5 },
+    turnRate: function () { return this.moveSpeed + 5 },
     getMouthCoords: function () {
       return {
         x: this.headCoords.x + this.r * Math.cos(this.directionRad),
@@ -24,9 +25,10 @@ export default class Centipede {
     turnDirection: 0,
   }
 
-  constructor(ctx, parentEnt=null) {
+  constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
+    this.state.headCoords = startPosition || {x:300, y:400}
     this.parentEnt = parentEnt
     this.body = new Body(this.ctx, this.state, 10)
   }
@@ -105,9 +107,9 @@ export default class Centipede {
   }
 
   step() {
-    this.state.headCoords.x += this.state.slitherSpeed 
+    this.state.headCoords.x += this.state.moveSpeed 
       * Math.cos(this.state.directionRad)
-    this.state.headCoords.y += this.state.slitherSpeed 
+    this.state.headCoords.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
 
     this.turnRandomlySmoothly()

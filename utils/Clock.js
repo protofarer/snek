@@ -1,4 +1,5 @@
 export default class Clock {
+  typename = 'clock'
   clockCycle60 = 0
   clockCycle5Min = 0
   isClockDrawn = false

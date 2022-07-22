@@ -1,22 +1,23 @@
 import Apple from '../swallowables/Apple'
 import Pebble from '../swallowables/Pebble'
 export default class World {
-  name = 'world'
+  typename = 'world'
   chilId = 0
   constructor(ctx) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.fieldEnts = []
-    this.createFieldOf('apple', 90)
-    this.createFieldOf('pebble', 90)
+    this.mobs = []
+    // this.createFieldOfImmob('apple', 90)
+    // this.createFieldOfImmob('pebble', 90)
   }
 
-  createFieldOf(name, n) {
+  createFieldOfImmob(typename, n) {
     for(let i = 0; i < n; i++) {
-      switch(name) {
+      switch(typename) {
         case 'apple':
           this.fieldEnts.push(new Apple(
-            this.canvas,
+            this.ctx,
             { 
               x: Math.random()*this.canvas.width, 
               y: Math.random()*this.canvas.height 
@@ -27,7 +28,7 @@ export default class World {
           break
         case 'pebble':
           this.fieldEnts.push(new Pebble(
-            this.canvas,
+            this.ctx,
             { 
               x: Math.random()*this.canvas.width, 
               y: Math.random()*this.canvas.height 
@@ -48,7 +49,7 @@ export default class World {
     if (rng < 0.01) {
       this.fieldEnts.push(
         new Apple(
-          this.canvas, 
+          this.ctx, 
           {
             x: Math.random() * this.canvas.width,
             y: Math.random() * this.canvas.height
@@ -60,7 +61,7 @@ export default class World {
     } else if (rng < 0.02) {
       this.fieldEnts.push(
         new Pebble(
-          this.canvas, 
+          this.ctx, 
           {
             x: Math.random() * this.canvas.width,
             y: Math.random() * this.canvas.height

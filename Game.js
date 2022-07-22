@@ -27,6 +27,7 @@ export default class Game {
 
     this.ents = {
     }
+    this.mobs = []
 
     // Step code not belonging to entity
     this.stepFunctions = []
@@ -35,14 +36,13 @@ export default class Game {
     this.container.appendChild(this.panel.panelContainer)
   }
 
-  // Entites are important, feature-full objects that are
-  //  highly interactive with each other
+  // Entites are important and callable directly by this.game.ents[name]
   addEnt(ent, name=null) {
     let entName
     if (name) {
       entName = name
-    } else if (ent.name !== '' && ent.name) {
-      entName = ent.name
+    } else if (ent.typename !== '' && ent.typename) {
+      entName = ent.typename
     } else {
       console.log('bad ent', ent)
       throw new Error('no name assigned in game.addEnt for obj')
@@ -52,11 +52,19 @@ export default class Game {
     ent.parentEnt = this
   }
 
+  addMob(mob) {
+    this.mobs.push(mob)
+  }
+
+  // removeMobByClassType(classtype) {
+
+  // }
+
   addFunctionToStep(f) {
     this.stepFunctions.push(f)
   }
 
-  seamlessSneks(snek) {
+  seamlessMove(snek) {
     if (snek.state.headCoords.x > this.canvas.width) {
       snek.state.headCoords.x = 0
     } else if (snek.state.headCoords.x <= 0) {
@@ -70,7 +78,7 @@ export default class Game {
     }
   }
 
-  getMobs() {
+  getMobileEnts() {
     let mobs = []
     for(let [key, val] of Object.entries(this.ents)) {
       val.mobile === true && mobs.push(this.ents[key])
@@ -83,8 +91,17 @@ export default class Game {
   }
 
   step() {
+    // ! seems problematic
+    for(const ent of Object.values(this.ents)) {
+      ent?.step?.()
+    }
+    this.panel.step()
     this.stepFunctions.forEach(f => f())
-    this.getMobs().forEach(m => this.seamlessSneks(m))
+    this.mobs.forEach(m => {
+      m.step()
+      this.seamlessMove(m)
+    })
+    this.getMobileEnts().forEach(e => this.seamlessMove(e))
 
     this.ents.world.fieldEnts.forEach( 
       fieldEnt => {
@@ -93,20 +110,17 @@ export default class Game {
             this.ents.snek.state.getMouthCoords(), 
             fieldEnt.perimeter
           )) {
-            this.ents.snek.swallow(fieldEnt)
-            this.ents.snek.state.exp++
-            this.state.score++
-            fieldEnt.getSwallowed()
+            if (this.ents.snek.swallowables.includes(fieldEnt.typename)) {
+              this.ents.snek.swallow(fieldEnt)
+              this.ents.snek.state.exp++
+              this.state.score++
+              fieldEnt.getSwallowed()
+            }
           }
         }
       }
     )
 
-    // ! seems problematic
-    for(const ent of Object.values(this.ents)) {
-      ent?.step?.()
-    }
-    this.panel.step()
   }
   
   isContactingMouth(mouthCoords, objPerimeter) {

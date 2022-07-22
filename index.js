@@ -24,13 +24,12 @@ export function startNewGame() {
   new Background(container, 'hsl(51, 50%, 26%)')
 
   let game = new Game(container)
-  let snek = new Snek(game.ctx)
-  let world = new World(game.ctx)
-  let clock = new Clock(game.ctx)
+  let snek = new Snek(game.ctx, null, game)
+  let world = new World(game.ctx, game)
+  let clock = new Clock(game.ctx, game)
   // let centipede = new Centipede(game.ctx)
 
   game.addEnt(snek)
-  // game.addEnt(centipede)
   game.addEnt(world)
   game.addEnt(clock, 'clock')
 
@@ -43,8 +42,9 @@ export function startNewGame() {
     if (game.phase === CONSTANTS.PHASE_PAUSE) {
       console.log('%c**** Next tick in 3 sec ****', 'color: orange')
       await new Promise (res => { setTimeout(res, 3000) })
-      console.log('%c****    Game Ticked    ****', 'color: orange')
+      console.log('%c****    Game Ticking below    ****', 'color: orange')
     }
+
     if (start === undefined) {
       start = t
     }
@@ -58,6 +58,9 @@ export function startNewGame() {
       start = t
       game.clr()
       game.step()
+      if (debugGUI.params.isGameDoubleSpeed) {
+        game.step()
+      }
   
       debugGUI ?? debugGUI.calcFPS(t)
 

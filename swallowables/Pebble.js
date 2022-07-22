@@ -1,13 +1,13 @@
 export default class Pebble {
-  class = 'pebble'
-  position = { x: 0, y: 0 }
+  typename = 'pebble'
   r = 6
   isSwallowed = false
-  constructor(canvas, position, parentEnt=null, id=null) {
-    this.canvas = canvas
-    this.ctx = this.canvas.getContext('2d')
+
+  constructor(ctx, position=null, parentEnt=null, id=null) {
+    this.ctx = ctx
+    this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
-    this.position = position
+    this.position = position || {x: 400, y:300}
     this.id = id
     this.hitSideLength = this.r + 1
     this.setHitArea()

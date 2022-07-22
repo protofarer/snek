@@ -1,14 +1,14 @@
 export default class Apple {
-  class = 'apple'
+  typename = 'apple'
   position = { x: 0, y: 0 }
   r = 6
   isSwallowed = false
   primaryColor = 'red'
-  constructor(canvas, position, parentEnt=null, id=null) {
-    this.canvas = canvas
-    this.ctx = this.canvas.getContext('2d')
+  constructor(ctx, startPosition=null, parentEnt=null, id=null) {
+    this.ctx = ctx
+    this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
-    this.position = position
+    this.position = startPosition || {x:400,y:330}
     this.id = id
     this.hitSideLength = this.r + 1
     this.setHitArea()
@@ -59,10 +59,23 @@ export default class Apple {
     }
   }
 
+
+  drawInitWrapper(radians=null) {
+    this.ctx.save()
+    this.ctx.translate(this.position.x, this.position.y)
+
+    radians && this.ctx.rotate(radians)
+
+    this.drawComponents()
+
+    this.ctx.restore()
+  }
+
   drawBody(color=null) {
     this.ctx.save()
     this.ctx.rotate(Math.PI / 4)
     this.ctx.scale(0.8, 1)
+    this.ctx.beginPath()
     this.ctx.arc(this.r*0.3, 0, this.r, 0, 2 * Math.PI)
     this.ctx.arc(-this.r*0.3, 0, this.r, 0, 2 * Math.PI)
     this.ctx.fillStyle = color || this.primaryColor || 'red'
@@ -96,13 +109,7 @@ export default class Apple {
     this.drawHighlight()
   }
 
-  draw() {
-    this.ctx.save()
-    this.ctx.translate(this.position.x, this.position.y)
-    this.ctx.beginPath()
-
-    this.drawComponents()
-
-    this.ctx.restore()
+  draw(radians=null) {
+    this.drawInitWrapper(radians)
   }
 }
