@@ -25,7 +25,8 @@ export default class Game {
       speed: 1,
     }
 
-    this.ents = {}
+    this.ents = {
+    }
 
     // Step code not belonging to entity
     this.stepFunctions = []
@@ -33,11 +34,21 @@ export default class Game {
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
   }
+
   // Entites are important, feature-full objects that are
   //  highly interactive with each other
   addEnt(ent, name=null) {
-    this.ents[name ?? ent.name ?? 'noName'] = ent
-    name === 'snek' && console.log(`snek mouf`, ent.state.getMouthCoords() )
+    let entName
+    if (name) {
+      entName = name
+    } else if (ent.name !== '' && ent.name) {
+      entName = ent.name
+    } else {
+      console.log('bad ent', ent)
+      throw new Error('no name assigned in game.addEnt for obj')
+    }
+
+    this.ents[entName] = ent
     ent.parentEnt = this
   }
 

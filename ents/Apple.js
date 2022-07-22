@@ -6,7 +6,7 @@ export default class Apple {
   constructor(canvas, position, parentEnt=null, id=null) {
     this.canvas = canvas
     this.ctx = this.canvas.getContext('2d')
-    this.parentEntity = parentEnt
+    this.parentEnt = parentEnt
     this.position = position
     this.id = id
     this.hitSideLength = this.r

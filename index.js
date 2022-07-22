@@ -28,10 +28,10 @@ export function startNewGame() {
 
   game.addEnt(snek)
   game.addEnt(world)
-  game.addEnt(clock)
+  game.addEnt(clock, 'clock')
 
   let debugGUI = import.meta.env.DEV ? new DebugGUI(game, clock) : null
-  game.addEnt(debugGUI)
+  game.addEnt(debugGUI, 'debugGUI')
 
   let loopID = requestAnimationFrame(draw)
   let start

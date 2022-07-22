@@ -89,7 +89,6 @@ export default class DebugGUI {
           break
       }
     })
-    this.game.addEnt(this)
   }
 
   setParamsFromSessionStorage() {
@@ -132,7 +131,7 @@ export default class DebugGUI {
 
     const setupBooleanToggler = (obj, name, guiFolder ) => {
       const handleSessionBoolean = toggleSessionBoolean(obj, name)
-      guiFolder.add(obj, name).onChange(handleSessionBoolean)
+      guiFolder.add(obj, name).onChange(handleSessionBoolean).listen()
     }
 
     const guiTestParams = this.gui.addFolder('TestParams')
