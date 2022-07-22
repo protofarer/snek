@@ -6,6 +6,7 @@ import World from './ents/World.js'
 import Clock from './utils/Clock.js'
 
 import Background from './Background.js'
+import Centipede from './ents/Centipede.js'
 
 export const ENV = new (function() {
   this.MODE = import.meta.env ? import.meta.env.MODE : 'production' 
@@ -25,8 +26,10 @@ export function startNewGame() {
   let snek = new Snek(game.ctx)
   let world = new World(game.ctx)
   let clock = new Clock(game.ctx)
+  let centipede = new Centipede(game.ctx)
 
   game.addEnt(snek)
+  game.addEnt(centipede)
   game.addEnt(world)
   game.addEnt(clock, 'clock')
 

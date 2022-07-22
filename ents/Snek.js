@@ -17,6 +17,7 @@ export default class Snek {
       }
     },
     exp: 0,
+    scaleColor: 'hsl(90, 80%, 50%)',
   }
 
   constructor(ctx, parentEnt=null) {
@@ -88,22 +89,22 @@ export default class Snek {
     this.ctx.scale(1,k)
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.lineWidth = 2
-    this.ctx.fillStyle = 'lawngreen'
+    this.ctx.fillStyle = this.state.scaleColor
     this.ctx.fill()
 
     this.ctx.beginPath()
     this.ctx.strokeStyle = 'red'
-    this.ctx.lineWidth = 3
-    this.ctx.arc(0, 0, this.state.r * 0.5, -Math.PI / 3, Math.PI / 3)
+    this.ctx.lineWidth = 2
+    this.ctx.arc(0, 0, this.state.r * 0.7, -Math.PI / 3, Math.PI / 3)
     this.ctx.stroke()
 
     this.ctx.beginPath()
     this.ctx.moveTo(this.state.r * 0.5, -0.4 * this.state.r)
     this.ctx.strokeStyle = 'white'
     this.ctx.lineWidth = 2
-    this.ctx.lineTo(this.state.r * 0.9, -0.4 * this.state.r)
+    this.ctx.lineTo(this.state.r, -0.4 * this.state.r)
     this.ctx.moveTo(this.state.r * 0.5, 0.4 * this.state.r)
-    this.ctx.lineTo(this.state.r * 0.9, 0.4 * this.state.r)
+    this.ctx.lineTo(this.state.r, 0.4 * this.state.r)
     this.ctx.stroke()
 
     this.ctx.restore()
@@ -113,7 +114,7 @@ export default class Snek {
   }
 }
 
-class Body {
+export class Body {
   headTrail = []
   constructor(ctx, snekState, nSegments=0) {
     this.ctx = ctx
@@ -149,10 +150,12 @@ class Body {
         const segmentAngle = Math.atan(dy/dx)
         this.ctx.rotate(segmentAngle)
         this.ctx.scale(1, 0.8)
+
         this.ctx.beginPath()
         this.ctx.arc(0, 0, this.snekState.r * 0.8, 0, 2 * Math.PI)
-        this.ctx.fillStyle = 'lawngreen'
+        this.ctx.fillStyle = this.snekState.scaleColor
         this.ctx.fill()
+
         this.ctx.restore()
       }
     }

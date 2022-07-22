@@ -56,20 +56,25 @@ export default class Game {
     this.stepFunctions.push(f)
   }
 
+  seamlessSneks(snek) {
+    if (snek.state.headCoords.x > this.canvas.width) {
+      snek.state.headCoords.x = 0
+    } else if (snek.state.headCoords.x <= 0) {
+      snek.state.headCoords.x = this.canvas.width
+    }
+
+    if (snek.state.headCoords.y > this.canvas.height) {
+      snek.state.headCoords.y = 0
+    } else if (snek.state.headCoords.y <= 0) {
+      snek.state.headCoords.y = this.canvas.height
+    }
+  }
+
   step() {
     this.stepFunctions.forEach(f => f())
+    this.seamlessSneks(this.ents.snek)
+    this.seamlessSneks(this.ents.centipede)
 
-    if (this.ents.snek.state.headCoords.x > this.canvas.width) {
-      this.ents.snek.state.headCoords.x = 0
-    } else if (this.ents.snek.state.headCoords.x <= 0) {
-      this.ents.snek.state.headCoords.x = this.canvas.width
-    }
-
-    if (this.ents.snek.state.headCoords.y > this.canvas.height) {
-      this.ents.snek.state.headCoords.y = 0
-    } else if (this.ents.snek.state.headCoords.y <= 0) {
-      this.ents.snek.state.headCoords.y = this.canvas.height
-    }
     this.ents.world.fieldEnts.forEach( 
       fieldEnt => {
         if (!fieldEnt.isSwallowed) {
