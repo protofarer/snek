@@ -1,5 +1,6 @@
 export default class Snek {
   name = 'snek'
+  mobile = true
   state = {
     r: 7,
     headCoords: { x: 400, y: 400 },

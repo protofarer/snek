@@ -2,6 +2,7 @@ import { Body } from './Snek'
 
 export default class Centipede {
   name = 'centipede'
+  mobile = true
   state = {
     r: 7,
     headCoords: { x: 700, y: 200 },

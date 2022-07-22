@@ -21,15 +21,16 @@ document.body.appendChild(container)
 // * Play Game: PHASE_PLAY
 
 export function startNewGame() {
-  new Background(container, 'hsl(53, 60%, 18%)')
+  new Background(container, 'hsl(51, 50%, 26%)')
+
   let game = new Game(container)
   let snek = new Snek(game.ctx)
   let world = new World(game.ctx)
   let clock = new Clock(game.ctx)
-  let centipede = new Centipede(game.ctx)
+  // let centipede = new Centipede(game.ctx)
 
   game.addEnt(snek)
-  game.addEnt(centipede)
+  // game.addEnt(centipede)
   game.addEnt(world)
   game.addEnt(clock, 'clock')
 

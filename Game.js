@@ -70,6 +70,10 @@ export default class Game {
     }
   }
 
+  getMobs() {
+    return this.ents.filter( e => e.mobile === true)
+  }
+
   step() {
     this.stepFunctions.forEach(f => f())
     this.seamlessSneks(this.ents.snek)

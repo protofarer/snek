@@ -63,7 +63,7 @@ export default class Pebble {
       this.ctx.rotate(Math.PI / 3)
       this.ctx.arc(this.r/6, 0, this.r, 0, 2 * Math.PI)
       this.ctx.arc(-this.r/6, 0, this.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'brown'
+      this.ctx.fillStyle = this.primaryColor || 'brown'
       this.ctx.fill()
       this.ctx.restore()
   
