@@ -57,14 +57,6 @@ export default class Snek {
       * Math.cos(this.state.directionRad)
     this.state.headCoords.y += this.state.slitherSpeed 
       * Math.sin(this.state.directionRad)
-    if (
-      this.state.headCoords.x >= this.canvas.width 
-      || this.state.headCoords.x <= 0 
-      || this.state.headCoords.y >= this.canvas.height 
-      || this.state.headCoords.y <= 0
-    ) {
-      // TODO kill snake
-    }
     
     this.drawSnake()
     this.body.step(this.state.headCoords)

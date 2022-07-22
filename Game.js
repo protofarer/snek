@@ -59,6 +59,17 @@ export default class Game {
   step() {
     this.stepFunctions.forEach(f => f())
 
+    if (this.ents.snek.state.headCoords.x > this.canvas.width) {
+      this.ents.snek.state.headCoords.x = 0
+    } else if (this.ents.snek.state.headCoords.x <= 0) {
+      this.ents.snek.state.headCoords.x = this.canvas.width
+    }
+
+    if (this.ents.snek.state.headCoords.y > this.canvas.height) {
+      this.ents.snek.state.headCoords.y = 0
+    } else if (this.ents.snek.state.headCoords.y <= 0) {
+      this.ents.snek.state.headCoords.y = this.canvas.height
+    }
     this.ents.world.objects.apples.forEach( 
       apple => {
         if (!apple.isEaten) {

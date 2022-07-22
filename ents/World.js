@@ -1,4 +1,5 @@
-import Apple from './Apple'
+import Apple from '../swallowables/Apple'
+import Pebble from '../swallowables/Pebble'
 export default class World {
   name = 'world'
   chilId = 0
@@ -9,7 +10,6 @@ export default class World {
       apples: [],
     }
     this.createFieldOfApples()
-    this.objects.apples.push(new Apple(this.canvas, {x:400,y:300}, this, this.childId++))
   }
 
   createFieldOfApples() {
@@ -27,11 +27,20 @@ export default class World {
     }
   }
 
-  draw() {
-    this.objects.apples.forEach(a => a.draw())
-  }
-
   step() {
-    this.draw()
+    this.objects.apples.forEach(a => a.step())
+    if (Math.random() < 0.01) {
+      this.objects.apples.push(
+        new Apple(
+          this.canvas, 
+          {
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height
+          }, 
+          this, 
+          this.childId++
+        )
+      )
+    }
   }
 }

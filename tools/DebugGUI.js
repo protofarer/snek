@@ -1,6 +1,7 @@
 import GUI from 'lil-gui'
 import CONSTANTS from '../Constants'
 import { resetGame, } from '..'
+import Apple from '../swallowables/Apple'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
@@ -84,31 +85,37 @@ export default class DebugGUI {
           break
         case 'q':
           this.params.isDebugOn = !this.params.isDebugOn
+          window.sessionStorage.setItem('isDebugOn', this.params.isDebugOn)
           break
         default:
           break
       }
     })
+
+    if (this.params.isDebugOn) {
+      this.game.ents.world.objects.apples.push(new Apple(this.game.canvas, {x:400,y:300}, this, this.game.ents.world.childId++))
+    }
+  }
+
+  setBooleanParam = (name) => {
+    const isTrueFromSession = window.sessionStorage.getItem(name)
+    let isParamTrue
+
+    if (isTrueFromSession === 'true') {
+      isParamTrue = true
+    } else if (isTrueFromSession === 'false') {
+      isParamTrue = false
+    } else {
+      isParamTrue = this.params[name]
+    }
+    this.params[name] = isParamTrue
   }
 
   setParamsFromSessionStorage() {
     // Read debug and game params from sessionStorage for persistence across game runs
-    const setBooleanParam = (name) => {
-      const isTrueFromSession = window.sessionStorage.getItem(name)
-      let isParamTrue
-
-      if (isTrueFromSession === 'true') {
-        isParamTrue = true
-      } else if (isTrueFromSession === 'false') {
-        isParamTrue = false
-      } else {
-        isParamTrue = this.params[name]
-      }
-      this.params[name] = isParamTrue
-    }
 
     for (const key of Object.keys(this.params)) {
-      setBooleanParam(key)
+      this.setBooleanParam(key)
     }
   }
 

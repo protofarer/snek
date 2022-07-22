@@ -1,5 +1,5 @@
-export default class Apple {
-  name = 'apple'
+export default class Pebble {
+  name = 'pebble'
   position = { x: 0, y: 0 }
   r = 4
   isEaten = false
@@ -29,10 +29,10 @@ export default class Apple {
 
   getEaten() {
     this.isEaten = true
-    this.perish()
+    this.nullifyHit()
   }
 
-  perish() {
+  nullifyHit() {
     this.perimeter = null
   }
 
@@ -64,16 +64,7 @@ export default class Apple {
       this.ctx.rotate(Math.PI / 3)
       this.ctx.arc(this.r/6, 0, this.r, 0, 2 * Math.PI)
       this.ctx.arc(-this.r/6, 0, this.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'red'
-      this.ctx.fill()
-      this.ctx.restore()
-  
-      this.ctx.save()
-      this.ctx.rotate(-Math.PI/4)
-      this.ctx.translate(this.r, 0)
-      this.ctx.beginPath()
-      this.ctx.arc(0, 0, this.r / 2, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'lawngreen'
+      this.ctx.fillStyle = 'brown'
       this.ctx.fill()
       this.ctx.restore()
   
@@ -81,7 +72,7 @@ export default class Apple {
       this.ctx.translate(this.r, 0)
       this.ctx.beginPath()
       this.ctx.arc(0, 0, this.r / 3, 0, 2 * Math.PI)
-      this.ctx.fillStyle = 'white'
+      this.ctx.fillStyle = 'grey'
       this.ctx.fill()
   
       this.ctx.restore()
