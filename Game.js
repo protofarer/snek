@@ -116,6 +116,7 @@ export default class Game {
         }, 
         this
       )
+      if (ent.entGroup === 'mob') ent.state.directionAngle = Math.random() * 360
       new Entity(ent)
       ents.push(ent)
     }

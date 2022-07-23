@@ -168,7 +168,8 @@ export default class Ant {
     }
 
     if (this.carriedEnt) {
-      this.carriedEnt.state.position = this.state.getMouthCoords()
+      this.carriedEnt.state.position.x = this.state.getMouthCoords().x 
+      this.carriedEnt.state.position.y = this.state.getMouthCoords().y - 5
       this.carriedEnt.state.directionRad = this.state.directionRad + this.carriedOffsetRad
       // ! hitArea null, may be used for snatch mechanic
       this.carriedEnt.step()
