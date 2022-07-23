@@ -1,7 +1,7 @@
 import Apple from '../immobs/Apple'
 import Pebble from '../immobs/Pebble'
 export default class World {
-  typename = 'world'
+  species = 'world'
   chilId = 0
   constructor(ctx) {
     this.ctx = ctx

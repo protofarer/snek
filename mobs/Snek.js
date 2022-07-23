@@ -1,7 +1,10 @@
 export default class Snek {
-  typename = 'snek'
+  static species = 'snek'
+  species = 'snek'
+  static entGroup = 'mob'
+
   mobile = true
-  entClass = 'mob'
+  hasTongueOut = false
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
   state = {
     r: 10,
@@ -27,7 +30,7 @@ export default class Snek {
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
-    this.state.headCoords = startPosition || {x:400,y:400}
+    this.state.position = startPosition || {x:400,y:400}
     this.parentEnt = parentEnt
     this.initEventListeners()
     this.body = new Body(this.ctx, this.state, 3)
@@ -67,10 +70,7 @@ export default class Snek {
     this.state.headCoords.y = this.state.position.y
 
     this.body.step(this.state.position)
-    
-    console.log(`snek pos`, this.state.position)
-    
-    this.drawSnake()
+    this.draw()
   }
 
   swallow(ent) {
@@ -79,7 +79,7 @@ export default class Snek {
     ent.state.position = {x: -1000, y: -1000}
     ent.hitArea = null
 
-    switch (ent.typename) {
+    switch (ent.species) {
       case 'apple':
         this.body.nSegments += 1
         this.exp += 2
@@ -98,11 +98,7 @@ export default class Snek {
     }
   }
 
-  drawSnake() {
-    this.ctx.save()
-
-    this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
-    this.ctx.rotate(this.state.directionRad)
+  drawHead() {
 
     this.ctx.beginPath()
     const k = 0.8
@@ -127,10 +123,47 @@ export default class Snek {
     this.ctx.lineTo(this.state.r, 0.4 * this.state.r)
     this.ctx.stroke()
 
-    this.ctx.restore()
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0.45 * this.state.r, 0.3 * this.state.r, 0, 2*Math.PI)
+    this.ctx.arc(0, -0.45 * this.state.r, 0.3 * this.state.r, 0, 2*Math.PI)
+    this.ctx.fillStyle ='white'
+    this.ctx.fill()
 
     this.ctx.beginPath()
-    
+    this.ctx.arc(0.1 * this.state.r, 0.40 * this.state.r, 0.2 * this.state.r, 0, 2*Math.PI)
+    this.ctx.arc(0.1 * this.state.r, -0.40 * this.state.r, 0.2 * this.state.r, 0, 2*Math.PI)
+    this.ctx.fillStyle='black'
+    this.ctx.fill()
+  }
+
+  drawTongue() {
+    this.ctx.beginPath()
+    this.ctx.moveTo(0.8*this.state.r, 0)
+    this.ctx.lineTo(1.8*this.state.r, 0,)
+    this.ctx.lineTo(2.2*this.state.r, 0.5 * this.state.r)
+    this.ctx.moveTo(1.8*this.state.r, 0)
+    this.ctx.lineTo(2.2*this.state.r, -0.5 * this.state.r)
+    this.ctx.lineWidth = 1
+    this.ctx.strokeStyle='red'
+    this.ctx.stroke()
+  }
+
+  draw() {
+    this.ctx.save()
+    this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
+    this.ctx.rotate(this.state.directionRad)
+
+    this.drawHead()
+
+    if (!this.hasTongueOut) {
+      if (Math.random() < 0.05) {
+        this.hasTongueOut = true
+        setTimeout(() => this.hasTongueOut = false, 100 + Math.random()*800)
+      }
+    }
+    this.hasTongueOut && this.drawTongue()
+
+    this.ctx.restore()
   }
 }
 

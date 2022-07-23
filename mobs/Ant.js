@@ -1,6 +1,8 @@
 export default class Ant {
-  typename = 'ant'
+  static species = 'ant'
+  species = 'ant'
   static entGroup = 'mob'
+
   mobile = true
   swallowables = ['apple', 'mango', 'ant', 'pebble', ]
   state = {

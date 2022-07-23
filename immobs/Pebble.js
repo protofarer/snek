@@ -1,6 +1,8 @@
 export default class Pebble {
-  typename = 'pebble'
+  species = 'pebble'
+  static species ='pebble'
   static entGroup = 'immob'
+
   r = 6
   state = {
     position: {x: 0, y: 0}

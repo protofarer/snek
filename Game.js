@@ -11,7 +11,7 @@ import Apple from './immobs/Apple'
 import Pebble from './immobs/Pebble'
 
 export default class Game {
-  typename = 'game'
+  species = 'game'
   constructor (container) {
     this.container = container
 
@@ -56,16 +56,6 @@ export default class Game {
     }
   }
 
-  addMob(mob) {
-    // id?
-    this.mobs.push(mob)
-  }
-
-  addImmob(immob) {
-    immob.parentEnt = this
-    this.immobs.push(immob)
-  }
-
   addFunctionToStep(f) {
     this.stepFunctions.push(f)
   }
@@ -102,49 +92,29 @@ export default class Game {
 
   initSpawn() {
     this.snek = new Snek(this.ctx, null, this)
-    this.addImmob(new Apple(this.ctx, null, this))
-    this.spawnFieldOfImmob('apple', 15)
-    this.spawnFieldOfImmob('pebble', 35)
-    this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
-    for(let i = 0; i < 12; i++) {
-      this.mobs.push(new Ant(
-        this.ctx, 
-        { 
-          x:Math.random()*this.canvas.width, 
-          y:Math.random()*this.canvas.height
-        }, 
-        this
-      ))
-    }
+
+    this.spawnEnts(Apple, 15)
+    // this.spawnEnts(Pebble, 35)
+    // this.spawnEnts(Ant, 25)
+
+    // this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
+
   }
 
-  spawnFieldOfImmob(typename, n) {
+  spawnEnts(classObj, n=1) {
+    const entGroup = classObj.entGroup === 'mob' ? this.mobs : this.immobs
+    
     for(let i = 0; i < n; i++) {
-      switch(typename) {
-        case 'apple':
-          this.immobs.push(new Apple(
-            this.ctx,
-            { 
-              x: Math.random()*this.canvas.width, 
-              y: Math.random()*this.canvas.height 
-            },
-            this,
-          ))
-          break
-        case 'pebble':
-          this.immobs.push(new Pebble(
-            this.ctx,
-            { 
-              x: Math.random()*this.canvas.width, 
-              y: Math.random()*this.canvas.height 
-            },
-            this,
-          ))
-          break
-        default:
-          console.log('createFieldOf defaulted')
-      }
+    //   entGroup.push(new classObj(
+    //     this.ctx, 
+    //     {
+    //       x:Math.random()*this.canvas.width,
+    //       y:Math.random()*this.canvas.height
+    //     },
+    //     this
+    //   ))
     }
+    entGroup.push(new Apple(this.ctx, null, this))
   }
 
   step() {
@@ -159,23 +129,23 @@ export default class Game {
       this.seamlessMove(m)
     })
 
-    this.immobs.forEach(immob => immob.step())
     this.immobs.forEach(immob => {
-    
+      immob.step()
+
       const isContacting = this.isContactingMouth(
         this.snek.state.getMouthCoords(), 
         immob.hitArea
       )
 
       if (isContacting) {
-        if (this.snek.swallowables.includes(immob.typename)) {
+        if (this.snek.swallowables.includes(immob.species)) {
           this.snek.swallow(immob)
           this.snek.state.exp++
           this.state.score++
         }
       }
     })
-    this.immobs = this.immobs.filter(i => i.parentEnt.typename === 'game')
+    this.immobs = this.immobs.filter(i => i.parentEnt.species === 'game')
 
 
     // TODO make more efficient... ensure all obj get moved to proper parent and parent tracking list
@@ -186,7 +156,7 @@ export default class Game {
           this.snek.state.getMouthCoords(), 
           mob.hitArea)
         if (isContacting) {
-          if (this.snek.swallowables.includes(mob.typename)) {
+          if (this.snek.swallowables.includes(mob.species)) {
             this.snek.swallow(mob)
             this.snek.state.exp++
             this.state.score++

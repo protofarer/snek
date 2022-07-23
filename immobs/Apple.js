@@ -1,6 +1,8 @@
 export default class Apple {
-  typename = 'apple'
+  static species = 'apple'
+  species = 'apple'
   static entGroup = 'immob'
+
   state = {
     position: { x: 0, y: 0 }
   }

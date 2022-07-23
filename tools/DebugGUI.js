@@ -221,7 +221,7 @@ export default class DebugGUI {
     }
 
     if (this.params.isDebugOn) {
-      this.game.snek = new Snek(this.game.ctx, {x:400,y:55}, this.game)
+      this.game.snek = new Snek(this.game.ctx, {x:400,y:400}, this.game)
       // addEnts(Ant, 20)
       // addEnts(Apple, 20)
       // addEnts(Centipede)

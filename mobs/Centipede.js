@@ -1,8 +1,10 @@
 import { Body } from './Snek'
 
 export default class Centipede {
-  typename = 'centipede'
+  static species = 'centipede'
+  species = 'centipede'
   static entGroup = 'mob'
+
   mobile = true
   swallowables = ['snek', 'ant']
   state = {
