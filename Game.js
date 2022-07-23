@@ -99,6 +99,8 @@ export default class Game {
     this.spawnEnts(Ant, 25)
     this.spawnEnts(Mango, 3)
 
+    this.world.randomSpawns()
+
     this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
   }
 

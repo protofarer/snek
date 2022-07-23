@@ -33,7 +33,7 @@ export default class Snek {
     this.state.position = startPosition || {x:400,y:400}
     this.parentEnt = parentEnt
     this.initEventListeners()
-    this.body = new Body(this.ctx, this.state, 3)
+    this.segments = new Segments(this.ctx, this.state, 3)
   }
 
   initEventListeners() {
@@ -69,19 +69,19 @@ export default class Snek {
     this.state.headCoords.x = this.state.position.x
     this.state.headCoords.y = this.state.position.y
 
-    this.body.step(this.state.position)
+    this.segments.step(this.state.position)
     this.draw()
   }
 
   swallow(ent) {
     // TODO segment carry and digest logic
-    ent.parentEnt = this.body
+    ent.parentEnt = this.segments
     ent.state.position = {x: -1000, y: -1000}
     ent.hitArea = null
 
     switch (ent.species) {
       case 'apple':
-        this.body.nSegments += 1
+        this.segments.nSegments += 1
         this.exp += 2
         // TODO add apple to body segment(s) for digestion
         break
@@ -90,8 +90,11 @@ export default class Snek {
         break
       case 'ant':
         this.exp += 3
-        this.body.nSegments += 1
-        console.log(`swallow ant`, )
+        this.segments.nSegments += 1
+        break
+      case 'mango':
+        this.exp += 5
+        this.segments.nSegments += 1
         break
       default:
         console.info(`snek.consume() defaulted`, )
@@ -167,7 +170,7 @@ export default class Snek {
   }
 }
 
-export class Body {
+export class Segments {
   headTrail = []
   constructor(ctx, snekState, nSegments=0) {
     this.ctx = ctx
@@ -187,7 +190,7 @@ export class Body {
     this.draw()
   }
   
-  draw() {
+  drawSegments() {
     for(let i = 1; i < this.headTrail.length; i++) {
       if (i % this.linkLength === 0) {
         this.ctx.save()
@@ -204,14 +207,24 @@ export class Body {
         this.ctx.rotate(segmentAngle)
         this.ctx.scale(1, 0.8)
 
+        this.drawLegs()
+
         this.ctx.beginPath()
         this.ctx.arc(0, 0, this.snekState.r * 0.8, 0, 2 * Math.PI)
         this.ctx.fillStyle = this.snekState.scaleColor
         this.ctx.fill()
 
+
         this.ctx.restore()
       }
     }
+  }
 
+  drawLegs() {
+    ;
+  }
+
+  draw() {
+    this.drawSegments()
   }
 }

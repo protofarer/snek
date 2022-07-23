@@ -1,4 +1,4 @@
-import { Body } from './Snek'
+import { Segments } from './Snek'
 
 export default class Centipede {
   static species = 'centipede'
@@ -25,7 +25,8 @@ export default class Centipede {
       }
     },
     exp: 0,
-    scaleColor: 'hsl(30, 100%, 70%)',
+    scaleColor: 'hsl(35, 50%, 55%)',
+    legColor: 'hsl(30, 70%, 7%)',
     turnDirection: 0,
   }
 
@@ -37,8 +38,7 @@ export default class Centipede {
     this.state.headCoords = startPosition || {x:300, y:400}
     this.parentEnt = parentEnt
 
-    this.body = new Body(this.ctx, this.state, nLinks || 5)
-    this.body.linkLength = Math.floor(this.state.r * 0.5)
+    this.segments = new LeggedSegments(this.ctx, this.state, nLinks || 15)
 
     this.hitSideLength = this.state.r
     this.setHitArea()
@@ -70,7 +70,7 @@ export default class Centipede {
   swallow(entity) {
     switch (entity.class) {
       case 'apple':
-        this.body.nSegments += 1
+        this.segments.nSegments += 1
         this.exp += 2
         // TODO add apple to body segment(s) for digestion
         break
@@ -143,6 +143,27 @@ export default class Centipede {
     this.turnRandomlySmoothly()
 
     this.draw()
-    this.body.step(this.state.position)
+    this.segments.step(this.state.headCoords)
   }
+}
+
+export class LeggedSegments extends Segments {
+  constructor(ctx, state, nSegments=0) {
+    super(ctx, state, nSegments)
+    this.ctx = ctx
+    this.state = state
+  }
+
+  drawLegs() {
+    const ctx = this.ctx
+    const r = this.state.r
+    
+    ctx.beginPath()
+    ctx.moveTo(0, -2*r)
+    ctx.lineTo(0, 2*r)
+    ctx.lineWidth = 1
+    ctx.strokeStyle = this.state.legColor
+    ctx.stroke()
+  }
+
 }
