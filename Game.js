@@ -146,7 +146,6 @@ export default class Game {
               ent.state.getMouthCoords(), 
               sweet.hitArea
             )
-            isContacting === true && console.log(`iscontacting`)
             if (isContacting) {
               ent.grab(sweet)
               this.removeEnt(id)

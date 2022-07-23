@@ -221,7 +221,7 @@ export default class DebugGUI {
       // this.game.spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
       this.game.spawnEnts(Ant, 50)
       // this.game.spawnEnts(Apple, 1, {x:400, y:300})
-      this.game.spawnEnts(Apple, 50)
+      this.game.spawnEnts(Mango, 50)
       // spawnEnts(Ant, 20)
       // spawnEnts(Centipede, 5)
       // addEnts(Apple, 20)

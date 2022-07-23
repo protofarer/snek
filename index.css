@@ -25,7 +25,7 @@ body {
 #layerGame {
   /* border: 5vh solid hsl(28, 55%, 55%); */
   background-color: transparent;
-  touch-action: none;
+  /* touch-action: none; */
   width: calc(80vh);
   height: calc(80vh);
 
