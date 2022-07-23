@@ -109,6 +109,11 @@ export default class Ant {
     }
   }
 
+  drawShadow() {
+    this.ctx.shadowColor = 'hsl(0,0%,25%)'
+    this.ctx.shadowBlur = 6
+  }
+
 
   draw() {
     const r = this.state.r

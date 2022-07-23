@@ -49,6 +49,12 @@ export default class Pebble {
     )
   }
 
+  drawShadow() {
+    this.ctx.shadowColor='hsl(0,0%,10%)'
+    this.ctx.shadowBlur = 2
+    this.ctx.shadowOffsetY = 3
+    this.ctx.fill()
+  }
   draw() {
       this.ctx.save()
       this.ctx.translate(this.state.position.x, this.state.position.y)
@@ -61,6 +67,9 @@ export default class Pebble {
       this.ctx.arc(-this.r/6, 0, this.r, 0, 2 * Math.PI)
       this.ctx.fillStyle = this.state.primaryColor
       this.ctx.fill()
+
+      this.drawShadow()
+
       this.ctx.restore()
   
       this.ctx.restore()

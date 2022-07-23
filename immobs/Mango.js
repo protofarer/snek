@@ -14,12 +14,12 @@ export default class Mango extends Apple {
 
   drawBody() {
     const ctx = this.ctx
-    this.ctx.save()
-    this.ctx.rotate(1.25)
-    this.ctx.scale(0.8, 1)
-    this.ctx.beginPath()
+    ctx.save()
+    ctx.rotate(1.25)
+    ctx.scale(0.8, 1)
+    ctx.beginPath()
 
-    this.ctx.arc(this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
+    ctx.arc(this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
     let grad = ctx.createLinearGradient(
       0.3 * this.state.r,
       this.state.r,
@@ -29,8 +29,11 @@ export default class Mango extends Apple {
     grad.addColorStop(0, this.state.primaryColor)
     grad.addColorStop(0.8,'green')
     ctx.fillStyle = grad
-    this.ctx.fill()
-    this.ctx.restore()
+    ctx.fill()
+
+    this.drawShadow()
+
+    ctx.restore()
   }
 
   drawHighlight() {

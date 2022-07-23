@@ -12,8 +12,8 @@ export default class Apple {
       this.directionAngle = val * 180 / Math.PI
     },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
-    primaryColor: 'hsl(0,80%, 50%)',
-    leafColor: 'hsl(95, 80%, 50%)'
+    primaryColor: 'hsl(0,70%, 50%)',
+    leafColor: 'hsl(95, 60%, 50%)'
   }
   constructor(ctx, startPosition=null, parentEnt=null, id=null) {
     this.ctx = ctx
@@ -82,12 +82,22 @@ export default class Apple {
     this.ctx.arc(-this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.fillStyle = this.state.primaryColor
     this.ctx.fill()
+
+    this.drawShadow()
+
     this.ctx.restore()
+  }
+
+  drawShadow() {
+    this.ctx.shadowOffsetY = this.state.r * 0.4
+    this.ctx.shadowBlur = this.state.r * 0.2
+    this.ctx.shadowColor = 'hsl(0,0%,20%)'
+    this.ctx.fill()
   }
 
   drawLeaf() {
     this.ctx.save()
-    this.ctx.rotate(-Math.PI/4)
+    this.ctx.rotate(-Math.PI/6)
     this.ctx.translate(this.state.r*0.8, 0)
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r / 2, 0, 2 * Math.PI)
@@ -101,13 +111,19 @@ export default class Apple {
     this.ctx.translate(this.state.r*0.8, 0)
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r * 0.28, 0, 2 * Math.PI)
-    this.ctx.fillStyle = 'white'
+    this.ctx.fillStyle = 'hsla(0,0%,100%, 0.7)'
     this.ctx.fill()
+  }
+
+  drawStem() {
+    this.ctx.beginPath()
+    
   }
 
   drawComponents() {
     this.drawBody()
     this.drawLeaf()
+    this.drawStem()
     this.drawHighlight()
   }
 
