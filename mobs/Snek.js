@@ -4,9 +4,9 @@ export default class Snek {
   static entGroup = 'mob'
   entGroup = 'mob'
 
-  mobile = true
-  hasTongueOut = false
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
+  scaleX = 0.8
+
   state = {
     r: 10,
     headCoords: { x: 0, y: 0 },
@@ -26,6 +26,8 @@ export default class Snek {
     },
     exp: 0,
     scaleColor: 'hsl(90, 80%, 50%)',
+    mobile: true,
+    hasTongueOut: false,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
@@ -75,7 +77,6 @@ export default class Snek {
   }
 
   swallow(ent) {
-    // TODO segment carry and digest logic
     ent.parentEnt = this
     ent.state.position = {x: -1000, y: -1000}
     ent.hitArea = null
@@ -84,7 +85,6 @@ export default class Snek {
       case 'apple':
         this.segments.nSegments += 1
         this.exp += 2
-        // TODO add apple to body segment(s) for digestion
         break
       case 'pebble':
         this.exp += 1
@@ -95,36 +95,31 @@ export default class Snek {
         break
       case 'mango':
         this.exp += 5
-        this.segments.nSegments += 1
         break
       default:
-        console.info(`snek.consume() defaulted`, )
+        console.info(`snek.consume() case-switch defaulted`, )
     }
   }
 
   drawHead() {
-
     this.ctx.beginPath()
-    const k = 0.8
-    this.ctx.scale(1,k)
+    this.ctx.scale(1 ,this.scaleX)
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
-    this.ctx.lineWidth = 2
     this.ctx.fillStyle = this.state.scaleColor
     this.ctx.fill()
 
     this.ctx.beginPath()
+    this.ctx.arc(0, 0, this.state.r * 0.7, -Math.PI / 3, Math.PI / 3)
     this.ctx.strokeStyle = 'red'
     this.ctx.lineWidth = 2
-    this.ctx.arc(0, 0, this.state.r * 0.7, -Math.PI / 3, Math.PI / 3)
     this.ctx.stroke()
 
     this.ctx.beginPath()
     this.ctx.moveTo(this.state.r * 0.5, -0.4 * this.state.r)
-    this.ctx.strokeStyle = 'white'
-    this.ctx.lineWidth = 2
     this.ctx.lineTo(this.state.r, -0.4 * this.state.r)
     this.ctx.moveTo(this.state.r * 0.5, 0.4 * this.state.r)
     this.ctx.lineTo(this.state.r, 0.4 * this.state.r)
+    this.ctx.strokeStyle = 'white'
     this.ctx.stroke()
 
     this.ctx.beginPath()
@@ -136,7 +131,7 @@ export default class Snek {
     this.ctx.beginPath()
     this.ctx.arc(0.1 * this.state.r, 0.40 * this.state.r, 0.2 * this.state.r, 0, 2*Math.PI)
     this.ctx.arc(0.1 * this.state.r, -0.40 * this.state.r, 0.2 * this.state.r, 0, 2*Math.PI)
-    this.ctx.fillStyle='black'
+    this.ctx.fillStyle = 'black'
     this.ctx.fill()
   }
 
@@ -159,13 +154,13 @@ export default class Snek {
 
     this.drawHead()
 
-    if (!this.hasTongueOut) {
+    if (!this.state.hasTongueOut) {
       if (Math.random() < 0.05) {
-        this.hasTongueOut = true
-        setTimeout(() => this.hasTongueOut = false, 100 + Math.random()*800)
+        this.state.hasTongueOut = true
+        setTimeout(() => this.state.hasTongueOut = false, 100 + Math.random()*800)
       }
     }
-    this.hasTongueOut && this.drawTongue()
+    this.state.hasTongueOut && this.drawTongue()
 
     this.ctx.restore()
   }
@@ -173,11 +168,11 @@ export default class Snek {
 
 export class Segments {
   headTrail = []
-  constructor(ctx, snekState, nSegments=0) {
+  constructor(ctx, headState, nSegments=0) {
     this.ctx = ctx
-    this.snekState = snekState
+    this.headState = headState
     this.nSegments = nSegments 
-    this.linkLength = Math.floor(snekState.r * 0.6)
+    this.linkLength = Math.floor(headState.r * 0.6)
   }
 
   step(headCoords) {
@@ -197,9 +192,11 @@ export class Segments {
         this.ctx.save()
         this.ctx.translate(this.headTrail[i].x, this.headTrail[i].y)
         let dy, dx
+
+        // * 
         if (i === 1) {
-          dy = this.snekState.headCoords.y - this.headTrail[i].y
-          dx = this.snekState.headCoords.x - this.headTrail[i].x
+          dy = this.headState.headCoords.y - this.headTrail[i].y
+          dx = this.headState.headCoords.x - this.headTrail[i].x
         } else {
           dy = this.headTrail[i-1].y - this.headTrail[i].y
           dx = this.headTrail[i-1].x - this.headTrail[i].x
@@ -211,10 +208,9 @@ export class Segments {
         this.drawLegs()
 
         this.ctx.beginPath()
-        this.ctx.arc(0, 0, this.snekState.r * 0.8, 0, 2 * Math.PI)
-        this.ctx.fillStyle = this.snekState.scaleColor
+        this.ctx.arc(0, 0, this.headState.r * 0.8, 0, 2 * Math.PI)
+        this.ctx.fillStyle = this.headState.scaleColor
         this.ctx.fill()
-
 
         this.ctx.restore()
       }
@@ -222,7 +218,6 @@ export class Segments {
   }
 
   drawLegs() {
-    ;
   }
 
   draw() {

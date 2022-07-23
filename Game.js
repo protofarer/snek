@@ -16,7 +16,6 @@ export default class Game {
   species = 'game'
   constructor (container) {
     this.container = container
-
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'layerGame'
     this.canvas.width = this.canvas.height = 800
@@ -51,7 +50,6 @@ export default class Game {
 
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
-
 
     const isDebugOn = window.sessionStorage.getItem('isDebugOn') 
     if (isDebugOn === 'false' || isDebugOn === null) {
@@ -186,7 +184,6 @@ export default class Game {
             }
           }
         }
-
       }
       this.panel.step()
     }

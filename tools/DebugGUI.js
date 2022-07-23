@@ -18,6 +18,7 @@ export default class DebugGUI {
 
     this.params = {
       isDebugOn: false,
+      showHitOverlay: false,
       isClockDrawn: false,
       isTurningRandomly: false,
       isGameDoubleSpeed: false,
@@ -92,9 +93,13 @@ export default class DebugGUI {
         case 'r':
           resetGame(this.params.isDebugOn)
           break
-        case 'q':
+        case 't':
           this.params.isDebugOn = !this.params.isDebugOn
           window.sessionStorage.setItem('isDebugOn', this.params.isDebugOn)
+          break
+        case 'q':
+          this.params.showHitOverlay = !this.params.showHitOverlay
+          window.sessionStorage.setItem('showHitOverlay', this.params.showHitOverlay)
           break
         case 'b':
           this.game.phase = this.game.phase === CONSTANTS.PHASE_PAUSE 
@@ -126,7 +131,6 @@ export default class DebugGUI {
 
   setParamsFromSessionStorage() {
     // Read debug and game params from sessionStorage for persistence across game runs
-
     for (const key of Object.keys(this.params)) {
       this.setBooleanParam(key)
     }
@@ -159,6 +163,7 @@ export default class DebugGUI {
     setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
     setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
     setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
+    setupBooleanToggler(this.params, 'showHitOverlay', guiTestParams, 'show overlay')
   }
 
   calcFPS(t) {
@@ -171,7 +176,7 @@ export default class DebugGUI {
   }
   
   step() {
-    // Debug only
+    // Debug Mode only
     if (this.params.isDebugOn){
       // Reset Game on hit border
       if (this.game.snek) {
@@ -180,19 +185,16 @@ export default class DebugGUI {
           resetGame(true)
         }
       }
-
-      // Show hitareas
-      
-      Object.values(Entity.stack).forEach( ent => ent.drawHitArea())
-
-      // TODO CLEANUP
-      this.game.immobs.forEach(a => a.drawHitArea())
-      this.game.mobs.forEach(a => a.drawHitArea())
-
-      this.drawOverlays()
     }
 
-    // Make snek turn randomly
+    // Can be run in normal mode
+    if (this.params.showHitOverlay) {
+      console.log(`drawing overlays`, )
+      
+      Object.values(Entity.stack).forEach( ent => ent.drawHitArea())
+      this.drawHitOverlays()
+    }
+
     if (this.snek) {
       if (this.params.isTurningRandomly) {
         const q = Math.random()
@@ -205,7 +207,7 @@ export default class DebugGUI {
     }
   }
 
-  drawOverlays() {
+  drawHitOverlays() {
     if (this.snek) {
       this.game.ctx.beginPath()
       this.game.ctx.arc(this.game.snek.state.getMouthCoords().x, this.game.snek.state.getMouthCoords().y, 2, 0, 2 * Math.PI)
@@ -218,10 +220,11 @@ export default class DebugGUI {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
       // this.game.snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
+      // spawnEnts(Ant, 1, {x:400,y:400})[0].mobile = false
       // this.game.spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
-      this.game.spawnEnts(Ant, 50)
+      // this.game.spawnEnts(Ant, 100)
       // this.game.spawnEnts(Apple, 1, {x:400, y:300})
-      this.game.spawnEnts(Mango, 50)
+      // this.game.spawnEnts(Mango, 50)
       // spawnEnts(Ant, 20)
       // spawnEnts(Centipede, 5)
       // addEnts(Apple, 20)

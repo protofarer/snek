@@ -7,7 +7,7 @@ export default class Ant {
   static swallowables = ['apple', 'mango', 'ant', 'pebble', ]
   canTurn = true
   state = {
-    r: 8,
+    r: 5,
     headCoords: { x: 0, y: 0 },
     position: { x: 0, y: 0 },
     moveSpeed: 2,
@@ -113,42 +113,31 @@ export default class Ant {
   draw() {
     const r = this.state.r
     const ctx = this.ctx
-    const pi = Math.PI
+    const pi = Math.trunc(1000 * Math.PI) / 1000
 
     ctx.save()
     ctx.translate(this.state.position.x, this.state.position.y)
     ctx.rotate(this.state.directionRad)
-    ctx.scale(0.6, 0.6)
-
-    // Draw Head
     ctx.save()
-    ctx.translate(r * 1.1, 0)
+    ctx.scale(1, 0.2)
+
+    // Draw Head + Thorax
     ctx.beginPath()
-    ctx.arc(0, 0, r*0.65, 0, 2 * pi)
+    ctx.arc(0, 0, 2*r, 0, 2 * pi)
+    ctx.restore()
+
+    // Draw Abdomen
+    ctx.arc(-1.4*r, 0, 0.7*r, 0, 2 * pi)
     ctx.fillStyle = this.state.primaryColor
     ctx.fill()
 
+    // Draw Eyes
     ctx.beginPath()
-    ctx.strokeStyle = 'red'
-    ctx.lineWidth = 2
-    ctx.arc(0, 0, r * 0.4, -pi / 4, pi / 4)
-    ctx.stroke()
-
-    ctx.beginPath()
-    ctx.arc(0, 0.3 * r, 0.2 * r, 0, 2 * pi)
-    ctx.arc(0, -0.3 * r, 0.2 * r, 0, 2 * pi)
+    ctx.arc(1.4*r, -0.4*r, 0.3 * r, 0, 2 * pi)
+    ctx.arc(1.4*r, 0.4*r, 0.3 * r, 0, 2 * pi)
     ctx.fillStyle = 'white'
     ctx.fill()
-    ctx.restore()
 
-    // Draw Thorax
-    ctx.beginPath()
-    ctx.arc(0, 0, 0.5 * r, 0, 2 * pi)
-
-    // Draw Abdomen
-    ctx.arc(-r, 0, 0.5 * r, 0, 2 * pi)
-    ctx.fillStyle = 'black'
-    ctx.fill()
 
     ctx.moveTo(r, 1.2*r)
     ctx.lineTo(-r, -1.2*r)
@@ -180,7 +169,7 @@ export default class Ant {
 
     if (this.carriedEnt) {
       this.carriedEnt.state.position = this.state.getMouthCoords()
-      this.carriedEnt.state.directionRad = this.state.directionRad - this.carriedOffsetRad
+      this.carriedEnt.state.directionRad = this.state.directionRad + this.carriedOffsetRad
       // ! hitArea null, may be used for snatch mechanic
       this.carriedEnt.step()
     }
