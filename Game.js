@@ -92,16 +92,13 @@ export default class Game {
   }
 
   initSpawn() {
-    this.snek = new Snek(this.ctx, null, this)
+    // this.snek = new Snek(this.ctx, null, this)
 
     this.spawnEnts(Apple, 30)
     this.spawnEnts(Pebble, 85)
     this.spawnEnts(Ant, 25)
     this.spawnEnts(Centipede, 2)
     // this.spawnEnts(Mango, 50)
-
-    this.world.randomSpawns()
-
   }
 
   addEnt(entClass) {
@@ -147,7 +144,7 @@ export default class Game {
 
   step() {
     this.clock.step()
-    this.world.step()
+    this.world.randomSpawns()
 
     this.stepFunctions.forEach(f => f())
 
