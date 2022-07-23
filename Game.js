@@ -139,6 +139,26 @@ export default class Game {
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
       ent.step()
+        if (ent.species === 'ant') {
+          let sweets = Entity.bySpecies('apple')
+          for(let [id, sweet] of Object.entries(sweets)) {
+            const isContacting = this.isContactingMouth(
+              ent.state.getMouthCoords(), 
+              sweet.hitArea
+            )
+              // console.log(`ant`, ent)
+              console.log(`headcoords`, ent.state.headCoords)
+              console.log(`sweetcoords`, sweet.state.position)
+              
+              // console.log(`mouthcords`, ent.state.getMouthCoords())
+              
+            isContacting === true && console.log(`iscontacting`)
+            if (isContacting) {
+              ent.grab(sweet)
+              this.removeEnt(id)
+            }
+          }
+        }
       if (ent.entGroup === 'mob') {
         
         this.seamlessMove(ent)
@@ -159,19 +179,21 @@ export default class Game {
         }
       } else if (ent.entGroup === 'immob') {
 
-        const isContacting = this.isContactingMouth(
-          this.snek.state.getMouthCoords(), 
-          ent.hitArea
-        )
-
-        if (isContacting) {
-          if (this.snek.swallowables.includes(ent.species)) {
-            this.snek.swallow(ent)
-            this.snek.state.exp++
-            this.state.score++
-            this.removeEnt(id)
+        if (this.snek) {
+          const isContacting = this.isContactingMouth(
+            this.snek.state.getMouthCoords(), 
+            ent.hitArea
+          )
+          if (isContacting) {
+            if (this.snek.swallowables.includes(ent.species)) {
+              this.snek.swallow(ent)
+              this.snek.state.exp++
+              this.state.score++
+              this.removeEnt(id)
+            }
           }
         }
+
       }
       this.panel.step()
     }

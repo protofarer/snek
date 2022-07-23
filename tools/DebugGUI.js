@@ -6,6 +6,7 @@ import Mango from '../immobs/Mango'
 import Centipede from '../mobs/Centipede'
 import Ant from '../mobs/Ant'
 import Snek from '../mobs/Snek'
+import Entity from '../Entity'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
@@ -173,12 +174,18 @@ export default class DebugGUI {
     // Debug only
     if (this.params.isDebugOn){
       // Reset Game on hit border
-      if (this.game.snek.state.getMouthCoords().y <= 0) {
-        this.game.snek.state.headCoords = { x: 400, y: 400 }
-        resetGame(true)
+      if (this.game.snek) {
+        if (this.game.snek.state.getMouthCoords().y <= 0) {
+          this.game.snek.state.headCoords = { x: 400, y: 400 }
+          resetGame(true)
+        }
       }
 
       // Show hitareas
+      
+      Object.values(Entity.stack).forEach( ent => ent.drawHitArea())
+
+      // TODO CLEANUP
       this.game.immobs.forEach(a => a.drawHitArea())
       this.game.mobs.forEach(a => a.drawHitArea())
 
@@ -197,17 +204,19 @@ export default class DebugGUI {
   }
 
   drawOverlays() {
-    this.game.ctx.beginPath()
-    this.game.ctx.arc(this.game.snek.state.getMouthCoords().x, this.game.snek.state.getMouthCoords().y, 2, 0, 2 * Math.PI)
-    this.game.ctx.fillStyle = 'blue'
-    this.game.ctx.fill()
+    if (this.snek) {
+      this.game.ctx.beginPath()
+      this.game.ctx.arc(this.game.snek.state.getMouthCoords().x, this.game.snek.state.getMouthCoords().y, 2, 0, 2 * Math.PI)
+      this.game.ctx.fillStyle = 'blue'
+      this.game.ctx.fill()
+    }
   }
 
   addTestObjects() {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
-      // this.game.snek = new Snek(this.game.ctx, {x:400,y:400}, this.game)
-      this.game.spawnEnts(Ant, 1, {x:400,y:330})[0].canTurn = false
+      // this.game.snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
+      this.game.spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
       this.game.spawnEnts(Apple, 1, {x:400, y:300})
       // spawnEnts(Ant, 20)
       // spawnEnts(Centipede, 5)

@@ -51,6 +51,9 @@ export default class Apple {
 
   step() {
     this.draw()
+    // if (this.parentEnt.species === 'ant') {
+    //   this.parentEnt.species === 'ant' && console.log(`im getting carried lol`, )
+    // }
   }
 
   drawInitWrapper(radians=null) {

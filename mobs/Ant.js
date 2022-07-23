@@ -67,14 +67,11 @@ export default class Ant {
       * Math.cos(this.state.directionRad)
     this.state.position.y += speedMultiplier * this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
-    this.state.headCoords.x = this.state.position.x 
-      + Math.cos(this.state.directionRad) * this.r * 1.75
-    this.state.headCoords.y = this.state.position.y 
-      + Math.sin(this.state.directionRad) * this.r * 1.75
   }
 
   grab(ent) {
     ent.parentEnt = this
+    ent.hitArea = null
     this.carriedEnt = ent
   }
 
@@ -165,6 +162,10 @@ export default class Ant {
   }
 
   step() {
+    this.state.headCoords.x = this.state.position.x 
+      + Math.cos(this.state.directionRad) * this.state.r * 1.75
+    this.state.headCoords.y = this.state.position.y 
+      + Math.sin(this.state.directionRad) * this.state.r * 1.75
     
     if (this.mobile) {
       if (Math.random() < 0.8) {
@@ -176,8 +177,9 @@ export default class Ant {
     }
 
     if (this.carriedEnt) {
-      this.carriedEnt.position = this.state.getMouthCoords() + this.carriedEnt.state.r
-      this.carriedEnt.directionAngle = this.state.directionAngle
+      this.carriedEnt.state.position = this.state.getMouthCoords()
+      this.carriedEnt.state.directionAngle = this.state.directionAngle
+      // ! hitArea null, may be used for snatch mechanic
       this.carriedEnt.step()
     }
 
