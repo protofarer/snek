@@ -84,20 +84,23 @@ export default class Snek {
     switch (ent.species) {
       case 'apple':
         this.segments.nSegments += 1
-        this.exp += 2
         break
       case 'pebble':
-        this.exp += 1
         break
       case 'ant':
-        this.exp += 3
         this.segments.nSegments += 1
         break
       case 'mango':
-        this.exp += 5
         break
       default:
         console.info(`snek.consume() case-switch defaulted`, )
+    }
+    this.state.exp += ent.state.exp
+
+    if (this.swallowables.includes(ent.carriedEnt?.species)) {
+      this.swallow(ent.carriedEnt)
+    } else {
+      // Drop any non-swallowable carried ents
     }
   }
 

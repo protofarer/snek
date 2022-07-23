@@ -104,6 +104,24 @@ export default class Game {
     this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
   }
 
+  addEnt(entClass) {
+    const ent = new entClass(
+      this.ctx, 
+      {
+        x: 400,
+        y: 400,
+      }, 
+      this
+    )
+    
+    const bigEnt = new Entity(ent)
+    
+    ent.state.position.y -= 40 * bigEnt.id
+    ent.state.directionAngle = -90
+    ent.state.mobile = false
+    return ent
+  }
+
   spawnEnts(entClass, n=1, position=null) {
     const ents = []
     for(let i = 0; i < n; i++) {
@@ -163,7 +181,6 @@ export default class Game {
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.swallow(ent)
-              this.snek.state.exp++
               this.state.score++
               this.removeEnt(id)
             }
@@ -179,7 +196,6 @@ export default class Game {
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.swallow(ent)
-              this.snek.state.exp++
               this.state.score++
               this.removeEnt(id)
             }

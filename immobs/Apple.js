@@ -13,7 +13,8 @@ export default class Apple {
     },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     primaryColor: 'hsl(0,70%, 50%)',
-    leafColor: 'hsl(95, 60%, 50%)'
+    leafColor: 'hsl(95, 60%, 50%)',
+    exp: 2,
   }
   constructor(ctx, startPosition=null, parentEnt=null, id=null) {
     this.ctx = ctx

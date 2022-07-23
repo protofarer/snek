@@ -222,12 +222,13 @@ export default class DebugGUI {
     if (this.params.isDebugOn) {
       const snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
       snek.state.directionAngle = -180
-      this.game.snek = snek
-      spawnEnts(Apple, 50)
-      spawnEnts(Pebble, 100)
-      spawnEnts(Mango, 50)
-      spawnEnts(Ant, 20)
-      spawnEnts(Centipede, 5)
+      // this.game.snek = snek
+      // spawnEnts(Apple, 20)
+      // spawnEnts(Pebble, 100)
+      // spawnEnts(Mango, 50)
+      // spawnEnts(Ant, 30)
+      // spawnEnts(Centipede, 5)
+      this.game.addEnt(Ant)
       // spawnEnts(Ant, 1, {x:400,y:400})[0].mobile = false
       // spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
       // spawnEnts(Ant, 10).forEach(e => e.state.moveSpeed = 10)

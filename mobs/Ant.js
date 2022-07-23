@@ -3,7 +3,6 @@ export default class Ant {
   species = 'ant'
   static entGroup = 'mob'
   entGroup = 'mob'
-  mobile = true
   static swallowables = ['apple', 'mango', 'ant', 'pebble', ]
   canTurn = true
   state = {
@@ -24,8 +23,9 @@ export default class Ant {
         y: this.headCoords.y + 0.6 * this.r * Math.sin(this.directionRad),
       }
     },
-    exp: 0,
+    exp: 1,
     primaryColor: 'black',
+    mobile: true,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
@@ -85,10 +85,10 @@ export default class Ant {
   setHitArea() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.state.position.x - 0.75 * this.hitSideLength,
-      this.state.position.y - 0.75 * this.hitSideLength, 
-      1.5 * this.hitSideLength,
-      1.5 * this.hitSideLength
+      this.state.position.x - 1 * this.hitSideLength,
+      this.state.position.y - 2 * this.hitSideLength, 
+      2 * this.hitSideLength,
+      4.2 * this.hitSideLength
     )
   }
 
@@ -100,9 +100,6 @@ export default class Ant {
       case 'apple':
         this.exp += 2
         // TODO add apple to body segment(s) for digestion
-        break
-      case 'pebble':
-        this.exp += 1
         break
       default:
         console.info(`${this.typname}.swallow() defaulted`, )
@@ -163,7 +160,7 @@ export default class Ant {
     this.state.headCoords.y = this.state.position.y 
       + Math.sin(this.state.directionRad) * this.state.r * 1.1
     
-    if (this.mobile) {
+    if (this.state.mobile) {
       if (Math.random() < 0.8) {
         this.move(1)
         this.setHitArea()

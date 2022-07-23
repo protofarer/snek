@@ -7,7 +7,8 @@ export default class Pebble {
   r = 6
   state = {
     position: {x: 0, y: 0},
-    primaryColor: 'hsl(220, 30%, 30%)'
+    primaryColor: 'hsl(220, 30%, 30%)',
+    exp: 0,
   }
 
   constructor(ctx, position=null, parentEnt=null, id=null) {

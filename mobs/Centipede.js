@@ -6,8 +6,7 @@ export default class Centipede {
   static entGroup = 'mob'
   entGroup = 'mob'
 
-  mobile = true
-  swallowables = ['snek', 'ant']
+  swallowables = ['snek']
   state = {
     r: 7,
     headCoords: { x: 0, y: 0 },
@@ -25,10 +24,11 @@ export default class Centipede {
         y: this.headCoords.y + this.r * Math.sin(this.directionRad),
       }
     },
-    exp: 0,
+    exp: 3,
     scaleColor: 'hsl(35, 50%, 55%)',
     legColor: 'hsl(30, 70%, 7%)',
     turnDirection: 0,
+    mobile: true,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null, nLinks=null) {
