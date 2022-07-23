@@ -15,5 +15,15 @@ export default class Background {
     this.ctx.fillStyle = 'hsl(35,40%,35%)'
     // this.ctx.fillStyle = 'white'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    const n = 1000
+    for(let i = 0; i < n; i++) {
+      const ry = Math.random() * this.canvas.height
+      const rx = Math.random() * this.canvas.width
+      this.ctx.moveTo(rx, ry)
+      this.ctx.lineTo(rx+1, ry)
+      this.ctx.strokeStyle=`hsla(0,0%,${Math.random()*50}%,${0.3 + Math.random() * 0.3})`
+      this.ctx.stroke()
+
+    }
   }
 }

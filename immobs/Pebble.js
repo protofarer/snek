@@ -4,20 +4,22 @@ export default class Pebble {
   static entGroup = 'immob'
   entGroup = 'immob'
 
-  r = 6
   state = {
+    r: 6,
     position: {x: 0, y: 0},
-    primaryColor: 'hsl(220, 30%, 45%)',
+    primaryColor: 'hsl(220, 10%, 48%)',
     exp: 0,
+    get weight() { return this.state.r }
   }
 
-  constructor(ctx, position=null, parentEnt=null, id=null) {
+  constructor(ctx, position=null, parentEnt=null, id=null, r=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
+    this.state.r = r || Math.random() * 5
     this.state.position = position || {x: 400, y:300}
     this.id = id
-    this.hitSideLength = this.r + 1
+    this.hitSideLength = this.state.r + 1
     this.setHitArea()
   }
 
@@ -64,8 +66,8 @@ export default class Pebble {
   
       this.ctx.save()
       this.ctx.rotate(Math.PI / 3)
-      this.ctx.arc(this.r/6, 0, this.r, 0, 2 * Math.PI)
-      this.ctx.arc(-this.r/6, 0, this.r, 0, 2 * Math.PI)
+      this.ctx.arc(this.state.r/6, 0, this.state.r, 0, 2 * Math.PI)
+      this.ctx.arc(-this.state.r/6, 0, this.state.r, 0, 2 * Math.PI)
       this.ctx.fillStyle = this.state.primaryColor
       this.ctx.fill()
 

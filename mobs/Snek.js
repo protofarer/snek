@@ -25,7 +25,7 @@ export default class Snek {
       }
     },
     exp: 0,
-    scaleColor: 'hsl(90, 80%, 50%)',
+    scaleColor: 'hsl(100, 100%, 32%)',
     mobile: true,
     hasTongueOut: false,
   }
