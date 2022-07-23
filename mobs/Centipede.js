@@ -131,16 +131,16 @@ export default class Centipede {
   }
 
   step() {
-    this.state.headCoords.x += this.state.moveSpeed 
+    this.state.position.x += this.state.moveSpeed 
       * Math.cos(this.state.directionRad)
-    this.state.headCoords.y += this.state.moveSpeed 
+    this.state.position.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
-    this.state.position.x = this.state.headCoords.x
-    this.state.position.y = this.state.headCoords.y
+    this.state.headCoords.x = this.state.position.x
+    this.state.headCoords.y = this.state.position.y
 
     this.turnRandomlySmoothly()
 
     this.draw()
-    this.body.step(this.state.headCoords)
+    this.body.step(this.state.position)
   }
 }

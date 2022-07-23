@@ -204,7 +204,7 @@ export default class DebugGUI {
   }
 
   addTestObjects() {
-    const addEnts = (entType, n) => {
+    const addEnts = (entType, n=1) => {
       const entGroup = entType.entGroup === 'mob' ? this.game.mobs : this.game.immobs
         for(let i = 0; i < n; i++) {
           entGroup.push(
@@ -221,9 +221,10 @@ export default class DebugGUI {
     }
 
     if (this.params.isDebugOn) {
-      this.game.snek = new Snek(this.game.ctx, null, this.game)
-      addEnts(Ant, 20)
-      addEnts(Apple, 20)
+      this.game.snek = new Snek(this.game.ctx, {x:400,y:55}, this.game)
+      // addEnts(Ant, 20)
+      // addEnts(Apple, 20)
+      // addEnts(Centipede)
     }
   }
 }

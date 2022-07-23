@@ -59,15 +59,18 @@ export default class Snek {
   }
 
   step() {
-    this.state.headCoords.x += this.state.moveSpeed 
+    this.state.position.x += this.state.moveSpeed 
       * Math.cos(this.state.directionRad)
-    this.state.headCoords.y += this.state.moveSpeed 
+    this.state.position.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
-    this.state.position.x = this.state.headCoords.x
-    this.state.position.y = this.state.headCoords.y
+    this.state.headCoords.x = this.state.position.x
+    this.state.headCoords.y = this.state.position.y
+
+    this.body.step(this.state.position)
+    
+    console.log(`snek pos`, this.state.position)
     
     this.drawSnake()
-    this.body.step(this.state.headCoords)
   }
 
   swallow(ent) {

@@ -151,8 +151,8 @@ export default class Game {
     this.clock.step()
     this.world.step()
 
-    this.snek.step()
     this.seamlessMove(this.snek)
+    this.snek.step()
 
     this.mobs.forEach(m => {
       m.step()
