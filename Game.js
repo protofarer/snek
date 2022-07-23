@@ -132,8 +132,10 @@ export default class Game {
     this.clock.step()
     this.world.step()
 
-    this.seamlessMove(this.snek)
-    this.snek.step()
+    this.stepFunctions.forEach(f => f())
+
+    this.snek && this.seamlessMove(this.snek)
+    this.snek?.step()
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
       ent.step()
@@ -141,19 +143,20 @@ export default class Game {
         
         this.seamlessMove(ent)
 
-        const isContacting = this.isContactingMouth(
-          this.snek.state.getMouthCoords(), 
-          ent.hitArea)
-
-        if (isContacting) {
-          if (this.snek.swallowables.includes(ent.species)) {
-            this.snek.swallow(ent)
-            this.snek.state.exp++
-            this.state.score++
-            this.removeEnt(id)
+        if (this.snek) {
+          const isContacting = this.isContactingMouth(
+            this.snek.state.getMouthCoords(), 
+            ent.hitArea)
+  
+          if (isContacting) {
+            if (this.snek.swallowables.includes(ent.species)) {
+              this.snek.swallow(ent)
+              this.snek.state.exp++
+              this.state.score++
+              this.removeEnt(id)
+            }
           }
         }
-
       } else if (ent.entGroup === 'immob') {
 
         const isContacting = this.isContactingMouth(
@@ -170,8 +173,7 @@ export default class Game {
           }
         }
       }
+      this.panel.step()
     }
-    this.panel.step()
-    this.stepFunctions.forEach(f => f())
   }
 }

@@ -5,6 +5,7 @@ export default class Ant {
   entGroup = 'mob'
   mobile = true
   static swallowables = ['apple', 'mango', 'ant', 'pebble', ]
+  canTurn = true
   state = {
     r: 8,
     headCoords: { x: 0, y: 0 },
@@ -70,7 +71,6 @@ export default class Ant {
       + Math.cos(this.state.directionRad) * this.r * 1.75
     this.state.headCoords.y = this.state.position.y 
       + Math.sin(this.state.directionRad) * this.r * 1.75
-    this.turnErratically()
   }
 
   grab(ent) {
@@ -165,12 +165,13 @@ export default class Ant {
   }
 
   step() {
+    
     if (this.mobile) {
       if (Math.random() < 0.8) {
         this.move(1)
         this.setHitArea()
       } else {
-        this.turnErratically(0.8)
+        this.canTurn && this.turnErratically(0.8)
       }
     }
 
