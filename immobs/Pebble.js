@@ -6,7 +6,8 @@ export default class Pebble {
 
   r = 6
   state = {
-    position: {x: 0, y: 0}
+    position: {x: 0, y: 0},
+    primaryColor: 'hsl(220, 30%, 30%)'
   }
 
   constructor(ctx, position=null, parentEnt=null, id=null) {
@@ -58,7 +59,7 @@ export default class Pebble {
       this.ctx.rotate(Math.PI / 3)
       this.ctx.arc(this.r/6, 0, this.r, 0, 2 * Math.PI)
       this.ctx.arc(-this.r/6, 0, this.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = this.primaryColor || 'brown'
+      this.ctx.fillStyle = this.state.primaryColor
       this.ctx.fill()
       this.ctx.restore()
   

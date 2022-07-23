@@ -1,6 +1,7 @@
 import GUI from 'lil-gui'
 import CONSTANTS from '../Constants'
 import { resetGame, } from '..'
+import Pebble from '../immobs/Pebble'
 import Apple from '../immobs/Apple'
 import Mango from '../immobs/Mango'
 import Centipede from '../mobs/Centipede'
@@ -195,7 +196,7 @@ export default class DebugGUI {
       this.drawHitOverlays()
     }
 
-    if (this.snek) {
+    if (this.game.snek) {
       if (this.params.isTurningRandomly) {
         const q = Math.random()
         if (q < 0.25) {
@@ -208,7 +209,7 @@ export default class DebugGUI {
   }
 
   drawHitOverlays() {
-    if (this.snek) {
+    if (this.game.snek) {
       this.game.ctx.beginPath()
       this.game.ctx.arc(this.game.snek.state.getMouthCoords().x, this.game.snek.state.getMouthCoords().y, 2, 0, 2 * Math.PI)
       this.game.ctx.fillStyle = 'blue'
@@ -219,15 +220,16 @@ export default class DebugGUI {
   addTestObjects() {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
-      // this.game.snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
-      // spawnEnts(Ant, 1, {x:400,y:400})[0].mobile = false
-      // this.game.spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
-      this.game.spawnEnts(Ant, 100)
-      // this.game.spawnEnts(Apple, 1, {x:400, y:300})
+      this.game.snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
       spawnEnts(Apple, 50)
-      // this.game.spawnEnts(Mango, 50)
-      // spawnEnts(Ant, 20)
-      // spawnEnts(Centipede, 5)
+      spawnEnts(Pebble, 100)
+      spawnEnts(Mango, 50)
+      spawnEnts(Ant, 20)
+      spawnEnts(Centipede, 5)
+      // spawnEnts(Ant, 1, {x:400,y:400})[0].mobile = false
+      // spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
+      // spawnEnts(Ant, 10).forEach(e => e.state.moveSpeed = 10)
+      // spawnEnts(Apple, 1, {x:400, y:300})
     }
   }
 }

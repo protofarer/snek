@@ -5,22 +5,23 @@ export default class Apple {
   entGroup = 'immob'
 
   state = {
+    r: 6,
     position: { x: 0, y: 0 },
     directionAngle: 0,
     set directionRad(val) {
       this.directionAngle = val * 180 / Math.PI
     },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
+    primaryColor: 'hsl(0,80%, 50%)',
+    leafColor: 'hsl(95, 80%, 50%)'
   }
-  r = 6
-  primaryColor = 'red'
   constructor(ctx, startPosition=null, parentEnt=null, id=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
     this.state.position = startPosition || {x:400,y:330}
     this.id = id
-    this.hitSideLength = this.r + 1
+    this.hitSideLength = this.state.r + 1
     
     this.setHitArea()
   }
@@ -72,35 +73,35 @@ export default class Apple {
     this.ctx.restore()
   }
 
-  drawBody(color=null) {
+  drawBody() {
     this.ctx.save()
     this.ctx.rotate(Math.PI / 4)
     this.ctx.scale(0.8, 1)
     this.ctx.beginPath()
-    this.ctx.arc(this.r*0.3, 0, this.r, 0, 2 * Math.PI)
-    this.ctx.arc(-this.r*0.3, 0, this.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = color || this.primaryColor || 'red'
+    this.ctx.arc(this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
+    this.ctx.arc(-this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
+    this.ctx.fillStyle = this.state.primaryColor
     this.ctx.fill()
     this.ctx.restore()
   }
 
-  drawLeaf(color=null) {
+  drawLeaf() {
     this.ctx.save()
     this.ctx.rotate(-Math.PI/4)
-    this.ctx.translate(this.r*0.8, 0)
+    this.ctx.translate(this.state.r*0.8, 0)
     this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.r / 2, 0, 2 * Math.PI)
-    this.ctx.fillStyle = color || 'lawngreen'
+    this.ctx.arc(0, 0, this.state.r / 2, 0, 2 * Math.PI)
+    this.ctx.fillStyle = this.state.leafColor
     this.ctx.fill()
     this.ctx.restore()
   }
 
-  drawHighlight(color=null) {
+  drawHighlight() {
     this.ctx.rotate(-2 * Math.PI / 3)
-    this.ctx.translate(this.r*0.8, 0)
+    this.ctx.translate(this.state.r*0.8, 0)
     this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.r / 3, 0, 2 * Math.PI)
-    this.ctx.fillStyle = color || 'white'
+    this.ctx.arc(0, 0, this.state.r * 0.28, 0, 2 * Math.PI)
+    this.ctx.fillStyle = 'white'
     this.ctx.fill()
   }
 
@@ -110,7 +111,7 @@ export default class Apple {
     this.drawHighlight()
   }
 
-  draw(radians=null) {
+  draw() {
     this.drawInitWrapper(this.state.directionRad)
   }
 }
