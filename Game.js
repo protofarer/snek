@@ -8,6 +8,7 @@ import Centipede from './mobs/Centipede'
 import Ant from './mobs/Ant'
 
 import Apple from './immobs/Apple'
+import Mango from './immobs/Mango'
 import Pebble from './immobs/Pebble'
 
 export default class Game {
@@ -94,27 +95,27 @@ export default class Game {
     this.snek = new Snek(this.ctx, null, this)
 
     this.spawnEnts(Apple, 15)
-    // this.spawnEnts(Pebble, 35)
-    // this.spawnEnts(Ant, 25)
+    this.spawnEnts(Pebble, 55)
+    this.spawnEnts(Ant, 25)
+    this.spawnEnts(Mango, 3)
 
-    // this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
-
+    this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
   }
 
-  spawnEnts(classObj, n=1) {
+  spawnEnts(classObj, n=1, position=null) {
     const entGroup = classObj.entGroup === 'mob' ? this.mobs : this.immobs
     
     for(let i = 0; i < n; i++) {
-    //   entGroup.push(new classObj(
-    //     this.ctx, 
-    //     {
-    //       x:Math.random()*this.canvas.width,
-    //       y:Math.random()*this.canvas.height
-    //     },
-    //     this
-    //   ))
+      entGroup.push(new classObj(
+        this.ctx, 
+        {
+          x:Math.random()*this.canvas.width,
+          y:Math.random()*this.canvas.height
+        },
+        this
+      ))
     }
-    entGroup.push(new Apple(this.ctx, null, this))
+    // entGroup.push(new Apple(this.ctx, null, this))
   }
 
   step() {
@@ -164,7 +165,7 @@ export default class Game {
         }
       }
     )
-    this.mobs = this.mobs.filter(mob => mob.parentEnt.typename === 'game')
+    this.mobs = this.mobs.filter(mob => mob.parentEnt.species === 'game')
 
     this.panel.step()
     this.stepFunctions.forEach(f => f())

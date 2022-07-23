@@ -51,7 +51,7 @@ export default class DebugGUI {
       'debugreset').name('reset: debug')
 
     const addCentipede = () => {
-      this.game.addMob(new Centipede(this.game.ctx, null, this.game))
+      this.game.spawnEnts(Centipede)
     }
     guiGameTest.add({ addCentipede }, 'addCentipede')
 
@@ -204,25 +204,10 @@ export default class DebugGUI {
   }
 
   addTestObjects() {
-    const addEnts = (entType, n=1) => {
-      const entGroup = entType.entGroup === 'mob' ? this.game.mobs : this.game.immobs
-        for(let i = 0; i < n; i++) {
-          entGroup.push(
-            new entType(
-              this.game.ctx, 
-              {
-                x:Math.random()*this.game.canvas.width, 
-                y:Math.random()*this.game.canvas.height
-              }, 
-              this.game
-            )
-          )
-        }
-    }
-
+    const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
       this.game.snek = new Snek(this.game.ctx, {x:400,y:400}, this.game)
-      // addEnts(Ant, 20)
+      spawnEnts(Ant, 20)
       // addEnts(Apple, 20)
       // addEnts(Centipede)
     }

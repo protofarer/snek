@@ -11,7 +11,7 @@ export default class Centipede {
     r: 7,
     headCoords: { x: 0, y: 0 },
     position: { x: 0, y: 0 },
-    moveSpeed: 4,
+    moveSpeed: 1,
     directionAngle: -90,
     set directionRad(val) {
       this.directionAngle = val * 180 / Math.PI
