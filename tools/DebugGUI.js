@@ -207,7 +207,7 @@ export default class DebugGUI {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
       this.game.snek = new Snek(this.game.ctx, {x:400,y:400}, this.game)
-      this.game.addEnt(Ant, {x:400,y:360}).mobile = false
+      // this.game.spawnEnts(Ant, {x:400,y:360})[0].mobile = false
       // spawnEnts(Ant, 20)
       // spawnEnts(Centipede, 5)
       // addEnts(Apple, 20)
