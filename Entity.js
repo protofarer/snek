@@ -12,7 +12,9 @@ export default class Entity {
   static bySpecies(species) {
     let found = {}
     for(const [k,v] of Object.entries(Entity.stack)) {
-      if (v.species === species) found[k] =  v
+      species.forEach(s => {
+        if (v.species === s) found[k] =  v
+      })
     }
     return found
   }

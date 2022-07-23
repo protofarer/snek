@@ -193,12 +193,14 @@ export default class DebugGUI {
     }
 
     // Make snek turn randomly
-    if (this.params.isTurningRandomly) {
-      const q = Math.random()
-      if (q < 0.25) {
-        this.game.snek.turnLeft()
-      } else if (q < 0.50){
-        this.game.snek.turnRight()
+    if (this.snek) {
+      if (this.params.isTurningRandomly) {
+        const q = Math.random()
+        if (q < 0.25) {
+          this.game.snek.turnLeft()
+        } else if (q < 0.50){
+          this.game.snek.turnRight()
+        }
       }
     }
   }
@@ -216,8 +218,10 @@ export default class DebugGUI {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
       // this.game.snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
-      this.game.spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
-      this.game.spawnEnts(Apple, 1, {x:400, y:300})
+      // this.game.spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
+      this.game.spawnEnts(Ant, 50)
+      // this.game.spawnEnts(Apple, 1, {x:400, y:300})
+      this.game.spawnEnts(Apple, 50)
       // spawnEnts(Ant, 20)
       // spawnEnts(Centipede, 5)
       // addEnts(Apple, 20)

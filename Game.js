@@ -99,7 +99,7 @@ export default class Game {
     this.spawnEnts(Apple, 15)
     this.spawnEnts(Pebble, 55)
     this.spawnEnts(Ant, 25)
-    this.spawnEnts(Mango, 3)
+    // this.spawnEnts(Mango, 3)
 
     this.world.randomSpawns()
 
@@ -139,19 +139,13 @@ export default class Game {
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
       ent.step()
-        if (ent.species === 'ant') {
-          let sweets = Entity.bySpecies('apple')
+        if (ent.species === 'ant' && !ent.carriedEnt) {
+          let sweets = Entity.bySpecies(['apple', 'mango'])
           for(let [id, sweet] of Object.entries(sweets)) {
             const isContacting = this.isContactingMouth(
               ent.state.getMouthCoords(), 
               sweet.hitArea
             )
-              // console.log(`ant`, ent)
-              console.log(`headcoords`, ent.state.headCoords)
-              console.log(`sweetcoords`, sweet.state.position)
-              
-              // console.log(`mouthcords`, ent.state.getMouthCoords())
-              
             isContacting === true && console.log(`iscontacting`)
             if (isContacting) {
               ent.grab(sweet)

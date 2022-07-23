@@ -20,8 +20,8 @@ export default class Ant {
     turnRate: function () { return this.moveSpeed + 8},
     getMouthCoords: function () {
       return {
-        x: this.headCoords.x + 1.75 * this.r * Math.cos(this.directionRad),
-        y: this.headCoords.y + 1.75 * this.r * Math.sin(this.directionRad),
+        x: this.headCoords.x + 0.6 * this.r * Math.cos(this.directionRad),
+        y: this.headCoords.y + 0.6 * this.r * Math.sin(this.directionRad),
       }
     },
     exp: 0,
@@ -35,6 +35,7 @@ export default class Ant {
     this.parentEnt = parentEnt
     this.hitSideLength = this.state.r
     this.carriedEnt = null
+    this.carriedOffsetRad = null
     this.setHitArea()
   }
 
@@ -73,6 +74,7 @@ export default class Ant {
     ent.parentEnt = this
     ent.hitArea = null
     this.carriedEnt = ent
+    this.carriedOffsetRad = this.state.directionRad - this.carriedEnt.state.directionRad
   }
 
   drawHitArea() {
@@ -163,9 +165,9 @@ export default class Ant {
 
   step() {
     this.state.headCoords.x = this.state.position.x 
-      + Math.cos(this.state.directionRad) * this.state.r * 1.75
+      + Math.cos(this.state.directionRad) * this.state.r * 1.1
     this.state.headCoords.y = this.state.position.y 
-      + Math.sin(this.state.directionRad) * this.state.r * 1.75
+      + Math.sin(this.state.directionRad) * this.state.r * 1.1
     
     if (this.mobile) {
       if (Math.random() < 0.8) {
@@ -178,7 +180,7 @@ export default class Ant {
 
     if (this.carriedEnt) {
       this.carriedEnt.state.position = this.state.getMouthCoords()
-      this.carriedEnt.state.directionAngle = this.state.directionAngle
+      this.carriedEnt.state.directionRad = this.state.directionRad - this.carriedOffsetRad
       // ! hitArea null, may be used for snatch mechanic
       this.carriedEnt.step()
     }

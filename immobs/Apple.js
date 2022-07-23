@@ -5,7 +5,12 @@ export default class Apple {
   entGroup = 'immob'
 
   state = {
-    position: { x: 0, y: 0 }
+    position: { x: 0, y: 0 },
+    directionAngle: 0,
+    set directionRad(val) {
+      this.directionAngle = val * 180 / Math.PI
+    },
+    get directionRad() { return this.directionAngle * Math.PI / 180 },
   }
   r = 6
   primaryColor = 'red'
@@ -106,6 +111,6 @@ export default class Apple {
   }
 
   draw(radians=null) {
-    this.drawInitWrapper(radians)
+    this.drawInitWrapper(this.state.directionRad)
   }
 }
