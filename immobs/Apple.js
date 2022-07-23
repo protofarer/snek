@@ -1,5 +1,6 @@
 export default class Apple {
   typename = 'apple'
+  static entGroup = 'immob'
   state = {
     position: { x: 0, y: 0 }
   }

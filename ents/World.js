@@ -1,5 +1,5 @@
-import Apple from '../swallowables/Apple'
-import Pebble from '../swallowables/Pebble'
+import Apple from '../immobs/Apple'
+import Pebble from '../immobs/Pebble'
 export default class World {
   typename = 'world'
   chilId = 0

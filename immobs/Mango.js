@@ -1,4 +1,4 @@
-import Apple from './Apple'
+import Apple from '../immobs/Apple'
 
 export default class Mango extends Apple {
   constructor(ctx, position, parentEnt=null, id=null) {
@@ -10,7 +10,4 @@ export default class Mango extends Apple {
 
   drawLeaf() {}
 
-  draw() {
-    super.draw(-0.4)
-  }
 }

@@ -2,12 +2,14 @@ import { Body } from './Snek'
 
 export default class Centipede {
   typename = 'centipede'
+  static entGroup = 'mob'
   mobile = true
   swallowables = ['snek', 'ant']
   state = {
     r: 7,
     headCoords: { x: 0, y: 0 },
-    moveSpeed: 5,
+    position: { x: 0, y: 0 },
+    moveSpeed: 4,
     directionAngle: -90,
     set directionRad(val) {
       this.directionAngle = val * 180 / Math.PI
@@ -25,12 +27,19 @@ export default class Centipede {
     turnDirection: 0,
   }
 
-  constructor(ctx, startPosition=null, parentEnt=null) {
+  constructor(ctx, startPosition=null, parentEnt=null, nLinks=null) {
+    if (!parentEnt) throw new Error('New centipede needs a parentEnt')
+
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.state.headCoords = startPosition || {x:300, y:400}
     this.parentEnt = parentEnt
-    this.body = new Body(this.ctx, this.state, 10)
+
+    this.body = new Body(this.ctx, this.state, nLinks || 5)
+    this.body.linkLength = Math.floor(this.state.r * 0.5)
+
+    this.hitSideLength = this.state.r
+    this.setHitArea()
   }
 
   turnLeft() {
@@ -39,6 +48,21 @@ export default class Centipede {
 
   turnRight() {
     this.state.directionAngle += this.state.turnRate() * 1
+  }
+
+  setHitArea() {
+    this.hitArea = new Path2D()
+    this.hitArea.rect(
+      this.state.position.x - this.hitSideLength, 
+      this.state.position.y - this.hitSideLength,
+      2 * this.hitSideLength,
+      2 * this.hitSideLength
+    )
+  }
+
+  drawHitArea() {
+    this.ctx.strokeStyle = 'blue'
+    this.ctx.stroke(this.hitArea)
   }
 
   swallow(entity) {
@@ -111,6 +135,8 @@ export default class Centipede {
       * Math.cos(this.state.directionRad)
     this.state.headCoords.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
+    this.state.position.x = this.state.headCoords.x
+    this.state.position.y = this.state.headCoords.y
 
     this.turnRandomlySmoothly()
 

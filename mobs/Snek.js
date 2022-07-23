@@ -1,10 +1,12 @@
 export default class Snek {
   typename = 'snek'
   mobile = true
+  entClass = 'mob'
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
   state = {
     r: 10,
     headCoords: { x: 0, y: 0 },
+    position: {x:0,y:0},
     moveSpeed: 2,
     directionAngle: -90,
     set directionRad(val) {
@@ -28,7 +30,7 @@ export default class Snek {
     this.state.headCoords = startPosition || {x:400,y:400}
     this.parentEnt = parentEnt
     this.initEventListeners()
-    this.body = new Body(this.ctx, this.state, 1)
+    this.body = new Body(this.ctx, this.state, 3)
   }
 
   initEventListeners() {
@@ -61,6 +63,8 @@ export default class Snek {
       * Math.cos(this.state.directionRad)
     this.state.headCoords.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
+    this.state.position.x = this.state.headCoords.x
+    this.state.position.y = this.state.headCoords.y
     
     this.drawSnake()
     this.body.step(this.state.headCoords)

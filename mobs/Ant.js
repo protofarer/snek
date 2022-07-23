@@ -1,5 +1,6 @@
 export default class Ant {
   typename = 'ant'
+  static entGroup = 'mob'
   mobile = true
   swallowables = ['apple', 'mango', 'ant', 'pebble', ]
   state = {
@@ -33,15 +34,15 @@ export default class Ant {
     this.setHitArea()
   }
 
-  turnLeft() {
-    this.state.directionAngle += this.state.turnRate() * -1
+  turnLeft(k=1) {
+    this.state.directionAngle += k * this.state.turnRate() * -1
   }
 
-  turnRight() {
-    this.state.directionAngle += this.state.turnRate() * 1
+  turnRight(k=1) {
+    this.state.directionAngle += k * this.state.turnRate() * 1
   }
 
-  turnErratically() {
+  turnErratically(k=1) {
     const rng = Math.random()
     if (rng < 0.2) {
       this.turnDirection = 1
@@ -51,16 +52,16 @@ export default class Ant {
       this.turnDirection = 0
     }
     if (this.turnDirection === 1) {
-      this.turnLeft()
+      this.turnLeft(k)
     } else if (this.turnDirection === 2) {
-      this.turnRight()
+      this.turnRight(k)
     }
   }
 
-  move() {
-    this.state.position.x += this.state.moveSpeed 
+  move(speedMultiplier=1) {
+    this.state.position.x += speedMultiplier * this.state.moveSpeed 
       * Math.cos(this.state.directionRad)
-    this.state.position.y += this.state.moveSpeed 
+    this.state.position.y += speedMultiplier * this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
     this.state.headCoords.x = this.state.position.x + Math.cos(this.state.directionRad) * this.r
     this.state.headCoords.y = this.state.position.y + Math.sin(this.state.directionRad) * this.r
@@ -75,10 +76,10 @@ export default class Ant {
   setHitArea() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.state.position.x - 0.5 * this.hitSideLength,
-      this.state.position.y - 1 * this.hitSideLength, 
-      1 * this.hitSideLength,
-      2 * this.hitSideLength
+      this.state.position.x - 0.75 * this.hitSideLength,
+      this.state.position.y - 0.75 * this.hitSideLength, 
+      1.5 * this.hitSideLength,
+      1.5 * this.hitSideLength
     )
   }
 
@@ -155,8 +156,12 @@ export default class Ant {
 
   step() {
     if (this.mobile) {
-      this.setHitArea
-      this.move()
+      if (Math.random() < 0.8) {
+        this.move(1)
+        this.setHitArea()
+      } else {
+        this.turnErratically(0.8)
+      }
     }
     this.draw()
   }

@@ -1,12 +1,14 @@
 import CONSTANTS from './Constants'
-import World from './ents/World'
-import Ant from './swallowables/Ant'
-import Centipede from './ents/Centipede'
-import Panel from './Panel'
-import Apple from './swallowables/Apple'
-import Pebble from './swallowables/Pebble'
-import Snek from './ents/Snek'
 import Clock from './utils/Clock'
+import World from './ents/World'
+import Panel from './Panel'
+
+import Snek from './mobs/Snek'
+import Centipede from './mobs/Centipede'
+import Ant from './mobs/Ant'
+
+import Apple from './immobs/Apple'
+import Pebble from './immobs/Pebble'
 
 export default class Game {
   typename = 'game'
@@ -48,7 +50,10 @@ export default class Game {
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
 
-    window.sessionStorage.getItem('isDebugOn') === 'false' && this.initSpawn()
+    const isDebugOn = window.sessionStorage.getItem('isDebugOn') 
+    if (isDebugOn === 'false' || isDebugOn === null) {
+      this.initSpawn()
+    }
   }
 
   addMob(mob) {
@@ -66,16 +71,16 @@ export default class Game {
   }
 
   seamlessMove(mob) {
-    if (mob.state.headCoords.x > this.canvas.width) {
-      mob.state.headCoords.x = 0
-    } else if (mob.state.headCoords.x <= 0) {
-      mob.state.headCoords.x = this.canvas.width
+    if (mob.state.position.x > this.canvas.width) {
+      mob.state.position.x = 0
+    } else if (mob.state.position.x <= 0) {
+      mob.state.position.x = this.canvas.width
     }
 
-    if (mob.state.headCoords.y > this.canvas.height) {
-      mob.state.headCoords.y = 0
-    } else if (mob.state.headCoords.y <= 0) {
-      mob.state.headCoords.y = this.canvas.height
+    if (mob.state.position.y > this.canvas.height) {
+      mob.state.position.y = 0
+    } else if (mob.state.position.y <= 0) {
+      mob.state.position.y = this.canvas.height
     }
   }
 
@@ -98,19 +103,19 @@ export default class Game {
   initSpawn() {
     this.snek = new Snek(this.ctx, null, this)
     this.addImmob(new Apple(this.ctx, null, this))
-    // this.spawnFieldOfImmob('apple', 9)
-    // this.spawnFieldOfImmob('pebble', 9)
-    // this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
-    // for(let i = 0; i < 8; i++) {
-    //   this.mobs.push(new Ant(
-    //     this.ctx, 
-    //     { 
-    //       x:Math.random()*this.canvas.width, 
-    //       y:Math.random()*this.canvas.height
-    //     }, 
-    //     this
-    //   ))
-    // }
+    this.spawnFieldOfImmob('apple', 15)
+    this.spawnFieldOfImmob('pebble', 35)
+    this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
+    for(let i = 0; i < 12; i++) {
+      this.mobs.push(new Ant(
+        this.ctx, 
+        { 
+          x:Math.random()*this.canvas.width, 
+          y:Math.random()*this.canvas.height
+        }, 
+        this
+      ))
+    }
   }
 
   spawnFieldOfImmob(typename, n) {
@@ -143,7 +148,6 @@ export default class Game {
   }
 
   step() {
-    // ! seems problematic
     this.clock.step()
     this.world.step()
 
@@ -160,7 +164,8 @@ export default class Game {
     
       const isContacting = this.isContactingMouth(
         this.snek.state.getMouthCoords(), 
-        immob.hitArea)
+        immob.hitArea
+      )
 
       if (isContacting) {
         if (this.snek.swallowables.includes(immob.typename)) {
@@ -174,6 +179,7 @@ export default class Game {
 
 
     // TODO make more efficient... ensure all obj get moved to proper parent and parent tracking list
+    
     this.mobs.forEach( 
       mob => {
         const isContacting = this.isContactingMouth(

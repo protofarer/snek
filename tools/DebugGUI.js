@@ -1,11 +1,11 @@
 import GUI from 'lil-gui'
 import CONSTANTS from '../Constants'
 import { resetGame, } from '..'
-import Apple from '../swallowables/Apple'
-import Mango from '../swallowables/Mango'
-import Centipede from '../ents/Centipede'
-import Ant from '../swallowables/Ant'
-import Snek from '../ents/Snek'
+import Apple from '../immobs/Apple'
+import Mango from '../immobs/Mango'
+import Centipede from '../mobs/Centipede'
+import Ant from '../mobs/Ant'
+import Snek from '../mobs/Snek'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
@@ -31,6 +31,7 @@ export default class DebugGUI {
       top: `${Math.floor(game.rect.top)}`
     }
 
+    gui.add(this.frames, 'fps').listen()
     const guiGamePositioning = gui.addFolder('GamePositioning') 
     guiGamePositioning.add(rectpos, 'left').name('rect.left').listen()
     guiGamePositioning.add(rectpos, 'top').name('rect.top').listen()
@@ -40,7 +41,6 @@ export default class DebugGUI {
     const guiGameState = gui.addFolder('GameState')
     guiGameState.add(this.game.state, 'phase').name('phase').listen()
 
-    gui.add(this.frames, 'fps').listen()
 
     // Game Test Params and Functions
     const guiGameTest = gui.addFolder('GameTest')
@@ -51,7 +51,7 @@ export default class DebugGUI {
       'debugreset').name('reset: debug')
 
     const addCentipede = () => {
-      this.game.addMob(new Centipede(this.game.ctx))
+      this.game.addMob(new Centipede(this.game.ctx, null, this.game))
     }
     guiGameTest.add({ addCentipede }, 'addCentipede')
 
@@ -161,6 +161,7 @@ export default class DebugGUI {
   }
 
   calcFPS(t) {
+    
     while (this.frames.times.length > 0 && this.frames.times[0] <= t - 1000) {
       this.frames.times.shift()
     }
@@ -178,12 +179,8 @@ export default class DebugGUI {
       }
 
       // Show hitareas
-      this.game.world.fieldEnts.forEach(
-        a => a.drawHitArea() )
-
-      this.game.mobs.forEach(
-        a => {a.drawHitArea() }
-      )
+      this.game.immobs.forEach(a => a.drawHitArea())
+      this.game.mobs.forEach(a => a.drawHitArea())
 
       this.drawOverlays()
     }
@@ -207,13 +204,26 @@ export default class DebugGUI {
   }
 
   addTestObjects() {
+    const addEnts = (entType, n) => {
+      const entGroup = entType.entGroup === 'mob' ? this.game.mobs : this.game.immobs
+        for(let i = 0; i < n; i++) {
+          entGroup.push(
+            new entType(
+              this.game.ctx, 
+              {
+                x:Math.random()*this.game.canvas.width, 
+                y:Math.random()*this.game.canvas.height
+              }, 
+              this.game
+            )
+          )
+        }
+    }
+
     if (this.params.isDebugOn) {
       this.game.snek = new Snek(this.game.ctx, null, this.game)
-      // this.game.world.fieldEnts.push(new Mango(this.game.ctx, {x:400,y:300}, this, this.game.world.childId++))
-      // const ant = new Ant(this.game.ctx, null, this)
-      // ant.mobile = false
-      // this.game.mobs.push(ant)
-      this.game.addImmob(new Apple(this.game.ctx, null, this.game))
+      addEnts(Ant, 20)
+      addEnts(Apple, 20)
     }
   }
 }

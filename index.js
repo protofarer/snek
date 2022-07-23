@@ -41,14 +41,14 @@ export function startNewGame() {
       start = t
       game.clr()
       game.step()
-      debugGUI ?? debugGUI.step()
+      debugGUI && debugGUI.step()
 
       if (debugGUI?.params.isGameDoubleSpeed) {
         game.step()
         debugGUI.step()
       }
   
-      debugGUI ?? debugGUI.calcFPS(t)
+      debugGUI && debugGUI.calcFPS(t)
   
       // * Enter PHASE_END via game.checkEndCondition()
       if (game.phase === CONSTANTS.PHASE_END) {
