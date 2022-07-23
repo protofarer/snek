@@ -226,9 +226,10 @@ export default class DebugGUI {
       // spawnEnts(Apple, 20)
       // spawnEnts(Pebble, 100)
       // spawnEnts(Mango, 50)
-      // spawnEnts(Ant, 30)
+      spawnEnts(Ant, 30)
       // spawnEnts(Centipede, 5)
-      this.game.addEnt(Ant)
+      // this.game.addEnt(Ant)
+      // this.game.addEnt(Mango)
       // spawnEnts(Ant, 1, {x:400,y:400})[0].mobile = false
       // spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
       // spawnEnts(Ant, 10).forEach(e => e.state.moveSpeed = 10)

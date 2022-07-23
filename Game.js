@@ -94,14 +94,14 @@ export default class Game {
   initSpawn() {
     this.snek = new Snek(this.ctx, null, this)
 
-    this.spawnEnts(Apple, 15)
-    this.spawnEnts(Pebble, 55)
+    this.spawnEnts(Apple, 30)
+    this.spawnEnts(Pebble, 85)
     this.spawnEnts(Ant, 25)
-    // this.spawnEnts(Mango, 3)
+    this.spawnEnts(Centipede, 2)
+    // this.spawnEnts(Mango, 50)
 
     this.world.randomSpawns()
 
-    this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
   }
 
   addEnt(entClass) {

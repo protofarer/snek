@@ -26,8 +26,8 @@ export default class Mango extends Apple {
       2 * this.state.r,
       0.5 * this.state.r
     )
-    grad.addColorStop(0, this.state.primaryColor)
-    grad.addColorStop(0.8,'green')
+    grad.addColorStop(0.2, this.state.primaryColor)
+    grad.addColorStop(0.9,'green')
     ctx.fillStyle = grad
     ctx.fill()
 

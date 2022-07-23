@@ -6,7 +6,7 @@ export default class Ant {
   static swallowables = ['apple', 'mango', 'ant', 'pebble', ]
   canTurn = true
   state = {
-    r: 5,
+    r: 4,
     headCoords: { x: 0, y: 0 },
     position: { x: 0, y: 0 },
     moveSpeed: 2,
@@ -135,8 +135,8 @@ export default class Ant {
 
     // Draw Eyes
     ctx.beginPath()
-    ctx.arc(1.4*r, -0.4*r, 0.3 * r, 0, 2 * pi)
-    ctx.arc(1.4*r, 0.4*r, 0.3 * r, 0, 2 * pi)
+    ctx.arc(1.4*r, -0.4*r, 0.4 * r, 0, 2 * pi)
+    ctx.arc(1.4*r, 0.4*r, 0.4 * r, 0, 2 * pi)
     ctx.fillStyle = 'white'
     ctx.fill()
 
