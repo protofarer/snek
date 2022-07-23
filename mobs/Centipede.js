@@ -4,6 +4,7 @@ export default class Centipede {
   static species = 'centipede'
   species = 'centipede'
   static entGroup = 'mob'
+  entGroup = 'mob'
 
   mobile = true
   swallowables = ['snek', 'ant']

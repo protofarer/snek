@@ -2,6 +2,7 @@ export default class Snek {
   static species = 'snek'
   species = 'snek'
   static entGroup = 'mob'
+  entGroup = 'mob'
 
   mobile = true
   hasTongueOut = false
@@ -75,7 +76,7 @@ export default class Snek {
 
   swallow(ent) {
     // TODO segment carry and digest logic
-    ent.parentEnt = this.segments
+    ent.parentEnt = this
     ent.state.position = {x: -1000, y: -1000}
     ent.hitArea = null
 

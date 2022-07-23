@@ -2,6 +2,7 @@ export default class Pebble {
   species = 'pebble'
   static species ='pebble'
   static entGroup = 'immob'
+  entGroup = 'immob'
 
   r = 6
   state = {

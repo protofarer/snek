@@ -10,6 +10,7 @@ import Ant from './mobs/Ant'
 import Apple from './immobs/Apple'
 import Mango from './immobs/Mango'
 import Pebble from './immobs/Pebble'
+import Entity from './Entity'
 
 export default class Game {
   species = 'game'
@@ -50,6 +51,7 @@ export default class Game {
 
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
+
 
     const isDebugOn = window.sessionStorage.getItem('isDebugOn') 
     if (isDebugOn === 'false' || isDebugOn === null) {
@@ -104,18 +106,39 @@ export default class Game {
     this.mobs.push(new Centipede(this.ctx, {x:50, y:50}, this))
   }
 
-  spawnEnts(classObj, n=1, position=null) {
-    const entGroup = classObj.entGroup === 'mob' ? this.mobs : this.immobs
+  addEnt(entClass, position=null) {
+    const ent = new entClass(
+      this.ctx, 
+      position || 
+      {
+        x:Math.random()*this.canvas.width,
+        y:Math.random()*this.canvas.height,
+      }, 
+      this
+    )
+    new Entity(ent)
+    return ent
+  }
+
+  removeEnt(id) {
+    delete Entity.stack[id]
+    console.log(`entity.stack`,Entity.stack )
+    
+  }
+
+  spawnEnts(entClass, n=1, position=null) {
+    // const entGroup = entClass.entGroup === 'mob' ? this.mobs : this.immobs
     
     for(let i = 0; i < n; i++) {
-      entGroup.push(new classObj(
-        this.ctx, 
-        {
-          x:Math.random()*this.canvas.width,
-          y:Math.random()*this.canvas.height
-        },
-        this
-      ))
+      // entGroup.push(new entClass(
+      //   this.ctx, 
+      //   {
+      //     x:Math.random()*this.canvas.width,
+      //     y:Math.random()*this.canvas.height
+      //   },
+      //   this
+      // ))
+      this.addEnt(entClass)
     }
     // entGroup.push(new Apple(this.ctx, null, this))
   }
@@ -127,47 +150,87 @@ export default class Game {
     this.seamlessMove(this.snek)
     this.snek.step()
 
-    this.mobs.forEach(m => {
-      m.step()
-      this.seamlessMove(m)
-    })
+    for(const [id, ent] of Object.entries(Entity.stack)) {
+      ent.step()
+      if (ent.entGroup === 'mob') {
+        
+        this.seamlessMove(ent)
 
-    this.immobs.forEach(immob => {
-      immob.step()
+        const isContacting = this.isContactingMouth(
+          this.snek.state.getMouthCoords(), 
+          ent.hitArea)
 
-      const isContacting = this.isContactingMouth(
-        this.snek.state.getMouthCoords(), 
-        immob.hitArea
-      )
+        if (isContacting) {
+          if (this.snek.swallowables.includes(ent.species)) {
+            this.snek.swallow(ent)
+            this.snek.state.exp++
+            this.state.score++
+            this.removeEnt(id)
+          }
+        }
 
-      if (isContacting) {
-        if (this.snek.swallowables.includes(immob.species)) {
-          this.snek.swallow(immob)
-          this.snek.state.exp++
-          this.state.score++
+      } else if (ent.entGroup === 'immob') {
+
+        const isContacting = this.isContactingMouth(
+          this.snek.state.getMouthCoords(), 
+          ent.hitArea
+        )
+
+        if (isContacting) {
+          if (this.snek.swallowables.includes(ent.species)) {
+            this.snek.swallow(ent)
+            this.snek.state.exp++
+            this.state.score++
+            this.removeEnt(id)
+          }
         }
       }
-    })
-    this.immobs = this.immobs.filter(i => i.parentEnt.species === 'game')
+    }
+
+    // this.mobs.forEach(m => {
+    //   m.step()
+    //   this.seamlessMove(m)
+    // })
+
+    // this.immobs.forEach(immob => {
+    //   immob.step()
+
+    //   const isContacting = this.isContactingMouth(
+    //     this.snek.state.getMouthCoords(), 
+    //     immob.hitArea
+    //   )
+
+    //   if (isContacting) {
+    //     if (this.snek.swallowables.includes(immob.species)) {
+    //       this.snek.swallow(immob)
+    //       this.snek.state.exp++
+    //       this.state.score++
+    //     }
+    //   }
+    // })
+    // this.immobs = this.immobs.filter(i => i.parentEnt.species === 'game')
 
 
     // TODO make more efficient... ensure all obj get moved to proper parent and parent tracking list
     
-    this.mobs.forEach( 
-      mob => {
-        const isContacting = this.isContactingMouth(
-          this.snek.state.getMouthCoords(), 
-          mob.hitArea)
-        if (isContacting) {
-          if (this.snek.swallowables.includes(mob.species)) {
-            this.snek.swallow(mob)
-            this.snek.state.exp++
-            this.state.score++
-          }
-        }
-      }
-    )
-    this.mobs = this.mobs.filter(mob => mob.parentEnt.species === 'game')
+    // this.mobs.forEach( 
+    //   mob => {
+    //     const isContacting = this.isContactingMouth(
+    //       this.snek.state.getMouthCoords(), 
+    //       mob.hitArea)
+    //     if (isContacting) {
+    //       if (this.snek.swallowables.includes(mob.species)) {
+    //         this.snek.swallow(mob)
+    //         this.snek.state.exp++
+    //         this.state.score++
+    //       }
+    //     }
+
+        // if (mob.species === 'ant') {
+        // }
+      // }
+    // )
+    // this.mobs = this.mobs.filter(mob => mob.parentEnt.species === 'game')
 
     this.panel.step()
     this.stepFunctions.forEach(f => f())

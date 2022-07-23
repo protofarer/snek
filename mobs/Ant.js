@@ -2,9 +2,9 @@ export default class Ant {
   static species = 'ant'
   species = 'ant'
   static entGroup = 'mob'
-
+  entGroup = 'mob'
   mobile = true
-  swallowables = ['apple', 'mango', 'ant', 'pebble', ]
+  static swallowables = ['apple', 'mango', 'ant', 'pebble', ]
   state = {
     r: 8,
     headCoords: { x: 0, y: 0 },
@@ -19,8 +19,8 @@ export default class Ant {
     turnRate: function () { return this.moveSpeed + 8},
     getMouthCoords: function () {
       return {
-        x: this.headCoords.x + this.r * Math.cos(this.directionRad),
-        y: this.headCoords.y + this.r * Math.sin(this.directionRad),
+        x: this.headCoords.x + 1.75 * this.r * Math.cos(this.directionRad),
+        y: this.headCoords.y + 1.75 * this.r * Math.sin(this.directionRad),
       }
     },
     exp: 0,
@@ -33,6 +33,7 @@ export default class Ant {
     this.state.position = startPosition || {x:400, y:270}
     this.parentEnt = parentEnt
     this.hitSideLength = this.state.r
+    this.carriedEnt = null
     this.setHitArea()
   }
 
@@ -65,9 +66,16 @@ export default class Ant {
       * Math.cos(this.state.directionRad)
     this.state.position.y += speedMultiplier * this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
-    this.state.headCoords.x = this.state.position.x + Math.cos(this.state.directionRad) * this.r
-    this.state.headCoords.y = this.state.position.y + Math.sin(this.state.directionRad) * this.r
+    this.state.headCoords.x = this.state.position.x 
+      + Math.cos(this.state.directionRad) * this.r * 1.75
+    this.state.headCoords.y = this.state.position.y 
+      + Math.sin(this.state.directionRad) * this.r * 1.75
     this.turnErratically()
+  }
+
+  grab(ent) {
+    ent.parentEnt = this
+    this.carriedEnt = ent
   }
 
   drawHitArea() {
@@ -165,6 +173,13 @@ export default class Ant {
         this.turnErratically(0.8)
       }
     }
+
+    if (this.carriedEnt) {
+      this.carriedEnt.position = this.state.getMouthCoords() + this.carriedEnt.state.r
+      this.carriedEnt.directionAngle = this.state.directionAngle
+      this.carriedEnt.step()
+    }
+
     this.draw()
   }
 }
