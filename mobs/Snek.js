@@ -1,8 +1,8 @@
 export default class Snek {
-  static species = 'snek'
-  species = 'snek'
   static entGroup = 'mob'
+  static species = 'snek'
   entGroup = 'mob'
+  species = 'snek'
 
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
   scaleX = 0.8
@@ -10,33 +10,31 @@ export default class Snek {
   state = {
     r: 10,
     headCoords: { x: 0, y: 0 },
-    position: {x:0,y:0},
+    position: { x: 400, y: 400},
     moveSpeed: 2,
     directionAngle: -90,
-    set directionRad(val) {
-      this.directionAngle = val * 180 / Math.PI
-    },
+    set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     turnRate: function () { return this.moveSpeed + 10 },
-    getMouthCoords: function () {
-      return {
+    get mouthCoords() { return {
         x: this.headCoords.x + this.r * Math.cos(this.directionRad),
         y: this.headCoords.y + this.r * Math.sin(this.directionRad),
-      }
-    },
-    exp: 0,
+      }},
     scaleColor: 'hsl(100, 100%, 32%)',
     mobile: true,
     hasTongueOut: false,
+    exp: 0,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
-    this.canvas = this.ctx.canvas
-    this.state.position = startPosition || {x:400,y:400}
+    this.state.position = startPosition || this.state.position
     this.parentEnt = parentEnt
-    this.initEventListeners()
+    this.canvas = this.ctx.canvas
+
     this.segments = new Segments(this.ctx, this.state, 3)
+
+    this.initEventListeners()
   }
 
   initEventListeners() {
@@ -51,7 +49,7 @@ export default class Snek {
         default:
           break
       }
-      this.state.directionAngle %= 360
+      // this.state.directionAngle %= 360 ...why did I even... *_+
     }
     document.addEventListener('keydown', handleKeyDown)
   }

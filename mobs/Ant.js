@@ -7,31 +7,31 @@ export default class Ant {
   canTurn = true
   state = {
     r: 4,
-    headCoords: { x: 0, y: 0 },
+    headCoords() { return { 
+        x: this.state.position.x 
+          + Math.cos(this.state.directionRad) * this.state.r * 1.1,
+        y: this.state.position.y 
+          + Math.sin(this.state.directionRad) * this.state.r * 1.1
+    }},
     position: { x: 0, y: 0 },
     moveSpeed: 2,
-    directionAngle: -90,
-    set directionRad(val) {
-      this.directionAngle = val * 180 / Math.PI
-    },
+    directionAngle: 0,
+    set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     turnDirection: 3,
-    turnRate: function () { return this.moveSpeed + 8},
-    getMouthCoords: function () {
-      return {
+    turnRate() { return this.moveSpeed + 8},
+    mouthCoords() { return {
         x: this.headCoords.x + 0.6 * this.r * Math.cos(this.directionRad),
         y: this.headCoords.y + 0.6 * this.r * Math.sin(this.directionRad),
-      }
-    },
-    exp: 1,
+    }},
     primaryColor: 'black',
     mobile: true,
+    exp: 1,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
-    this.canvas = this.ctx.canvas
-    this.state.position = startPosition || {x:400, y:270}
+    this.state.position = startPosition || this.state.position
     this.parentEnt = parentEnt
     this.hitSideLength = this.state.r
     this.carriedEnt = null
@@ -74,7 +74,8 @@ export default class Ant {
     ent.parentEnt = this
     ent.hitArea = null
     this.carriedEnt = ent
-    this.carriedOffsetRad = this.state.directionRad - this.carriedEnt.state.directionRad
+    this.carriedOffsetRad = this.state.directionRad 
+      - this.carriedEnt.state.directionRad
   }
 
   drawHitArea() {
@@ -92,74 +93,52 @@ export default class Ant {
     )
   }
 
-  swallow(entity) {
-    if (!this.swallowables.includes(entity.typename)) {
-      throw new Error(`${this.typename} cannot swallow a ${entity.typename}!`)
-    }
-    switch (entity.typename) {
-      case 'apple':
-        this.exp += 2
-        // TODO add apple to body segment(s) for digestion
-        break
-      default:
-        console.info(`${this.typname}.swallow() defaulted`, )
-    }
-  }
-
   drawShadow() {
     this.ctx.shadowColor = 'hsl(0,0%,25%)'
     this.ctx.shadowBlur = 6
   }
 
-
   draw() {
-    const r = this.state.r
-    const ctx = this.ctx
     const pi = Math.trunc(1000 * Math.PI) / 1000
 
-    ctx.save()
-    ctx.translate(this.state.position.x, this.state.position.y)
-    ctx.rotate(this.state.directionRad)
-    ctx.save()
-    ctx.scale(1, 0.2)
+    this.ctx.save()
+    this.ctx.translate(this.state.position.x, this.state.position.y)
+    this.ctx.rotate(this.state.directionRad)
+    this.ctx.save()
+    this.ctx.scale(1, 0.2)
 
     // Draw Head + Thorax
-    ctx.beginPath()
-    ctx.arc(0, 0, 2*r, 0, 2 * pi)
-    ctx.restore()
+    this.ctx.beginPath()
+    this.ctx.arc(0, 0, 2*this.state.r, 0, 2 * pi)
+    this.ctx.restore()
 
     // Draw Abdomen
-    ctx.arc(-1.4*r, 0, 0.7*r, 0, 2 * pi)
-    ctx.fillStyle = this.state.primaryColor
-    ctx.fill()
+    this.ctx.arc(-1.4*this.state.r, 0, 0.7*this.state.r, 0, 2 * pi)
+    this.ctx.fillStyle = this.state.primaryColor
+    this.ctx.fill()
 
     // Draw Eyes
-    ctx.beginPath()
-    ctx.arc(1.4*r, -0.4*r, 0.4 * r, 0, 2 * pi)
-    ctx.arc(1.4*r, 0.4*r, 0.4 * r, 0, 2 * pi)
-    ctx.fillStyle = 'white'
-    ctx.fill()
+    this.ctx.beginPath()
+    this.ctx.arc(1.4*this.state.r, -0.4*this.state.r, 0.4 * this.state.r, 0, 2 * pi)
+    this.ctx.arc(1.4*this.state.r, 0.4*this.state.r, 0.4 * this.state.r, 0, 2 * pi)
+    this.ctx.fillStyle = 'white'
+    this.ctx.fill()
 
 
-    ctx.moveTo(r, 1.2*r)
-    ctx.lineTo(-r, -1.2*r)
-    ctx.moveTo(r, -1.2*r)
-    ctx.lineTo(-r, 1.2*r)
-    ctx.moveTo(0, -1.5*r)
-    ctx.lineTo(0, 1.5*r)
-    ctx.moveTo(0,0)
-    ctx.strokeStyle = 'black'
-    ctx.stroke()
+    this.ctx.moveTo(this.state.r, 1.2*this.state.r)
+    this.ctx.lineTo(-this.state.r, -1.2*this.state.r)
+    this.ctx.moveTo(this.state.r, -1.2*this.state.r)
+    this.ctx.lineTo(-this.state.r, 1.2*this.state.r)
+    this.ctx.moveTo(0, -1.5*this.state.r)
+    this.ctx.lineTo(0, 1.5*this.state.r)
+    this.ctx.moveTo(0,0)
+    this.ctx.strokeStyle = 'black'
+    this.ctx.stroke()
 
-    ctx.restore()
+    this.ctx.restore()
   }
 
   step() {
-    this.state.headCoords.x = this.state.position.x 
-      + Math.cos(this.state.directionRad) * this.state.r * 1.1
-    this.state.headCoords.y = this.state.position.y 
-      + Math.sin(this.state.directionRad) * this.state.r * 1.1
-    
     if (this.state.mobile) {
       if (Math.random() < 0.8) {
         this.move(1)
@@ -172,7 +151,7 @@ export default class Ant {
     this.draw()
 
     if (this.carriedEnt) {
-      this.carriedEnt.state.position = this.state.getMouthCoords()
+      this.carriedEnt.state.position = this.state.mouthCoords
       this.carriedEnt.state.directionRad = this.state.directionRad + this.carriedOffsetRad
       // ! hitArea null, may be used for snatch mechanic
       this.carriedEnt.step()

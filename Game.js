@@ -157,7 +157,7 @@ export default class Game {
           let sweets = Entity.bySpecies(['apple', 'mango'])
           for(let [id, sweet] of Object.entries(sweets)) {
             const isContacting = this.isContactingMouth(
-              ent.state.getMouthCoords(), 
+              ent.state.mouthCoords, 
               sweet.hitArea
             )
             if (isContacting) {
@@ -187,7 +187,7 @@ export default class Game {
 
         if (this.snek) {
           const isContacting = this.isContactingMouth(
-            this.snek.state.getMouthCoords(), 
+            this.snek.state.mouthCoords, 
             ent.hitArea
           )
           if (isContacting) {
