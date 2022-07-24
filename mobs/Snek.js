@@ -224,6 +224,8 @@ export class Segments {
         })
       }
     }
+    console.log(`headtrailL`, this.headTrail.length)
+    
   }
 
   addSegment() {
@@ -241,6 +243,7 @@ export class Segments {
     })
     this.headState.nSegments++
     console.log(`segs`, this.headState.nSegments)
+    console.log(`headtrailL`, this.headTrail.length)
     
   }
 
@@ -254,44 +257,42 @@ export class Segments {
     // ! do I need slack in case game drops an index?
     this.headTrail.pop()
     this.headTrail.splice(0, 0, { 
-      x: this.headState.headCoords.x,
-      y: this.headState.headCoords.y
+      x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
+      y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
     })
     this.draw()
   }
   
   drawSegments() {
     for(let i = 0; i < this.headState.nSegments; i++) {
-        const position = this.headTrail[(i+1)*this.linkLength - 1]
-        this.segments[i].position = position
+      const position = this.headTrail[(i+1)*this.linkLength - 1]
+      this.segments[i].position = position
 
-        this.ctx.save()
-        this.ctx.translate(position.x, position.y)
-        let dy, dx
-        if (i === 0) {
-          dy = this.headState.headCoords.y 
-            - this.headTrail[(i+1)*Math.ceil(this.linkLength/2)].y   // TODO get segments pointing at tail end of segment in front of it
-          dx = this.headState.headCoords.x 
-            - this.headTrail[(i+1)*Math.ceil(this.linkLength/2)].x
-        } else {
-          dy = this.headTrail[(i-1) * this.linkLength].y 
-            - this.headTrail[(i)*Math.ceil(this.linkLength/2)-1].y
-          dx = this.headTrail[(i-1) * this.linkLength].x 
-            - this.headTrail[(i)*Math.ceil(this.linkLength/2)-1].x
-        }
+      this.ctx.save()
+      this.ctx.translate(position.x, position.y)
+      let dy, dx
+      if (i === 0) {
+      // x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
+      // y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
+        dy = this.headTrail[(i) * this.linkLength + Math.ceil(this.linkLength/2)].y 
+          - position.y
 
-        const segmentAngle = Math.atan(dy/dx)
-        this.ctx.rotate(segmentAngle)
-        this.ctx.scale(1, 0.6)
+        dx = this.headTrail[(i) * this.linkLength + Math.ceil(this.linkLength/2)].x 
+          - position.x
+      }
 
-        this.drawLegs()
+      const segmentAngle = Math.atan(dy/dx)
+      this.ctx.rotate(segmentAngle)
+      this.ctx.scale(1, 0.6)
 
-        this.ctx.beginPath()
-        this.ctx.arc(0, 0, this.headState.r, 0, 2 * Math.PI)
-        this.ctx.fillStyle = this.headState.scaleColor
-        this.ctx.fill()
+      this.drawLegs()
 
-        this.ctx.restore()
+      this.ctx.beginPath()
+      this.ctx.arc(0, 0, this.headState.r, 0, 2 * Math.PI)
+      this.ctx.fillStyle = this.headState.scaleColor
+      this.ctx.fill()
+
+      this.ctx.restore()
       
     }
   }
