@@ -21,7 +21,7 @@ export default class Background {
       const rx = Math.random() * this.canvas.width
       this.ctx.moveTo(rx, ry)
       this.ctx.lineTo(rx+1, ry)
-      this.ctx.strokeStyle=`hsla(0,0%,${Math.random()*50}%,${0.3 + Math.random() * 0.3})`
+      this.ctx.strokeStyle=`hsla(0,0%,${Math.random()*40}%,${0.3 + Math.random() * 0.3})`
       this.ctx.stroke()
 
     }
