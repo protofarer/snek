@@ -81,36 +81,57 @@ export default class Centipede {
     this.state.exp += ent.state.exp
   }
 
-  draw() {
-    this.ctx.save()
-    this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
-    this.ctx.rotate(this.state.directionRad)
-    this.ctx.scale(1, this.scaleX)
-
+  drawHead() {
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.lineWidth = 2
     this.ctx.fillStyle = this.state.scaleColor
     this.ctx.fill()
 
+    // eyes
     this.ctx.beginPath()
-    this.ctx.strokeStyle = 'red'
-    this.ctx.lineWidth = 2
-    this.ctx.arc(0, 0, this.state.r * 0.7, -Math.PI / 3, Math.PI / 3)
+    this.ctx.arc(
+      0.7 * this.state.r, 
+      0.33 * this.state.r, 
+      0.2 * this.state.r, 
+      2.5, 
+      -1,
+      true
+    )
+    this.ctx.fillStyle = 'hsl(0, 100%, 50%)'
+    this.ctx.fill()
+    this.ctx.beginPath()
+    this.ctx.arc(
+      0.7 * this.state.r,
+      -0.33 * this.state.r, 
+      0.2 * this.state.r, 
+      1, 
+      -2.5,
+      true
+    )
+    this.ctx.fill()
+
+    // fangs
+    this.ctx.beginPath()
+    this.ctx.arc(3, -20, 25, 1.1, 1.6)
     this.ctx.stroke()
 
     this.ctx.beginPath()
-    this.ctx.moveTo(this.state.r * 0.5, -0.4 * this.state.r)
-    this.ctx.strokeStyle = 'white'
+    this.ctx.arc(3, 20, 25, -1.6, -1.1)
     this.ctx.lineWidth = 2
-    this.ctx.lineTo(this.state.r, -0.4 * this.state.r)
-    this.ctx.moveTo(this.state.r * 0.5, 0.4 * this.state.r)
-    this.ctx.lineTo(this.state.r, 0.4 * this.state.r)
+    this.ctx.strokeStyle = 'hsl(0,0%,0%)'
     this.ctx.stroke()
+  }
+
+  draw() {
+    this.ctx.save()
+    this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
+    this.ctx.rotate(this.state.directionRad)
+    this.ctx.scale(1, this.scaleX)
+
+    this.drawHead()
 
     this.ctx.restore()
-
-    this.ctx.beginPath()
   }
 
   turnRandomlySmoothly() {
@@ -129,15 +150,22 @@ export default class Centipede {
     }
   }
 
-  step() {
+  move() {
     this.state.position.x += this.state.moveSpeed 
       * Math.cos(this.state.directionRad)
     this.state.position.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
 
     this.turnRandomlySmoothly()
+  }
 
+  step() {
+    this.state.mobile && this.move()
+
+    // this.ctx.save()
+    // this.ctx.scale(2,2)
     this.draw()
+    // this.ctx.restore()
     this.segments.step(this.state.headCoords)
   }
 }
