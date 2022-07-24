@@ -1,29 +1,31 @@
 export default class Pebble {
-  species = 'pebble'
-  static species ='pebble'
   static entGroup = 'immob'
+  static species ='pebble'
   entGroup = 'immob'
+  species = 'pebble'
 
   state = {
     r: 6,
-    position: {x: 0, y: 0},
+    position: {x: 400, y: 400},
     primaryColor: 'hsl(220, 10%, 48%)',
+    directionAngle: 0,
+    set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
+    get directionRad() { return this.directionAngle * Math.PI / 180 },
+    get weight() { return this.state.r },
     exp: 0,
-    get weight() { return this.state.r }
   }
 
-  constructor(ctx, position=null, parentEnt=null, id=null, r=null) {
+  constructor(ctx, position=null, parentEnt=null, r=null) {
     this.ctx = ctx
-    this.canvas = this.ctx.canvas
+    this.state.position = position || this.state.position
     this.parentEnt = parentEnt
-    this.state.r = r || Math.random() * 5
-    this.state.position = position || {x: 400, y:300}
-    this.id = id
+    this.state.r = r || Math.random() * 5     // TODO skewed gaussian random dist
+    this.state.directionAngle = Math.random() * 359
+    this.canvas = this.ctx.canvas
     this.hitSideLength = this.state.r + 1
     this.setHitArea()
   }
 
-  // Collision helper
   left() {
     return { x:this.state.position.x - this.hitSideLength, y: this.state.position.y}
   }
@@ -58,29 +60,33 @@ export default class Pebble {
     this.ctx.shadowOffsetY = 3
     this.ctx.fill()
   }
+
+  drawBody() {
+    this.ctx.save()
+    this.ctx.rotate(Math.PI / 3)
+    this.ctx.beginPath()
+    this.ctx.arc(this.state.r/6, 0, this.state.r, 0, 2 * Math.PI)
+    this.ctx.arc(-this.state.r/6, 0, 0.8*this.state.r, 0, 2 * Math.PI)
+    this.ctx.fillStyle = this.state.primaryColor
+    this.ctx.fill()
+
+    this.drawShadow()
+
+    this.ctx.restore()
+  }
+
   draw() {
       this.ctx.save()
       this.ctx.translate(this.state.position.x, this.state.position.y)
-      
-      this.ctx.beginPath()
-  
-      this.ctx.save()
-      this.ctx.rotate(Math.PI / 3)
-      this.ctx.arc(this.state.r/6, 0, this.state.r, 0, 2 * Math.PI)
-      this.ctx.arc(-this.state.r/6, 0, this.state.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = this.state.primaryColor
-      this.ctx.fill()
+      this.ctx.rotate(this.state.directionRad)
+      this.ctx.scale(2,2)
 
-      this.drawShadow()
-
-      this.ctx.restore()
+      this.drawBody()
   
       this.ctx.restore()
   }
 
   step() {
-    if (!this.isSwallowed) {
-      this.draw()
-    }
+    this.draw()
   }
 }

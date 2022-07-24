@@ -16,7 +16,7 @@ export default class Apple {
     leafColor: 'hsl(95, 60%, 50%)',
     exp: 2,
   }
-  constructor(ctx, startPosition=null, parentEnt=null, id=null) {
+  constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
