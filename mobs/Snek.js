@@ -267,20 +267,14 @@ export class Segments {
     for(let i = 0; i < this.headState.nSegments; i++) {
       const position = this.headTrail[(i+1)*this.linkLength - 1]
       this.segments[i].position = position
+      const tailOfSegmentAhead = this.headTrail[i*this.linkLength]
+      let {dy, dx} = {
+        dy: tailOfSegmentAhead.y - position.y,
+        dx: tailOfSegmentAhead.x - position.x
+      }
 
       this.ctx.save()
       this.ctx.translate(position.x, position.y)
-      let dy, dx
-      if (i === 0) {
-      // x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
-      // y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
-        dy = this.headTrail[(i) * this.linkLength + Math.ceil(this.linkLength/2)].y 
-          - position.y
-
-        dx = this.headTrail[(i) * this.linkLength + Math.ceil(this.linkLength/2)].x 
-          - position.x
-      }
-
       const segmentAngle = Math.atan(dy/dx)
       this.ctx.rotate(segmentAngle)
       this.ctx.scale(1, 0.6)
