@@ -6,7 +6,7 @@ export default class Apple {
 
   state = {
     r: 6,
-    position: { x: 0, y: 0 },
+    position: { x: 400, y: 400 },
     directionAngle: 0,
     set directionRad(val) {
       this.directionAngle = val * 180 / Math.PI
@@ -20,14 +20,12 @@ export default class Apple {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
-    this.state.position = startPosition || {x:400,y:330}
-    this.id = id
+    this.state.position = startPosition || this.state.position
     this.hitSideLength = this.state.r + 1
     
     this.setHitArea()
   }
 
-  // Collision helper
   left() {
     return { x:this.state.position.x - this.hitSideLength, y: this.state.position.y}
   }
@@ -58,9 +56,6 @@ export default class Apple {
 
   step() {
     this.draw()
-    // if (this.parentEnt.species === 'ant') {
-    //   this.parentEnt.species === 'ant' && console.log(`im getting carried lol`, )
-    // }
   }
 
   drawInitWrapper(radians=null) {
@@ -91,17 +86,17 @@ export default class Apple {
 
   drawShadow() {
     this.ctx.shadowOffsetY = this.state.r * 0.4
-    this.ctx.shadowBlur = this.state.r * 0.2
     this.ctx.shadowColor = 'hsl(0,0%,20%)'
+    this.ctx.shadowBlur = this.state.r * 0.2
     this.ctx.fill()
   }
 
   drawLeaf() {
     this.ctx.save()
     this.ctx.rotate(-Math.PI/6)
-    this.ctx.translate(this.state.r*0.8, 0)
+    this.ctx.translate(this.state.r*0.8, 0.2 * this.state.r)
     this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.state.r / 2, 0, 2 * Math.PI)
+    this.ctx.arc(0, 0, 0.4 * this.state.r, 0, 2 * Math.PI)
     this.ctx.fillStyle = this.state.leafColor
     this.ctx.fill()
     this.ctx.restore()
@@ -117,8 +112,15 @@ export default class Apple {
   }
 
   drawStem() {
+    this.ctx.save()
+    this.ctx.rotate(-1)
     this.ctx.beginPath()
-    
+    this.ctx.moveTo(0.55*this.state.r,0)
+    this.ctx.lineTo(1.1*this.state.r,0)
+    this.ctx.lineWidth = 1.5
+    this.ctx.strokeStyle = 'hsl(40, 60%, 20%)'
+    this.ctx.stroke()
+    this.ctx.restore()
   }
 
   drawComponents() {
@@ -129,6 +131,9 @@ export default class Apple {
   }
 
   draw() {
+    // this.ctx.save()
+    // this.ctx.scale(2,2)
     this.drawInitWrapper(this.state.directionRad)
+    // this.ctx.restore()
   }
 }
