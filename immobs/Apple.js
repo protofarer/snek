@@ -103,11 +103,11 @@ export default class Apple {
   }
 
   drawHighlight() {
-    this.ctx.rotate(-2 * Math.PI / 3)
+    this.ctx.rotate(-.55 * Math.PI)
     this.ctx.translate(this.state.r*0.8, 0)
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r * 0.28, 0, 2 * Math.PI)
-    this.ctx.fillStyle = 'hsla(0,0%,100%, 0.7)'
+    this.ctx.fillStyle = 'hsla(0,0%,100%, 0.6)'
     this.ctx.fill()
   }
 
@@ -131,9 +131,6 @@ export default class Apple {
   }
 
   draw() {
-    // this.ctx.save()
-    // this.ctx.scale(2,2)
     this.drawInitWrapper(this.state.directionRad)
-    // this.ctx.restore()
   }
 }

@@ -225,7 +225,7 @@ export default class DebugGUI {
       // this.game.snek = snek
       // spawnEnts(Apple, 20)
       // spawnEnts(Pebble, 100)
-      // spawnEnts(Mango, 50)
+      spawnEnts(Mango, 50)
       spawnEnts(Ant, 30)
       // spawnEnts(Centipede, 5)
       // this.game.addEnt(Ant)

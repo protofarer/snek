@@ -1,26 +1,25 @@
 import Apple from '../immobs/Apple'
 
 export default class Mango extends Apple {
-  static species = 'mango'
-  species = 'mango'
   static entGroup = 'immob'
+  static species = 'mango'
   entGroup = 'immob'
+  species = 'mango'
+
   constructor(ctx, position, parentEnt=null, id=null) {
     super(ctx, position, parentEnt, id)
     this.state.primaryColor = 'hsl(35,100%, 50%)'
     this.state.secondaryColor = 'green'
-    // self frames for animation
   }
 
   drawBody() {
-    const ctx = this.ctx
-    ctx.save()
-    ctx.rotate(1.25)
-    ctx.scale(0.8, 1)
-    ctx.beginPath()
+    this.ctx.save()
+    this.ctx.rotate(1.25)
+    this.ctx.scale(0.8, 1)
+    this.ctx.beginPath()
 
-    ctx.arc(this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
-    let grad = ctx.createLinearGradient(
+    this.ctx.arc(this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
+    let grad = this.ctx.createLinearGradient(
       0.3 * this.state.r,
       this.state.r,
       2 * this.state.r,
@@ -28,18 +27,15 @@ export default class Mango extends Apple {
     )
     grad.addColorStop(0.2, this.state.primaryColor)
     grad.addColorStop(0.9,'green')
-    ctx.fillStyle = grad
-    ctx.fill()
+    this.ctx.fillStyle = grad
+    this.ctx.fill()
 
     this.drawShadow()
 
-    ctx.restore()
+    this.ctx.restore()
   }
 
-  drawHighlight() {
-
-  }
-
+  drawHighlight() {}
+  drawStem() {}
   drawLeaf() {}
-
 }
