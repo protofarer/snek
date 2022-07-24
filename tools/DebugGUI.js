@@ -190,7 +190,6 @@ export default class DebugGUI {
 
     // Can be run in normal mode
     if (this.params.showHitOverlay) {
-      Object.values(Entity.stack).forEach( ent => ent.drawHitArea())
       this.drawHitOverlays()
     }
 
@@ -207,20 +206,15 @@ export default class DebugGUI {
   }
 
   drawHitOverlays() {
-    if (this.game.snek) {
-      this.game.ctx.beginPath()
-      this.game.ctx.arc(this.game.snek.state.mouthCoords.x, this.game.snek.state.mouthCoords.y, 2, 0, 2 * Math.PI)
-      this.game.ctx.fillStyle = 'blue'
-      this.game.ctx.fill()
-    }
+    Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
   }
 
   addTestObjects() {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
-      const snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
-      snek.state.directionAngle = 0
-      this.game.snek = snek
+      // const snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
+      // snek.state.directionAngle = 0
+      // this.game.snek = snek
       // snek.mobile = false
       // spawnEnts(Apple, 20)
       // spawnEnts(Pebble, 100)
@@ -228,10 +222,10 @@ export default class DebugGUI {
       // spawnEnts(Ant, 30)
       // spawnEnts(Centipede, 1)[0].mobile = false
       // this.game.addEnt(Centipede).state.mobile = true
-      // this.game.addEnt(Ant)
+      this.game.addEnt(Ant).state.directionAngle = 0
       // this.game.addEnt(Mango)
-      // spawnEnts(Ant, 1, {x:400,y:400})[0].mobile = false
-      // spawnEnts(Ant, 1, {x:400,y:400})[0].canTurn = false
+      // spawnEnts(Ant, 1, {x:400,y:400})[0].state.mobile = false
+      // spawnEnts(Ant, 1, {x:400,y:400})[0].state.canTurn = false
       // spawnEnts(Ant, 10).forEach(e => e.state.moveSpeed = 10)
       // spawnEnts(Apple, 1, {x:400, y:300})
     }

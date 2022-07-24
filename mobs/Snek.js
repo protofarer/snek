@@ -19,26 +19,25 @@ export default class Snek {
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
-    turnRate: function () { return this.moveSpeed + 5 },
+    turnRate() { return this.moveSpeed + 5 },
     get mouthCoords() { return {
         x: this.headCoords.x + this.r * Math.cos(this.directionRad),
         y: this.headCoords.y + this.r * Math.sin(this.directionRad),
       }},
-    scaleColor: 'hsl(100, 100%, 32%)',
+    bodyColor: 'hsl(100, 100%, 32%)',
     mobile: true,
     hasTongueOut: false,
     tongueDirection: 0,
     exp: 0,
   }
 
-  constructor(ctx, startPosition=null, parentEnt=null) {
+  constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
     this.ctx = ctx
     this.state.position = startPosition || this.state.position
     this.parentEnt = parentEnt
-    this.canvas = this.ctx.canvas
-
+    this.nSegments = nSegments || this.state.nSegments
     this.segments = new Segments(this.ctx, this.state)
-
+    this.hitSideLength = this.state.r + 1
     this.initEventListeners()
   }
 
@@ -71,15 +70,6 @@ export default class Snek {
     this.state.directionAngle += this.state.turnRate() * 1
   }
 
-  step() {
-    this.state.position.x += this.state.moveSpeed 
-      * Math.cos(this.state.directionRad)
-    this.state.position.y += this.state.moveSpeed 
-      * Math.sin(this.state.directionRad)
-    this.segments.step(this.state.position)
-    this.draw()
-  }
-
   swallow(ent) {
     ent.parentEnt = this
     ent.state.position = {x: -1000, y: -1000}
@@ -108,10 +98,27 @@ export default class Snek {
     }
   }
 
+  setHitAreas() {
+    this.hitArea = new Path2D()
+    this.hitArea.rect(
+      this.state.position.x - this.hitSideLength, 
+      this.state.position.y - this.hitSideLength,
+      2 * this.hitSideLength,
+      2 * this.hitSideLength
+    )
+  }
+
+  drawHitOverlays() {
+    this.ctx.beginPath()
+    this.ctx.arc(this.state.mouthCoords.x, this.state.mouthCoords.y, 2, 0, 2 * Math.PI)
+    this.ctx.fillStyle = 'blue'
+    this.ctx.fill()
+  }
+
   drawHead() {
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.state.scaleColor
+    this.ctx.fillStyle = this.state.bodyColor
     this.ctx.fill()
 
     this.ctx.beginPath()
@@ -179,6 +186,24 @@ export default class Snek {
     }
     this.ctx.restore()
   }
+
+  move() {
+    this.state.position.x += this.state.moveSpeed 
+      * Math.cos(this.state.directionRad)
+    this.state.position.y += this.state.moveSpeed 
+      * Math.sin(this.state.directionRad)
+    this.setHitAreas()
+  }
+
+  step() {
+    if (this.state.mobile) {
+      this.move()
+    }
+
+    this.segments.step(this.state.position)
+    this.draw()
+  }
+
 }
 
 export class Segment {
@@ -283,7 +308,7 @@ export class Segments {
 
       this.ctx.beginPath()
       this.ctx.arc(0, 0, this.headState.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = this.headState.scaleColor
+      this.ctx.fillStyle = this.headState.bodyColor
       this.ctx.fill()
 
       this.ctx.restore()

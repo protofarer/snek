@@ -23,7 +23,7 @@ export default class Apple {
     this.state.position = startPosition || this.state.position
     this.hitSideLength = this.state.r + 1
     
-    this.setHitArea()
+    this.setHitAreas()
   }
 
   left() {
@@ -39,12 +39,12 @@ export default class Apple {
     return { x: this.state.position.x, y: this.state.position.y + this.hitSideLength }
   }
 
-  drawHitArea() {
+  drawHitOverlays() {
     this.ctx.strokeStyle = 'blue'
     this.ctx.stroke(this.hitArea)
   }
 
-  setHitArea() {
+  setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
       this.state.position.x - this.hitSideLength, 

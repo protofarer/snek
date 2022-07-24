@@ -27,6 +27,7 @@ export default class Ant {
     primaryColor: 'black',
     mobile: true,
     exp: 1,
+    scale: 4,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
@@ -36,7 +37,7 @@ export default class Ant {
     this.hitSideLength = this.state.r
     this.carriedEnt = null
     this.carriedOffsetRad = null
-    this.setHitArea()
+    this.setHitAreas()
   }
 
   turnLeft(k=1) {
@@ -77,20 +78,30 @@ export default class Ant {
     this.carriedOffsetRad = this.state.directionRad 
       - this.carriedEnt.state.directionRad
   }
-
-  drawHitArea() {
-    this.ctx.strokeStyle = 'blue'
-    this.ctx.stroke(this.hitArea)
+  
+  setHitAreas() {
+    this.hitArea = new Path2D()
+    // this.hitArea.rect(
+    //   this.state.position.x - 1 * this.hitSideLength,
+    //   this.state.position.y - 2 * this.hitSideLength, 
+    //   2 * this.hitSideLength,
+    //   4.2 * this.hitSideLength
+    // )
+    const x = this.state.position.x - 2*this.hitSideLength * Math.cos(this.state.directionRad) - (Math.sin(this.state.directionRad))
+    const y = this.state.position.y - 1 * this.hitSideLength - 2 * this.hitSideLength * Math.sin(this.state.directionRad)
+    console.log(`x:`, x)
+    console.log(`y`, y)
+    this.hitArea.rect(
+      x,
+      y,
+      4.2 * this.hitSideLength,
+      2 * this.hitSideLength
+    )
   }
 
-  setHitArea() {
-    this.hitArea = new Path2D()
-    this.hitArea.rect(
-      this.state.position.x - 1 * this.hitSideLength,
-      this.state.position.y - 2 * this.hitSideLength, 
-      2 * this.hitSideLength,
-      4.2 * this.hitSideLength
-    )
+  drawHitOverlays() {
+    this.ctx.strokeStyle = 'blue'
+    this.ctx.stroke(this.hitArea)
   }
 
   drawShadow() {
@@ -104,13 +115,15 @@ export default class Ant {
     this.ctx.save()
     this.ctx.translate(this.state.position.x, this.state.position.y)
     this.ctx.rotate(this.state.directionRad)
-    this.ctx.save()
-    this.ctx.scale(1, 0.2)
+    this.ctx.scale(this.state.scale,this.state.scale)
 
-    // Draw Head + Thorax
+    // Draw Head
     this.ctx.beginPath()
-    this.ctx.arc(0, 0, 2*this.state.r, 0, 2 * pi)
-    this.ctx.restore()
+    this.ctx.arc(1.1*this.state.r,0,0.5*this.state.r,0,2*Math.PI)
+
+    // Draw Thorax
+    this.ctx.rect(this.state.r*-1, -this.state.r/4, this.state.r*2, this.state.r/2 )
+    this.ctx.fill()
 
     // Draw Abdomen
     this.ctx.arc(-1.4*this.state.r, 0, 0.7*this.state.r, 0, 2 * pi)
@@ -119,12 +132,13 @@ export default class Ant {
 
     // Draw Eyes
     this.ctx.beginPath()
-    this.ctx.arc(1.4*this.state.r, -0.4*this.state.r, 0.4 * this.state.r, 0, 2 * pi)
-    this.ctx.arc(1.4*this.state.r, 0.4*this.state.r, 0.4 * this.state.r, 0, 2 * pi)
+    this.ctx.arc(1.4*this.state.r, -0.4*this.state.r, 0.2 * this.state.r, 0, 2 * pi)
+    this.ctx.arc(1.4*this.state.r, 0.4*this.state.r, 0.2 * this.state.r, 0, 2 * pi)
     this.ctx.fillStyle = 'white'
     this.ctx.fill()
 
 
+    this.ctx.beginPath()
     this.ctx.moveTo(this.state.r, 1.2*this.state.r)
     this.ctx.lineTo(-this.state.r, -1.2*this.state.r)
     this.ctx.moveTo(this.state.r, -1.2*this.state.r)
@@ -135,6 +149,12 @@ export default class Ant {
     this.ctx.strokeStyle = 'black'
     this.ctx.stroke()
 
+    this.ctx.beginPath()
+    this.ctx.arc(0,0,1,0,6)
+    this.ctx.strokeStyle = 'red'
+    this.ctx.stroke()
+
+
     this.ctx.restore()
   }
 
@@ -142,11 +162,12 @@ export default class Ant {
     if (this.state.mobile) {
       if (Math.random() < 0.8) {
         this.move(1)
-        this.setHitArea()
+        this.setHitAreas()
       } else {
         this.canTurn && this.turnErratically(0.8)
       }
     }
+    this.drawHitOverlays()
 
     this.draw()
 

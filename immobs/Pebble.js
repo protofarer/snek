@@ -22,8 +22,8 @@ export default class Pebble {
     this.state.r = r || 1 + Math.random() * 2.5     // TODO skewed gaussian random dist
     this.state.directionAngle = Math.random() * 359
     this.canvas = this.ctx.canvas
-    this.hitSideLength = this.state.r + 1
-    this.setHitArea()
+    this.hitSideLength = this.state.r + 4
+    this.setHitAreas()
   }
 
   left() {
@@ -39,12 +39,12 @@ export default class Pebble {
     return { x: this.state.position.x, y: this.state.position.y + this.hitSideLength }
   }
 
-  drawHitArea() {
+  drawHitOverlays() {
     this.ctx.strokeStyle = 'blue'
     this.ctx.stroke(this.hitArea)
   }
 
-  setHitArea() {
+  setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
       this.state.position.x - this.hitSideLength, 

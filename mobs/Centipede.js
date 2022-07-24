@@ -10,13 +10,14 @@ export default class Centipede {
   scaleX = 0.8
 
   state = {
-    r: 7,
+    r: 20,
     get headCoords() { return {
       x: this.position.x,
       y: this.position.y
     }},
     position: { x: 0, y: 0 },
     moveSpeed: 3,
+    nSegments: 8,
     directionAngle: 0,
     turnDirection: 0,
     mobile: true,
@@ -27,18 +28,19 @@ export default class Centipede {
         x: this.headCoords.x + this.r * Math.cos(this.directionRad),
         y: this.headCoords.y + this.r * Math.sin(this.directionRad)
     }},
-    scaleColor: 'hsl(35, 50%, 55%)',
+    bodyColor: 'hsl(35, 50%, 55%)',
     legColor: 'hsl(30, 70%, 7%)',
-    exp: 3,
+    exp: 10,
   }
 
-  constructor(ctx, startPosition=null, parentEnt=null, nLinks=null) {
+  constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
     this.ctx = ctx
     this.state.position = startPosition || this.state.position
     this.parentEnt = parentEnt
-    this.segments = new LeggedSegments(this.ctx, this.state, nLinks || 15)
+    this.nSegments = nSegments || this.state.nSegments
+    this.segments = new LeggedSegments(this.ctx, this.state, nSegments || 15)
     this.hitSideLength = this.state.r
-    this.setHitArea()
+    this.setHitAreas()
   }
 
   turnLeft() {
@@ -49,7 +51,7 @@ export default class Centipede {
     this.state.directionAngle += this.state.turnRate * 1
   }
 
-  setHitArea() {
+  setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
       this.state.position.x - this.hitSideLength, 
@@ -59,9 +61,14 @@ export default class Centipede {
     )
   }
 
-  drawHitArea() {
+  drawHitOverlays() {
     this.ctx.strokeStyle = 'blue'
     this.ctx.stroke(this.hitArea)
+
+    this.ctx.beginPath()
+    this.ctx.arc(this.state.mouthCoords.x, this.state.mouthCoords.y, 2, 0, 2 * Math.PI)
+    this.ctx.fillStyle = 'blue'
+    this.ctx.fill()
   }
 
   swallow(ent) {
@@ -71,7 +78,6 @@ export default class Centipede {
 
     switch (ent.species) {
       case 'ant':
-        this.segments.nSegments += 1
         break
       case 'pebble':
         break
@@ -85,7 +91,7 @@ export default class Centipede {
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.lineWidth = 2
-    this.ctx.fillStyle = this.state.scaleColor
+    this.ctx.fillStyle = this.state.bodyColor
     this.ctx.fill()
 
     // eyes
@@ -113,13 +119,13 @@ export default class Centipede {
 
     // fangs
     this.ctx.beginPath()
-    this.ctx.arc(3, -20, 25, 1.1, 1.6)
-    this.ctx.lineWidth = 1.5
+    this.ctx.arc(.5*this.state.r, -1.8*this.state.r, 2.5 * this.state.r, .9, 1.6)
+    this.ctx.lineWidth = 0.15*this.state.r
     this.ctx.strokeStyle = 'hsl(0,0%,0%)'
     this.ctx.stroke()
 
     this.ctx.beginPath()
-    this.ctx.arc(3, 20, 25, -1.6, -1.1)
+    this.ctx.arc(.5*this.state.r, 1.8*this.state.r, 2.5*this.state.r, -1.6, -.9)
     this.ctx.stroke()
   }
 
@@ -150,6 +156,9 @@ export default class Centipede {
     }
   }
 
+  drawMouthHitOverlay() {
+  }
+
   move() {
     this.state.position.x += this.state.moveSpeed 
       * Math.cos(this.state.directionRad)
@@ -157,6 +166,7 @@ export default class Centipede {
       * Math.sin(this.state.directionRad)
 
     this.turnRandomlySmoothly()
+    this.setHitAreas()
   }
 
   step() {
