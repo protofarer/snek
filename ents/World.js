@@ -18,7 +18,6 @@ export default class World {
       this.game.clock.getElapsedSeconds() % 5 === 0 
         && this.game.clock.getElapsedSeconds() !== 0 && this.isSpawning === false
     ) {
-      console.log(`world spawning`, )
       this.isSpawning = true
       await new Promise (res => { setTimeout(res => this.isSpawning = false, 1000) })
       

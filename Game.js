@@ -91,16 +91,6 @@ export default class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
-  initSpawn() {
-    // this.snek = new Snek(this.ctx, null, this)
-
-    this.spawnEnts(Apple, 30)
-    this.spawnEnts(Pebble, 85)
-    this.spawnEnts(Ant, 25)
-    this.spawnEnts(Centipede, 2)
-    // this.spawnEnts(Mango, 50)
-  }
-
   addEnt(entClass) {
     const ent = new entClass(
       this.ctx, 
@@ -201,5 +191,16 @@ export default class Game {
       }
       this.panel.step()
     }
+  }
+
+  initSpawn() {
+    this.snek = new Snek(this.ctx, null, this)
+
+    this.spawnEnts(Apple, 20)
+    this.spawnEnts(Pebble, 55)
+    this.spawnEnts(Ant, 25)
+    this.spawnEnts(Centipede, 2)
+    this.spawnEnts(Mango, 5)
+
   }
 }

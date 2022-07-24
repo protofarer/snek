@@ -114,12 +114,12 @@ export default class Centipede {
     // fangs
     this.ctx.beginPath()
     this.ctx.arc(3, -20, 25, 1.1, 1.6)
+    this.ctx.lineWidth = 1.5
+    this.ctx.strokeStyle = 'hsl(0,0%,0%)'
     this.ctx.stroke()
 
     this.ctx.beginPath()
     this.ctx.arc(3, 20, 25, -1.6, -1.1)
-    this.ctx.lineWidth = 2
-    this.ctx.strokeStyle = 'hsl(0,0%,0%)'
     this.ctx.stroke()
   }
 
@@ -160,6 +160,12 @@ export default class Centipede {
   }
 
   step() {
+    if (this.state.mobile) {
+      if (Math.random() < 0.001) {
+        this.state.mobile = false
+        setTimeout(() => this.state.mobile = true, 200 + Math.random() * 2000)
+      }
+    }
     this.state.mobile && this.move()
 
     // this.ctx.save()
@@ -182,8 +188,8 @@ export class LeggedSegments extends Segments {
     const r = this.state.r
     
     ctx.beginPath()
-    ctx.moveTo(0, -2*r)
-    ctx.lineTo(0, 2*r)
+    ctx.moveTo(0, -2.2*r)
+    ctx.lineTo(0, 2.2*r)
     ctx.lineWidth = 1
     ctx.strokeStyle = this.state.legColor
     ctx.stroke()

@@ -19,7 +19,7 @@ export default class Pebble {
     this.ctx = ctx
     this.state.position = position || this.state.position
     this.parentEnt = parentEnt
-    this.state.r = r || Math.random() * 5     // TODO skewed gaussian random dist
+    this.state.r = r || 1 + Math.random() * 2.5     // TODO skewed gaussian random dist
     this.state.directionAngle = Math.random() * 359
     this.canvas = this.ctx.canvas
     this.hitSideLength = this.state.r + 1
