@@ -181,8 +181,8 @@ export default class DebugGUI {
     if (this.params.isDebugOn){
       // Reset Game on hit border
       if (this.game.snek) {
-        if (this.game.snek.state.getMouthCoords().y <= 0) {
-          this.game.snek.state.headCoords = { x: 400, y: 400 }
+        if (this.game.snek.state.mouthCoords.y <= 0) {
+          this.game.snek.state.position = { x: 400, y: 400 }
           resetGame(true)
         }
       }
@@ -211,7 +211,7 @@ export default class DebugGUI {
   drawHitOverlays() {
     if (this.game.snek) {
       this.game.ctx.beginPath()
-      this.game.ctx.arc(this.game.snek.state.getMouthCoords().x, this.game.snek.state.getMouthCoords().y, 2, 0, 2 * Math.PI)
+      this.game.ctx.arc(this.game.snek.state.mouthCoords.x, this.game.snek.state.mouthCoords.y, 2, 0, 2 * Math.PI)
       this.game.ctx.fillStyle = 'blue'
       this.game.ctx.fill()
     }
@@ -221,12 +221,13 @@ export default class DebugGUI {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
       const snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
-      snek.state.directionAngle = -180
-      // this.game.snek = snek
+      snek.state.directionAngle = -90
+      snek.mobile = false
+      this.game.snek = snek
       // spawnEnts(Apple, 20)
-      spawnEnts(Pebble, 100)
-      spawnEnts(Mango, 50)
-      spawnEnts(Ant, 30)
+      // spawnEnts(Pebble, 100)
+      // spawnEnts(Mango, 50)
+      // spawnEnts(Ant, 30)
       // spawnEnts(Centipede, 5)
       // this.game.addEnt(Ant)
       // this.game.addEnt(Mango)

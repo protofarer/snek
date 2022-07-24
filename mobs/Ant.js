@@ -20,7 +20,7 @@ export default class Ant {
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     turnDirection: 3,
     turnRate() { return this.moveSpeed + 8},
-    mouthCoords() { return {
+    get mouthCoords() { return {
         x: this.headCoords.x + 0.6 * this.r * Math.cos(this.directionRad),
         y: this.headCoords.y + 0.6 * this.r * Math.sin(this.directionRad),
     }},

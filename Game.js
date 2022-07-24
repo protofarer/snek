@@ -172,7 +172,7 @@ export default class Game {
 
         if (this.snek) {
           const isContacting = this.isContactingMouth(
-            this.snek.state.getMouthCoords(), 
+            this.snek.state.mouthCoords, 
             ent.hitArea)
   
           if (isContacting) {

@@ -9,10 +9,13 @@ export default class Snek {
 
   state = {
     r: 10,
-    headCoords: { x: 0, y: 0 },
+    get headCoords() { return {
+      x: this.position.x,
+      y: this.position.y
+    }},
     position: { x: 400, y: 400},
     moveSpeed: 2,
-    directionAngle: -90,
+    directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     turnRate: function () { return this.moveSpeed + 10 },
@@ -23,6 +26,7 @@ export default class Snek {
     scaleColor: 'hsl(100, 100%, 32%)',
     mobile: true,
     hasTongueOut: false,
+    tongueDirection: 0,
     exp: 0,
   }
 
@@ -67,9 +71,6 @@ export default class Snek {
       * Math.cos(this.state.directionRad)
     this.state.position.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
-    this.state.headCoords.x = this.state.position.x
-    this.state.headCoords.y = this.state.position.y
-
     this.segments.step(this.state.position)
     this.draw()
   }
@@ -104,7 +105,6 @@ export default class Snek {
 
   drawHead() {
     this.ctx.beginPath()
-    this.ctx.scale(1 ,this.scaleX)
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.fillStyle = this.state.scaleColor
     this.ctx.fill()
@@ -143,7 +143,7 @@ export default class Snek {
     this.ctx.lineTo(2.2*this.state.r, 0.5 * this.state.r)
     this.ctx.moveTo(1.8*this.state.r, 0)
     this.ctx.lineTo(2.2*this.state.r, -0.5 * this.state.r)
-    this.ctx.lineWidth = 1
+    this.ctx.lineWidth = 0.7
     this.ctx.strokeStyle='red'
     this.ctx.stroke()
   }
@@ -152,18 +152,28 @@ export default class Snek {
     this.ctx.save()
     this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
     this.ctx.rotate(this.state.directionRad)
+    this.ctx.save()
+    this.ctx.scale(1 ,this.scaleX)
 
     this.drawHead()
 
+    this.ctx.restore()
     if (!this.state.hasTongueOut) {
       if (Math.random() < 0.05) {
         this.state.hasTongueOut = true
-        setTimeout(() => this.state.hasTongueOut = false, 100 + Math.random()*800)
+        this.state.tongueDirection = Math.floor(Math.random() * 3 - 1)
+        setTimeout(() => this.state.hasTongueOut = false, 100 + Math.random()*700)
       }
     }
-    this.state.hasTongueOut && this.drawTongue()
 
+    if (this.state.hasTongueOut) {
+        this.ctx.save()
+        this.ctx.rotate(0.3 * this.state.tongueDirection)
+        this.drawTongue()
+        this.ctx.restore()
+    }
     this.ctx.restore()
+
   }
 }
 
