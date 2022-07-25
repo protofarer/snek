@@ -223,16 +223,15 @@ export default class Game {
   initSpawn() {
     this.snek = new Snek(this.ctx, null, this)
 
-    // this.spawnEnts(Apple, 50)
-    // this.spawnEnts(Pebble, 55)
-    // this.spawnEnts(Ant, 50)
-    // this.spawnEnts(Mango, 50)
-    // this.spawnEnts(Centipede, 2)
+    this.spawnEnts(Apple, 50)
+    this.spawnEnts(Pebble, 55)
+    this.spawnEnts(Ant, 50)
+    this.spawnEnts(Mango, 50)
+    this.spawnEnts(Centipede, 2)
 
-      const ant = this.addEnt(Ant)
-      ant.state.canTurn = false
-      ant.state.mobile = true
-      const m = this.addEnt(Mango)
-
+      // const ant = this.addEnt(Ant)
+      // ant.state.canTurn = false
+      // ant.state.mobile = true
+      // const m = this.addEnt(Mango)
   }
 }

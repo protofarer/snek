@@ -7,7 +7,7 @@ export default class Snek {
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
 
   state = {
-    r: 10,
+    r: 20,
     get headCoords() { return {
       x: this.position.x,
       y: this.position.y
@@ -119,7 +119,11 @@ export default class Snek {
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
     this.ctx.fillStyle = this.state.bodyColor
+    this.ctx.shadowOffsetY = 2
+    this.ctx.shadowBlur = 2
+    this.ctx.shadowColor = 'hsl(0,0%,0%)'
     this.ctx.fill()
+    this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
 
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.state.r * 0.7, -Math.PI / 3, Math.PI / 3)
@@ -287,6 +291,10 @@ export class Segments {
     }
     this.draw()
   }
+
+  processSegments() {
+
+  }
   
   drawSegments() {
     for(let i = 0; i < this.headState.nSegments; i++) {
@@ -309,7 +317,11 @@ export class Segments {
       this.ctx.beginPath()
       this.ctx.arc(0, 0, this.headState.r, 0, 2 * Math.PI)
       this.ctx.fillStyle = this.headState.bodyColor
+      this.ctx.shadowOffsetY = 2
+      this.ctx.shadowBlur = 2
+      this.ctx.shadowColor = 'hsl(0,0%,0%)'
       this.ctx.fill()
+      this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
 
       this.ctx.restore()
       
