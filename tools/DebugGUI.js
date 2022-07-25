@@ -25,10 +25,13 @@ export default class DebugGUI {
       isGameDoubleSpeed: false,
       timeToReset: 2000,
       resetAfterElapsed: false,
+      gameTickMultiplier: 1,
+      set gameSpeed(val) { game.params.speed = val},
+      get gameSpeed() { return game.params.speed }
     }
 
     this.setParamsFromSessionStorage()
-    this.invokeOnGameStart()
+    this.invokeOnDebugGameStart()
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -55,6 +58,14 @@ export default class DebugGUI {
     this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
     this.setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
     this.setupBooleanToggler(this.params, 'showHitOverlay', guiTestParams, 'show overlay')
+    this.setupNumericSlider({
+      obj: this.params,
+      key: 'gameTickMultiplier',
+      folder: guiTestParams,
+      minVal: 1,
+      maxVal: 5,
+      stepVal: 1,
+    })
 
     const guiGameTest = gui.addFolder('GameTest')
     guiGameTest.add({ resetGame }, 'resetGame')
@@ -99,7 +110,15 @@ export default class DebugGUI {
 
     const endGame = () => { this.game.phase = CONSTANTS.PHASE_END }
     guiGameTest.add({ endGame }, 'endGame')
-    guiGameTest.add(this.game.params, 'speed', 0.05, 1, 0.05)
+    this.setupNumericSlider({
+      obj: this.params,
+      key: 'gameSpeed',
+      folder: guiGameTest,
+      minVal: 0.05,
+      maxVal: 1,
+      stepVal: 0.05,
+    })
+    // guiGameTest.add(this.game.params, 'speed', 0.05, 1, 0.05)
 
     // const guiPointerTracking = gui.addFolder('PointerTracking')
     // guiPointerTracking.add(this.game.pointerCoords.client, 'x').name('client.x').listen()
@@ -169,8 +188,7 @@ export default class DebugGUI {
         window.sessionStorage.removeItem(key)
         // window.sessionStorage.setItem()
       }
-      console.log(`window.sessionStorage: ${key}: ${sessionVal}`)
-      
+      if (this.params.isDebugOn) console.log(`window.sessionStorage: ${key}: ${sessionVal}`)
       this.params[key] = paramVal ? paramVal : this.params[key]
     }
 
@@ -206,7 +224,7 @@ export default class DebugGUI {
           obj[key] = false
           window.sessionStorage.setItem(key, 'false')
         }
-        console.info(`sessionStorage and params[${key}] set to`, obj[key])
+        console.info(`sessionStorage/debug.params [${key}] toggled to:`, obj[key])
       }
     }
 
@@ -224,15 +242,54 @@ export default class DebugGUI {
     this.frames.fps = this.frames.times.length
   }
   
+  drawHitOverlays() {
+    Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
+  }
+
+  async invokeOnDebugGameStart() {
+    if (this.params.isDebugOn) {
+      console.log(`*******************************************`, )
+      console.log(`******** Running debug funcs on game start:`, )
+      if (this.params.resetAfterElapsed) {
+        setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
+      }
+      
+      console.log(`*******************************************`, )
+      console.log(`*******************************************`, )
+    }
+  }
+
+
+  addTestObjects() {
+    const spawnEnts = this.game.spawnEnts.bind(this.game)
+
+    if (this.params.isDebugOn) {
+
+      const addEnt = this.game.addEnt.bind(this.game)
+      const snek = new Snek(this.game.ctx, {x:100,y:400}, this.game)
+      // snek.state.directionAngle = 0
+      this.game.snek = snek
+      // snek.mobile = false
+
+      const app = addEnt(Apple)
+      // const ant = addEnt(Ant).canTurn(false).isMobile(true)
+      // addEnt(Apple)
+      // addEnt(Mango)
+
+
+      // spawnEnts(Pebble, 100)
+      // spawnEnts(Apple, 50)
+      // spawnEnts(Ant, 50)
+      // spawnEnts(Mango, 50)
+    }
+  }
+
   step() {
+
     // Debug Mode only
     if (this.params.isDebugOn){
-      // Reset Game on hit border
-      if (this.game.snek) {
-        if (this.game.snek.state.mouthCoords.y <= 0) {
-          this.game.snek.state.position = { x: 400, y: 400 }
-          resetGame(true)
-        }
+      for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
+        this.game.step()
       }
     }
 
@@ -253,43 +310,4 @@ export default class DebugGUI {
     }
   }
 
-  drawHitOverlays() {
-    Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
-  }
-
-  async invokeOnGameStart() {
-    if (this.params.isDebugOn) {
-      console.log(`*******************************************`, )
-      console.log(`******** Running debug funcs on game start:`, )
-      if (this.params.resetAfterElapsed) {
-        setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
-      }
-      
-      console.log(`*******************************************`, )
-      console.log(`*******************************************`, )
-    }
-  }
-
-
-  addTestObjects() {
-    const spawnEnts = this.game.spawnEnts.bind(this.game)
-    if (this.params.isDebugOn) {
-      const addEnt = this.game.addEnt.bind(this.game)
-      const snek = new Snek(this.game.ctx, {x:100,y:400}, this.game)
-      // snek.state.directionAngle = 0
-      this.game.snek = snek
-      // snek.mobile = false
-
-      const app = addEnt(Apple)
-      // const ant = addEnt(Ant).canTurn(false).isMobile(true)
-      // addEnt(Apple)
-      // addEnt(Mango)
-
-
-      // spawnEnts(Pebble, 100)
-      // spawnEnts(Apple, 50)
-      // spawnEnts(Ant, 50)
-      // spawnEnts(Mango, 50)
-    }
-  }
 }

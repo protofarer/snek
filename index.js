@@ -43,10 +43,10 @@ export function startNewGame() {
       game.step()
       debugGUI && debugGUI.step()
 
-      if (debugGUI?.params.isGameDoubleSpeed) {
-        game.step()
-        debugGUI.step()
-      }
+      // if (debugGUI?.params.isGameDoubleSpeed) {
+      //   game.step()
+      //   debugGUI.step()
+      // }
   
       debugGUI && debugGUI.calcFPS(t)
   
