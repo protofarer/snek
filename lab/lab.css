@@ -21,6 +21,7 @@ body {
   width: calc(100vw - 200px);
   height: calc(100vw - 200px);
   flex: 0 0 0%;
+  border: 1px solid red;
 }
 
 #pan {

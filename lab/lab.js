@@ -4,118 +4,48 @@ con.id ='con'
 const body = document.querySelector('body')
 body.appendChild(con)
 
-const wild = document.createElement('span')
-// con.appendChild(wild)
 
 const can = document.createElement('canvas')
 can.id='can'
 con.appendChild(can)
-
-const pan = document.createElement('div')
-pan.id = 'pan'
-con.appendChild(pan)
-
-const topgrid = document.createElement('div')
-topgrid.id ='topgrid'
-topgrid.className = 'grid'
-pan.appendChild(topgrid)
-
-const midbox = document.createElement('div')
-midbox.id='midbox'
-pan.appendChild(midbox)
-
-const shrinkChiks = document.createElement('button')
-shrinkChiks.id='shrinkchiks'
-shrinkChiks.innerText = 'shrink\'em'
-midbox.appendChild(shrinkChiks)
-
-shrinkChiks.addEventListener('click', () => {
-  chiks.forEach((chik) => {
-    // ! cannot get a properly scaled height because the grid(parent)
-    // ! doesn't shrink!, it fits its children no matter what
-    chik.width = chik.height = chik.parentNode.clientHeight * 3 / 16
-    drawChik(chik)
-  })
-})
-
-const botgrid = document.createElement('div')
-botgrid.id='botgrid'
-botgrid.className = 'grid'
-pan.appendChild(botgrid)
-
-let chiks = []
-function fillChiks(par, ele='div', side=null, n=12) {
-  for(let i = 0; i < n; i++) {
-    const chik = document.createElement(ele)
-    chik.className = 'chik'
-    if (side) {
-      chik.width = chik.height = side
-    }
-    if (ele='canvas') {
-      drawChik(chik)
-    }
-    par.appendChild(chik)
-    chiks.push(chik)
-  }
-}
-
-function drawChik(chik) {
-  const ctx = chik.getContext('2d')
-  const h = chik.height
-  const w = chik.width
-  ctx.moveTo(w/2, 0)
-  ctx.lineTo(w/2,h)
-  ctx.moveTo(0, h/2)
-  ctx.lineTo(w, h/2)
-  ctx.stroke()
-}
-
-fillChiks(topgrid,'canvas', 50)
-fillChiks(botgrid,'canvas', 50)
-
-
 const ctx = can.getContext('2d')
-
-
-function fluxingWidth() {
-  let x = 0
-  setInterval(() => {
-    if (x) {
-      wild.innerText = 'WWWWWWWWWWWWWWWWWWWw'
-      x = 0
-    } else {
-      wild.innerText = ''
-      x = 1
-    }
-  }, 1000)
-}
-
 can.width = can.height = 800
 
-let center = {
-  x: can.width / 2,
-  y: can.height / 2
-}
-
-setInterval(() => {
-  // console.log('logical', { w: can.width, h: can.height })
-  // console.log('browsal', { w: can.clientWidth, h: can.clientHeight})
-  // console.log(`center:`, { x: can.width / 2, y: can.height / 2 })
-  console.log(`--------------------`, )
-  
-}, 100)
 
 
-ctx.arc(center.x, center.y, can.width/2 -2, 0, 2*Math.PI)
-ctx.moveTo(center.x, 0)
-ctx.lineTo(center.x, can.height)
-ctx.moveTo(0, center.y)
-ctx.lineTo(can.width, center.y)
+const pi = Math.PI
+
+ctx.beginPath()
+ctx.moveTo(400,0)
+ctx.lineTo(400,800)
+ctx.moveTo(0,400)
+ctx.lineTo(800,400)
 ctx.stroke()
 
-window.addEventListener('resize', () => {
-  chiks.forEach(() => {
+ctx.beginPath()
 
-  })
-
-})
+const r = 50
+const R = Math.sqrt(5*r**2)
+const position = {x:400, y:400}
+const directionRad = -Math.PI/4
+    const sideLong = 4 * r
+    const x1 = position.x - R * Math.cos(Math.atan(1/2) - directionRad)
+    const y1 = position.y - R * Math.sin(Math.atan(1/2) - directionRad)
+    const x2 = x1 + 4*r*Math.cos(directionRad)
+    const y2 = y1 + 4*r*Math.sin(directionRad)
+    const x3 = -x1
+    const y3 = -y1
+    const x4 = -x2
+    const y4 = -y2
+    console.info(`coords`,
+    {x1,y1,x2,y2,x3,y3,x4,y4})
+    
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(x1,y1,3,0,Math.PI*2)
+    // ctx.moveTo(x1,y1)
+    // ctx.lineTo(x2,y2)
+    // ctx.lineTo(x2,y2)
+    // ctx.lineTo(x3,y3)
+    // ctx.lineTo(x4,y4)
+    ctx.stroke()

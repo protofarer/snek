@@ -222,7 +222,7 @@ export default class DebugGUI {
       // spawnEnts(Ant, 30)
       // spawnEnts(Centipede, 1)[0].mobile = false
       // this.game.addEnt(Centipede).state.mobile = true
-      this.game.addEnt(Ant).state.directionAngle = 0
+      this.game.addEnt(Ant).state.directionAngle = -90
       // this.game.addEnt(Mango)
       // spawnEnts(Ant, 1, {x:400,y:400})[0].state.mobile = false
       // spawnEnts(Ant, 1, {x:400,y:400})[0].state.canTurn = false

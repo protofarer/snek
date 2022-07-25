@@ -24,4 +24,5 @@ export default defineConfig({
     // emptyOutDir: true,
     // sourcemap: true,
   },
+  main: new URL('./lab/lab.html', import.meta.url)
 })

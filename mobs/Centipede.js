@@ -10,7 +10,7 @@ export default class Centipede {
   scaleX = 0.8
 
   state = {
-    r: 20,
+    r: 10,
     get headCoords() { return {
       x: this.position.x,
       y: this.position.y

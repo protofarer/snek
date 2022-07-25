@@ -27,7 +27,7 @@ export default class Ant {
     primaryColor: 'black',
     mobile: true,
     exp: 1,
-    scale: 4,
+    scale: 1,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
@@ -81,21 +81,11 @@ export default class Ant {
   
   setHitAreas() {
     this.hitArea = new Path2D()
-    // this.hitArea.rect(
-    //   this.state.position.x - 1 * this.hitSideLength,
-    //   this.state.position.y - 2 * this.hitSideLength, 
-    //   2 * this.hitSideLength,
-    //   4.2 * this.hitSideLength
-    // )
-    const x = this.state.position.x - 2*this.hitSideLength * Math.cos(this.state.directionRad) - (Math.sin(this.state.directionRad))
-    const y = this.state.position.y - 1 * this.hitSideLength - 2 * this.hitSideLength * Math.sin(this.state.directionRad)
-    console.log(`x:`, x)
-    console.log(`y`, y)
     this.hitArea.rect(
-      x,
-      y,
-      4.2 * this.hitSideLength,
-      2 * this.hitSideLength
+      this.state.position.x - 2 * this.hitSideLength,
+      this.state.position.y - 2 * this.hitSideLength,
+      4 * this.hitSideLength,
+      4 * this.hitSideLength
     )
   }
 
