@@ -349,7 +349,7 @@ export class Segment {
   }
 
   ingest(ent) {
-    if (this.state.entUnderDigestion) {
+    if (this.state.entUnderDigestion !==null) {
       if (!this.downstreamSegment) {
         console.log(`seg is pooping ent`, )
         this.poop()
@@ -359,16 +359,15 @@ export class Segment {
       }
     }
     this.state.entUnderDigestion = ent
-    console.log(`ent started being digested`, this.state.entUnderDigestion)
     this.state.entUnderDigestion.parentEnt = this
     this.state.entUnderDigestion.state.position = this.position
+    console.log(`ent started being digested`, this.state.entUnderDigestion)
   }
 
   digest() {
-    console.log(`IN digest`, )
-    console.log(`digestiontimeleft`, this.state.entUnderDigestion.state.digestionTimeleft)
-    
-    console.log(`typeof digestiontime`, typeof this.state.entUnderDigestion.state.digestionTimeleft)
+    // console.log(`IN digest`, )
+    // console.log(`digestiontimeleft`, this.state.entUnderDigestion.state.digestionTimeleft)
+    // console.log(`typeof digestiontime`, typeof this.state.entUnderDigestion.state.digestionTimeleft)
     
     if (this.state.entUnderDigestion.state.digestionTimeleft > 0) {
       this.digestionEffect = this.state.entUnderDigestion.state.digestionEffect
@@ -396,13 +395,13 @@ export class Segment {
 
   step() {
     if (this.state.entUnderDigestion !== null) {
-      console.log(`seg is digesting something`, )
+      // console.log(`seg is digesting something`, )
       this.state.entUnderDigestion.state.position = this.position
       this.digest()
       this.state.entUnderDigestion.step()
       
     } else {
-      console.log(`seg is not digesting`, )
+      // console.log(`seg is not digesting`, )
     }
     
   }

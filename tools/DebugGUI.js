@@ -23,11 +23,14 @@ export default class DebugGUI {
       isClockDrawn: false,
       isTurningRandomly: false,
       isGameDoubleSpeed: false,
+      timeToReset: 2000,
     }
-
+    this.gameStartFunctions = {
+      resetAfterElapsed: false
+    }
     this.setParamsFromSessionStorage()
-    this.setupBooleanTogglers()
 
+    this.invokeOnGameStart()
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -44,7 +47,15 @@ export default class DebugGUI {
     const guiGameState = gui.addFolder('GameState')
     guiGameState.add(this.game.state, 'phase').name('phase').listen()
 
-
+// **********************************************************************
+// * Testing
+// **********************************************************************
+    const guiTestParams = this.gui.addFolder('Test & Debug')
+    this.setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
+    this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
+    this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
+    this.setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
+    this.setupBooleanToggler(this.params, 'showHitOverlay', guiTestParams, 'show overlay')
     // Game Test Params and Functions
     const guiGameTest = gui.addFolder('GameTest')
     guiGameTest.add({ resetGame }, 
@@ -53,16 +64,53 @@ export default class DebugGUI {
     guiGameTest.add({ debugreset() { resetGame(true)} }, 
       'debugreset').name('reset: debug')
 
-    const addCentipede = () => {
-      this.game.spawnEnts(Centipede)
+
+// **********************************************************************
+// * Game Start Functions
+// **********************************************************************
+    const guiStartFunctions = gui.addFolder('GameStartFunctions')
+    // guiStartFunctions.add(this.params, 'timeToReset', 1000, 5000, 500)
+    this.setupBooleanToggler(this.gameStartFunctions, 'resetAfterElapsed', guiStartFunctions, 'reset: after elapsed ms')
+    guiStartFunctions.add(this.gameStartFunctions, 'resetAfterElapsed')
+      .name('reset after elapsed')
+
+
+    const setupNumericSlider = ({obj, key, folder, minVal, maxVal, stepVal, label}) => {
+      const setSessionNumeric = (val) => {
+        return () => {
+          window.sessionStorage.setItem(key, val)
+          obj[key] = val
+        }
+      }
+      folder.add(obj, key, minVal, maxVal, stepVal).onChange(setSessionNumeric).listen()
+        .name(label || key)
     }
+
+    setupNumericSlider({
+      obj: this.params,
+      key: 'timeToReset',
+      folder: guiStartFunctions,
+      minVal: 1000,
+      maxVal: 10000,
+      stepVal: 500,
+    })
+
+
+    // TODO set sessionstorage timetoreset on init
+    // TODO onChange of timetoreset Slider, update sessionStorage
+
+    // const handleSessionBoolean = toggleSessionBoolean(obj, prop)
+    // folder.add(obj, prop).onChange(handleSessionBoolean).listen()
+    //   .name(label || prop)
+
+
+// **********************************************************************
+// * Add Mobs
+// **********************************************************************
+    const addCentipede = () => this.game.spawnEnts(Centipede)
     guiGameTest.add({ addCentipede }, 'addCentipede')
 
-    const endGame = () => {
-      // for debug
-      this.game.phase = CONSTANTS.PHASE_END
-    }
-
+    const endGame = () => { this.game.phase = CONSTANTS.PHASE_END }
     guiGameTest.add({ endGame }, 'endGame')
     guiGameTest.add(this.game.params, 'speed', 0.05, 1, 0.05)
 
@@ -116,55 +164,49 @@ export default class DebugGUI {
     this.addTestObjects()
   }
 
-  setBooleanParam = (name) => {
-    const isTrueFromSession = window.sessionStorage.getItem(name)
-    let isParamTrue
+  setParamFromSession = (key) => {
+    const sessionVal = window.sessionStorage.getItem(key)
+    let paramVal
 
-    if (isTrueFromSession === 'true') {
-      isParamTrue = true
-    } else if (isTrueFromSession === 'false') {
-      isParamTrue = false
-    } else {
-      isParamTrue = this.params[name]
+    if (sessionVal === 'true') {
+      paramVal = true
+    } else if (sessionVal === 'false') {
+      paramVal = false
+    } else if (!isNaN(sessionVal)) {
+      paramVal = Number(sessionVal)
+      console.log(`found numeric session value`, sessionVal)
+      
     }
-    this.params[name] = isParamTrue
+    this.params[key] = paramVal
   }
 
   setParamsFromSessionStorage() {
     // Read debug and game params from sessionStorage for persistence across game runs
     for (const key of Object.keys(this.params)) {
-      this.setBooleanParam(key)
+      this.setParamFromSession(key)
     }
   }
 
-  setupBooleanTogglers() {
-    const toggleSessionBoolean = (obj, name) => { 
+  setupBooleanToggler(obj, key, folder, label=null) {
+    const toggleSessionBoolean = () => { 
       return () => {
         if (
-          window.sessionStorage.getItem(name) === 'false'
-          || !window.sessionStorage.getItem(name)
+          window.sessionStorage.getItem(key) === 'false'
+          || !window.sessionStorage.getItem(key)
         ) {
-          obj[name] = true
-          window.sessionStorage.setItem(name, 'true')
+          obj[key] = true
+          window.sessionStorage.setItem(key, 'true')
         } else {
-          obj[name] = false
-          window.sessionStorage.setItem(name, 'false')
+          obj[key] = false
+          window.sessionStorage.setItem(key, 'false')
         }
-        console.info(`sessionStorage and params[${name}] set to`, obj[name])
+        console.info(`sessionStorage and params[${key}] set to`, obj[key])
       }
     }
 
-    const setupBooleanToggler = (obj, name, guiFolder, label=null ) => {
-      const handleSessionBoolean = toggleSessionBoolean(obj, name)
-      guiFolder.add(obj, name).onChange(handleSessionBoolean).listen().name(label || name)
-    }
-
-    const guiTestParams = this.gui.addFolder('TestParams')
-    setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
-    setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
-    setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
-    setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
-    setupBooleanToggler(this.params, 'showHitOverlay', guiTestParams, 'show overlay')
+    const handleSessionBoolean = toggleSessionBoolean(obj, key)
+    folder.add(obj, key).onChange(handleSessionBoolean).listen()
+      .name(label || key)
   }
 
   calcFPS(t) {
@@ -208,6 +250,23 @@ export default class DebugGUI {
   drawHitOverlays() {
     Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
   }
+
+  invokeOnGameStart() {
+    const resetAfterElapsedMillisec = async () => {
+      console.log(`reset after 5 sec`, )
+      setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
+    }
+
+    console.log(`*******************************************`, )
+    console.log(`******** Running debug funcs on game start:`, )
+    this.gameStartFunctions.resetAfterElapsed && 
+      resetAfterElapsedMillisec()
+
+    
+    console.log(`*******************************************`, )
+    console.log(`*******************************************`, )
+  }
+
 
   addTestObjects() {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
