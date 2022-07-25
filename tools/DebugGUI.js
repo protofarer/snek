@@ -24,12 +24,10 @@ export default class DebugGUI {
       isTurningRandomly: false,
       isGameDoubleSpeed: false,
       timeToReset: 2000,
+      resetAfterElapsed: false,
     }
-    this.gameStartFunctions = {
-      resetAfterElapsed: false
-    }
-    this.setParamsFromSessionStorage()
 
+    this.setParamsFromSessionStorage()
     this.invokeOnGameStart()
 
     const rectpos = {
@@ -51,42 +49,32 @@ export default class DebugGUI {
 // * Testing
 // **********************************************************************
     const guiTestParams = this.gui.addFolder('Test & Debug')
+
     this.setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
     this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
     this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
     this.setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
     this.setupBooleanToggler(this.params, 'showHitOverlay', guiTestParams, 'show overlay')
-    // Game Test Params and Functions
+
     const guiGameTest = gui.addFolder('GameTest')
-    guiGameTest.add({ resetGame }, 
-      'resetGame').name('reset: normal')
+    guiGameTest.add({ resetGame }, 'resetGame')
+      .name('reset: normal')
 
-    guiGameTest.add({ debugreset() { resetGame(true)} }, 
-      'debugreset').name('reset: debug')
-
+    guiGameTest.add({ debugreset() { resetGame(true)} }, 'debugreset')
+      .name('reset: debug')
 
 // **********************************************************************
 // * Game Start Functions
 // **********************************************************************
     const guiStartFunctions = gui.addFolder('GameStartFunctions')
     // guiStartFunctions.add(this.params, 'timeToReset', 1000, 5000, 500)
-    this.setupBooleanToggler(this.gameStartFunctions, 'resetAfterElapsed', guiStartFunctions, 'reset: after elapsed ms')
-    guiStartFunctions.add(this.gameStartFunctions, 'resetAfterElapsed')
-      .name('reset after elapsed')
 
+    this.setupBooleanToggler(this.params, 'resetAfterElapsed', guiStartFunctions, 'reset: after elapsed ms')
 
-    const setupNumericSlider = ({obj, key, folder, minVal, maxVal, stepVal, label}) => {
-      const setSessionNumeric = (val) => {
-        return () => {
-          window.sessionStorage.setItem(key, val)
-          obj[key] = val
-        }
-      }
-      folder.add(obj, key, minVal, maxVal, stepVal).onChange(setSessionNumeric).listen()
-        .name(label || key)
-    }
+    // guiStartFunctions.add(this.gameStartFunctions, 'resetAfterElapsed')
+    //   .name('reset after elapsed')
 
-    setupNumericSlider({
+    this.setupNumericSlider({
       obj: this.params,
       key: 'timeToReset',
       folder: guiStartFunctions,
@@ -94,7 +82,6 @@ export default class DebugGUI {
       maxVal: 10000,
       stepVal: 500,
     })
-
 
     // TODO set sessionstorage timetoreset on init
     // TODO onChange of timetoreset Slider, update sessionStorage
@@ -164,27 +151,46 @@ export default class DebugGUI {
     this.addTestObjects()
   }
 
-  setParamFromSession = (key) => {
-    const sessionVal = window.sessionStorage.getItem(key)
-    let paramVal
-
-    if (sessionVal === 'true') {
-      paramVal = true
-    } else if (sessionVal === 'false') {
-      paramVal = false
-    } else if (!isNaN(sessionVal)) {
-      paramVal = Number(sessionVal)
-      console.log(`found numeric session value`, sessionVal)
-      
-    }
-    this.params[key] = paramVal
-  }
-
+  
   setParamsFromSessionStorage() {
     // Read debug and game params from sessionStorage for persistence across game runs
-    for (const key of Object.keys(this.params)) {
-      this.setParamFromSession(key)
+    const setParamFromSession = (key) => {
+      const sessionVal = window.sessionStorage.getItem(key)
+      let paramVal
+  
+      if (sessionVal === 'true') {
+        paramVal = true
+      } else if (sessionVal === 'false') {
+        paramVal = false
+      } else if (!isNaN(sessionVal && sessionVal)) {
+        paramVal = Number(sessionVal)
+      } else if (sessionVal === 'undefined') {
+        // Clean out undefined's, they break lil-gui gui.add()
+        window.sessionStorage.removeItem(key)
+        // window.sessionStorage.setItem()
+      }
+      console.log(`window.sessionStorage: ${key}: ${sessionVal}`)
+      
+      this.params[key] = paramVal ? paramVal : this.params[key]
     }
+
+    for (const key of Object.keys(this.params)) {
+      setParamFromSession(key)
+    }
+  }
+
+  setupNumericSlider = ({
+    obj, key, folder, minVal, maxVal, stepVal, label
+  }) => {
+    console.log(`folder`, folder)
+    
+    const setSessionNumeric = (val) => {
+        window.sessionStorage.setItem(key, val)
+        obj[key] = val
+        console.log(`setting windowseshstore, k/v:`,key,val )
+    }
+    folder.add(obj, key, minVal, maxVal, stepVal).onChange(setSessionNumeric).listen()
+      .name(label || key)
   }
 
   setupBooleanToggler(obj, key, folder, label=null) {
@@ -251,20 +257,17 @@ export default class DebugGUI {
     Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
   }
 
-  invokeOnGameStart() {
-    const resetAfterElapsedMillisec = async () => {
-      console.log(`reset after 5 sec`, )
-      setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
+  async invokeOnGameStart() {
+    if (this.params.isDebugOn) {
+      console.log(`*******************************************`, )
+      console.log(`******** Running debug funcs on game start:`, )
+      if (this.params.resetAfterElapsed) {
+        setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
+      }
+      
+      console.log(`*******************************************`, )
+      console.log(`*******************************************`, )
     }
-
-    console.log(`*******************************************`, )
-    console.log(`******** Running debug funcs on game start:`, )
-    this.gameStartFunctions.resetAfterElapsed && 
-      resetAfterElapsedMillisec()
-
-    
-    console.log(`*******************************************`, )
-    console.log(`*******************************************`, )
   }
 
 
