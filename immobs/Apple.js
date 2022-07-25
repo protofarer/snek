@@ -6,6 +6,7 @@ export default class Apple {
 
   state = {
     r: 6,
+    get hitSideLength() { return this.r + 1 },
     position: { x: 400, y: 400 },
     directionAngle: 0,
     set directionRad(val) {
@@ -15,7 +16,8 @@ export default class Apple {
     primaryColor: 'hsl(0,70%, 50%)',
     leafColor: 'hsl(95, 60%, 50%)',
     exp: 2,
-    get hitSideLength() { return this.r + 1 }
+    digestionTimeLeft: 3000,
+    digestionEffect: 'movespeed',
   }
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx

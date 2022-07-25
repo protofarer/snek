@@ -19,8 +19,8 @@ export default class Panel {
     this.gameInfo.id = 'info-game'
     this.infobox.appendChild(this.gameInfo)
   
-    this.statusMsg.id = 'info-msg'
-    this.infobox.appendChild(this.statusMsg)
+    // this.statusMsg.id = 'info-msg'
+    // this.infobox.appendChild(this.statusMsg)
 
     this.newGameButton.id = 'newGameButton'
     this.newGameButton.innerText = 'New Game'

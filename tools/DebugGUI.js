@@ -213,14 +213,15 @@ export default class DebugGUI {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     if (this.params.isDebugOn) {
       const addEnt = this.game.addEnt.bind(this.game)
-      // const snek = new Snek(this.game.ctx, {x:400,y:700}, this.game)
+      const snek = new Snek(this.game.ctx, {x:100,y:400}, this.game)
       // snek.state.directionAngle = 0
-      // this.game.snek = snek
+      this.game.snek = snek
       // snek.mobile = false
 
-
-      const ant = addEnt(Ant).canTurn(false).isMobile(true)
-      addEnt(Mango)
+      const app = addEnt(Apple)
+      // const ant = addEnt(Ant).canTurn(false).isMobile(true)
+      // addEnt(Apple)
+      // addEnt(Mango)
 
 
       // spawnEnts(Pebble, 100)

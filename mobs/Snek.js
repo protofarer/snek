@@ -1,3 +1,5 @@
+import Clock from "../utils/Clock"
+
 export default class Snek {
   static entGroup = 'mob'
   static species = 'snek'
@@ -14,7 +16,7 @@ export default class Snek {
     }},
     position: { x: 400, y: 400},
     moveSpeed: 2,
-    nSegments: 3,
+    nSegments: 2,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
@@ -41,7 +43,13 @@ export default class Snek {
     this.initEventListeners()
   }
 
+  isMobile(isMobile) {
+    this.state.mobile = isMobile
+    return this
+  }
+
   addSegment() {
+    this.state.nSegments++
     this.segments.addSegment()
   }
 
@@ -77,12 +85,12 @@ export default class Snek {
 
     switch (ent.species) {
       case 'apple':
-        this.addSegment()//.digest(ent)
+        this.segments.ingest(ent)
         break
       case 'pebble':
         break
       case 'ant':
-        this.addSegment()
+        // this.addSegment()
         break
       case 'mango':
         break
@@ -210,27 +218,6 @@ export default class Snek {
 
 }
 
-export class Segment {
-  state = {
-    position: {x:0,y:0},
-    entDigesting: {},
-    directionAngle: 0,
-    set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
-    get directionRad() { return this.directionAngle * Math.PI / 180 },
-  }
-
-  constructor(head, ent=null) {
-
-  }
-
-  step() {
-
-  }
-  draw() {
-
-  }
-
-}
 export class Segments {
   headTrail = []
   segments = []
@@ -241,19 +228,25 @@ export class Segments {
     this.linkLength = Math.floor(this.headState.r * 0.8 - this.headState.moveSpeed * 0.5)
 
     for(let i = 0; i < this.headState.nSegments; i++) {
-      this.segments.push({
-        position: { x: 0, y: 0 },
-        entDigesting: null,
-      })
       for(let j = 0; j < this.linkLength; j++) {
         this.headTrail.push({ 
           x: this.headState.headCoords.x - (j + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.cos(this.headState.directionRad),
           y: this.headState.headCoords.y - (j + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.sin(this.headState.directionRad) 
         })
       }
+    const position = this.headTrail[(this.headState.nSegments+1)*this.linkLength - 1]
+      this.segments.push(new Segment(position))
     }
     console.log(`headtrailL`, this.headTrail.length)
     
+  }
+
+  ingest(ent) {
+    ent.parentEnt = this
+    console.log(`thissegments0`, this.segments[0])
+    
+    this.segments[0].ingest(ent)
+    this.segments[0].downstreamSegment = this.segments[1]
   }
 
   addSegment() {
@@ -268,51 +261,15 @@ export class Segments {
       position,
       entDigesting: null,
     })
-    this.headState.nSegments++
-    console.log(`segs`, this.headState.nSegments)
-    console.log(`headtrailL`, this.headTrail.length)
-    
   }
 
-  step(headCoords) {
-    // while (
-    //   this.headTrail.length > this.headState.nSegments * this.linkLength
-    //   && this.headState.nSegments > 0
-    // ) {
-    //   this.headTrail.shift()
-    // }
-    // ! do I need slack in case game drops an index?
-    if (this.headState.mobile === true) {
-      this.headTrail.pop()
-      this.headTrail.splice(0, 0, { 
-        x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
-        y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
-      })
-    }
-    this.draw()
-  }
-
-  processSegments() {
-    for(let i = 0; i < this.headState.nSegments; i++) {
-      const position = this.headTrail[(i+1)*this.linkLength - 1]
-      this.segments[i].position = position
-    }
-
-  }
-  
   drawSegments() {
     for(let i = this.headState.nSegments-1; i >= 0; i--) {
-      const position = this.headTrail[(i+1)*this.linkLength - 1]
-      const tailOfSegmentAhead = this.headTrail[i*this.linkLength]
-      let {dy, dx} = {
-        dy: tailOfSegmentAhead.y - position.y,
-        dx: tailOfSegmentAhead.x - position.x
-      }
-  
+      const position = this.segments[i].position
+      const segmentRad = this.segments[i].directionRad
       this.ctx.save()
       this.ctx.translate(position.x, position.y)
-      const segmentAngle = Math.atan(dy/dx)
-      this.ctx.rotate(segmentAngle)
+      this.ctx.rotate(segmentRad)
       this.ctx.scale(this.headState.scale, this.headState.scale*0.6)
   
       this.drawLegs()
@@ -329,6 +286,21 @@ export class Segments {
       this.ctx.restore()
     }
   }
+  
+  updateSegments() {
+    for(let i = this.headState.nSegments-1; i >= 0; i--) {
+      const tailOfSegmentAhead = this.headTrail[i*this.linkLength]
+
+      const position = this.headTrail[(i+1)*this.linkLength - 1]
+      this.segments[i].position = position
+
+      let {dy, dx} = {
+        dy: tailOfSegmentAhead.y - position.y,
+        dx: tailOfSegmentAhead.x - position.x
+      }
+      this.segments[i].directionRad = Math.atan(dy/dx)
+    }
+  }
 
   drawLegs() {
   }
@@ -336,4 +308,70 @@ export class Segments {
   draw() {
     this.drawSegments()
   }
+
+  step() {
+    this.updateSegments()
+    // while (
+    //   this.headTrail.length > this.headState.nSegments * this.linkLength
+    //   && this.headState.nSegments > 0
+    // ) {
+    //   this.headTrail.shift()
+    // }
+    // ! do I need slack in case game drops an index?
+    if (this.headState.mobile === true) {
+      this.headTrail.pop()
+      this.headTrail.splice(0, 0, { 
+        x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
+        y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
+      })
+    }
+    this.draw()
+  }
+}
+
+export class Segment {
+  state = {
+    position: {x:0,y:0},
+    directionAngle: 0,
+    set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
+    get directionRad() { return this.directionAngle * Math.PI / 180 },
+    entUnderDigestion: {},
+    upstreamSegment: {},
+    downstreamSegment: {},
+    digestionEffect: '',
+  }
+
+  constructor(position, upstreamSegment=null) {
+    this.state.position = position
+    this.upstreamSegment = upstreamSegment
+    this.entUnderDigestion = null
+  }
+
+  ingest(ent) {
+    this.entUnderDigestion = ent
+    this.entUnderDigestion.parentEnt = this
+    this.entUnderDigestion.state.position = this.position
+  }
+
+  digest() {
+    if (this.entUnderDigestion.digestionTimeleft > 0) {
+      this.digestionEffect = this.entUnderDigestion.state.digestionEffect
+      this.entUnderDigestion.digestionTimeleft -= 17    // TODO subtract timeElapsed since last digest tick
+    } else {
+      this.digestionEffect = null
+      
+    }
+  }
+
+  step() {
+    this.entDigesting.position = this.position
+
+    if (this.entUnderDigestion) {
+      this.digest()
+    }
+  }
+  draw() {
+
+  }
+
 }

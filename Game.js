@@ -97,16 +97,15 @@ export default class Game {
     const ent = new entClass(
       this.ctx, 
       {
-        x: position?.x || 400,
-        y: position?.y || 750,
+        x: position?.x || 150,
+        y: position?.y || 400,
       }, 
       this
     )
     
     const bigEnt = new Entity(ent)
     
-    ent.state.position.y -= (50 * bigEnt.id)
-    ent.state.directionAngle = -90
+    ent.state.position.x += (50 * bigEnt.id)
     ent.state.mobile = false
     // Handle setting hit area when position arg specified since immobs
     //  only set it only once at instantiation
@@ -224,9 +223,9 @@ export default class Game {
 
     this.spawnEnts(Pebble, 55)
     this.spawnEnts(Mango, 10)
-    this.spawnEnts(Apple, 20)
+    this.spawnEnts(Apple, 30)
     this.snek = new Snek(this.ctx, null, this)
-    this.spawnEnts(Ant, 30)
+    this.spawnEnts(Ant, 40)
     this.spawnEnts(Centipede, 2)
 
 
