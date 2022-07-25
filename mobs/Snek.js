@@ -234,8 +234,12 @@ export class Segments {
           y: this.headState.headCoords.y - (j + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.sin(this.headState.directionRad) 
         })
       }
-    const position = this.headTrail[(this.headState.nSegments+1)*this.linkLength - 1]
+      const position = this.headTrail[(this.headState.nSegments+1)*this.linkLength - 1]
       this.segments.push(new Segment(position))
+      if (i > 0) {
+        this.segments[i-1].downstreamSegment = this.segments[i]
+        this.segments[i].upstreamSegment = this.segments[i-1]
+      }
     }
     console.log(`headtrailL`, this.headTrail.length)
     
@@ -243,10 +247,7 @@ export class Segments {
 
   ingest(ent) {
     ent.parentEnt = this
-    console.log(`thissegments0`, this.segments[0])
-    
     this.segments[0].ingest(ent)
-    this.segments[0].downstreamSegment = this.segments[1]
   }
 
   addSegment() {
@@ -290,7 +291,6 @@ export class Segments {
   updateSegments() {
     for(let i = this.headState.nSegments-1; i >= 0; i--) {
       const tailOfSegmentAhead = this.headTrail[i*this.linkLength]
-
       const position = this.headTrail[(i+1)*this.linkLength - 1]
       this.segments[i].position = position
 
@@ -299,6 +299,7 @@ export class Segments {
         dx: tailOfSegmentAhead.x - position.x
       }
       this.segments[i].directionRad = Math.atan(dy/dx)
+      this.segments[i].step()
     }
   }
 
@@ -344,31 +345,66 @@ export class Segment {
   constructor(position, upstreamSegment=null) {
     this.state.position = position
     this.upstreamSegment = upstreamSegment
-    this.entUnderDigestion = null
+    this.state.entUnderDigestion = null
   }
 
   ingest(ent) {
-    this.entUnderDigestion = ent
-    this.entUnderDigestion.parentEnt = this
-    this.entUnderDigestion.state.position = this.position
+    if (this.state.entUnderDigestion) {
+      if (!this.downstreamSegment) {
+        console.log(`seg is pooping ent`, )
+        this.poop()
+      } else {
+        console.log(`seg is passing ent`, )
+        this.pass()
+      }
+    }
+    this.state.entUnderDigestion = ent
+    console.log(`ent started being digested`, this.state.entUnderDigestion)
+    this.state.entUnderDigestion.parentEnt = this
+    this.state.entUnderDigestion.state.position = this.position
   }
 
   digest() {
-    if (this.entUnderDigestion.digestionTimeleft > 0) {
-      this.digestionEffect = this.entUnderDigestion.state.digestionEffect
-      this.entUnderDigestion.digestionTimeleft -= 17    // TODO subtract timeElapsed since last digest tick
+    console.log(`IN digest`, )
+    console.log(`digestiontimeleft`, this.state.entUnderDigestion.state.digestionTimeleft)
+    
+    console.log(`typeof digestiontime`, typeof this.state.entUnderDigestion.state.digestionTimeleft)
+    
+    if (this.state.entUnderDigestion.state.digestionTimeleft > 0) {
+      this.digestionEffect = this.state.entUnderDigestion.state.digestionEffect
+      console.log(`activating digestioneffect:`, this.digestionEffect)
+      this.state.entUnderDigestion.state.digestionTimeleft -= 17    // TODO subtract timeElapsed since last digest tick
+      console.log(`digestionTimeLeft`, this.state.entUnderDigestion.state.digestionTimeleft)
     } else {
       this.digestionEffect = null
-      
     }
   }
 
-  step() {
-    this.entDigesting.position = this.position
+  pass() {
+    this.downstreamSegment.ingest(this.state.entUnderDigestion)
+    this.state.entUnderDigestion = null
+  }
 
-    if (this.entUnderDigestion) {
+  poop() {
+    // TODO setup a line based on entity id across bottomn of screen till
+    //    digestion code is complete
+    this.state.entUnderDigestion.position = {x: 50, y: 700}
+    this.state.entUnderDigestion.parentEnt = null
+    this.state.entUnderDigestion = null
+  }
+
+
+  step() {
+    if (this.state.entUnderDigestion !== null) {
+      console.log(`seg is digesting something`, )
+      this.state.entUnderDigestion.state.position = this.position
       this.digest()
+      this.state.entUnderDigestion.step()
+      
+    } else {
+      console.log(`seg is not digesting`, )
     }
+    
   }
   draw() {
 
