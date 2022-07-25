@@ -62,20 +62,22 @@ export default class Game {
   }
 
   seamlessMove(mob) {
-    if (mob.state.position.x > this.canvas.width) {
+    if (mob.state.position.x >= this.canvas.width) {
       mob.state.position.x = 0
-    } else if (mob.state.position.x <= 0) {
+    } else if (mob.state.position.x < 0) {
       mob.state.position.x = this.canvas.width
     }
 
-    if (mob.state.position.y > this.canvas.height) {
+    if (mob.state.position.y >= this.canvas.height) {
       mob.state.position.y = 0
-    } else if (mob.state.position.y <= 0) {
+    } else if (mob.state.position.y < 0) {
       mob.state.position.y = this.canvas.height
     }
   }
 
-  isContactingMouth(mouthCoords, objHitArea) {
+  isContactingMouth(objHitArea, mouthCoords) {
+    // console.log(`objhitarea`, objHitArea)
+    // console.log(`mouthcoords in iscontactingmouth`, mouthCoords)
     return this.ctx.isPointInPath(objHitArea, mouthCoords.x, mouthCoords.y)
   }
 
@@ -91,21 +93,24 @@ export default class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
-  addEnt(entClass) {
+  addEnt(entClass, position=null) {
     const ent = new entClass(
       this.ctx, 
       {
-        x: 400,
-        y: 400,
+        x: position?.x || 400,
+        y: position?.y || 750,
       }, 
       this
     )
     
     const bigEnt = new Entity(ent)
     
-    ent.state.position.y -= 40 * bigEnt.id
+    ent.state.position.y -= (50 * bigEnt.id)
     ent.state.directionAngle = -90
     ent.state.mobile = false
+    // Handle setting hit area when position arg specified since immobs
+    //  only set it only once at instantiation
+    if (entClass.entGroup === 'immob') ent.setHitAreas()
     return ent
   }
 
@@ -124,7 +129,9 @@ export default class Game {
       if (ent.entGroup === 'mob') ent.state.directionAngle = Math.random() * 360
       new Entity(ent)
       ents.push(ent)
+    console.log(`ent`, ent)
     }
+    
     return ents
   }
 
@@ -143,42 +150,62 @@ export default class Game {
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
       ent.step()
-        if (ent.species === 'ant' && !ent.carriedEnt) {
-          let sweets = Entity.bySpecies(['apple', 'mango'])
-          for(let [id, sweet] of Object.entries(sweets)) {
-            const isContacting = this.isContactingMouth(
-              ent.state.mouthCoords, 
-              sweet.hitArea
+      if (ent.species === 'ant' && !ent.carriedEnt) {
+        let sweets = Entity.bySpecies(['apple', 'mango'])
+        for(let [id, sweet] of Object.entries(sweets)) {
+          const isContacting = this.isContactingMouth(
+            sweet.hitArea,
+            ent.state.mouthCoords
             )
+            
             if (isContacting) {
-              ent.grab(sweet)
-              this.removeEnt(id)
-            }
+            //   console.log(`****************************************`, )
+            //   console.log(`****************************************`, )
+            //   console.log(`****************************************`, )
+            //   console.log(`****************************************`, )
+            //   console.log(`****************************************`, )
+            //   console.log(`****************************************`, )
+              
+            // console.log(`ant mouthcoords`, ent.state.mouthCoords.x)
+            // console.log(`ant mouthcoords`, ent.state.mouthCoords.y)
+            // console.log( sweet.hitArea )
+            // console.log(`isContacting!`, isContacting)
+            
+            ent.grab(sweet)
+            // console.log( sweet.hitArea )
+            // console.log(`sweet`, sweet)
+            // console.log(`id`, id)
+            
+            
+            this.removeEnt(id)
           }
         }
+      }
       if (ent.entGroup === 'mob') {
         
         this.seamlessMove(ent)
 
         if (this.snek) {
           const isContacting = this.isContactingMouth(
-            this.snek.state.mouthCoords, 
-            ent.hitArea)
+            ent.hitArea,
+            this.snek.state.mouthCoords,
+          )
   
           if (isContacting) {
+            
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.swallow(ent)
               this.state.score++
               this.removeEnt(id)
             }
           }
-        }
+        } // * DRY
       } else if (ent.entGroup === 'immob') {
 
         if (this.snek) {
           const isContacting = this.isContactingMouth(
+            ent.hitArea,
             this.snek.state.mouthCoords, 
-            ent.hitArea
           )
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
@@ -196,11 +223,16 @@ export default class Game {
   initSpawn() {
     this.snek = new Snek(this.ctx, null, this)
 
-    this.spawnEnts(Apple, 20)
-    this.spawnEnts(Pebble, 55)
-    this.spawnEnts(Ant, 25)
-    this.spawnEnts(Centipede, 2)
-    this.spawnEnts(Mango, 5)
+    // this.spawnEnts(Apple, 50)
+    // this.spawnEnts(Pebble, 55)
+    // this.spawnEnts(Ant, 50)
+    // this.spawnEnts(Mango, 50)
+    // this.spawnEnts(Centipede, 2)
+
+      const ant = this.addEnt(Ant)
+      ant.state.canTurn = false
+      ant.state.mobile = true
+      const m = this.addEnt(Mango)
 
   }
 }

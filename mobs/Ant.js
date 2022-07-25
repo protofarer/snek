@@ -4,14 +4,13 @@ export default class Ant {
   static entGroup = 'mob'
   entGroup = 'mob'
   static swallowables = ['apple', 'mango', 'ant', 'pebble', ]
-  canTurn = true
   state = {
     r: 4,
-    headCoords() { return { 
-        x: this.state.position.x 
-          + Math.cos(this.state.directionRad) * this.state.r * 1.1,
-        y: this.state.position.y 
-          + Math.sin(this.state.directionRad) * this.state.r * 1.1
+    get headCoords() { return { 
+      x: this.position.x 
+        + Math.cos(this.directionRad) * this.r * 1.1,
+      y: this.position.y 
+        + Math.sin(this.directionRad) * this.r * 1.1
     }},
     position: { x: 0, y: 0 },
     moveSpeed: 2,
@@ -26,6 +25,7 @@ export default class Ant {
     }},
     primaryColor: 'black',
     mobile: true,
+    canTurn: true,
     exp: 1,
     scale: 1,
   }
@@ -38,6 +38,10 @@ export default class Ant {
     this.carriedEnt = null
     this.carriedOffsetRad = null
     this.setHitAreas()
+    console.log(`ant headcoords`, this.state.headCoords)
+    console.log(`ant mouthcoords`, this.state.mouthCoords)
+    console.log(`ant pos`, this.state.position)
+    
   }
 
   turnLeft(k=1) {
@@ -73,10 +77,20 @@ export default class Ant {
 
   grab(ent) {
     ent.parentEnt = this
-    ent.hitArea = null
+    ent.hitArea = new Path2D()
     this.carriedEnt = ent
     this.carriedOffsetRad = this.state.directionRad 
       - this.carriedEnt.state.directionRad
+  }
+
+  canTurn(setCanTurn) {
+    this.state.canTurn = setCanTurn
+    return this
+  }
+
+  isMobile(setMobile) {
+    this.state.mobile = setMobile
+    return this
   }
   
   setHitAreas() {
@@ -145,13 +159,18 @@ export default class Ant {
   step() {
     if (this.state.mobile) {
       if (Math.random() < 0.8) {
-        this.move(1)
-        this.setHitAreas()
+        this.move()
       } else {
-        this.canTurn && this.turnErratically(0.8)
+        this.state.canTurn && this.turnErratically(0.8)
       }
+      this.setHitAreas()
     }
+    // console.log(`ant mouthcoords`, this.state.mouthCoords)
+    // console.log(`ant headcoords`, this.state.headCoords)
+    // console.log(`ant pos`, this.state.position)
 
+    //   this.setHitAreas()
+    //   this.move()
     this.draw()
 
     if (this.carriedEnt) {

@@ -6,10 +6,11 @@ export default class Mango extends Apple {
   entGroup = 'immob'
   species = 'mango'
 
-  constructor(ctx, position, parentEnt=null, id=null) {
-    super(ctx, position, parentEnt, id)
+  constructor(ctx, position, parentEnt=null) {
+    super(ctx, position, parentEnt)
     this.state.primaryColor = 'hsl(35,100%, 50%)'
     this.state.secondaryColor = 'green'
+    console.log(`hitarea lol`, this.hitArea)
   }
 
   drawBody() {

@@ -1,8 +1,8 @@
 export default class Apple {
-  static species = 'apple'
-  species = 'apple'
   static entGroup = 'immob'
+  static species = 'apple'
   entGroup = 'immob'
+  species = 'apple'
 
   state = {
     r: 6,
@@ -15,28 +15,28 @@ export default class Apple {
     primaryColor: 'hsl(0,70%, 50%)',
     leafColor: 'hsl(95, 60%, 50%)',
     exp: 2,
+    get hitSideLength() { return this.r + 1 }
   }
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
     this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
     this.state.position = startPosition || this.state.position
-    this.hitSideLength = this.state.r + 1
     
     this.setHitAreas()
   }
 
   left() {
-    return { x:this.state.position.x - this.hitSideLength, y: this.state.position.y}
+    return { x:this.state.position.x - this.state.hitSideLength, y: this.state.position.y}
   }
   right() {
-    return { x:this.state.position.x + this.hitSideLength, y:this.state.position.y}
+    return { x:this.state.position.x + this.state.hitSideLength, y:this.state.position.y}
   }
   top() {
-    return { x: this.state.position.x,y: this.state.position.y - this.hitSideLength }
+    return { x: this.state.position.x,y: this.state.position.y - this.state.hitSideLength }
   }
   bottom() {
-    return { x: this.state.position.x, y: this.state.position.y + this.hitSideLength }
+    return { x: this.state.position.x, y: this.state.position.y + this.state.hitSideLength }
   }
 
   drawHitOverlays() {
@@ -47,10 +47,10 @@ export default class Apple {
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.state.position.x - this.hitSideLength, 
-      this.state.position.y - this.hitSideLength,
-      2 * this.hitSideLength,
-      2 * this.hitSideLength
+      this.state.position.x - this.state.hitSideLength, 
+      this.state.position.y - this.state.hitSideLength,
+      2 * this.state.hitSideLength,
+      2 * this.state.hitSideLength
     )
   }
 

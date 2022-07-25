@@ -73,7 +73,7 @@ export default class Snek {
   swallow(ent) {
     ent.parentEnt = this
     ent.state.position = {x: -1000, y: -1000}
-    ent.hitArea = null
+    ent.hitArea = new Path2D()
 
     switch (ent.species) {
       case 'apple':
