@@ -198,8 +198,8 @@ export class LeggedSegments extends Segments {
     const r = this.state.r
     
     ctx.beginPath()
-    ctx.moveTo(0, -2.2*r)
-    ctx.lineTo(0, 2.2*r)
+    ctx.moveTo(0, -3*r)
+    ctx.lineTo(0, 3*r)
     ctx.lineWidth = 1
     ctx.strokeStyle = this.state.legColor
     ctx.stroke()

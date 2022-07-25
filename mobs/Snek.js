@@ -241,7 +241,6 @@ export class Segments {
         position: { x: 0, y: 0 },
         entDigesting: null,
       })
-
       for(let j = 0; j < this.linkLength; j++) {
         this.headTrail.push({ 
           x: this.headState.headCoords.x - (j + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.cos(this.headState.directionRad),
@@ -254,7 +253,6 @@ export class Segments {
   }
 
   addSegment() {
-    
     for(let i = 0; i < this.linkLength; i++) {
       this.headTrail.push({ 
         x: this.headTrail[this.linkLength * this.headState.nSegments - 1].x - (i + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.cos(this.headState.directionRad),
@@ -280,11 +278,13 @@ export class Segments {
     //   this.headTrail.shift()
     // }
     // ! do I need slack in case game drops an index?
-    this.headTrail.pop()
-    this.headTrail.splice(0, 0, { 
-      x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
-      y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
-    })
+    if (this.headState.mobile === true) {
+      this.headTrail.pop()
+      this.headTrail.splice(0, 0, { 
+        x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
+        y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
+      })
+    }
     this.draw()
   }
   

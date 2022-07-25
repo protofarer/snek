@@ -157,7 +157,6 @@ export default class Ant {
         this.canTurn && this.turnErratically(0.8)
       }
     }
-    this.drawHitOverlays()
 
     this.draw()
 
