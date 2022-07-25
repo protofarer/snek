@@ -234,7 +234,7 @@ export class Segments {
     this.ctx = ctx
     this.headState = headState
     this.nSegments = this.headState.nSegments
-    this.linkLength = Math.floor(this.headState.r * 0.8)
+    this.linkLength = Math.floor(this.headState.r * 0.8 - this.headState.moveSpeed * 0.5)
 
     for(let i = 0; i < this.headState.nSegments; i++) {
       this.segments.push({

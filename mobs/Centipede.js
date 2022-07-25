@@ -31,6 +31,7 @@ export default class Centipede {
     bodyColor: 'hsl(35, 50%, 55%)',
     legColor: 'hsl(30, 70%, 7%)',
     exp: 10,
+    scale: 1,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
@@ -54,10 +55,10 @@ export default class Centipede {
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.state.position.x - this.hitSideLength, 
-      this.state.position.y - this.hitSideLength,
-      2 * this.hitSideLength,
-      2 * this.hitSideLength
+      this.state.position.x - this.hitSideLength * this.state.scale, 
+      this.state.position.y - this.hitSideLength * this.state.scale,
+      2 * this.hitSideLength * this.state.scale,
+      2 * this.hitSideLength * this.state.scale
     )
   }
 
@@ -133,6 +134,7 @@ export default class Centipede {
     this.ctx.save()
     this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
     this.ctx.rotate(this.state.directionRad)
+    this.ctx.scale(this.state.scale, this.state.scale)
     this.ctx.scale(1, this.scaleX)
 
     this.drawHead()
@@ -171,17 +173,15 @@ export default class Centipede {
 
   step() {
     if (this.state.mobile) {
-      if (Math.random() < 0.001) {
+      if (Math.random() < 0.005) {
         this.state.mobile = false
         setTimeout(() => this.state.mobile = true, 200 + Math.random() * 2000)
+      } else {
+        this.move()
       }
     }
-    this.state.mobile && this.move()
 
-    // this.ctx.save()
-    // this.ctx.scale(2,2)
     this.draw()
-    // this.ctx.restore()
     this.segments.step(this.state.headCoords)
   }
 }
