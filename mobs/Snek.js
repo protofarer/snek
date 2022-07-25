@@ -7,7 +7,7 @@ export default class Snek {
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
 
   state = {
-    r: 20,
+    r: 10,
     get headCoords() { return {
       x: this.position.x,
       y: this.position.y
@@ -126,16 +126,16 @@ export default class Snek {
     this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
 
     this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.state.r * 0.7, -Math.PI / 3, Math.PI / 3)
+    this.ctx.arc(0, 0, this.state.r * 0.85, -Math.PI / 3, Math.PI / 3)
     this.ctx.strokeStyle = 'red'
     this.ctx.lineWidth = 2
     this.ctx.stroke()
 
     this.ctx.beginPath()
-    this.ctx.moveTo(this.state.r * 0.6, -0.4 * this.state.r)
-    this.ctx.lineTo(this.state.r, -0.4 * this.state.r)
-    this.ctx.moveTo(this.state.r * 0.6, 0.4 * this.state.r)
-    this.ctx.lineTo(this.state.r, 0.4 * this.state.r)
+    this.ctx.moveTo(0.9*this.state.r * 0.6, -0.4 * this.state.r)
+    this.ctx.lineTo(0.9*this.state.r, -0.4 * this.state.r)
+    this.ctx.moveTo(0.9*this.state.r * 0.6, 0.4 * this.state.r)
+    this.ctx.lineTo(0.9*this.state.r, 0.4 * this.state.r)
     this.ctx.strokeStyle = 'white'
     this.ctx.stroke()
 
@@ -159,7 +159,7 @@ export default class Snek {
     this.ctx.lineTo(2.2*this.state.r, 0.5 * this.state.r)
     this.ctx.moveTo(1.8*this.state.r, 0)
     this.ctx.lineTo(2.2*this.state.r, -0.5 * this.state.r)
-    this.ctx.lineWidth = 0.7
+    this.ctx.lineWidth = this.state.r * .07
     this.ctx.strokeStyle='red'
     this.ctx.stroke()
   }
@@ -293,27 +293,30 @@ export class Segments {
   }
 
   processSegments() {
+    for(let i = 0; i < this.headState.nSegments; i++) {
+      const position = this.headTrail[(i+1)*this.linkLength - 1]
+      this.segments[i].position = position
+    }
 
   }
   
   drawSegments() {
-    for(let i = 0; i < this.headState.nSegments; i++) {
+    for(let i = this.headState.nSegments-1; i >= 0; i--) {
       const position = this.headTrail[(i+1)*this.linkLength - 1]
-      this.segments[i].position = position
       const tailOfSegmentAhead = this.headTrail[i*this.linkLength]
       let {dy, dx} = {
         dy: tailOfSegmentAhead.y - position.y,
         dx: tailOfSegmentAhead.x - position.x
       }
-
+  
       this.ctx.save()
       this.ctx.translate(position.x, position.y)
       const segmentAngle = Math.atan(dy/dx)
       this.ctx.rotate(segmentAngle)
       this.ctx.scale(this.headState.scale, this.headState.scale*0.6)
-
+  
       this.drawLegs()
-
+  
       this.ctx.beginPath()
       this.ctx.arc(0, 0, this.headState.r, 0, 2 * Math.PI)
       this.ctx.fillStyle = this.headState.bodyColor
@@ -322,9 +325,8 @@ export class Segments {
       this.ctx.shadowColor = 'hsl(0,0%,0%)'
       this.ctx.fill()
       this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
-
+  
       this.ctx.restore()
-      
     }
   }
 

@@ -135,11 +135,11 @@ export default class Ant {
     this.ctx.fill()
 
     // Draw Eyes
-    this.ctx.beginPath()
-    this.ctx.arc(1.4*this.state.r, -0.4*this.state.r, 0.2 * this.state.r, 0, 2 * pi)
-    this.ctx.arc(1.4*this.state.r, 0.4*this.state.r, 0.2 * this.state.r, 0, 2 * pi)
-    this.ctx.fillStyle = 'white'
-    this.ctx.fill()
+    // this.ctx.beginPath()
+    // this.ctx.arc(1.4*this.state.r, -0.4*this.state.r, 0.2 * this.state.r, 0, 2 * pi)
+    // this.ctx.arc(1.4*this.state.r, 0.4*this.state.r, 0.2 * this.state.r, 0, 2 * pi)
+    // this.ctx.fillStyle = 'white'
+    // this.ctx.fill()
 
 
     this.ctx.beginPath()
