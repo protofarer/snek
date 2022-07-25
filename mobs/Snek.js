@@ -5,7 +5,6 @@ export default class Snek {
   species = 'snek'
 
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
-  scaleX = 0.8
 
   state = {
     r: 10,
@@ -29,6 +28,7 @@ export default class Snek {
     hasTongueOut: false,
     tongueDirection: 0,
     exp: 0,
+    scale: 1,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
@@ -165,7 +165,7 @@ export default class Snek {
     this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
     this.ctx.rotate(this.state.directionRad)
     this.ctx.save()
-    this.ctx.scale(1 ,this.scaleX)
+    this.ctx.scale(this.state.scale, this.state.scale * 0.8)
 
     this.drawHead()
 
@@ -302,7 +302,7 @@ export class Segments {
       this.ctx.translate(position.x, position.y)
       const segmentAngle = Math.atan(dy/dx)
       this.ctx.rotate(segmentAngle)
-      this.ctx.scale(1, 0.6)
+      this.ctx.scale(this.headState.scale, this.headState.scale*0.6)
 
       this.drawLegs()
 

@@ -139,12 +139,6 @@ export default class Ant {
     this.ctx.strokeStyle = 'black'
     this.ctx.stroke()
 
-    this.ctx.beginPath()
-    this.ctx.arc(0,0,1,0,6)
-    this.ctx.strokeStyle = 'red'
-    this.ctx.stroke()
-
-
     this.ctx.restore()
   }
 
