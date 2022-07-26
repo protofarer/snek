@@ -15,7 +15,7 @@ export default class Apple {
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     primaryColor: 'hsl(0,70%, 50%)',
     leafColor: 'hsl(95, 60%, 50%)',
-    exp: 2,
+    exp: 10,
     digestionTimeLeft: 3000,
     digestionEffect: 'movespeed',
   }
@@ -27,6 +27,23 @@ export default class Apple {
     
     this.setHitAreas()
     // console.log(`IN apple digesttimeleft`, this.state.digestionTimeLeft)
+  }
+
+  digestionEffect(entAffected) {
+    let upstreamSegment = entAffected.state.upstreamSegment
+    while (upstreamSegment.state.upstreamSegment) {
+        upstreamSegment = upstreamSegment.state.upstreamSegment
+    }
+    console.log(`looping to head`, )
+    upstreamSegment.state.moveSpeed += 1
+    // return () => this.state.moveSpeed -= 10
+    // return console.log(`hoohaa`, )
+    
+  }
+
+  swallowEffect(entAffected) {
+    entAffected.state.exp += this.state.exp / 2
+    this.state.exp /= 2
   }
 
   left() {

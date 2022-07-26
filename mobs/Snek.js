@@ -98,11 +98,11 @@ export default class Snek {
     ent.parentEnt = this
     ent.state.position = {x: -1000, y: -1000}
     ent.hitArea = new Path2D()
-    const seg = new Segment(this.ctx, this)
+    ent.swallowEffect(this)
 
     switch (ent.species) {
       case 'apple':
-        seg.ingest(ent)
+        this.state.downstreamSegment.ingest(ent)
         break
       case 'pebble':
         break
@@ -246,28 +246,31 @@ export default class Snek {
 }
 
 export class Segment {
+  static species = 'segment'
+  species = 'segment'
   state = {
     r: 0,
     position: {x:0,y:0},
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
-    entUnderDigestion: {},
-    upstreamSegment: {},
+    entUnderDigestion: null,
+    upstreamSegment: null,
     downstreamSegment: null,
     digestionEffect: '',
     linkLength: 0,
     headPositionHistory: [],
     bodyColor: null,
-    scale: 1,
+    scale: 0,
   }
+  finishDigestionEffect = null
 
   constructor(ctx, upstreamSegment=null) {
     this.ctx = ctx
     this.state.upstreamSegment = upstreamSegment
     this.state.r = this.state.upstreamSegment.state.r
-    this.state.entUnderDigestion = null
-    this.state.moveSpeed = this.state.upstreamSegment.state.moveSpeed
+    this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
+    this.state.scale = this.state.upstreamSegment.state.scale
     console.log(`upstreamSegment`, upstreamSegment)
 
     /** 
@@ -277,7 +280,7 @@ export class Segment {
      */
 
     // TODO adjust the moveSpeed factor
-    this.linkLength = Math.floor(
+    this.state.linkLength = Math.floor(
       this.state.r + this.state.upstreamSegment.state.r 
         - this.state.upstreamSegment.state.moveSpeed
     )
@@ -290,7 +293,7 @@ export class Segment {
   }
 
   ingest(ent) {
-    if (this.state.entUnderDigestion !==null) {
+    if (this.state.entUnderDigestion !== null) {
       // Forces segment to pass
       if (!this.downstreamSegment) {
         this.pass()
@@ -299,9 +302,8 @@ export class Segment {
     this.state.entUnderDigestion = ent
     this.state.entUnderDigestion.parentEnt = this
     this.state.entUnderDigestion.state.position = this.state.position
-    this.digestionEffect = this.state.entUnderDigestion.state.digestionEffect
+    this.finishDigestionEffect = this.state.entUnderDigestion.digestionEffect(this)
     console.log(`ent started being digested`)
-    console.log(`activating digestioneffect:`, this.digestionEffect)
   }
 
   digest() {
@@ -348,14 +350,25 @@ export class Segment {
     this.state.entUnderDigestion = null
   }
 
+  getHeadMoveSpeed() {
+    let upstreamSegment = this.state.upstreamSegment
+    while (upstreamSegment.state.upstreamSegment) {
+        upstreamSegment = upstreamSegment.state.upstreamSegment
+    }
+    return upstreamSegment.state.moveSpeed
+  }
+
 
   update() {
     // console.log(`*****************************************`, )
     // console.log(`seg stepping`, )
     // console.log(`headposthist.len`, this.state.headPositionHistory.length)
     
-    this.linkLength = Math.floor(this.state.r + this.state.upstreamSegment.state.r
-      - this.state.upstreamSegment.state.moveSpeed)
+    this.state.linkLength = Math.floor(
+      this.state.r 
+      + this.state.upstreamSegment.state.r
+      // - this.getHeadMoveSpeed()
+    )
       // console.log(`r`, this.state.r)
       // console.log(`upR`, this.state.upstreamSegment.state.r)
       // console.log(`movespeed`, this.state.upstreamSegment.state.moveSpeed)
@@ -368,7 +381,7 @@ export class Segment {
 
     while (
       this.state.headPositionHistory.length 
-        > this.linkLength/this.state.upstreamSegment.state.moveSpeed
+        > this.state.linkLength/this.getHeadMoveSpeed()
     ) {
       this.state.headPositionHistory.pop()
     }
@@ -376,7 +389,7 @@ export class Segment {
     
     
 //     console.log(`headposhist`, this.state.headPositionHistory)
-//     const indexOfUpstreamTailPosition = Math.min(this.state.headPositionHistory.length, Math.floor(this.linkLength / 2)) - 1
+//     const indexOfUpstreamTailPosition = Math.min(this.state.headPositionHistory.length, Math.floor(this.state.linkLength / 2)) - 1
 //     console.log(`%cindexofUpstreamTailPos`, 'color:orange',indexOfUpstreamTailPosition)
 // console.log('upsegtail.x', this.state.headPositionHistory[indexOfUpstreamTailPosition].x )
 //         console.log('rel seg.s', - this.state.position.x)
@@ -405,6 +418,13 @@ export class Segment {
       x: this.state.headPositionHistory.at(-1).x,
       y: this.state.headPositionHistory.at(-1).y
     }
+
+    // !
+    const dBetweenSegAndUpstream = Math.sqrt((this.state.upstreamSegment.state.position.x - this.state.position.x)**2 + (this.state.upstreamSegment.state.position.y - this.state.position.y)**2)
+    console.log(`seg behind: ${this.state.upstreamSegment.species}, dbetweentSegandUp:`, dBetweenSegAndUpstream)
+    console.log(`Seg behind ${this.state.upstreamSegment.species.toUpperCase()}:`, this)
+    
+    
 
     this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
     this.state.scale = this.state.upstreamSegment.state.scale
