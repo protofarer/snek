@@ -44,9 +44,13 @@ export default class Snek {
       
       if (i === 0){
         this.state.downstreamSegment = new Segment(this.ctx, this)
+        this.state.downstreamSegment.id = 0
       } else {
         const newSegment = new Segment(this.ctx, this)
-        this.state.downstreamSegment.state.upstreamSegment = newSegment
+        newSegment.id = 1
+        const oldSegment = this.state.downstreamSegment
+        oldSegment.state.upstreamSegment = newSegment
+        newSegment.state.downstreamSegment = oldSegment
         this.state.downstreamSegment = newSegment
       }
     }
@@ -250,10 +254,12 @@ export class Segment {
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     entUnderDigestion: {},
     upstreamSegment: {},
-    downstreamSegment: {},
+    downstreamSegment: null,
     digestionEffect: '',
     linkLength: 0,
-    headPositionHistory: []
+    headPositionHistory: [],
+    bodyColor: null,
+    scale: 1,
   }
 
   constructor(ctx, upstreamSegment=null) {
@@ -261,6 +267,7 @@ export class Segment {
     this.state.upstreamSegment = upstreamSegment
     this.state.r = this.state.upstreamSegment.state.r
     this.state.entUnderDigestion = null
+    this.state.moveSpeed = this.state.upstreamSegment.state.moveSpeed
     console.log(`upstreamSegment`, upstreamSegment)
 
     /** 
@@ -345,7 +352,7 @@ export class Segment {
   update() {
     // console.log(`*****************************************`, )
     // console.log(`seg stepping`, )
-    console.log(`headposthist.len`, this.state.headPositionHistory.length)
+    // console.log(`headposthist.len`, this.state.headPositionHistory.length)
     
     this.linkLength = Math.floor(this.state.r + this.state.upstreamSegment.state.r
       - this.state.upstreamSegment.state.moveSpeed)
@@ -365,6 +372,8 @@ export class Segment {
     ) {
       this.state.headPositionHistory.pop()
     }
+    // console.log(`downstreamseg`, this.state.downstreamSegment)
+    
     
 //     console.log(`headposhist`, this.state.headPositionHistory)
 //     const indexOfUpstreamTailPosition = Math.min(this.state.headPositionHistory.length, Math.floor(this.linkLength / 2)) - 1
@@ -381,17 +390,24 @@ export class Segment {
       
 //     this.state.directionRad = Math.atan(dy/dx)
     this.upstreamSegmentTailPosition = {
-      x: this.state.upstreamSegment.state.position.x - this.state.upstreamSegment.state.r * Math.cos(this.state.upstreamSegment.state.directionRad),
-      y: this.state.upstreamSegment.state.position.y - this.state.upstreamSegment.state.r * Math.sin(this.state.upstreamSegment.state.directionRad),
+      x: this.state.upstreamSegment.state.position.x 
+        - this.state.upstreamSegment.state.r 
+          * Math.cos(this.state.upstreamSegment.state.directionRad),
+      y: this.state.upstreamSegment.state.position.y 
+        - this.state.upstreamSegment.state.r 
+          * Math.sin(this.state.upstreamSegment.state.directionRad),
     }
-    const dx = (this.upstreamSegmentTailPosition.x - this.state.position.x)
     const dy = (this.upstreamSegmentTailPosition.y - this.state.position.y)
+    const dx = (this.upstreamSegmentTailPosition.x - this.state.position.x)
     this.state.directionRad = Math.atan(dy/dx)
 
     this.state.position = {
       x: this.state.headPositionHistory.at(-1).x,
       y: this.state.headPositionHistory.at(-1).y
     }
+
+    this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
+    this.state.scale = this.state.upstreamSegment.state.scale
     
     if (this.state.entUnderDigestion !== null) {
       this.state.entUnderDigestion.state.position = this.state.position
@@ -400,7 +416,7 @@ export class Segment {
     } else {
       // console.log(`seg is not digesting`, )
     }
-    this.downStreamSegment?.update()
+    this.state?.downstreamSegment?.update()
   }
 
   drawLegs() {
@@ -408,38 +424,29 @@ export class Segment {
 
   render() {
     // console.log(`IN seg render, stae.pos and dir`, this.state.position, this.state.directionRad)
-    
-    for(let i = 0; i < this.state.headPositionHistory.length; i++) {
-      this.ctx.beginPath()
-      this.ctx.arc(this.state.headPositionHistory[i].x,this.state.headPositionHistory[i].y,1,0,2*Math.PI)
-      this.ctx.fill()
-    }
+    this.state.downstreamSegment?.render()
+
+    const position = this.state.position
+    const angle = this.state.directionRad
+
+    this.ctx.save()
+    this.ctx.translate(position.x, position.y)
+    this.ctx.rotate(angle)
+    this.ctx.scale(this.state.upstreamSegment.state.scale, this.state.upstreamSegment.state.scale*0.6)
+
+    this.drawLegs()
+
     this.ctx.beginPath()
-    this.ctx.arc(this.upstreamSegmentTailPosition.x, this.upstreamSegmentTailPosition.y, 2, 0 , 2*Math.PI)
-    this.ctx.stroke()
+    this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
+    this.ctx.fillStyle = this.state.upstreamSegment.state.bodyColor
+    this.ctx.shadowOffsetY = 2
+    this.ctx.shadowBlur = 2
+    this.ctx.shadowColor = 'hsl(0,0%,0%)'
+    this.ctx.fill()
+    this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
 
-      const position = this.state.position
-      const angle = this.state.directionRad
-
-      this.ctx.save()
-      this.ctx.translate(position.x, position.y)
-      this.ctx.rotate(angle)
-      this.ctx.scale(this.state.upstreamSegment.state.scale, this.state.upstreamSegment.state.scale*0.6)
-
-      this.drawLegs()
-
-      this.ctx.beginPath()
-      this.ctx.arc(0, 0, this.state.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = this.state.upstreamSegment.state.bodyColor
-      this.ctx.shadowOffsetY = 2
-      this.ctx.shadowBlur = 2
-      this.ctx.shadowColor = 'hsl(0,0%,0%)'
-      this.ctx.fill()
-      this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
-
-      this.ctx.restore()
+    this.ctx.restore()
 
     this.state.entUnderDigestion?.render()
-    this.downStreamSegment?.render()
   }
 }

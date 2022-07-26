@@ -296,7 +296,7 @@ export default class DebugGUI {
     // Debug Mode only
     if (this.params.isDebugOn){
       for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
-        this.game.step()
+        this.game.update()
       }
     }
 

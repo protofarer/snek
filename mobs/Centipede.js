@@ -1,4 +1,4 @@
-import { Segments } from './Snek'
+import { Segment } from './Snek'
 
 export default class Centipede {
   static entGroup = 'mob'
@@ -187,7 +187,7 @@ export default class Centipede {
 
 }
 
-export class LeggedSegments extends Segments {
+export class LeggedSegments extends Segment {
   constructor(ctx, state, nSegments=0) {
     super(ctx, state, nSegments)
     this.ctx = ctx
