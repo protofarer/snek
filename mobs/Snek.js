@@ -15,7 +15,7 @@ export default class Snek {
       y: this.position.y
     }},
     position: { x: 400, y: 400},
-    moveSpeed: 2,
+    moveSpeed: 1,
     nSegments: 2,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
@@ -367,7 +367,7 @@ export class Segment {
     this.state.linkLength = Math.floor(
       this.state.r 
       + this.state.upstreamSegment.state.r
-      // - this.getHeadMoveSpeed()
+      + this.getHeadMoveSpeed()*1.5
     )
       // console.log(`r`, this.state.r)
       // console.log(`upR`, this.state.upstreamSegment.state.r)
@@ -419,12 +419,10 @@ export class Segment {
       y: this.state.headPositionHistory.at(-1).y
     }
 
-    // !
-    const dBetweenSegAndUpstream = Math.sqrt((this.state.upstreamSegment.state.position.x - this.state.position.x)**2 + (this.state.upstreamSegment.state.position.y - this.state.position.y)**2)
-    console.log(`seg behind: ${this.state.upstreamSegment.species}, dbetweentSegandUp:`, dBetweenSegAndUpstream)
-    console.log(`Seg behind ${this.state.upstreamSegment.species.toUpperCase()}:`, this)
-    
-    
+    // ! debug
+    // const dBetweenSegAndUpstream = Math.sqrt((this.state.upstreamSegment.state.position.x - this.state.position.x)**2 + (this.state.upstreamSegment.state.position.y - this.state.position.y)**2)
+    // console.log(`seg behind: ${this.state.upstreamSegment.species}, dbetweentSegandUp:`, dBetweenSegAndUpstream)
+    // console.log(`Seg behind ${this.state.upstreamSegment.species.toUpperCase()}:`, this)
 
     this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
     this.state.scale = this.state.upstreamSegment.state.scale
