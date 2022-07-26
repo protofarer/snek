@@ -26,8 +26,8 @@ export function startNewGame() {
   let start
   async function draw(t) {
     if (game.phase === CONSTANTS.PHASE_PAUSE) {
-      console.log('%c**** Next tick in 3 sec ****', 'color: orange')
-      await new Promise (res => { setTimeout(res, 3000) })
+      console.log(`%c**** Next tick in ${game.params.pauseLength/1000} sec ****`, 'color: orange')
+      await new Promise (res => { setTimeout(res, game.params.pauseLength) })
       console.log('%c****    Game Ticking below    ****', 'color: orange')
     }
 
@@ -40,16 +40,18 @@ export function startNewGame() {
     if (elapsed > 16 / game.params.speed) {
       start = t
       game.clr()
-      game.step()
+      game.update()
+
       debugGUI && debugGUI.step()
 
       // if (debugGUI?.params.isGameDoubleSpeed) {
-      //   game.step()
-      //   debugGUI.step()
+      //   game.update()
+      //   debugGUI.update()
       // }
   
       debugGUI && debugGUI.calcFPS(t)
   
+      game.render()
       // * Enter PHASE_END via game.checkEndCondition()
       if (game.phase === CONSTANTS.PHASE_END) {
         cancelAnimationFrame(loopID)

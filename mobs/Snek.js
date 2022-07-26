@@ -16,7 +16,7 @@ export default class Snek {
     }},
     position: { x: 400, y: 400},
     moveSpeed: 2,
-    nSegments: 2,
+    nSegments: 1,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
@@ -38,7 +38,7 @@ export default class Snek {
     this.state.position = startPosition || this.state.position
     this.parentEnt = parentEnt
     this.nSegments = nSegments || this.state.nSegments
-    this.segments = new Segments(this.ctx, this.state)
+    this.segments = new Segments(this.ctx, this)
     this.hitSideLength = this.state.r + 1
     this.initEventListeners()
   }
@@ -180,7 +180,8 @@ export default class Snek {
     this.ctx.stroke()
   }
 
-  draw() {
+  render() {
+    this.segments.render()
     this.ctx.save()
     this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
     this.ctx.rotate(this.state.directionRad)
@@ -215,13 +216,9 @@ export default class Snek {
     this.setHitAreas()
   }
 
-  step() {
-    if (this.state.mobile) {
-      this.move()
-    }
-
-    this.segments.step(this.state.position)
-    this.draw()
+  update() {
+    this.state.mobile && this.move()
+    this.segments.update(this.state.position)
   }
 
 }
@@ -229,28 +226,34 @@ export default class Snek {
 export class Segments {
   headTrail = []
   segments = []
-  constructor(ctx, headState) {
+  constructor(ctx, head) {
     this.ctx = ctx
-    this.headState = headState
-    this.nSegments = this.headState.nSegments
-    this.linkLength = Math.floor(this.headState.r * 0.8 - this.headState.moveSpeed * 0.5)
-
-    for(let i = 0; i < this.headState.nSegments; i++) {
+    this.head= head
+    this.nSegments = this.head.state.nSegments
+    this.linkLength = Math.floor(this.head.state.r * 0.8 - this.head.state.moveSpeed * 0.5)
+    console.log(`linkL`, this.linkLength)
+    
+    for(let i = 0; i < this.head.state.nSegments; i++) {
       for(let j = 0; j < this.linkLength; j++) {
         this.headTrail.push({ 
-          x: this.headState.headCoords.x - (j + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.cos(this.headState.directionRad),
-          y: this.headState.headCoords.y - (j + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.sin(this.headState.directionRad) 
+          x: this.head.state.headCoords.x - (j + 1 + i * this.linkLength) * this.head.state.moveSpeed * Math.cos(this.head.state.directionRad),
+          y: this.head.state.headCoords.y - (j + 1 + i * this.linkLength) * this.head.state.moveSpeed * Math.sin(this.head.state.directionRad) 
         })
       }
-      const position = this.headTrail[(this.headState.nSegments+1)*this.linkLength - 1]
-      this.segments.push(new Segment(position))
-      if (i > 0) {
+      console.log(`headtrail`, this.headTrail)
+      console.log(`headtrail index for pos`, (this.head.state.nSegments-1)*this.linkLength)
+      const position = this.headTrail[(this.head.state.nSegments-1)*this.linkLength]
+      if (i === 0) {
+        console.log(`creating new seg, pos:`, position)
+        this.segments.push(new Segment(this.ctx, position, this.head))
+      } else {
+        this.segments.push(new Segment(this.ctx, position, this.segments[i-1]))
         this.segments[i-1].downstreamSegment = this.segments[i]
         this.segments[i].upstreamSegment = this.segments[i-1]
       }
     }
-    console.log(`headtrailL`, this.headTrail.length)
-    
+    // console.log(`headtrailL`, this.headTrail.length)
+    console.log(`this.segments`, this.segments)
   }
 
   ingest(ent) {
@@ -261,43 +264,17 @@ export class Segments {
   addSegment() {
     for(let i = 0; i < this.linkLength; i++) {
       this.headTrail.push({ 
-        x: this.headTrail[this.linkLength * this.headState.nSegments - 1].x - (i + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.cos(this.headState.directionRad),
-        y: this.headTrail[this.linkLength * this.headState.nSegments - 1].y - (i + 1 + i * this.linkLength) * this.headState.moveSpeed * Math.sin(this.headState.directionRad) 
+        x: this.headTrail[this.linkLength * this.head.state.nSegments - 1].x - (i + 1 + i * this.linkLength) * this.head.state.moveSpeed * Math.cos(this.head.state.directionRad),
+        y: this.headTrail[this.linkLength * this.head.state.nSegments - 1].y - (i + 1 + i * this.linkLength) * this.head.state.moveSpeed * Math.sin(this.head.state.directionRad) 
       })
     }
-    const position = this.headTrail[(this.headState.nSegments+1)*this.linkLength - 1]
-    this.segments.push({
-      position,
-      entDigesting: null,
-    })
+    const position = this.headTrail[(this.head.state.nSegments+1)*this.linkLength - 1]
+    this.segments.push(
+      new Segment(this.ctx, position, this.segments[this.segments.length - 1])
+    )
   }
-
-  drawSegments() {
-    for(let i = this.headState.nSegments-1; i >= 0; i--) {
-      const position = this.segments[i].position
-      const segmentRad = this.segments[i].directionRad
-      this.ctx.save()
-      this.ctx.translate(position.x, position.y)
-      this.ctx.rotate(segmentRad)
-      this.ctx.scale(this.headState.scale, this.headState.scale*0.6)
-  
-      this.drawLegs()
-  
-      this.ctx.beginPath()
-      this.ctx.arc(0, 0, this.headState.r, 0, 2 * Math.PI)
-      this.ctx.fillStyle = this.headState.bodyColor
-      this.ctx.shadowOffsetY = 2
-      this.ctx.shadowBlur = 2
-      this.ctx.shadowColor = 'hsl(0,0%,0%)'
-      this.ctx.fill()
-      this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
-  
-      this.ctx.restore()
-    }
-  }
-  
   updateSegments() {
-    for(let i = this.headState.nSegments-1; i >= 0; i--) {
+    for(let i = this.head.state.nSegments-1; i >= 0; i--) {
       const tailOfSegmentAhead = this.headTrail[i*this.linkLength]
       const position = this.headTrail[(i+1)*this.linkLength - 1]
       this.segments[i].position = position
@@ -307,34 +284,32 @@ export class Segments {
         dx: tailOfSegmentAhead.x - position.x
       }
       this.segments[i].directionRad = Math.atan(dy/dx)
-      this.segments[i].step()
+      this.segments[i].update()
     }
   }
 
-  drawLegs() {
+  render() {
+    for(let i = this.head.state.nSegments-1; i >= 0; i--) {
+      this.segments[i].render()
+    }
   }
 
-  draw() {
-    this.drawSegments()
-  }
-
-  step() {
+  update() {
     this.updateSegments()
     // while (
-    //   this.headTrail.length > this.headState.nSegments * this.linkLength
-    //   && this.headState.nSegments > 0
+    //   this.headTrail.length > this.upstreamSegment.nSegments * this.linkLength
+    //   && this.upstreamSegment.nSegments > 0
     // ) {
     //   this.headTrail.shift()
     // }
     // ! do I need slack in case game drops an index?
-    if (this.headState.mobile === true) {
+    if (this.head.state.mobile === true) {
       this.headTrail.pop()
       this.headTrail.splice(0, 0, { 
-        x: this.headState.headCoords.x - this.linkLength * Math.cos(this.headState.directionRad)/2,
-        y: this.headState.headCoords.y - this.linkLength * Math.sin(this.headState.directionRad)/2
+        x: this.head.state.headCoords.x - this.linkLength * Math.cos(this.head.state.directionRad)/2,
+        y: this.head.state.headCoords.y - this.linkLength * Math.sin(this.head.state.directionRad)/2
       })
     }
-    this.draw()
   }
 }
 
@@ -350,71 +325,113 @@ export class Segment {
     digestionEffect: '',
   }
 
-  constructor(position, upstreamSegment=null) {
+  constructor(ctx, position, upstreamSegment=null) {
+    this.ctx = ctx
     this.state.position = position
+    const position = this.headTrail[(this.head.state.nSegments+1)*this.linkLength - 1]
     this.upstreamSegment = upstreamSegment
     this.state.entUnderDigestion = null
   }
 
   ingest(ent) {
     if (this.state.entUnderDigestion !==null) {
+      // Forces segment to pass
       if (!this.downstreamSegment) {
-        console.log(`seg is pooping ent`, )
-        this.poop()
-      } else {
-        console.log(`seg is passing ent`, )
         this.pass()
       }
     }
     this.state.entUnderDigestion = ent
     this.state.entUnderDigestion.parentEnt = this
-    this.state.entUnderDigestion.state.position = this.position
-    console.log(`ent started being digested`, this.state.entUnderDigestion)
+    this.state.entUnderDigestion.state.position = this.state.position
+    this.digestionEffect = this.state.entUnderDigestion.state.digestionEffect
+    console.log(`ent started being digested`)
+    console.log(`activating digestioneffect:`, this.digestionEffect)
   }
 
   digest() {
     // console.log(`IN digest`, )
-    // console.log(`digestiontimeleft`, this.state.entUnderDigestion.state.digestionTimeleft)
+    // console.log(`entunderDigest.state`, this.state.entUnderDigestion.state.digestionTimeLeft)
     // console.log(`typeof digestiontime`, typeof this.state.entUnderDigestion.state.digestionTimeleft)
     
-    if (this.state.entUnderDigestion.state.digestionTimeleft > 0) {
-      this.digestionEffect = this.state.entUnderDigestion.state.digestionEffect
-      console.log(`activating digestioneffect:`, this.digestionEffect)
-      this.state.entUnderDigestion.state.digestionTimeleft -= 17    // TODO subtract timeElapsed since last digest tick
-      console.log(`digestionTimeLeft`, this.state.entUnderDigestion.state.digestionTimeleft)
+    if (this.state.entUnderDigestion.state.digestionTimeLeft > 0) {
+      this.state.entUnderDigestion.state.digestionTimeLeft -= 17    // TODO subtract timeElapsed since last digest tick
+      // console.log(`digestionTimeLeft`, this.state.entUnderDigestion.state.digestionTimeLeft)
     } else {
+      // * Upon fully digesting contents transform ent into poop and pass
+      // TODO transform ent into poop and pass it
+    console.log(`canceling digestion effect`, )
       this.digestionEffect = null
+      this.pass()
     }
   }
 
   pass() {
-    this.downstreamSegment.ingest(this.state.entUnderDigestion)
-    this.state.entUnderDigestion = null
+    console.log(`passing`, )
+    // TODO call the digestionEffect function to reverse state
+    // TODO reverse state change
+    console.log(`canceling digestion effect`, )
+    
+    if (!this.downStreamSegment) {
+      console.log(`seg is pooping`, )
+      this.excrete()
+    } else {
+      console.log(`seg transferring to next seg`, )
+      this.downstreamSegment.ingest(this.state.entUnderDigestion)
+      this.state.entUnderDigestion = null
+    }
+    
   }
 
-  poop() {
+  excrete() {
     // TODO setup a line based on entity id across bottomn of screen till
     //    digestion code is complete
-    this.state.entUnderDigestion.position = {x: 50, y: 700}
+    console.log(`pooping`, )
+    
+    this.state.entUnderDigestion.state.position = {x: 50, y: 700}
     this.state.entUnderDigestion.parentEnt = null
     this.state.entUnderDigestion = null
   }
 
 
-  step() {
+  update() {
+    // console.log(`*****************************************`, )
+    // console.log(`seg stepping`, )
+    
     if (this.state.entUnderDigestion !== null) {
-      // console.log(`seg is digesting something`, )
-      this.state.entUnderDigestion.state.position = this.position
+      this.state.entUnderDigestion.state.position = this.state.position
+      // console.log(`entunderdigestion and pos`, this.state.entUnderDigestion.state.position)
       this.digest()
-      this.state.entUnderDigestion.step()
-      
     } else {
       // console.log(`seg is not digesting`, )
     }
+  }
+
+  drawLegs() {
+  }
+
+  render() {
+    console.log(`IN seg render, stae.pos and dir`, this.state.position, this.directionRad)
     
-  }
-  draw() {
+      const position = this.state.position
+      const segmentRad = this.directionRad
+      this.ctx.save()
+      this.ctx.translate(position.x, position.y)
+      this.ctx.rotate(segmentRad)
+      this.ctx.scale(this.upstreamSegment.state.scale, this.upstreamSegment.state.scale*0.6)
 
-  }
+      this.drawLegs()
 
+      this.ctx.beginPath()
+      this.ctx.arc(0, 0, this.upstreamSegment.state.r, 0, 2 * Math.PI)
+      this.ctx.fillStyle = this.upstreamSegment.state.bodyColor
+      this.ctx.shadowOffsetY = 2
+      this.ctx.shadowBlur = 2
+      this.ctx.shadowColor = 'hsl(0,0%,0%)'
+      this.ctx.fill()
+      this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
+
+      this.ctx.restore()
+
+    this.state.entUnderDigestion?.render()
+  }
 }

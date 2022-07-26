@@ -33,9 +33,4 @@ export default class World {
       }
     }
   }
-
-  step() {
-    // this.fieldEnts.forEach(e => e.step())
-    // this.randomSpawns()
-  }
 }

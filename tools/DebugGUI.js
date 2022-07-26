@@ -90,8 +90,8 @@ export default class DebugGUI {
       key: 'timeToReset',
       folder: guiStartFunctions,
       minVal: 1000,
-      maxVal: 10000,
-      stepVal: 500,
+      maxVal: 60000,
+      stepVal: 250,
     })
 
     // TODO set sessionstorage timetoreset on init
@@ -114,7 +114,7 @@ export default class DebugGUI {
       obj: this.params,
       key: 'gameSpeed',
       folder: guiGameTest,
-      minVal: 0.05,
+      minVal: 0.005,
       maxVal: 1,
       stepVal: 0.05,
     })
@@ -157,11 +157,19 @@ export default class DebugGUI {
           window.sessionStorage.setItem('showHitOverlay', this.params.showHitOverlay)
           break
         case 'b':
+          this.game.params.pauseLength = 3000
           this.game.phase = this.game.phase === CONSTANTS.PHASE_PAUSE 
             ? CONSTANTS.PHASE_PLAY
             : CONSTANTS.PHASE_PAUSE
           console.log(`%c*************** Game ${this.game.phase === CONSTANTS.PHASE_PAUSE ? 'Slowed' : 'Set to Play'} ***************`, 'color: orange')
-          
+          break
+        case 'v':
+          // Very Long Pause
+          this.game.params.pauseLength = 3600000
+          this.game.phase = this.game.phase === CONSTANTS.PHASE_PAUSE 
+            ? CONSTANTS.PHASE_PLAY
+            : CONSTANTS.PHASE_PAUSE
+          console.log(`%c*************** Game ${this.game.phase === CONSTANTS.PHASE_PAUSE ? 'Slowed' : 'Set to Play'} ***************`, 'color: orange')
           break
         default:
           break
@@ -200,8 +208,6 @@ export default class DebugGUI {
   setupNumericSlider = ({
     obj, key, folder, minVal, maxVal, stepVal, label
   }) => {
-    console.log(`folder`, folder)
-    
     const setSessionNumeric = (val) => {
         window.sessionStorage.setItem(key, val)
         obj[key] = val
@@ -248,14 +254,13 @@ export default class DebugGUI {
 
   async invokeOnDebugGameStart() {
     if (this.params.isDebugOn) {
-      console.log(`*******************************************`, )
-      console.log(`******** Running debug funcs on game start:`, )
+      console.log(`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%`, )
+      console.log(`% Running debug funcs on game start:`, )
       if (this.params.resetAfterElapsed) {
-        setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
+        await setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
       }
       
-      console.log(`*******************************************`, )
-      console.log(`*******************************************`, )
+      console.log(`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%`, )
     }
   }
 
@@ -266,15 +271,17 @@ export default class DebugGUI {
     if (this.params.isDebugOn) {
 
       const addEnt = this.game.addEnt.bind(this.game)
-      const snek = new Snek(this.game.ctx, {x:400,y:400}, this.game)
+      const snek = new Snek(this.game.ctx, {x:130,y:400}, this.game)
       // snek.state.directionAngle = 0
       this.game.snek = snek
-      snek.state.mobile = false
+      // snek.state.mobile = false
 
-      const app = addEnt(Apple)
+      // const app = addEnt(Apple)
       // const ant = addEnt(Ant).canTurn(false).isMobile(true)
       // addEnt(Apple)
       // addEnt(Mango)
+      // addEnt(Pebble)
+      // addEnt(Centipede).state.mobile = true
 
 
       // spawnEnts(Pebble, 100)

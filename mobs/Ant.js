@@ -38,9 +38,9 @@ export default class Ant {
     this.carriedEnt = null
     this.carriedOffsetRad = null
     this.setHitAreas()
-    console.log(`ant headcoords`, this.state.headCoords)
-    console.log(`ant mouthcoords`, this.state.mouthCoords)
-    console.log(`ant pos`, this.state.position)
+    // console.log(`ant headcoords`, this.state.headCoords)
+    // console.log(`ant mouthcoords`, this.state.mouthCoords)
+    // console.log(`ant pos`, this.state.position)
     
   }
 
@@ -113,7 +113,7 @@ export default class Ant {
     this.ctx.shadowBlur = 6
   }
 
-  draw() {
+  render() {
     const pi = Math.trunc(1000 * Math.PI) / 1000
 
     this.ctx.save()
@@ -156,7 +156,7 @@ export default class Ant {
     this.ctx.restore()
   }
 
-  step() {
+  update() {
     if (this.state.mobile) {
       if (Math.random() < 0.8) {
         this.move()
@@ -171,13 +171,11 @@ export default class Ant {
 
     //   this.setHitAreas()
     //   this.move()
-    this.draw()
-
     if (this.carriedEnt) {
       this.carriedEnt.state.position = this.state.mouthCoords
       this.carriedEnt.state.directionRad = this.state.directionRad + this.carriedOffsetRad
       // ! hitArea null, may be used for snatch mechanic
-      this.carriedEnt.step()
+      this.carriedEnt.update()
     }
   }
 }

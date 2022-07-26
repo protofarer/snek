@@ -35,6 +35,7 @@ export default class Game {
     this.params = {
       // * capped at 1 on test slider because of how it divides the elapsed time 't' from draw= {
       speed: 1,
+      pauseLength: 0
     }
 
     this.snek = null
@@ -45,8 +46,8 @@ export default class Game {
     this.mobs = []
     this.immobs = []
 
-    // Step code not belonging to entity
-    this.stepFunctions = []
+    // Update code not belonging to entity
+    this.updateFunctions = []
 
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
@@ -57,8 +58,8 @@ export default class Game {
     }
   }
 
-  addFunctionToStep(f) {
-    this.stepFunctions.push(f)
+  addUpdateFunction(f) {
+    this.updateFunctions.push(f)
   }
 
   seamlessMove(mob) {
@@ -128,7 +129,7 @@ export default class Game {
       if (ent.entGroup === 'mob') ent.state.directionAngle = Math.random() * 360
       new Entity(ent)
       ents.push(ent)
-    console.log(`ent`, ent)
+    // console.log(`ent`, ent)
     }
     
     return ents
@@ -138,17 +139,32 @@ export default class Game {
     delete Entity.stack[id]
   }
 
-  step() {
-    this.clock.step()
-    this.world.randomSpawns()
+  render() {
+    this.clock.render()
+    this.snek?.render()
+    for(const  ent of Object.values(Entity.stack)) {
+      ent.render()
+    }
+    this.panel.render()
+  }
 
-    this.stepFunctions.forEach(f => f())
+  update() {
+    // **********************************************************************
+    // * 1. Add new objects
+    // **********************************************************************
+    this.world.randomSpawns()
+    // **********************************************************************
+    // * 2. Update all objects
+    // **********************************************************************
+    this.clock.update()
+
+    this.updateFunctions.forEach(f => f())
 
     this.snek && this.seamlessMove(this.snek)
-    this.snek?.step()
+    this.snek?.update()
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
-      ent.step()
+      ent.update()
       if (ent.species === 'ant' && !ent.carriedEnt) {
         let sweets = Entity.bySpecies(['apple', 'mango'])
         for(let [id, sweet] of Object.entries(sweets)) {
@@ -215,7 +231,10 @@ export default class Game {
           }
         }
       }
-      this.panel.step()
+    // **********************************************************************
+    // * 3. Update UI
+    // **********************************************************************
+      // this.panel.updateMsg()
     }
   }
 

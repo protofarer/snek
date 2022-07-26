@@ -26,6 +26,7 @@ export default class Apple {
     this.state.position = startPosition || this.state.position
     
     this.setHitAreas()
+    // console.log(`IN apple digesttimeleft`, this.state.digestionTimeLeft)
   }
 
   left() {
@@ -56,8 +57,7 @@ export default class Apple {
     )
   }
 
-  step() {
-    this.draw()
+  update() {
   }
 
   drawInitWrapper(radians=null) {
@@ -131,8 +131,10 @@ export default class Apple {
     this.drawStem()
     this.drawHighlight()
   }
+  update() {
+  }
 
-  draw() {
+  render() {
     this.drawInitWrapper(this.state.directionRad)
   }
 }

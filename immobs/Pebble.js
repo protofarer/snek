@@ -75,7 +75,7 @@ export default class Pebble {
     this.ctx.restore()
   }
 
-  draw() {
+  render() {
       this.ctx.save()
       this.ctx.translate(this.state.position.x, this.state.position.y)
       this.ctx.rotate(this.state.directionRad)
@@ -86,7 +86,6 @@ export default class Pebble {
       this.ctx.restore()
   }
 
-  step() {
-    this.draw()
+  update() {
   }
 }

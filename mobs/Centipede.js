@@ -130,18 +130,6 @@ export default class Centipede {
     this.ctx.stroke()
   }
 
-  draw() {
-    this.ctx.save()
-    this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
-    this.ctx.rotate(this.state.directionRad)
-    this.ctx.scale(this.state.scale, this.state.scale)
-    this.ctx.scale(1, this.scaleX)
-
-    this.drawHead()
-
-    this.ctx.restore()
-  }
-
   turnRandomlySmoothly() {
     const rng = Math.random()
     if (rng < 0.15) {
@@ -171,7 +159,7 @@ export default class Centipede {
     this.setHitAreas()
   }
 
-  step() {
+  update() {
     if (this.state.mobile) {
       if (Math.random() < 0.005) {
         this.state.mobile = false
@@ -180,10 +168,23 @@ export default class Centipede {
         this.move()
       }
     }
-
-    this.draw()
-    this.segments.step(this.state.headCoords)
+    this.segments.update(this.state.headCoords)
   }
+
+  render() {
+    this.segments.render()
+
+    this.ctx.save()
+    this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
+    this.ctx.rotate(this.state.directionRad)
+    this.ctx.scale(this.state.scale, this.state.scale)
+    this.ctx.scale(1, this.scaleX)
+
+    this.drawHead()
+
+    this.ctx.restore()
+  }
+
 }
 
 export class LeggedSegments extends Segments {
@@ -204,5 +205,4 @@ export class LeggedSegments extends Segments {
     ctx.strokeStyle = this.state.legColor
     ctx.stroke()
   }
-
 }

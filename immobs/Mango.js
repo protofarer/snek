@@ -10,7 +10,6 @@ export default class Mango extends Apple {
     super(ctx, position, parentEnt)
     this.state.primaryColor = 'hsl(35,100%, 50%)'
     this.state.secondaryColor = 'green'
-    console.log(`hitarea lol`, this.hitArea)
   }
 
   drawBody() {
@@ -39,4 +38,6 @@ export default class Mango extends Apple {
   drawHighlight() {}
   drawStem() {}
   drawLeaf() {}
+  update() {
+  }
 }

@@ -35,7 +35,7 @@ export default class Panel {
     console.info('%cUI initializing', 'color: orange')
 
     this.setupEventListeners()
-    this.update()
+    this.updateMsg()
   }
 
   setupEventListeners() {
@@ -45,7 +45,8 @@ export default class Panel {
   }
 
   // Full panel display update outside of step
-  update() {
+  // ! unused
+  updateMsg() {
     this.statusMsg.innerHTML = `${this.game.state.msg}`
     
     const delayClr = (delay) => new Promise(res => setTimeout(res, delay))
@@ -53,7 +54,7 @@ export default class Panel {
       .then(() => this.statusMsg.innerHTML = '')
   }
 
-  step() {
+  render() {
     this.score.innerHTML = `score: ${this.game.state.score}`
     this.gameInfo.innerHTML = `exp: ${this.game.snek?.state.exp}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
   }

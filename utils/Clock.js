@@ -49,11 +49,14 @@ export default class Clock {
     this.ctx.restore()
   }
 
-  step() {
+  update() {
     this.isClockDrawn = window.sessionStorage
       .getItem('isClockDrawn') === 'true' ? true : false
     this.clockCycle60 = this.clockCycle60 === 60 ? 0 : this.clockCycle60 + 1
     this.clockCycle5Min = this.clockCycle5Min === 18000 ? 0 : this.clockCycle5Min + 1
+  }
+
+  render() {
     this.isClockDrawn && this.drawClock()
   }
 }
