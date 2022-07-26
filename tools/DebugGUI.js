@@ -266,10 +266,10 @@ export default class DebugGUI {
     if (this.params.isDebugOn) {
 
       const addEnt = this.game.addEnt.bind(this.game)
-      const snek = new Snek(this.game.ctx, {x:100,y:400}, this.game)
+      const snek = new Snek(this.game.ctx, {x:400,y:400}, this.game)
       // snek.state.directionAngle = 0
       this.game.snek = snek
-      // snek.mobile = false
+      snek.state.mobile = false
 
       const app = addEnt(Apple)
       // const ant = addEnt(Ant).canTurn(false).isMobile(true)

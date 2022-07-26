@@ -148,26 +148,34 @@ export default class Snek {
     this.ctx.stroke()
 
     this.ctx.beginPath()
-    this.ctx.arc(0, 0.45 * this.state.r, 0.3 * this.state.r, 0, 2*Math.PI)
-    this.ctx.arc(0, -0.45 * this.state.r, 0.3 * this.state.r, 0, 2*Math.PI)
+    this.ctx.arc(0, 0.45 * this.state.r, 0.34 * this.state.r, 0, 2*Math.PI)
+    this.ctx.arc(0, -0.45 * this.state.r, 0.34 * this.state.r, 0, 2*Math.PI)
     this.ctx.fillStyle ='white'
     this.ctx.fill()
 
     this.ctx.beginPath()
-    this.ctx.arc(0.1 * this.state.r, 0.40 * this.state.r, 0.2 * this.state.r, 0, 2*Math.PI)
-    this.ctx.arc(0.1 * this.state.r, -0.40 * this.state.r, 0.2 * this.state.r, 0, 2*Math.PI)
+    this.ctx.arc(0.1 * this.state.r, 0.40 * this.state.r, 0.19 * this.state.r, 0, 2*Math.PI)
     this.ctx.fillStyle = 'black'
     this.ctx.fill()
+    this.ctx.lineWidth = 1.5
+    this.ctx.strokeStyle = 'hsl(230,100%,80%)'
+    this.ctx.stroke()
+
+    this.ctx.beginPath()
+    this.ctx.arc(0.1 * this.state.r, -0.40 * this.state.r, 0.19 * this.state.r, 0, 2*Math.PI)
+    this.ctx.fill()
+    this.ctx.strokeStyle = 'hsl(55, 100%, 25%)'
+    this.ctx.stroke()
   }
 
   drawTongue() {
     this.ctx.beginPath()
     this.ctx.moveTo(0.8*this.state.r, 0)
-    this.ctx.lineTo(1.8*this.state.r, 0,)
-    this.ctx.lineTo(2.2*this.state.r, 0.5 * this.state.r)
-    this.ctx.moveTo(1.8*this.state.r, 0)
-    this.ctx.lineTo(2.2*this.state.r, -0.5 * this.state.r)
-    this.ctx.lineWidth = this.state.r * .07
+    this.ctx.lineTo(1.6*this.state.r, 0,)
+    this.ctx.lineTo(2*this.state.r, 0.3 * this.state.r)
+    this.ctx.moveTo(1.6*this.state.r, 0)
+    this.ctx.lineTo(2*this.state.r, -0.3 * this.state.r)
+    this.ctx.lineWidth = this.state.r * .09
     this.ctx.strokeStyle='red'
     this.ctx.stroke()
   }
