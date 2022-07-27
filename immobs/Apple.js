@@ -1,4 +1,6 @@
-export default class Apple {
+import Immob from "./Immob"
+
+export default class Apple extends Immob {
   static entGroup = 'immob'
   static species = 'apple'
   entGroup = 'immob'
@@ -16,34 +18,36 @@ export default class Apple {
     primaryColor: 'hsl(0,70%, 50%)',
     leafColor: 'hsl(95, 60%, 50%)',
     exp: 10,
-    digestionTimeLeft: 3000,
-    digestionEffect: 'movespeed',
+    digestion: {
+      timeLeft: 700,
+      effect (entAffected) {
+        let upstreamSegment = entAffected.state.upstreamSegment
+        while (upstreamSegment.state.upstreamSegment) {
+            upstreamSegment = upstreamSegment.state.upstreamSegment
+        }
+        console.log(`looping to head`, )
+        upstreamSegment.state.moveSpeed += 5
+        // return () => this.state.moveSpeed -= 10
+        // return console.log(`hoohaa`, ) 
+        return () => {
+          console.log(`digestion effect ended`, )
+          upstreamSegment.state.moveSpeed -= 5
+        }
+      },
+    },
+    swallowEffect(entAffected) {
+      entAffected.state.exp += this.state.exp / 2
+      this.state.exp /= 2
+    },
   }
   constructor(ctx, startPosition=null, parentEnt=null) {
+    super(ctx, startPosition, parentEnt)
     this.ctx = ctx
-    this.canvas = this.ctx.canvas
     this.parentEnt = parentEnt
     this.state.position = startPosition || this.state.position
     
     this.setHitAreas()
     // console.log(`IN apple digesttimeleft`, this.state.digestionTimeLeft)
-  }
-
-  digestionEffect(entAffected) {
-    let upstreamSegment = entAffected.state.upstreamSegment
-    while (upstreamSegment.state.upstreamSegment) {
-        upstreamSegment = upstreamSegment.state.upstreamSegment
-    }
-    console.log(`looping to head`, )
-    upstreamSegment.state.moveSpeed += 1
-    // return () => this.state.moveSpeed -= 10
-    // return console.log(`hoohaa`, )
-    
-  }
-
-  swallowEffect(entAffected) {
-    entAffected.state.exp += this.state.exp / 2
-    this.state.exp /= 2
   }
 
   left() {
@@ -59,10 +63,6 @@ export default class Apple {
     return { x: this.state.position.x, y: this.state.position.y + this.state.hitSideLength }
   }
 
-  drawHitOverlays() {
-    this.ctx.strokeStyle = 'blue'
-    this.ctx.stroke(this.hitArea)
-  }
 
   setHitAreas() {
     this.hitArea = new Path2D()
@@ -72,9 +72,6 @@ export default class Apple {
       2 * this.state.hitSideLength,
       2 * this.state.hitSideLength
     )
-  }
-
-  update() {
   }
 
   drawInitWrapper(radians=null) {
@@ -148,6 +145,7 @@ export default class Apple {
     this.drawStem()
     this.drawHighlight()
   }
+
   update() {
   }
 

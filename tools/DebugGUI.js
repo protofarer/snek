@@ -276,7 +276,8 @@ export default class DebugGUI {
       this.game.snek = snek
       // snek.state.mobile = false
 
-      const app = addEnt(Apple)
+      const app = addEnt(Apple, {x:170,y:400})
+      
       // const ant = addEnt(Ant).canTurn(false).isMobile(true)
       // addEnt(Apple)
       // addEnt(Mango)

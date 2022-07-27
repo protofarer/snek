@@ -16,7 +16,7 @@ export default class Snek {
     }},
     position: { x: 400, y: 400},
     moveSpeed: 1,
-    nSegments: 2,
+    nSegments: 3,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
@@ -263,7 +263,7 @@ export class Segment {
     bodyColor: null,
     scale: 0,
   }
-  finishDigestionEffect = null
+  cancelDigestionEffect = null
 
   constructor(ctx, upstreamSegment=null) {
     this.ctx = ctx
@@ -280,10 +280,10 @@ export class Segment {
      */
 
     // TODO adjust the moveSpeed factor
-    this.state.linkLength = Math.floor(
-      this.state.r + this.state.upstreamSegment.state.r 
-        - this.state.upstreamSegment.state.moveSpeed
-    )
+    // this.state.linkLength = Math.floor(
+    //   this.state.r + this.state.upstreamSegment.state.r 
+    //     - this.state.upstreamSegment.state.moveSpeed
+    // )
 
     this.state.directionRad = this.state.upstreamSegment.state.directionRad
     this.state.position = {
@@ -302,7 +302,7 @@ export class Segment {
     this.state.entUnderDigestion = ent
     this.state.entUnderDigestion.parentEnt = this
     this.state.entUnderDigestion.state.position = this.state.position
-    this.finishDigestionEffect = this.state.entUnderDigestion.digestionEffect(this)
+    this.cancelDigestionEffect = this.state.entUnderDigestion.state.digestion.effect(this)
     console.log(`ent started being digested`)
   }
 
@@ -311,14 +311,15 @@ export class Segment {
     // console.log(`entunderDigest.state`, this.state.entUnderDigestion.state.digestionTimeLeft)
     // console.log(`typeof digestiontime`, typeof this.state.entUnderDigestion.state.digestionTimeleft)
     
-    if (this.state.entUnderDigestion.state.digestionTimeLeft > 0) {
-      this.state.entUnderDigestion.state.digestionTimeLeft -= 17    // TODO subtract timeElapsed since last digest tick
+    if (this.state.entUnderDigestion.state.digestion.timeLeft > 0) {
+      this.state.entUnderDigestion.state.digestion.timeLeft -= 17    // TODO subtract timeElapsed since last digest tick
       // console.log(`digestionTimeLeft`, this.state.entUnderDigestion.state.digestionTimeLeft)
     } else {
       // * Upon fully digesting contents transform ent into poop and pass
       // TODO transform ent into poop and pass it
-    console.log(`canceling digestion effect`, )
-      this.digestionEffect = null
+    console.log(`finishing digestion effect`, )
+      this.cancelDigestionEffect()
+      this.cancelDigestionEffect = null
       this.pass()
     }
   }
@@ -327,10 +328,9 @@ export class Segment {
     console.log(`passing`, )
     // TODO call the digestionEffect function to reverse state
     // TODO reverse state change
-    console.log(`canceling digestion effect`, )
     
     if (!this.downStreamSegment) {
-      console.log(`seg is pooping`, )
+      console.log(`fully digested ${this.state.entUnderDigestion.species}`, )
       this.excrete()
     } else {
       console.log(`seg transferring to next seg`, )
@@ -360,48 +360,72 @@ export class Segment {
 
 
   update() {
-    // console.log(`*****************************************`, )
-    // console.log(`seg stepping`, )
-    // console.log(`headposthist.len`, this.state.headPositionHistory.length)
-    
-    this.state.linkLength = Math.floor(
-      this.state.r 
-      + this.state.upstreamSegment.state.r
-      + this.getHeadMoveSpeed()*1.5
-    )
-      // console.log(`r`, this.state.r)
-      // console.log(`upR`, this.state.upstreamSegment.state.r)
-      // console.log(`movespeed`, this.state.upstreamSegment.state.moveSpeed)
-    // is considered the tail of the upstreamSegment to follow
-    
+    // this.state.linkLength = Math.floor(
+    //   this.state.r 
+    //   + this.state.upstreamSegment.state.r
+    //   + this.getHeadMoveSpeed()
+    // )
+
     this.state.headPositionHistory.splice(0, 0, {
       x: this.state.upstreamSegment.state.position.x,
       y: this.state.upstreamSegment.state.position.y
     })
 
-    while (
-      this.state.headPositionHistory.length 
-        > this.state.linkLength/this.getHeadMoveSpeed()
-    ) {
-      this.state.headPositionHistory.pop()
-    }
-    // console.log(`downstreamseg`, this.state.downstreamSegment)
+    // while (
+    //   this.state.headPositionHistory.length 
+    //     > this.state.linkLength/0.5
+    // ) {
+    //   this.state.headPositionHistory.pop()
+    // }
+    console.log(`headposhistory.len`, this.state.headPositionHistory.length)
     
-    
-//     console.log(`headposhist`, this.state.headPositionHistory)
-//     const indexOfUpstreamTailPosition = Math.min(this.state.headPositionHistory.length, Math.floor(this.state.linkLength / 2)) - 1
-//     console.log(`%cindexofUpstreamTailPos`, 'color:orange',indexOfUpstreamTailPosition)
-// console.log('upsegtail.x', this.state.headPositionHistory[indexOfUpstreamTailPosition].x )
-//         console.log('rel seg.s', - this.state.position.x)
-//       const dy = this.state.headPositionHistory[indexOfUpstreamTailPosition].y 
-//         - this.state.position.y
-//       const dx = this.state.headPositionHistory[indexOfUpstreamTailPosition].x 
-//         - this.state.position.x
+    let headTrailElementsToKeep = this.state.headPositionHistory.length
+    let headTrailLength = 0
+    for (let i = 1; i < this.state.headPositionHistory.length; i++) {
+      // console.log('xlen', 
+      //   (
+      //     this.state.headPositionHistory[i].x 
+      //     - this.state.headPositionHistory[i-1].x
+      //   )**2
+      // )
+      // console.log('ylen',
+      //   (this.state.headPositionHistory[i].y 
+      //     - this.state.headPositionHistory[i-1].y
+      //   )**2
+      // )
 
-//       console.log(`dy`,dy )
-//       console.log(`dx`, dx)
-      
-//     this.state.directionRad = Math.atan(dy/dx)
+      headTrailLength += Math.sqrt(
+        (this.state.headPositionHistory[i].x - this.state.headPositionHistory[i-1].x)**2
+        + (this.state.headPositionHistory[i].y - this.state.headPositionHistory[i-1].y)**2
+      )
+      if (headTrailLength >= (this.state.r*2)) {
+        headTrailElementsToKeep = i
+        break
+      }
+    }
+    console.log(`headtraillength`, headTrailLength)
+    console.log(`ele to keep`, headTrailElementsToKeep)
+    this.state.headPositionHistory.splice(headTrailElementsToKeep)
+    console.log(this.state.headPositionHistory)
+
+    this.state.position = {
+      x: this.state.headPositionHistory.at(-1).x,
+      y: this.state.headPositionHistory.at(-1).y
+    }
+    // this.state.position = {
+    //   x: this.state.headPositionHistory[
+    //     Math.min(
+    //       this.state.headPositionHistory.length - 1,
+    //       Math.floor((this.state.r + this.state.upstreamSegment.state.r)/this.getHeadMoveSpeed())
+    //     )
+    //   ].x,
+    //   y: this.state.headPositionHistory[
+    //     Math.min(
+    //       this.state.headPositionHistory.length - 1,
+    //       Math.floor(this.state.linkLength/this.getHeadMoveSpeed())
+    //     )
+    //   ].y
+    // }
     this.upstreamSegmentTailPosition = {
       x: this.state.upstreamSegment.state.position.x 
         - this.state.upstreamSegment.state.r 
@@ -413,11 +437,6 @@ export class Segment {
     const dy = (this.upstreamSegmentTailPosition.y - this.state.position.y)
     const dx = (this.upstreamSegmentTailPosition.x - this.state.position.x)
     this.state.directionRad = Math.atan(dy/dx)
-
-    this.state.position = {
-      x: this.state.headPositionHistory.at(-1).x,
-      y: this.state.headPositionHistory.at(-1).y
-    }
 
     // ! debug
     // const dBetweenSegAndUpstream = Math.sqrt((this.state.upstreamSegment.state.position.x - this.state.position.x)**2 + (this.state.upstreamSegment.state.position.y - this.state.position.y)**2)
@@ -466,5 +485,18 @@ export class Segment {
     this.ctx.restore()
 
     this.state.entUnderDigestion?.render()
+    this.drawDebugOverlays()
+  }
+
+  drawDebugOverlays() {
+    for(let i = 0; i < this.state.headPositionHistory.length; i++) {
+      this.ctx.beginPath()
+      this.ctx.arc(
+        this.state.headPositionHistory[i].x, 
+        this.state.headPositionHistory[i].y, 1, 0, 2*Math.PI)
+      this.ctx.fillStyle='red'
+      this.ctx.fill()
+    }
+
   }
 }
