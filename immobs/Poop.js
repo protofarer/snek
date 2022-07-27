@@ -10,7 +10,7 @@ export default class Poop extends Immob {
     r: 5,
     primaryColor: 'hsl(40, 100%, 13%)',
     digestion: {
-      timeLeft: 3000,
+      timeLeft: 2000,
       excrete() { 
       // TODO Excrete before digestion over. Good relief! Speed boost for a few seconds
       }
@@ -25,8 +25,8 @@ export default class Poop extends Immob {
   }
 
   digestionEffect(entAffected) {
-    entAffected.state.moveSpeed -= 0.3
-    return () => { entAffected.state.moveSpeed += 0.3 }
+    entAffected.state.moveSpeed -= 0.1
+    return () => { entAffected.state.moveSpeed += 0.1 }
   }
 
   drawBody() {

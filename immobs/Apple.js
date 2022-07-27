@@ -19,8 +19,8 @@ export default class Apple extends Immob {
     leafColor: 'hsl(95, 60%, 50%)',
     exp: 10,
     digestion: {
-      timeLeft: 1000,
-      maxTimeLeft: 1000
+      timeLeft: 7000,
+      maxTimeLeft: 7000
     },
   }
   constructor(ctx, startPosition=null, parentEnt=null) {

@@ -18,7 +18,7 @@ export default class Snek {
     }},
     position: { x: 400, y: 400},
     moveSpeed: 1,
-    nSegments: 1,
+    nSegments: 5,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
@@ -260,16 +260,16 @@ export class Segment {
     linkLength: 0,
     headPositionHistory: [],
     bodyColor: null,
-    scale: 0,
+    scale: { x: 0, y: 0 }
   }
   cancelDigestionEffect = null
 
   constructor(ctx, upstreamSegment=null) {
     this.ctx = ctx
     this.state.upstreamSegment = upstreamSegment
-    this.state.r = this.state.upstreamSegment.state.r
+    this.state.r = this.getHeadEnt().state.r
     this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
-    this.state.scale = this.state.upstreamSegment.state.scale
+    this.state.scale = {x: this.getHeadEnt().state.scale, y: this.getHeadEnt().state.scale }
     /** 
      * * linkLength is the size of headPositionHistory needed to properly position
      * * the segment.  Estimated by subtracting upstreamSeg movespeed from
@@ -289,6 +289,15 @@ export class Segment {
     }
   }
 
+  getHeadEnt() {
+    let upstreamSegment = this.state.upstreamSegment
+    while (upstreamSegment.state.upstreamSegment) {
+        upstreamSegment = upstreamSegment.state.upstreamSegment
+    }
+    return upstreamSegment
+  }
+
+
   ingest(ent) {
     if (this.state.entUnderDigestion !== null) {
       // Forces segment to pass
@@ -301,16 +310,9 @@ export class Segment {
     this.state.entUnderDigestion.state.position = this.state.position
     this.cancelDigestionEffect = this.state.entUnderDigestion.digestionEffect(this.getHeadEnt())
     console.log(`ent started being digested`)
+    this.state.scale = this.state.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
   }
   
-  getHeadEnt() {
-    let upstreamSegment = this.state.upstreamSegment
-    while (upstreamSegment.state.upstreamSegment) {
-        upstreamSegment = upstreamSegment.state.upstreamSegment
-    }
-    return upstreamSegment
-  }
-
   digest() {
     if (this.state.entUnderDigestion.state.digestion.timeLeft > 0) {
       // console.log(`digesting timeleft:`, this.state.entUnderDigestion.state.digestion.timeLeft)
@@ -334,6 +336,7 @@ export class Segment {
         new Entity(poop)
         this.state.entUnderDigestion = poop
         this.cancelDigestionEffect = this.state.entUnderDigestion.digestionEffect(this.getHeadEnt())
+        this.state.scale = { x: 1, y: 1.3 }
         console.log(`Made poo:`, poop)
       }
     }
@@ -348,6 +351,7 @@ export class Segment {
       console.log(`Passing`, )
       this.state.downstreamSegment.ingest(this.state.entUnderDigestion)
     }
+    this.state.scale = {x: this.getHeadEnt().state.scale, y: this.getHeadEnt().state.scale }
     this.state.entUnderDigestion = null
   }
 
@@ -376,12 +380,12 @@ export class Segment {
     return upstreamSegment.state.moveSpeed
   }
 
-
   update() {
     this.state.headPositionHistory.splice(0, 0, {
       x: this.state.upstreamSegment.state.position.x,
       y: this.state.upstreamSegment.state.position.y
     })
+
     let headTrailElementsToKeep = this.state.headPositionHistory.length
     let headTrailLength = 0
     for (let i = 1; i < this.state.headPositionHistory.length; i++) {
@@ -390,7 +394,9 @@ export class Segment {
         (this.state.headPositionHistory[i].x - this.state.headPositionHistory[i-1].x)**2
         + (this.state.headPositionHistory[i].y - this.state.headPositionHistory[i-1].y)**2
       )
-      if (headTrailLength >= (this.state.r*2)) {
+
+      // * Tweak Segment Follow distance here: coefficient to r
+      if (headTrailLength >= (this.state.r*1.8)) {
         headTrailElementsToKeep = i
         break
       }
@@ -415,13 +421,13 @@ export class Segment {
     this.state.directionRad = Math.atan(dy/dx)
 
     this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
-    this.state.scale = this.state.upstreamSegment.state.scale
     
     if (this.state.entUnderDigestion !== null) {
+      // this.state.r = this.getHeadEnt().state.r + 3
       this.state.entUnderDigestion.state.position = this.state.position
       this.digest()
     } else {
-      // console.log(`seg is not digesting`, )
+    //  this.state.r = this.getHeadEnt().state.r
     }
     this.state?.downstreamSegment?.update()
   }
@@ -439,7 +445,7 @@ export class Segment {
     this.ctx.save()
     this.ctx.translate(position.x, position.y)
     this.ctx.rotate(angle)
-    this.ctx.scale(this.state.upstreamSegment.state.scale, this.state.upstreamSegment.state.scale*0.6)
+    this.ctx.scale(this.state.scale.x, this.state.scale.y-.6)
 
     this.drawLegs()
 
