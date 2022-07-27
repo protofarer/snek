@@ -8,6 +8,7 @@ import Centipede from '../mobs/Centipede'
 import Ant from '../mobs/Ant'
 import Snek from '../mobs/Snek'
 import Entity from '../Entity'
+import Poop from '../immobs/Poop'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
@@ -276,7 +277,9 @@ export default class DebugGUI {
       this.game.snek = snek
       // snek.state.mobile = false
 
-      const app = addEnt(Apple, {x:170,y:400})
+      const app = addEnt(Apple)
+      addEnt(Apple)
+      // const poo = addEnt(Poop, {x:170,y:400})
       
       // const ant = addEnt(Ant).canTurn(false).isMobile(true)
       // addEnt(Apple)

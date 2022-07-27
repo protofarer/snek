@@ -10,6 +10,7 @@ import Ant from './mobs/Ant'
 import Apple from './immobs/Apple'
 import Mango from './immobs/Mango'
 import Pebble from './immobs/Pebble'
+import Poop from './immobs/Poop'
 import Entity from './Entity'
 
 export default class Game {
@@ -98,7 +99,7 @@ export default class Game {
     const ent = new entClass(
       this.ctx, 
       {
-        x: position?.x || 150,
+        x: position?.x || 170,
         y: position?.y || 400,
       }, 
       this
@@ -106,11 +107,15 @@ export default class Game {
     
     const bigEnt = new Entity(ent)
     
-    ent.state.position.x += (50 * bigEnt.id)
+    if (!position) {
+      ent.state.position.x += (50 * bigEnt.id)
+    }
     ent.state.mobile = false
     // Handle setting hit area when position arg specified since immobs
     //  only set it only once at instantiation
     if (entClass.entGroup === 'immob') ent.setHitAreas()
+    console.log(`ent.position`, ent.state.position)
+    
     return ent
   }
 
@@ -141,10 +146,12 @@ export default class Game {
 
   render() {
     this.clock.render()
-    this.snek?.render()
-    for(const  ent of Object.values(Entity.stack)) {
+    for(const ent of Object.values(Entity.stack)) {
+      // console.log(`rendering ent:`, ent)
+      
       ent.render()
     }
+    this.snek?.render()
     this.panel.render()
   }
 

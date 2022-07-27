@@ -1,4 +1,6 @@
+import Poop from "../immobs/Poop"
 import Clock from "../utils/Clock"
+import Entity from "../Entity"
 
 export default class Snek {
   static entGroup = 'mob'
@@ -16,7 +18,7 @@ export default class Snek {
     }},
     position: { x: 400, y: 400},
     moveSpeed: 1,
-    nSegments: 3,
+    nSegments: 2,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
@@ -295,9 +297,7 @@ export class Segment {
   ingest(ent) {
     if (this.state.entUnderDigestion !== null) {
       // Forces segment to pass
-      if (!this.downstreamSegment) {
-        this.pass()
-      }
+      this.pass()
     }
     this.state.entUnderDigestion = ent
     this.state.entUnderDigestion.parentEnt = this
@@ -307,45 +307,49 @@ export class Segment {
   }
 
   digest() {
-    // console.log(`IN digest`, )
-    // console.log(`entunderDigest.state`, this.state.entUnderDigestion.state.digestionTimeLeft)
-    // console.log(`typeof digestiontime`, typeof this.state.entUnderDigestion.state.digestionTimeleft)
-    
     if (this.state.entUnderDigestion.state.digestion.timeLeft > 0) {
+      // console.log(`digesting timeleft:`, this.state.entUnderDigestion.state.digestion.timeLeft)
+      
       this.state.entUnderDigestion.state.digestion.timeLeft -= 17    // TODO subtract timeElapsed since last digest tick
-      // console.log(`digestionTimeLeft`, this.state.entUnderDigestion.state.digestionTimeLeft)
     } else {
       // * Upon fully digesting contents transform ent into poop and pass
-      // TODO transform ent into poop and pass it
-    console.log(`finishing digestion effect`, )
+
+      console.log(`finishing digestion effect`, )
+
       this.cancelDigestionEffect()
       this.cancelDigestionEffect = null
-      this.pass()
+
+      if (this.state.entUnderDigestion.species === 'poop') {
+        this.pass()
+      } else {
+        // TODO recycle or destroy the digested ent object
+        const poop = new Poop(this.ctx, this.state.position, this)
+        new Entity(poop)
+        this.state.entUnderDigestion = poop
+        this.cancelDigestionEffect = this.state.entUnderDigestion.state.digestion.effect(this)
+        console.log(`Made poo:`, poop)
+      }
     }
   }
 
   pass() {
-    console.log(`passing`, )
     // TODO call the digestionEffect function to reverse state
     // TODO reverse state change
-    
-    if (!this.downStreamSegment) {
-      console.log(`fully digested ${this.state.entUnderDigestion.species}`, )
+    if (!this.state.downstreamSegment) {
       this.excrete()
     } else {
-      console.log(`seg transferring to next seg`, )
-      this.downstreamSegment.ingest(this.state.entUnderDigestion)
+      console.log(`Passing`, )
+      this.state.downstreamSegment.ingest(this.state.entUnderDigestion)
       this.state.entUnderDigestion = null
+      this.cancelDigestionEffect = null
     }
-    
   }
 
   excrete() {
     // TODO setup a line based on entity id across bottomn of screen till
     //    digestion code is complete
-    console.log(`pooping`, )
+    console.log(`Excreting: ${this.state.entUnderDigestion.species}`, )
     
-    this.state.entUnderDigestion.state.position = {x: 50, y: 700}
     this.state.entUnderDigestion.parentEnt = null
     this.state.entUnderDigestion = null
   }
@@ -360,39 +364,13 @@ export class Segment {
 
 
   update() {
-    // this.state.linkLength = Math.floor(
-    //   this.state.r 
-    //   + this.state.upstreamSegment.state.r
-    //   + this.getHeadMoveSpeed()
-    // )
-
     this.state.headPositionHistory.splice(0, 0, {
       x: this.state.upstreamSegment.state.position.x,
       y: this.state.upstreamSegment.state.position.y
     })
-
-    // while (
-    //   this.state.headPositionHistory.length 
-    //     > this.state.linkLength/0.5
-    // ) {
-    //   this.state.headPositionHistory.pop()
-    // }
-    console.log(`headposhistory.len`, this.state.headPositionHistory.length)
-    
     let headTrailElementsToKeep = this.state.headPositionHistory.length
     let headTrailLength = 0
     for (let i = 1; i < this.state.headPositionHistory.length; i++) {
-      // console.log('xlen', 
-      //   (
-      //     this.state.headPositionHistory[i].x 
-      //     - this.state.headPositionHistory[i-1].x
-      //   )**2
-      // )
-      // console.log('ylen',
-      //   (this.state.headPositionHistory[i].y 
-      //     - this.state.headPositionHistory[i-1].y
-      //   )**2
-      // )
 
       headTrailLength += Math.sqrt(
         (this.state.headPositionHistory[i].x - this.state.headPositionHistory[i-1].x)**2
@@ -403,29 +381,13 @@ export class Segment {
         break
       }
     }
-    console.log(`headtraillength`, headTrailLength)
-    console.log(`ele to keep`, headTrailElementsToKeep)
     this.state.headPositionHistory.splice(headTrailElementsToKeep)
-    console.log(this.state.headPositionHistory)
 
     this.state.position = {
       x: this.state.headPositionHistory.at(-1).x,
       y: this.state.headPositionHistory.at(-1).y
     }
-    // this.state.position = {
-    //   x: this.state.headPositionHistory[
-    //     Math.min(
-    //       this.state.headPositionHistory.length - 1,
-    //       Math.floor((this.state.r + this.state.upstreamSegment.state.r)/this.getHeadMoveSpeed())
-    //     )
-    //   ].x,
-    //   y: this.state.headPositionHistory[
-    //     Math.min(
-    //       this.state.headPositionHistory.length - 1,
-    //       Math.floor(this.state.linkLength/this.getHeadMoveSpeed())
-    //     )
-    //   ].y
-    // }
+
     this.upstreamSegmentTailPosition = {
       x: this.state.upstreamSegment.state.position.x 
         - this.state.upstreamSegment.state.r 
@@ -438,17 +400,11 @@ export class Segment {
     const dx = (this.upstreamSegmentTailPosition.x - this.state.position.x)
     this.state.directionRad = Math.atan(dy/dx)
 
-    // ! debug
-    // const dBetweenSegAndUpstream = Math.sqrt((this.state.upstreamSegment.state.position.x - this.state.position.x)**2 + (this.state.upstreamSegment.state.position.y - this.state.position.y)**2)
-    // console.log(`seg behind: ${this.state.upstreamSegment.species}, dbetweentSegandUp:`, dBetweenSegAndUpstream)
-    // console.log(`Seg behind ${this.state.upstreamSegment.species.toUpperCase()}:`, this)
-
     this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
     this.state.scale = this.state.upstreamSegment.state.scale
     
     if (this.state.entUnderDigestion !== null) {
       this.state.entUnderDigestion.state.position = this.state.position
-      // console.log(`entunderdigestion and pos`, this.state.entUnderDigestion.state.position)
       this.digest()
     } else {
       // console.log(`seg is not digesting`, )
@@ -484,8 +440,8 @@ export class Segment {
 
     this.ctx.restore()
 
+    // console.log( 'ent under digestion',this.state.entUnderDigestion?.species )
     this.state.entUnderDigestion?.render()
-    this.drawDebugOverlays()
   }
 
   drawDebugOverlays() {

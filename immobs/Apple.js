@@ -19,19 +19,15 @@ export default class Apple extends Immob {
     leafColor: 'hsl(95, 60%, 50%)',
     exp: 10,
     digestion: {
-      timeLeft: 700,
+      timeLeft: 1000,
       effect (entAffected) {
         let upstreamSegment = entAffected.state.upstreamSegment
         while (upstreamSegment.state.upstreamSegment) {
             upstreamSegment = upstreamSegment.state.upstreamSegment
         }
-        console.log(`looping to head`, )
-        upstreamSegment.state.moveSpeed += 5
-        // return () => this.state.moveSpeed -= 10
-        // return console.log(`hoohaa`, ) 
+        upstreamSegment.state.moveSpeed += 1
         return () => {
-          console.log(`digestion effect ended`, )
-          upstreamSegment.state.moveSpeed -= 5
+          upstreamSegment.state.moveSpeed -= 1
         }
       },
     },
@@ -47,7 +43,6 @@ export default class Apple extends Immob {
     this.state.position = startPosition || this.state.position
     
     this.setHitAreas()
-    // console.log(`IN apple digesttimeleft`, this.state.digestionTimeLeft)
   }
 
   left() {
@@ -147,9 +142,5 @@ export default class Apple extends Immob {
   }
 
   update() {
-  }
-
-  render() {
-    this.drawInitWrapper(this.state.directionRad)
   }
 }

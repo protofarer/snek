@@ -15,10 +15,9 @@ export default class Immob {
     get directionRad() { return this.directionAngle * Math.PI / 180 },
     primaryColor: '',
     exp: 0,
-    digestionTimeLeft: 0,
     digestion: {
-      digestionTimeLeft: 0,
-      digestionEffect() { }
+      timeLeft: 0,
+      effect() { }
     },
     swallowEffect() {}
   }
