@@ -5,6 +5,7 @@ You are Snek. You're small and always hungry. Your appetite is endless but so ar
 Looking far out:<br>
 - 1: single player desktop<br>
 - 2: single player mobile<br>
-- 3: online dual player<br>
-- 4: online dual player<br>
-- 5: advanced features (or new game)<br>
+- 3: online dual player desktop<br>
+- 4: online dual player mobile<br>
+- 5: daily to weekly meta-gameplay, adhoc pvp, scheduled pvp
+- 6: advanced features (or new game)<br>
