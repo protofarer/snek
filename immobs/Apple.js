@@ -15,11 +15,12 @@ export default class Apple extends Immob {
       this.directionAngle = val * 180 / Math.PI
     },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
-    primaryColor: 'hsl(0,70%, 50%)',
+    get primaryColor() { return `hsl(${0 + 40*(this.digestion.maxTimeLeft-this.digestion.timeLeft)/this.digestion.maxTimeLeft},${20 + 50*this.digestion.timeLeft/this.digestion.maxTimeLeft}%, ${20 + 30*this.digestion.timeLeft/this.digestion.maxTimeLeft}%)` },
     leafColor: 'hsl(95, 60%, 50%)',
     exp: 10,
     digestion: {
       timeLeft: 1000,
+      maxTimeLeft: 1000
     },
   }
   constructor(ctx, startPosition=null, parentEnt=null) {
