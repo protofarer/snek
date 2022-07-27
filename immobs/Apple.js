@@ -1,4 +1,4 @@
-import Immob from "./Immob"
+import Immob from './Immob'
 
 export default class Apple extends Immob {
 
@@ -54,22 +54,31 @@ export default class Apple extends Immob {
         throw Error(`Must specify both start & end values for primaryColorHue`)
       } else if (hueStart < 0 || hueStart > 255 || hueEnd < 0 || hueEnd > 255) {
         throw Error(`${this.species} primaryColorHue values must be in [0, 255]`)
+      } else {
+        this.primaryColorHue = { start: hueStart, end: hueEnd } 
+          || this.primaryColorHue
       }
     }
-    if ((typeof satStart === 'number' || typeof satEnd === 'number') 
-    && (typeof satStart !== 'number' || typeof satEnd !== 'number')) {
-        throw Error(`Must specify both start & end values for primaryColorHue`)
+    if (typeof satStart === 'number' || typeof satEnd === 'number') {
+      if (typeof satStart !== 'number' || typeof satEnd !== 'number') {
+          throw Error(`Must specify both start & end values for primaryColorHue`)
+      } else if (satStart < 0 || satStart > 100 || satEnd < 0 || satEnd > 100) {
+        throw Error(`${this.species} primaryColorSat values must be in [0, 100]`)
+      } else {
+        this.primaryColorSat = { start: satStart, end: satEnd } 
+          || this.primaryColorSat
+      }
     }
-    if ((typeof lumStart === 'number' || typeof lumEnd === 'number') 
-    && (typeof lumStart !== 'number' || typeof lumEnd !== 'number')) {
-        throw Error(`Must specify both start & end values for primaryColorHue`)
+    if (typeof lumStart === 'number' || typeof lumEnd === 'number') {
+      if (typeof lumStart !== 'number' || typeof lumEnd !== 'number') {
+          throw Error(`Must specify both start & end values for primaryColorHue`)
+      } else if (lumStart < 0 || lumStart > 100 || lumEnd < 0 || lumEnd > 100) {
+        throw Error(`${this.species} primaryColorHue values must be in [0, 255]`)
+      } else {
+        this.primaryColorLum = { start: lumStart, end: lumEnd } 
+          || this.primaryColorLum
+      }
     }
-    this.primaryColorHue = { start: hueStart, end: hueEnd } 
-      || this.primaryColorHue
-    this.primaryColorSat = { start: satStart, end: satEnd } 
-      || this.primaryColorSat
-    this.primaryColorLum = { start: lumStart, end: lumEnd } 
-      || this.primaryColorLum
   }
   secondaryColor = `hsl(95 60% 50%)`
 
