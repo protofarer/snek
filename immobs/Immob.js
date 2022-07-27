@@ -19,7 +19,6 @@ export default class Immob {
       timeLeft: 0,
       effect() { }
     },
-    swallowEffect() {}
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {

@@ -20,20 +20,6 @@ export default class Apple extends Immob {
     exp: 10,
     digestion: {
       timeLeft: 1000,
-      effect (entAffected) {
-        let upstreamSegment = entAffected.state.upstreamSegment
-        while (upstreamSegment.state.upstreamSegment) {
-            upstreamSegment = upstreamSegment.state.upstreamSegment
-        }
-        upstreamSegment.state.moveSpeed += 1
-        return () => {
-          upstreamSegment.state.moveSpeed -= 1
-        }
-      },
-    },
-    swallowEffect(entAffected) {
-      entAffected.state.exp += this.state.exp / 2
-      this.state.exp /= 2
     },
   }
   constructor(ctx, startPosition=null, parentEnt=null) {
@@ -43,6 +29,23 @@ export default class Apple extends Immob {
     this.state.position = startPosition || this.state.position
     
     this.setHitAreas()
+  }
+
+  digestionEffect (entAffected) {
+    entAffected.state.moveSpeed += 1
+    return () => { entAffected.state.moveSpeed -= 1 }
+  }
+
+  absorbExp(entAffected) {
+    if (this.state.exp > 0) {
+      entAffected.state.exp += 1
+      this.state.exp -= 1
+    }
+  }
+  
+  swallowEffect(entAffected) {
+    entAffected.state.exp += Math.ceil(this.state.exp / 2)
+    this.state.exp = Math.ceil(this.state.exp/2)
   }
 
   left() {

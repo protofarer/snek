@@ -144,12 +144,18 @@ export default class Game {
     delete Entity.stack[id]
   }
 
+  readdEnt(ent) {
+    new Entity(ent)
+  }
+
   render() {
     this.clock.render()
     for(const ent of Object.values(Entity.stack)) {
       // console.log(`rendering ent:`, ent)
+      if (ent.parentEnt === this) {
+        ent.render()
+      }
       
-      ent.render()
     }
     this.snek?.render()
     this.panel.render()
@@ -233,7 +239,7 @@ export default class Game {
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.swallow(ent)
               this.state.score++
-              this.removeEnt(id)
+              // this.removeEnt(id)
             }
           }
         }

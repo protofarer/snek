@@ -277,11 +277,16 @@ export default class DebugGUI {
       this.game.snek = snek
       // snek.state.mobile = false
 
-      const app = addEnt(Apple)
       addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      // addEnt(Apple)
       // const poo = addEnt(Poop, {x:170,y:400})
       
-      // const ant = addEnt(Ant).canTurn(false).isMobile(true)
+      // const ant = addEnt(Ant).canTurn(false)
       // addEnt(Apple)
       // addEnt(Mango)
       // addEnt(Pebble)

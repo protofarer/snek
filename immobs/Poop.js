@@ -11,16 +11,6 @@ export default class Poop extends Immob {
     primaryColor: 'hsl(40, 100%, 13%)',
     digestion: {
       timeLeft: 3000,
-      effect(entAffected) {
-        let upstreamSegment = entAffected.state.upstreamSegment
-        while (upstreamSegment.state.upstreamSegment) {
-            upstreamSegment = upstreamSegment.state.upstreamSegment
-        }
-        upstreamSegment.state.moveSpeed -= 0.3
-        return () => {
-          upstreamSegment.state.moveSpeed += 0.3
-        }
-      },
       excrete() { 
       // TODO Excrete before digestion over. Good relief! Speed boost for a few seconds
       }
@@ -32,6 +22,13 @@ export default class Poop extends Immob {
     this.ctx = ctx
     this.parentEnt = parentEnt
     this.state.position = startPosition || this.state.position
+  }
+
+  digestionEffect(entAffected) {
+    entAffected.state.moveSpeed -= 0.3
+    return () => {
+      entAffected.state.moveSpeed += 0.3
+    }
   }
 
   drawBody() {

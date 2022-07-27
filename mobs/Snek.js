@@ -18,7 +18,7 @@ export default class Snek {
     }},
     position: { x: 400, y: 400},
     moveSpeed: 1,
-    nSegments: 2,
+    nSegments: 1,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },
@@ -98,7 +98,6 @@ export default class Snek {
 
   swallow(ent) {
     ent.parentEnt = this
-    ent.state.position = {x: -1000, y: -1000}
     ent.hitArea = new Path2D()
     ent.swallowEffect(this)
 
@@ -109,14 +108,12 @@ export default class Snek {
       case 'pebble':
         break
       case 'ant':
-        // this.addSegment()
         break
       case 'mango':
         break
       default:
         console.info(`snek.consume() case-switch defaulted`, )
     }
-    this.state.exp += ent.state.exp
 
     if (this.swallowables.includes(ent.carriedEnt?.species)) {
       this.swallow(ent.carriedEnt)
@@ -273,8 +270,6 @@ export class Segment {
     this.state.r = this.state.upstreamSegment.state.r
     this.state.bodyColor = this.state.upstreamSegment.state.bodyColor
     this.state.scale = this.state.upstreamSegment.state.scale
-    console.log(`upstreamSegment`, upstreamSegment)
-
     /** 
      * * linkLength is the size of headPositionHistory needed to properly position
      * * the segment.  Estimated by subtracting upstreamSeg movespeed from
@@ -302,8 +297,16 @@ export class Segment {
     this.state.entUnderDigestion = ent
     this.state.entUnderDigestion.parentEnt = this
     this.state.entUnderDigestion.state.position = this.state.position
-    this.cancelDigestionEffect = this.state.entUnderDigestion.state.digestion.effect(this)
+    this.cancelDigestionEffect = this.state.entUnderDigestion.digestionEffect(this.getHeadEnt())
     console.log(`ent started being digested`)
+  }
+  
+  getHeadEnt() {
+    let upstreamSegment = this.state.upstreamSegment
+    while (upstreamSegment.state.upstreamSegment) {
+        upstreamSegment = upstreamSegment.state.upstreamSegment
+    }
+    return upstreamSegment
   }
 
   digest() {
@@ -311,6 +314,7 @@ export class Segment {
       // console.log(`digesting timeleft:`, this.state.entUnderDigestion.state.digestion.timeLeft)
       
       this.state.entUnderDigestion.state.digestion.timeLeft -= 17    // TODO subtract timeElapsed since last digest tick
+      this.state.entUnderDigestion.species !== 'poop' && this.state.entUnderDigestion.absorbExp(this.getHeadEnt())
     } else {
       // * Upon fully digesting contents transform ent into poop and pass
 
@@ -326,7 +330,7 @@ export class Segment {
         const poop = new Poop(this.ctx, this.state.position, this)
         new Entity(poop)
         this.state.entUnderDigestion = poop
-        this.cancelDigestionEffect = this.state.entUnderDigestion.state.digestion.effect(this)
+        this.cancelDigestionEffect = this.state.entUnderDigestion.digestionEffect(this.getHeadEnt())
         console.log(`Made poo:`, poop)
       }
     }
@@ -340,9 +344,10 @@ export class Segment {
     } else {
       console.log(`Passing`, )
       this.state.downstreamSegment.ingest(this.state.entUnderDigestion)
-      this.state.entUnderDigestion = null
-      this.cancelDigestionEffect = null
     }
+    this.cancelDigestionEffect()
+    this.state.entUnderDigestion = null
+    this.cancelDigestionEffect = null
   }
 
   excrete() {
@@ -350,8 +355,14 @@ export class Segment {
     //    digestion code is complete
     console.log(`Excreting: ${this.state.entUnderDigestion.species}`, )
     
-    this.state.entUnderDigestion.parentEnt = null
-    this.state.entUnderDigestion = null
+    if (this.state.entUnderDigestion.entGroup === 'immob') {
+      this.state.entUnderDigestion.setHitAreas()
+    }
+    let upstreamEnt = this.state.upstreamSegment
+    while (upstreamEnt.state.upstreamSegment) {
+      upstreamEnt = upstreamEnt.state.upstreamSegment
+    }
+    this.state.entUnderDigestion.parentEnt = upstreamEnt.parentEnt
   }
 
   getHeadMoveSpeed() {
