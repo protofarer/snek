@@ -18,7 +18,7 @@ export default class Snek {
     }},
     position: { x: 400, y: 400},
     moveSpeed: 1,
-    nSegments: 5,
+    nSegments: 2,
     directionAngle: 0,
     set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
     get directionRad() { return this.directionAngle * Math.PI / 180 },

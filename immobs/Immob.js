@@ -4,47 +4,52 @@ export default class Immob {
   entGroup = 'immob'
   species = 'immob'
 
-  state = {
-    r: 0,
-    get hitSideLength() { return this.r + 1 },
-    position: { x: 400, y: 400 },
-    directionAngle: 0,
-    set directionRad(val) {
-      this.directionAngle = val * 180 / Math.PI
-    },
-    get directionRad() { return this.directionAngle * Math.PI / 180 },
-    primaryColor: '',
-    exp: 0,
-    digestion: {
-      timeLeft: 0,
-      effect() { }
-    },
+  r = 1
+  position = { x: 400, y: 400 }
+  primaryColor = ''
+  exp = 10
+  expAbsorbRate = 1
+  digestion = {
+    timeLeft: 1000,
+    baseTime: 1000,
   }
+  directionAngleRadian = 0
+  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
+  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  get hitSideLength() { return this.r + 1 }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
     this.parentEnt = parentEnt
-    this.state.position = startPosition || this.state.position
+    // assert
+    this.position = startPosition || this.position
     
     this.setHitAreas()
   }
 
   swallowEffect(entAffected) {
-    entAffected.state.exp += Math.floor(this.state.exp / 2)
-    this.state.exp -= Math.floor(this.state.exp/2)
+    entAffected.exp += Math.floor(this.exp / 2)
+    this.exp -= Math.floor(this.exp / 2)
+  }
+
+  absorbExp(entAffected) {
+    if (this.exp > 0) {
+      entAffected.exp += this.expAbsorbRate
+      this.exp -= this.expAbsorbRate
+    }
   }
 
   left() {
-    return { x:this.state.position.x - this.state.hitSideLength, y: this.state.position.y}
+    return { x:this.position.x - this.hitSideLength, y: this.position.y}
   }
   right() {
-    return { x:this.state.position.x + this.state.hitSideLength, y:this.state.position.y}
+    return { x:this.position.x + this.hitSideLength, y:this.position.y}
   }
   top() {
-    return { x: this.state.position.x,y: this.state.position.y - this.state.hitSideLength }
+    return { x: this.position.x,y: this.position.y - this.hitSideLength }
   }
   bottom() {
-    return { x: this.state.position.x, y: this.state.position.y + this.state.hitSideLength }
+    return { x: this.position.x, y: this.position.y + this.hitSideLength }
   }
 
   drawHitOverlays() {
@@ -55,29 +60,35 @@ export default class Immob {
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.state.position.x - this.state.hitSideLength, 
-      this.state.position.y - this.state.hitSideLength,
-      2 * this.state.hitSideLength,
-      2 * this.state.hitSideLength
+      this.position.x - this.hitSideLength, 
+      this.position.y - this.hitSideLength,
+      2 * this.hitSideLength,
+      2 * this.hitSideLength
     )
   }
 
   drawInitWrapper(radians=null) {
-    this.ctx.save()
-    this.ctx.translate(this.state.position.x, this.state.position.y)
+    const ctx = this.ctx
+    ctx.save()
+    ctx.translate(this.position.x, this.position.y)
 
-    radians && this.ctx.rotate(radians)
+    radians && ctx.rotate(radians)
 
-    this.drawComponents()
+    this.drawComponents(ctx)
 
-    this.ctx.restore()
+    ctx.restore()
   }
 
-  drawComponents() {
-    this.drawBody()
+  drawComponents(ctx) {
+    this.drawBody(ctx)
   }
 
-  drawBody() {
+  drawBody(ctx) {
+    ctx.beginPath()
+    ctx.rect(0,0,10,10)
+    ctx.strokeStyle = 'lawngreen'
+    ctx.lineWidth = 2
+    ctx.stroke()
   }
 
   drawShadow() {
@@ -87,6 +98,6 @@ export default class Immob {
   }
 
   render() {
-    this.drawInitWrapper(this.state.directionRad)
+    this.drawInitWrapper(this.directionRad)
   }
 }

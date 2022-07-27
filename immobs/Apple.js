@@ -6,136 +6,109 @@ export default class Apple extends Immob {
   entGroup = 'immob'
   species = 'apple'
 
-  state = {
-    r: 6,
-    get hitSideLength() { return this.r + 1 },
-    position: { x: 400, y: 400 },
-    directionAngle: 0,
-    set directionRad(val) {
-      this.directionAngle = val * 180 / Math.PI
-    },
-    get directionRad() { return this.directionAngle * Math.PI / 180 },
-    get primaryColor() { return `hsl(${0 + 40*(this.digestion.maxTimeLeft-this.digestion.timeLeft)/this.digestion.maxTimeLeft},${20 + 50*this.digestion.timeLeft/this.digestion.maxTimeLeft}%, ${20 + 30*this.digestion.timeLeft/this.digestion.maxTimeLeft}%)` },
-    leafColor: 'hsl(95, 60%, 50%)',
-    exp: 10,
-    digestion: {
-      timeLeft: 7000,
-      maxTimeLeft: 7000
-    },
+  r = 6
+  position = { x: 400, y: 400 }
+  exp = 10
+  secondaryColor = `hsl(95 60% 50%)`
+  get primaryColor() { return `hsl(${0 + 40*(this.digestion.maxTimeLeft-this.digestion.timeLeft)/this.digestion.maxTimeLeft},${20 + 50*this.digestion.timeLeft/this.digestion.maxTimeLeft}%, ${20 + 30*this.digestion.timeLeft/this.digestion.maxTimeLeft}%)` }
+  digestion = {
+    timeLeft: 7000,
+    baseTime: 7000
   }
+
+  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
+  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  directionAngleRadian = 0
+  get hitR() { return this.r + 1 }
+
   constructor(ctx, startPosition=null, parentEnt=null) {
     super(ctx, startPosition, parentEnt)
     this.ctx = ctx
     this.parentEnt = parentEnt
-    this.state.position = startPosition || this.state.position
-    
+    this.position = startPosition || this.position
     this.setHitAreas()
   }
 
   digestionEffect (entAffected) {
-    entAffected.state.moveSpeed += 1
-    return () => { entAffected.state.moveSpeed -= 1 }
+    entAffected.moveSpeed += 1
+    return () => { entAffected.moveSpeed -= 1 }
   }
 
   absorbExp(entAffected) {
-    if (this.state.exp > 0) {
-      entAffected.state.exp += 1
-      this.state.exp -= 1
+    if (this.exp > 0) {
+      entAffected.exp += 1
+      this.exp -= 1
     }
   }
   
   swallowEffect(entAffected) {
-    entAffected.state.exp += Math.ceil(this.state.exp / 2)
-    this.state.exp = Math.ceil(this.state.exp/2)
-  }
-
-  left() {
-    return { x:this.state.position.x - this.state.hitSideLength, y: this.state.position.y}
-  }
-  right() {
-    return { x:this.state.position.x + this.state.hitSideLength, y:this.state.position.y}
-  }
-  top() {
-    return { x: this.state.position.x,y: this.state.position.y - this.state.hitSideLength }
-  }
-  bottom() {
-    return { x: this.state.position.x, y: this.state.position.y + this.state.hitSideLength }
-  }
-
-
-  setHitAreas() {
-    this.hitArea = new Path2D()
-    this.hitArea.rect(
-      this.state.position.x - this.state.hitSideLength, 
-      this.state.position.y - this.state.hitSideLength,
-      2 * this.state.hitSideLength,
-      2 * this.state.hitSideLength
-    )
+    entAffected.exp += Math.ceil(this.exp / 2)
+    this.exp = Math.ceil(this.exp / 2)
   }
 
   drawInitWrapper(radians=null) {
-    this.ctx.save()
-    this.ctx.translate(this.state.position.x, this.state.position.y)
+    const ctx = this.ctx
+    ctx.save()
+    ctx.translate(this.state.position.x, this.state.position.y)
+    radians && ctx.rotate(radians)
 
-    radians && this.ctx.rotate(radians)
+    this.drawComponents(ctx)
 
-    this.drawComponents()
-
-    this.ctx.restore()
+    ctx.restore()
   }
 
-  drawBody() {
-    this.ctx.save()
-    this.ctx.rotate(Math.PI / 4)
-    this.ctx.scale(0.8, 1)
-    this.ctx.beginPath()
-    this.ctx.arc(this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
-    this.ctx.arc(-this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.state.primaryColor
-    this.ctx.fill()
+  drawBody(ctx) {
+    ctx.save()
+    ctx.rotate(Math.PI / 4)
+    ctx.scale(0.8, 1)
+    ctx.beginPath()
+    ctx.arc(this.r*0.3, 0, this.r, 0, 2 * Math.PI)
+    ctx.arc(-this.r*0.3, 0, this.r, 0, 2 * Math.PI)
+    ctx.fillStyle = this.primaryColor
+    ctx.fill()
 
     this.drawShadow()
 
-    this.ctx.restore()
+    ctx.restore()
   }
 
-  drawShadow() {
-    this.ctx.shadowOffsetY = this.state.r * 0.4
-    this.ctx.shadowColor = 'hsl(0,0%,20%)'
-    this.ctx.shadowBlur = this.state.r * 0.2
-    this.ctx.fill()
+  drawShadow(ctx) {
+    ctx.shadowOffsetY = this.r * 0.4
+    ctx.shadowColor = 'hsl(0,0%,20%)'
+    ctx.shadowBlur = this.r * 0.2
+    ctx.fill()
   }
 
-  drawLeaf() {
-    this.ctx.save()
-    this.ctx.rotate(-Math.PI/6)
-    this.ctx.translate(this.state.r*0.8, 0.2 * this.state.r)
-    this.ctx.beginPath()
-    this.ctx.arc(0, 0, 0.4 * this.state.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.state.leafColor
-    this.ctx.fill()
-    this.ctx.restore()
+  drawLeaf(ctx) {
+    ctx.save()
+    ctx.rotate(-Math.PI/6)
+    ctx.translate(this.r*0.8, 0.2 * this.r)
+    ctx.beginPath()
+    ctx.arc(0, 0, 0.4 * this.r, 0, 2 * Math.PI)
+    ctx.fillStyle = this.leafColor
+    ctx.fill()
+    ctx.restore()
   }
 
-  drawHighlight() {
-    this.ctx.rotate(-.55 * Math.PI)
-    this.ctx.translate(this.state.r*0.8, 0)
-    this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.state.r * 0.28, 0, 2 * Math.PI)
-    this.ctx.fillStyle = 'hsla(0,0%,100%, 0.6)'
-    this.ctx.fill()
+  drawHighlight(ctx) {
+    ctx.rotate(-.55 * Math.PI)
+    ctx.translate(this.r*0.8, 0)
+    ctx.beginPath()
+    ctx.arc(0, 0, this.r * 0.28, 0, 2 * Math.PI)
+    ctx.fillStyle = 'hsla(0,0%,100%, 0.6)'
+    ctx.fill()
   }
 
-  drawStem() {
-    this.ctx.save()
-    this.ctx.rotate(-1)
-    this.ctx.beginPath()
-    this.ctx.moveTo(0.55*this.state.r,0)
-    this.ctx.lineTo(1.1*this.state.r,0)
-    this.ctx.lineWidth = 1.5
-    this.ctx.strokeStyle = 'hsl(40, 60%, 20%)'
-    this.ctx.stroke()
-    this.ctx.restore()
+  drawStem(ctx) {
+    ctx.save()
+    ctx.rotate(-1)
+    ctx.beginPath()
+    ctx.moveTo(0.55*this.r,0)
+    ctx.lineTo(1.1*this.r,0)
+    ctx.lineWidth = 1.5
+    ctx.strokeStyle = 'hsl(40, 60%, 20%)'
+    ctx.stroke()
+    ctx.restore()
   }
 
   drawComponents() {
