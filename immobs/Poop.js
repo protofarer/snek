@@ -26,9 +26,7 @@ export default class Poop extends Immob {
 
   digestionEffect(entAffected) {
     entAffected.state.moveSpeed -= 0.3
-    return () => {
-      entAffected.state.moveSpeed += 0.3
-    }
+    return () => { entAffected.state.moveSpeed += 0.3 }
   }
 
   drawBody() {

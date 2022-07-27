@@ -278,12 +278,6 @@ export default class DebugGUI {
       // snek.state.mobile = false
 
       addEnt(Apple)
-      addEnt(Apple)
-      addEnt(Apple)
-      addEnt(Apple)
-      addEnt(Apple)
-      addEnt(Apple)
-      // addEnt(Apple)
       // const poo = addEnt(Poop, {x:170,y:400})
       
       // const ant = addEnt(Ant).canTurn(false)

@@ -292,6 +292,8 @@ export class Segment {
   ingest(ent) {
     if (this.state.entUnderDigestion !== null) {
       // Forces segment to pass
+      this.cancelDigestionEffect()
+      this.cancelDigestionEffect = null
       this.pass()
     }
     this.state.entUnderDigestion = ent
@@ -320,6 +322,7 @@ export class Segment {
 
       console.log(`finishing digestion effect`, )
 
+
       this.cancelDigestionEffect()
       this.cancelDigestionEffect = null
 
@@ -345,9 +348,7 @@ export class Segment {
       console.log(`Passing`, )
       this.state.downstreamSegment.ingest(this.state.entUnderDigestion)
     }
-    this.cancelDigestionEffect()
     this.state.entUnderDigestion = null
-    this.cancelDigestionEffect = null
   }
 
   excrete() {
@@ -358,6 +359,8 @@ export class Segment {
     if (this.state.entUnderDigestion.entGroup === 'immob') {
       this.state.entUnderDigestion.setHitAreas()
     }
+
+    // TODO refactor
     let upstreamEnt = this.state.upstreamSegment
     while (upstreamEnt.state.upstreamSegment) {
       upstreamEnt = upstreamEnt.state.upstreamSegment
