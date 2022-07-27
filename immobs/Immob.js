@@ -6,7 +6,8 @@ export default class Immob {
 
   r = 1
   position = { x: 400, y: 400 }
-  primaryColor = ''
+  get primaryColor() { return 'lawngreen'}
+  secondaryColor
   exp = 10
   expAbsorbRate = 1
   digestion = {
@@ -16,14 +17,12 @@ export default class Immob {
   directionAngleRadian = 0
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
-  get hitSideLength() { return this.r + 1 }
+  get hitR() { return this.r + 1 }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
-    this.parentEnt = parentEnt
-    // assert
+    this.parentEnt = parentEnt || Error(`Must place ${this.species} under a Parent Entity!`)
     this.position = startPosition || this.position
-    
     this.setHitAreas()
   }
 
@@ -60,10 +59,10 @@ export default class Immob {
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.position.x - this.hitSideLength, 
-      this.position.y - this.hitSideLength,
-      2 * this.hitSideLength,
-      2 * this.hitSideLength
+      this.position.x - this.hitR, 
+      this.position.y - this.hitR,
+      2 * this.hitR,
+      2 * this.hitR
     )
   }
 
@@ -71,7 +70,6 @@ export default class Immob {
     const ctx = this.ctx
     ctx.save()
     ctx.translate(this.position.x, this.position.y)
-
     radians && ctx.rotate(radians)
 
     this.drawComponents(ctx)
@@ -86,12 +84,9 @@ export default class Immob {
   drawBody(ctx) {
     ctx.beginPath()
     ctx.rect(0,0,10,10)
-    ctx.strokeStyle = 'lawngreen'
+    ctx.strokeStyle = this.primaryColor
     ctx.lineWidth = 2
     ctx.stroke()
-  }
-
-  drawShadow() {
   }
 
   update() {
@@ -99,5 +94,7 @@ export default class Immob {
 
   render() {
     this.drawInitWrapper(this.directionRad)
+  // console.log(`primarycolor`, this.primaryColor)
+  
   }
 }

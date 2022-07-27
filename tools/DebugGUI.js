@@ -272,15 +272,16 @@ export default class DebugGUI {
     if (this.params.isDebugOn) {
 
       const addEnt = this.game.addEnt.bind(this.game)
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game)
+      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game)
       // snek.state.directionAngle = 0
-      this.game.snek = snek
       // snek.state.mobile = false
+      // this.game.snek = snek
 
-      addEnt(Apple)
-      addEnt(Apple)
-      addEnt(Apple)
-      addEnt(Apple)
+      const a = addEnt(Apple)
+      for(let i = 0; i < a.digestion.baseTime; i++) {
+        a.digestion.timeLeft -= 1
+        a.render()
+      }
       // const poo = addEnt(Poop, {x:170,y:400})
       
       // const ant = addEnt(Ant).canTurn(false)

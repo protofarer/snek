@@ -1,33 +1,79 @@
 import Immob from "./Immob"
 
 export default class Apple extends Immob {
-  static entGroup = 'immob'
+
+  // ! Unsure if entGroup is defined, inherit from Immob
+
   static species = 'apple'
-  entGroup = 'immob'
   species = 'apple'
 
   r = 6
   position = { x: 400, y: 400 }
   exp = 10
-  secondaryColor = `hsl(95 60% 50%)`
-  get primaryColor() { return `hsl(${0 + 40*(this.digestion.maxTimeLeft-this.digestion.timeLeft)/this.digestion.maxTimeLeft},${20 + 50*this.digestion.timeLeft/this.digestion.maxTimeLeft}%, ${20 + 30*this.digestion.timeLeft/this.digestion.maxTimeLeft}%)` }
+  expAbsorbRate = 1
   digestion = {
     timeLeft: 7000,
     baseTime: 7000
   }
 
-  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
-  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
-  directionAngleRadian = 0
-  get hitR() { return this.r + 1 }
-
-  constructor(ctx, startPosition=null, parentEnt=null) {
-    super(ctx, startPosition, parentEnt)
-    this.ctx = ctx
-    this.parentEnt = parentEnt
-    this.position = startPosition || this.position
-    this.setHitAreas()
+  primaryColorHue = { start: 0, end: 25 }
+  primaryColorSat = { start: 70, end: 30 }
+  primaryColorLum = { start: 50, end: 30 }
+  get primaryColor() { return (
+    `hsl(
+      ${
+        this.primaryColorHue.start 
+        + (this.primaryColorHue.end - this.primaryColorHue.start)
+        * Math.ceil(
+          (this.digestion.baseTime - this.digestion.timeLeft)
+          / this.digestion.baseTime
+        )
+      },
+      ${
+        this.primaryColorSat.start 
+        + (this.primaryColorSat.end - this.primaryColorSat.start)
+        + Math.ceil(
+            (this.digestion.baseTime - this.digestion.timeLeft)
+            / this.digestion.baseTime
+          )
+      }%,
+      ${
+        this.primaryColorLum.start
+        + (this.primaryColorLum.end - this.primaryColorLum.start)
+        + Math.ceil(
+          (this.digestion.baseTime - this.digestion.timeLeft)
+          / this.digestion.baseTime
+        )
+      }%
+    )`
+  )}
+  set primaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) {
+    // ! Doesn't catch out of range (x < 0, x > 255)
+    if (typeof hueStart === 'number' || typeof hueEnd === 'number') {
+      if (typeof hueStart !== 'number' || typeof hueEnd !== 'number') {
+        throw Error(`Must specify both start & end values for primaryColorHue`)
+      } else if (hueStart < 0 || hueStart > 255 || hueEnd < 0 || hueEnd > 255) {
+        throw Error(`${this.species} primaryColorHue values must be in [0, 255]`)
+      }
+    }
+    if ((typeof satStart === 'number' || typeof satEnd === 'number') 
+    && (typeof satStart !== 'number' || typeof satEnd !== 'number')) {
+        throw Error(`Must specify both start & end values for primaryColorHue`)
+    }
+    if ((typeof lumStart === 'number' || typeof lumEnd === 'number') 
+    && (typeof lumStart !== 'number' || typeof lumEnd !== 'number')) {
+        throw Error(`Must specify both start & end values for primaryColorHue`)
+    }
+    this.primaryColorHue = { start: hueStart, end: hueEnd } 
+      || this.primaryColorHue
+    this.primaryColorSat = { start: satStart, end: satEnd } 
+      || this.primaryColorSat
+    this.primaryColorLum = { start: lumStart, end: lumEnd } 
+      || this.primaryColorLum
   }
+  secondaryColor = `hsl(95 60% 50%)`
+
+  get hitR() { return this.r + 1 }
 
   digestionEffect (entAffected) {
     entAffected.moveSpeed += 1
@@ -49,7 +95,7 @@ export default class Apple extends Immob {
   drawInitWrapper(radians=null) {
     const ctx = this.ctx
     ctx.save()
-    ctx.translate(this.state.position.x, this.state.position.y)
+    ctx.translate(this.position.x, this.position.y)
     radians && ctx.rotate(radians)
 
     this.drawComponents(ctx)
@@ -67,7 +113,7 @@ export default class Apple extends Immob {
     ctx.fillStyle = this.primaryColor
     ctx.fill()
 
-    this.drawShadow()
+    this.drawShadow(ctx)
 
     ctx.restore()
   }
@@ -111,11 +157,11 @@ export default class Apple extends Immob {
     ctx.restore()
   }
 
-  drawComponents() {
-    this.drawBody()
-    this.drawLeaf()
-    this.drawStem()
-    this.drawHighlight()
+  drawComponents(ctx) {
+    this.drawBody(ctx)
+    this.drawLeaf(ctx)
+    this.drawStem(ctx)
+    this.drawHighlight(ctx)
   }
 
   update() {

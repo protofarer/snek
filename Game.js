@@ -108,13 +108,12 @@ export default class Game {
     const bigEnt = new Entity(ent)
     
     if (!position) {
-      ent.state.position.x += (50 * bigEnt.id)
+      ent.position.x += (50 * bigEnt.id)
     }
-    ent.state.mobile = false
+    ent.mobile = false
     // Handle setting hit area when position arg specified since immobs
     //  only set it only once at instantiation
     if (entClass.entGroup === 'immob') ent.setHitAreas()
-    console.log(`ent.position`, ent.state.position)
     
     return ent
   }
@@ -131,10 +130,9 @@ export default class Game {
         }, 
         this
       )
-      if (ent.entGroup === 'mob') ent.state.directionAngle = Math.random() * 360
+      if (ent.entGroup === 'mob') ent.directionAngleDegrees = Math.random() * 360
       new Entity(ent)
       ents.push(ent)
-    // console.log(`ent`, ent)
     }
     
     return ents
