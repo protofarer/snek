@@ -1,6 +1,5 @@
 import GUI from 'lil-gui'
 import CONSTANTS from '../Constants'
-import { resetGame, } from '..'
 
 import Entity from '../Entity'
 import Pebble from '../immobs/Pebble'
@@ -31,8 +30,10 @@ export default class DebugGUI {
       get gameSpeed() { return game.params.speed }
     }
 
+    const resetGame = this.game.resetGame
+
     this.setParamsFromSessionStorage()
-    this.invokeOnDebugGameStart()
+    this.invokeOnDebugGameStart(resetGame)
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -71,7 +72,7 @@ export default class DebugGUI {
     guiGameTest.add({ resetGame }, 'resetGame')
       .name('reset: normal')
 
-    guiGameTest.add({ debugreset() { resetGame(true)} }, 'debugreset')
+    guiGameTest.add({ resetGame: () => resetGame(true) }, 'resetGame')
       .name('reset: debug')
 
 // **********************************************************************
@@ -228,7 +229,7 @@ export default class DebugGUI {
     Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
   }
 
-  async invokeOnDebugGameStart() {
+  async invokeOnDebugGameStart(resetGame) {
     if (this.params.isDebugOn) {
       console.log(`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%`, )
       console.log(`% Running debug funcs on game start:`, )

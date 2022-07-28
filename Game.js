@@ -96,6 +96,15 @@ export default class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
 
+  resetGame(toDebug=false) {
+    const currURL = new URL(window.location.href)
+    if (import.meta.env.DEV) {
+      window.sessionStorage.setItem('isDebugOn', toDebug)
+    }
+    location.replace(currURL.toString())
+    location.reload()
+  }
+
   addEnt(entClass, position=null) {
     const ent = new entClass(
       this.ctx, 

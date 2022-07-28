@@ -43,10 +43,9 @@ export function startNewGame() {
         ? CONSTANTS.PHASE_PLAY
         : CONSTANTS.PHASE_PAUSE
 
-      game.phase === CONSTANTS.PHASE_PAUSE 
-        && cancelAnimationFrame(loopID)
-
-      if (game.phase === CONSTANTS.PHASE_PLAY) (
+      if (game.phase === CONSTANTS.PHASE_PAUSE ) {
+        cancelAnimationFrame(loopID)
+      } else if (game.phase === CONSTANTS.PHASE_PLAY) (
         loopID = requestAnimationFrame(draw)
       )
 
@@ -59,15 +58,5 @@ export function startNewGame() {
     }
   })
 }
+
 startNewGame()
-
-
-
-export function resetGame(toDebug=false) {
-  const currURL = new URL(window.location.href)
-  if (import.meta.env.DEV) {
-    window.sessionStorage.setItem('isDebugOn', toDebug)
-  }
-  location.replace(currURL.toString())
-  location.reload()
-}
