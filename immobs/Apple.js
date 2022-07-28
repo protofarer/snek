@@ -8,9 +8,6 @@ export default class Apple extends Immob {
   species = 'apple'
 
   r = 6
-  position = { x: 400, y: 400 }
-  exp = 10
-  expAbsorbRate = 1
   digestion = {
     timeLeft: 7000,
     baseTime: 7000
@@ -20,19 +17,20 @@ export default class Apple extends Immob {
 
   constructor(ctx, startPosition, parentEnt) {
     super(ctx, startPosition, parentEnt)
-    // this.primaryColor = { 
-    //   hueStart: 0, 
-    //   hueEnd: 25, 
-    //   satStart: 70,
-    //   satEnd: 30,
-    //   lumStart: 100,
-    //   lumEnd: 0,
-    // }
-    console.log(`primarycolor`, this.primaryColor)
-    
+    this.primaryColor = { 
+      hueStart: 0, 
+      hueEnd: 25, 
+      satStart: 70,
+      satEnd: 30,
+      lumStart: 50,
+      lumEnd: 25,
+    }
   }
 
-  get hitR() { return this.r + 1 }
+  swallowEffect(entAffected) {
+    entAffected.exp += Math.ceil(this.exp / 2)
+    this.exp = Math.ceil(this.exp / 2)
+  }
 
   digestionEffect (entAffected) {
     entAffected.moveSpeed += 1
@@ -46,11 +44,6 @@ export default class Apple extends Immob {
     }
   }
   
-  swallowEffect(entAffected) {
-    entAffected.exp += Math.ceil(this.exp / 2)
-    this.exp = Math.ceil(this.exp / 2)
-  }
-
   drawBody(ctx) {
     ctx.save()
     ctx.rotate(Math.PI / 4)
@@ -110,8 +103,5 @@ export default class Apple extends Immob {
     this.drawLeaf(ctx)
     this.drawStem(ctx)
     this.drawHighlight(ctx)
-  }
-
-  update() {
   }
 }

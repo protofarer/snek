@@ -87,14 +87,6 @@ export default class Immob {
     this.ctx = ctx
     this.parentEnt = parentEnt || Error(`Must place ${this.species} under a Parent Entity!`)
     this.position = startPosition || this.position
-    // this.#primaryColor = { 
-    //   hueStart:50, 
-    //   hueEnd:250, 
-    //   satStart: 100,
-    //   satEnd: 20,
-    //   lumStart: 50,
-    //   lumEnd: 25,
-    // }
     this.setHitAreas()
   }
 
