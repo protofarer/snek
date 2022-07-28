@@ -24,7 +24,6 @@ export default class DebugGUI {
       showHitOverlay: false,
       isClockDrawn: false,
       isTurningRandomly: false,
-      isGameDoubleSpeed: false,
       timeToReset: 2000,
       resetAfterElapsed: false,
       gameTickMultiplier: 1,
@@ -58,7 +57,6 @@ export default class DebugGUI {
     this.setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
     this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
     this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
-    this.setupBooleanToggler(this.params, 'isGameDoubleSpeed', guiTestParams, '2x speed')
     this.setupBooleanToggler(this.params, 'showHitOverlay', guiTestParams, 'show overlay')
     this.setupNumericSlider({
       obj: this.params,

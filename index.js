@@ -31,9 +31,7 @@ export function startNewGame() {
       start = t
       game.clr()
       game.update(loopID)
-
-      debugGUI && debugGUI.update(t, loopID) && debugGUI.calcFPS(t)
-  
+      debugGUI && debugGUI.update(t, loopID)
       game.render()
     }
     loopID = requestAnimationFrame(draw)
