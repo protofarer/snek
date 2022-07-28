@@ -47,7 +47,7 @@ export default class Panel {
   // Full panel display update outside of step
   // ! unused
   updateMsg() {
-    this.statusMsg.innerHTML = `${this.game.state.msg}`
+    this.statusMsg.innerHTML = `${this.game.msg}`
     
     const delayClr = (delay) => new Promise(res => setTimeout(res, delay))
     delayClr(4000)
@@ -55,7 +55,7 @@ export default class Panel {
   }
 
   render() {
-    this.score.innerHTML = `score: ${this.game.state.score}`
+    this.score.innerHTML = `score: ${this.game.score}`
     this.gameInfo.innerHTML = `exp: ${this.game.snek?.state.exp}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
   }
 }

@@ -48,7 +48,7 @@ export default class DebugGUI {
     guiGamePositioning.add(this.game.canvas,'height').name('canvas.height')
 
     const guiGameState = gui.addFolder('GameState')
-    guiGameState.add(this.game.state, 'phase').name('phase').listen()
+    guiGameState.add(this.game, 'phase').name('phase').listen()
 
 // **********************************************************************
 // * Testing
@@ -241,38 +241,6 @@ export default class DebugGUI {
     }
   }
 
-  addTestObjects() {
-    const spawnEnts = this.game.spawnEnts.bind(this.game)
-    const addEnt = this.game.addEnt.bind(this.game)
-
-    if (this.params.isDebugOn) {
-
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game)
-      // snek.state.directionAngle = 0
-      // snek.state.mobile = false
-      this.game.snek = snek
-
-      // const a = addEnt(Apple)
-      // for(let i = 0; i < a.digestion.baseTime; i++) {
-      //   a.digestion.timeLeft -= 1
-      //   a.render()
-      // }
-      // const poo = addEnt(Poop, {x:170,y:400})
-      
-      // const ant = addEnt(Ant).canTurn(false)
-      // addEnt(Apple)
-      // addEnt(Mango)
-      // addEnt(Pebble)
-      // addEnt(Centipede).state.mobile = true
-
-
-      // spawnEnts(Pebble, 100)
-      // spawnEnts(Apple, 50)
-      // spawnEnts(Ant, 50)
-      // spawnEnts(Mango, 50)
-    }
-  }
-
   update(t, loopID) {
     this.loopID = loopID
     
@@ -305,4 +273,25 @@ export default class DebugGUI {
     }
   }
 
+  addTestObjects() {
+    const spawnEnts = this.game.spawnEnts.bind(this.game)
+    const addEnt = this.game.addEnt.bind(this.game)
+
+    if (this.params.isDebugOn) {
+
+      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game)
+      // snek.state.directionAngle = 0
+      // snek.state.mobile = false
+      this.game.snek = snek
+
+      // const a = addEnt(Apple)
+      // for(let i = 0; i < a.digestion.baseTime; i++) {
+      //   a.digestion.timeLeft -= 1
+      //   a.render()
+      // }
+      // const poo = addEnt(Poop, {x:170,y:400})
+      
+      // const ant = addEnt(Ant).canTurn(false)
+    }
+  }
 }

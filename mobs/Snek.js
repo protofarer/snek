@@ -1,6 +1,7 @@
 import Poop from "../immobs/Poop"
 import Clock from "../utils/Clock"
 import Entity from "../Entity"
+import { moveEdgeWrap } from "./behaviors"
 
 export default class Snek {
   static entGroup = 'mob'
@@ -231,6 +232,9 @@ export default class Snek {
       * Math.cos(this.state.directionRad)
     this.state.position.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
+
+    moveEdgeWrap.call(this)
+
     this.setHitAreas()
   }
 

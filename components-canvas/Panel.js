@@ -299,7 +299,7 @@ export default class Panel {
       <span>Game: ${this.game.match.gameNo}/${this.game.match.matchLength}&nbsp;&nbsp;</span><span>Turn: ${this.game.turnCount} </span>
       `
     this.statusInfo.innerHTML = `\
-      <span style="color: blue;">${this.game.state.msg}</span>
+      <span style="color: blue;">${this.game.msg}</span>
     `
     this.scoreInfo.innerHTML = `\
       <span style="color: crimson;">Red: ${this.game.match.red}</span>&nbsp;

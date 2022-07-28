@@ -13,9 +13,16 @@ import Pebble from './immobs/Pebble'
 import Poop from './immobs/Poop'
 import Background from './Background'
 import Entity from './Entity'
+import { moveEdgeWrap } from './mobs/behaviors'
 
 export default class Game {
   species = 'game'
+
+  // * Related to normal game flow and info directly relevant to player
+  msg = ''
+  phase = CONSTANTS.PHASE_PLAY
+  score = 0
+
   constructor (container) {
     this.container = container
     this.canvas = document.createElement('canvas')
@@ -25,13 +32,6 @@ export default class Game {
 
     this.ctx = this.canvas.getContext('2d')
     this.rect = this.canvas.getBoundingClientRect()
-
-    // * Related to normal game flow and info directly relevant to player
-    this.state = {
-      msg: '',
-      phase: CONSTANTS.PHASE_PLAY,
-      score: 0,
-    }
 
     // * Adjustable parameters for testing design, performance, and debugging
     this.params = {
@@ -43,37 +43,16 @@ export default class Game {
     this.snek = null
     this.mobs = []
     this.immobs = []
-    this.updateFunctions = []
 
     new Background(container, 'hsl(51, 50%, 20%)')
     this.world = new World(this.ctx, this),
     this.clock = new Clock(this.ctx, this)
-
-
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
 
     const isDebugOn = window.sessionStorage.getItem('isDebugOn') 
     if (isDebugOn === 'false' || isDebugOn === null) {
       this.initSpawn()
-    }
-  }
-
-  addUpdateFunction(f) {
-    this.updateFunctions.push(f)
-  }
-
-  seamlessMove(mob) {
-    if (mob.state.position.x >= this.canvas.width) {
-      mob.state.position.x = 0
-    } else if (mob.state.position.x < 0) {
-      mob.state.position.x = this.canvas.width
-    }
-
-    if (mob.state.position.y >= this.canvas.height) {
-      mob.state.position.y = 0
-    } else if (mob.state.position.y < 0) {
-      mob.state.position.y = this.canvas.height
     }
   }
 
@@ -179,9 +158,7 @@ export default class Game {
     // **********************************************************************
     this.clock.update()
 
-    this.updateFunctions.forEach(f => f())
-
-    this.snek && this.seamlessMove(this.snek)
+    this.snek
     this.snek?.update()
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
@@ -219,7 +196,7 @@ export default class Game {
       }
       if (ent.entGroup === 'mob') {
         
-        this.seamlessMove(ent)
+        // moveEdgeWrap().call(ent)
 
         if (this.snek) {
           const isContacting = this.isContactingMouth(
