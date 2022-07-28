@@ -12,7 +12,8 @@ import Poop from '../immobs/Poop'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
-  constructor(game) {
+  constructor(game, draw) {
+    this.draw = draw
     const gui = new GUI()
     this.gui = gui
     this.game = game
@@ -157,21 +158,6 @@ export default class DebugGUI {
           this.params.showHitOverlay = !this.params.showHitOverlay
           window.sessionStorage.setItem('showHitOverlay', this.params.showHitOverlay)
           break
-        case 'b':
-          this.game.params.pauseLength = 3000
-          this.game.phase = this.game.phase === CONSTANTS.PHASE_PAUSE 
-            ? CONSTANTS.PHASE_PLAY
-            : CONSTANTS.PHASE_PAUSE
-          console.log(`%c*************** Game ${this.game.phase === CONSTANTS.PHASE_PAUSE ? 'Slowed' : 'Set to Play'} ***************`, 'color: orange')
-          break
-        case 'v':
-          // Very Long Pause
-          this.game.params.pauseLength = 3600000
-          this.game.phase = this.game.phase === CONSTANTS.PHASE_PAUSE 
-            ? CONSTANTS.PHASE_PLAY
-            : CONSTANTS.PHASE_PAUSE
-          console.log(`%c*************** Game ${this.game.phase === CONSTANTS.PHASE_PAUSE ? 'Slowed' : 'Set to Play'} ***************`, 'color: orange')
-          break
         default:
           break
       }
@@ -240,15 +226,6 @@ export default class DebugGUI {
       .name(label || key)
   }
 
-  calcFPS(t) {
-    
-    while (this.frames.times.length > 0 && this.frames.times[0] <= t - 1000) {
-      this.frames.times.shift()
-    }
-    this.frames.times.push(t)
-    this.frames.fps = this.frames.times.length
-  }
-  
   drawHitOverlays() {
     Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
   }
@@ -265,19 +242,18 @@ export default class DebugGUI {
     }
   }
 
-
   addTestObjects() {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
+    const addEnt = this.game.addEnt.bind(this.game)
 
     if (this.params.isDebugOn) {
 
-      const addEnt = this.game.addEnt.bind(this.game)
-      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game)
+      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game)
       // snek.state.directionAngle = 0
       // snek.state.mobile = false
-      // this.game.snek = snek
+      this.game.snek = snek
 
-      const a = addEnt(Apple)
+      // const a = addEnt(Apple)
       // for(let i = 0; i < a.digestion.baseTime; i++) {
       //   a.digestion.timeLeft -= 1
       //   a.render()
@@ -298,16 +274,16 @@ export default class DebugGUI {
     }
   }
 
-  step() {
-
-    // Debug Mode only
-    if (this.params.isDebugOn){
-      for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
-        this.game.update()
-      }
+  update(t, loopID) {
+    this.loopID = loopID
+    
+    while (this.frames.times.length > 0 && this.frames.times[0] <= t - 1000) {
+      this.frames.times.shift()
     }
+    this.frames.times.push(t)
+    this.frames.fps = this.frames.times.length
 
-    // Can be run in normal mode
+
     if (this.params.showHitOverlay) {
       this.drawHitOverlays()
     }
@@ -320,6 +296,12 @@ export default class DebugGUI {
         } else if (q < 0.50){
           this.game.snek.turnRight()
         }
+      }
+    }
+
+    if (this.params.isDebugOn){
+      for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
+        this.game.update()
       }
     }
   }

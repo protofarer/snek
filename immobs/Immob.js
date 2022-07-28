@@ -158,9 +158,5 @@ export default class Immob {
 
   render() {
     this.drawInitWrapper(this.directionRad)
-    console.log(`primarycolor immob`, this.primaryColor)
-    
-  // console.log(`primarycolor`, this.#primaryColor)
-  
   }
 }

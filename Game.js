@@ -11,6 +11,7 @@ import Apple from './immobs/Apple'
 import Mango from './immobs/Mango'
 import Pebble from './immobs/Pebble'
 import Poop from './immobs/Poop'
+import Background from './Background'
 import Entity from './Entity'
 
 export default class Game {
@@ -36,19 +37,18 @@ export default class Game {
     this.params = {
       // * capped at 1 on test slider because of how it divides the elapsed time 't' from draw= {
       speed: 1,
-      pauseLength: 0
+      pauseInterval: 1000
     }
 
     this.snek = null
+    this.mobs = []
+    this.immobs = []
+    this.updateFunctions = []
 
+    new Background(container, 'hsl(51, 50%, 20%)')
     this.world = new World(this.ctx, this),
     this.clock = new Clock(this.ctx, this)
 
-    this.mobs = []
-    this.immobs = []
-
-    // Update code not belonging to entity
-    this.updateFunctions = []
 
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
