@@ -30,16 +30,11 @@ export function startNewGame() {
     if (elapsed > 16 / game.params.speed) {
       start = t
       game.clr()
-      game.update()
+      game.update(loopID)
 
       debugGUI && debugGUI.update(t, loopID) && debugGUI.calcFPS(t)
   
       game.render()
-      // * Enter PHASE_END via game.checkEndCondition()
-      if (game.phase === CONSTANTS.PHASE_END) {
-        cancelAnimationFrame(loopID)
-        game.end()
-      }
     }
     loopID = requestAnimationFrame(draw)
   }

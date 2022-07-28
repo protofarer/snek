@@ -1,19 +1,19 @@
 import GUI from 'lil-gui'
 import CONSTANTS from '../Constants'
 import { resetGame, } from '..'
+
+import Entity from '../Entity'
 import Pebble from '../immobs/Pebble'
 import Apple from '../immobs/Apple'
 import Mango from '../immobs/Mango'
 import Centipede from '../mobs/Centipede'
 import Ant from '../mobs/Ant'
 import Snek from '../mobs/Snek'
-import Entity from '../Entity'
 import Poop from '../immobs/Poop'
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
-  constructor(game, draw) {
-    this.draw = draw
+  constructor(game) {
     const gui = new GUI()
     this.gui = gui
     this.game = game

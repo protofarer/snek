@@ -84,6 +84,7 @@ export default class Game {
   }
 
   checkEndCondition() {
+    // Set game.phase to PHASE_END conditionally
     console.log('IN checkEndCondition()')
   }
 
@@ -159,7 +160,7 @@ export default class Game {
     this.panel.render()
   }
 
-  update() {
+  update(loopID) {
     // **********************************************************************
     // * 1. Add new objects
     // **********************************************************************
@@ -246,6 +247,12 @@ export default class Game {
     // * 3. Update UI
     // **********************************************************************
       // this.panel.updateMsg()
+
+    // * Enter PHASE_END via game.checkEndCondition()
+    if (this.phase === CONSTANTS.PHASE_END) {
+      cancelAnimationFrame(loopID)
+      this.end()
+    }
     }
   }
 
