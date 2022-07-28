@@ -278,10 +278,10 @@ export default class DebugGUI {
       // this.game.snek = snek
 
       const a = addEnt(Apple)
-      for(let i = 0; i < a.digestion.baseTime; i++) {
-        a.digestion.timeLeft -= 1
-        a.render()
-      }
+      // for(let i = 0; i < a.digestion.baseTime; i++) {
+      //   a.digestion.timeLeft -= 1
+      //   a.render()
+      // }
       // const poo = addEnt(Poop, {x:170,y:400})
       
       // const ant = addEnt(Ant).canTurn(false)

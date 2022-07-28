@@ -16,71 +16,21 @@ export default class Apple extends Immob {
     baseTime: 7000
   }
 
-  primaryColorHue = { start: 0, end: 25 }
-  primaryColorSat = { start: 70, end: 30 }
-  primaryColorLum = { start: 50, end: 30 }
-  get primaryColor() { return (
-    `hsl(
-      ${
-        this.primaryColorHue.start 
-        + (this.primaryColorHue.end - this.primaryColorHue.start)
-        * Math.ceil(
-          (this.digestion.baseTime - this.digestion.timeLeft)
-          / this.digestion.baseTime
-        )
-      },
-      ${
-        this.primaryColorSat.start 
-        + (this.primaryColorSat.end - this.primaryColorSat.start)
-        + Math.ceil(
-            (this.digestion.baseTime - this.digestion.timeLeft)
-            / this.digestion.baseTime
-          )
-      }%,
-      ${
-        this.primaryColorLum.start
-        + (this.primaryColorLum.end - this.primaryColorLum.start)
-        + Math.ceil(
-          (this.digestion.baseTime - this.digestion.timeLeft)
-          / this.digestion.baseTime
-        )
-      }%
-    )`
-  )}
-  set primaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) {
-    // ! Doesn't catch out of range (x < 0, x > 255)
-    if (typeof hueStart === 'number' || typeof hueEnd === 'number') {
-      if (typeof hueStart !== 'number' || typeof hueEnd !== 'number') {
-        throw Error(`Must specify both start & end values for primaryColorHue`)
-      } else if (hueStart < 0 || hueStart > 255 || hueEnd < 0 || hueEnd > 255) {
-        throw Error(`${this.species} primaryColorHue values must be in [0, 255]`)
-      } else {
-        this.primaryColorHue = { start: hueStart, end: hueEnd } 
-          || this.primaryColorHue
-      }
-    }
-    if (typeof satStart === 'number' || typeof satEnd === 'number') {
-      if (typeof satStart !== 'number' || typeof satEnd !== 'number') {
-          throw Error(`Must specify both start & end values for primaryColorHue`)
-      } else if (satStart < 0 || satStart > 100 || satEnd < 0 || satEnd > 100) {
-        throw Error(`${this.species} primaryColorSat values must be in [0, 100]`)
-      } else {
-        this.primaryColorSat = { start: satStart, end: satEnd } 
-          || this.primaryColorSat
-      }
-    }
-    if (typeof lumStart === 'number' || typeof lumEnd === 'number') {
-      if (typeof lumStart !== 'number' || typeof lumEnd !== 'number') {
-          throw Error(`Must specify both start & end values for primaryColorHue`)
-      } else if (lumStart < 0 || lumStart > 100 || lumEnd < 0 || lumEnd > 100) {
-        throw Error(`${this.species} primaryColorHue values must be in [0, 255]`)
-      } else {
-        this.primaryColorLum = { start: lumStart, end: lumEnd } 
-          || this.primaryColorLum
-      }
-    }
-  }
   secondaryColor = `hsl(95 60% 50%)`
+
+  constructor(ctx, startPosition, parentEnt) {
+    super(ctx, startPosition, parentEnt)
+    // this.primaryColor = { 
+    //   hueStart: 0, 
+    //   hueEnd: 25, 
+    //   satStart: 70,
+    //   satEnd: 30,
+    //   lumStart: 100,
+    //   lumEnd: 0,
+    // }
+    console.log(`primarycolor`, this.primaryColor)
+    
+  }
 
   get hitR() { return this.r + 1 }
 
@@ -99,17 +49,6 @@ export default class Apple extends Immob {
   swallowEffect(entAffected) {
     entAffected.exp += Math.ceil(this.exp / 2)
     this.exp = Math.ceil(this.exp / 2)
-  }
-
-  drawInitWrapper(radians=null) {
-    const ctx = this.ctx
-    ctx.save()
-    ctx.translate(this.position.x, this.position.y)
-    radians && ctx.rotate(radians)
-
-    this.drawComponents(ctx)
-
-    ctx.restore()
   }
 
   drawBody(ctx) {
@@ -140,7 +79,7 @@ export default class Apple extends Immob {
     ctx.translate(this.r*0.8, 0.2 * this.r)
     ctx.beginPath()
     ctx.arc(0, 0, 0.4 * this.r, 0, 2 * Math.PI)
-    ctx.fillStyle = this.leafColor
+    ctx.fillStyle = this.secondaryColor
     ctx.fill()
     ctx.restore()
   }
