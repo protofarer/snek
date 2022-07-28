@@ -284,7 +284,7 @@ export default class DebugGUI {
       // snek.state.mobile = false
       this.game.snek = snek
 
-      // const a = addEnt(Apple)
+      const a = addEnt(Apple)
       // for(let i = 0; i < a.digestion.baseTime; i++) {
       //   a.digestion.timeLeft -= 1
       //   a.render()

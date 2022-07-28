@@ -6,34 +6,33 @@ export default class Poop extends Immob {
   entGroup = 'immob'
   species = 'poop'
 
-  state = {
-    r: 5,
-    primaryColor: 'hsl(40, 100%, 13%)',
-    digestion: {
-      timeLeft: 2000,
-      excrete() { 
-      // TODO Excrete before digestion over. Good relief! Speed boost for a few seconds
-      }
-    },
+  r = 5
+  primaryColor = 'hsl(40, 100%, 13%)'
+  digestion = {
+    timeLeft: 2000,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     super(ctx, startPosition, parentEnt)
     this.ctx = ctx
     this.parentEnt = parentEnt
-    this.state.position = startPosition || this.state.position
+    this.position = startPosition || this.position
   }
 
   digestionEffect(entAffected) {
-    entAffected.state.moveSpeed -= 0.1
-    return () => { entAffected.state.moveSpeed += 0.1 }
+    entAffected.moveSpeed -= 0.1
+    return () => { entAffected.moveSpeed += 0.1 }
+  }
+
+  excretionEffect(entAffected) {
+    console.log(`${entAffected} triggered ${this.species} excretion effect`)
   }
 
   drawBody() {
     this.ctx.beginPath()
-    this.ctx.arc(0, 0,this.state.r, 0, 2 * Math.PI
+    this.ctx.arc(0, 0,this.r, 0, 2 * Math.PI
       )
-    this.ctx.fillStyle = this.state.primaryColor
+    this.ctx.fillStyle = this.primaryColor
     this.ctx.fill()
     this.ctx.lineWidth = 0.5
     this.ctx.stroke()

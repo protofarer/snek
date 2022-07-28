@@ -57,8 +57,6 @@ export default class Game {
   }
 
   isContactingMouth(objHitArea, mouthCoords) {
-    // console.log(`objhitarea`, objHitArea)
-    // console.log(`mouthcoords in iscontactingmouth`, mouthCoords)
     return this.ctx.isPointInPath(objHitArea, mouthCoords.x, mouthCoords.y)
   }
 
@@ -100,7 +98,7 @@ export default class Game {
       ent.position.x += (50 * bigEnt.id)
     }
     ent.mobile = false
-    // Handle setting hit area when position arg specified since immobs
+    // * Handle setting hit area when position arg specified since immobs
     //  only set it only once at instantiation
     if (entClass.entGroup === 'immob') ent.setHitAreas()
     
@@ -119,7 +117,11 @@ export default class Game {
         }, 
         this
       )
-      if (ent.entGroup === 'mob') ent.directionAngleDegrees = Math.random() * 360
+
+      if (ent.entGroup === 'mob') {
+        ent.directionAngleDegrees = Math.random() * 360
+      }
+
       new Entity(ent)
       ents.push(ent)
     }
@@ -131,18 +133,16 @@ export default class Game {
     delete Entity.stack[id]
   }
 
-  readdEnt(ent) {
+  reAddEnt(ent) {
     new Entity(ent)
   }
 
   render() {
     this.clock.render()
     for(const ent of Object.values(Entity.stack)) {
-      // console.log(`rendering ent:`, ent)
       if (ent.parentEnt === this) {
         ent.render()
       }
-      
     }
     this.snek?.render()
     this.panel.render()
@@ -153,6 +153,7 @@ export default class Game {
     // * 1. Add new objects
     // **********************************************************************
     this.world.randomSpawns()
+
     // **********************************************************************
     // * 2. Update all objects
     // **********************************************************************
@@ -172,44 +173,25 @@ export default class Game {
             )
             
             if (isContacting) {
-            //   console.log(`****************************************`, )
-            //   console.log(`****************************************`, )
-            //   console.log(`****************************************`, )
-            //   console.log(`****************************************`, )
-            //   console.log(`****************************************`, )
-            //   console.log(`****************************************`, )
-              
-            // console.log(`ant mouthcoords`, ent.state.mouthCoords.x)
-            // console.log(`ant mouthcoords`, ent.state.mouthCoords.y)
-            // console.log( sweet.hitArea )
-            // console.log(`isContacting!`, isContacting)
-            
             ent.grab(sweet)
-            // console.log( sweet.hitArea )
-            // console.log(`sweet`, sweet)
-            // console.log(`id`, id)
-            
-            
             this.removeEnt(id)
           }
         }
       }
       if (ent.entGroup === 'mob') {
         
-        // moveEdgeWrap().call(ent)
+        moveEdgeWrap.call(ent)
 
         if (this.snek) {
           const isContacting = this.isContactingMouth(
             ent.hitArea,
-            this.snek.state.mouthCoords,
+            this.snek.mouthCoords,
           )
   
           if (isContacting) {
-            
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.swallow(ent)
-              this.state.score++
-              this.removeEnt(id)
+              this.score++
             }
           }
         } // * DRY
@@ -218,17 +200,18 @@ export default class Game {
         if (this.snek) {
           const isContacting = this.isContactingMouth(
             ent.hitArea,
-            this.snek.state.mouthCoords, 
+            this.snek.mouthCoords, 
           )
+
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.swallow(ent)
-              this.state.score++
-              // this.removeEnt(id)
+              this.score++
             }
           }
         }
       }
+    }
     // **********************************************************************
     // * 3. Update UI
     // **********************************************************************
@@ -239,28 +222,21 @@ export default class Game {
       cancelAnimationFrame(loopID)
       this.end()
     }
-    }
   }
 
   initSpawn() {
     // this.snek = new Snek(this.ctx, null, this)
+
+    // this.spawnEnts(Apple, 25)
+    // this.spawnEnts(Pebble, 75)
+    // this.spawnEnts(Mango, 5)
+    // this.spawnEnts(Ant, 12)
+    // this.spawnEnts(Centipede, 1)
+
     // this.spawnEnts(Apple, 50)
-
-    // this.spawnEnts(Pebble, 55)
-    // this.spawnEnts(Mango, 10)
-    // this.spawnEnts(Ant, 40)
-    // this.spawnEnts(Centipede, 2)
-
-
-    // this.spawnEnts(Apple, 50)
-    // this.spawnEnts(Pebble, 55)
-    // this.spawnEnts(Ant, 50)
-    // this.spawnEnts(Mango, 50)
-    // this.spawnEnts(Centipede, 2)
-
-      // const ant = this.addEnt(Ant)
-      // ant.state.canTurn = false
-      // ant.state.mobile = true
-      // const m = this.addEnt(Mango)
+    // this.spawnEnts(Pebble, 75)
+    // this.spawnEnts(Ant, 70)
+    // this.spawnEnts(Mango, 25)
+    // this.spawnEnts(Centipede, 5)
   }
 }
