@@ -163,7 +163,7 @@ export default class Game {
     this.snek?.update()
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
-      ent.update()
+      ent.update?.()
       if (ent.species === 'ant' && !ent.carriedEnt) {
         let sweets = Entity.bySpecies(['apple', 'mango'])
         for(let [id, sweet] of Object.entries(sweets)) {

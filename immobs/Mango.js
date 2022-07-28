@@ -8,36 +8,44 @@ export default class Mango extends Apple {
 
   constructor(ctx, position, parentEnt=null) {
     super(ctx, position, parentEnt)
-    this.state.primaryColor = 'hsl(35,100%, 50%)'
-    this.state.secondaryColor = 'green'
+    this.primaryColor = {
+      hueStart: 35,
+      hueEnd: 35,
+      satStart: 100,
+      satEnd: 30,
+      lumStart: 50,
+      lumEnd: 25
+    }
+    this.secondaryColor = 'green'
   }
 
-  drawBody() {
-    this.ctx.save()
-    this.ctx.rotate(1.25)
-    this.ctx.scale(0.8, 1)
-    this.ctx.beginPath()
+  drawBody(ctx) {
+    ctx.save()
+    ctx.rotate(1.25)
+    ctx.scale(0.8, 1)
+    ctx.beginPath()
 
-    this.ctx.arc(this.state.r*0.3, 0, this.state.r, 0, 2 * Math.PI)
-    let grad = this.ctx.createLinearGradient(
-      0.3 * this.state.r,
-      this.state.r,
-      2 * this.state.r,
-      0.5 * this.state.r
+    ctx.arc(this.r*0.3, 0, this.r, 0, 2 * Math.PI)
+    let grad = ctx.createLinearGradient(
+      0.3 * this.r,
+      this.r,
+      2 * this.r,
+      0.5 * this.r
     )
-    grad.addColorStop(0.2, this.state.primaryColor)
+    grad.addColorStop(0.2, this.primaryColor)
     grad.addColorStop(0.9,'green')
-    this.ctx.fillStyle = grad
-    this.ctx.fill()
+    ctx.fillStyle = grad
+    ctx.fill()
 
-    this.drawShadow()
+    this.drawShadow(ctx)
 
-    this.ctx.restore()
+    ctx.restore()
   }
 
-  drawHighlight() {}
-  drawStem() {}
-  drawLeaf() {}
+  drawComponents(ctx) {
+    this.drawBody(ctx)
+  }
+
   update() {
   }
 }

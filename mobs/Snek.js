@@ -55,7 +55,7 @@ export default class Snek {
       }
     }
     // this.segments = new Segments(this.ctx, this)
-    this.hitSideLength = this.r + 1
+    this.hitR = this.r + 1
     this.initEventListeners()
   }
 
@@ -123,10 +123,10 @@ export default class Snek {
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.position.x - this.hitSideLength, 
-      this.position.y - this.hitSideLength,
-      2 * this.hitSideLength,
-      2 * this.hitSideLength
+      this.position.x - this.hitR, 
+      this.position.y - this.hitR,
+      2 * this.hitR,
+      2 * this.hitR
     )
   }
 

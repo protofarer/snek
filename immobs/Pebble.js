@@ -1,91 +1,49 @@
-export default class Pebble {
-  static entGroup = 'immob'
+import Immob from './Immob'
+export default class Pebble extends Immob {
   static species ='pebble'
-  entGroup = 'immob'
   species = 'pebble'
 
-  state = {
-    r: 6,
-    position: {x: 400, y: 400},
-    primaryColor: 'hsl(220, 10%, 48%)',
-    directionAngle: 0,
-    set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
-    get directionRad() { return this.directionAngle * Math.PI / 180 },
-    get weight() { return this.state.r },
-    exp: 0,
+  // * "r" is the canonical size descriptor. All ents can be compared to each
+  // * other and thus states inferred from this attribute.
+  r = 3
+  position = {x: 400, y: 400}
+  primaryColor = 'hsl(220, 10%, 48%)'
+  get weight() { return this.r }
+  exp = 0
+  digestion = {
+    baseTime: 0,
+    timeLeft: 0
   }
 
-  constructor(ctx, position=null, parentEnt=null, r=null) {
-    this.ctx = ctx
-    this.state.position = position || this.state.position
-    this.parentEnt = parentEnt
-    this.state.r = r || 1 + Math.random() * 2.5     // TODO skewed gaussian random dist
-    this.state.directionAngle = Math.random() * 359
-    this.canvas = this.ctx.canvas
-    this.hitSideLength = this.state.r + 4
+  constructor(ctx, startPosition, parentEnt, r=null) {
+    super(ctx, startPosition, parentEnt)
+    this.r = r || 2 + Math.ceil(Math.random() * 2)     // TODO skewed gaussian random dist
+    this.directionAngleDegrees = Math.random() * 359
     this.setHitAreas()
   }
 
-  left() {
-    return { x:this.state.position.x - this.hitSideLength, y: this.state.position.y}
-  }
-  right() {
-    return { x:this.state.position.x + this.hitSideLength, y:this.state.position.y}
-  }
-  top() {
-    return { x: this.state.position.x,y: this.state.position.y - this.hitSideLength }
-  }
-  bottom() {
-    return { x: this.state.position.x, y: this.state.position.y + this.hitSideLength }
+  drawShadow(ctx) {
+    ctx.shadowOffsetY = 0.5 * this.r
+    ctx.shadowColor='hsl(0,0%,10%)'
+    ctx.shadowBlur = 0.33 * this.r
+    ctx.fill()
   }
 
-  drawHitOverlays() {
-    this.ctx.strokeStyle = 'blue'
-    this.ctx.stroke(this.hitArea)
+  drawBody(ctx) {
+    ctx.save()
+    ctx.rotate(Math.PI / 3)
+    ctx.beginPath()
+    ctx.arc(this.r/6, 0, this.r, 0, 2 * Math.PI)
+    ctx.arc(-this.r/6, 0, 0.8*this.r, 0, 2 * Math.PI)
+    ctx.fillStyle = this.primaryColor
+    ctx.fill()
+
+    this.drawShadow(ctx)
+
+    ctx.restore()
   }
 
-  setHitAreas() {
-    this.hitArea = new Path2D()
-    this.hitArea.rect(
-      this.state.position.x - this.hitSideLength, 
-      this.state.position.y - this.hitSideLength,
-      2 * this.hitSideLength,
-      2 * this.hitSideLength
-    )
-  }
-
-  drawShadow() {
-    this.ctx.shadowColor='hsl(0,0%,10%)'
-    this.ctx.shadowBlur = 2
-    this.ctx.shadowOffsetY = 3
-    this.ctx.fill()
-  }
-
-  drawBody() {
-    this.ctx.save()
-    this.ctx.rotate(Math.PI / 3)
-    this.ctx.beginPath()
-    this.ctx.arc(this.state.r/6, 0, this.state.r, 0, 2 * Math.PI)
-    this.ctx.arc(-this.state.r/6, 0, 0.8*this.state.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.state.primaryColor
-    this.ctx.fill()
-
-    this.drawShadow()
-
-    this.ctx.restore()
-  }
-
-  render() {
-      this.ctx.save()
-      this.ctx.translate(this.state.position.x, this.state.position.y)
-      this.ctx.rotate(this.state.directionRad)
-      this.ctx.scale(2,2)
-
-      this.drawBody()
-  
-      this.ctx.restore()
-  }
-
-  update() {
+  drawComponents(ctx) {
+    this.drawBody(ctx)
   }
 }

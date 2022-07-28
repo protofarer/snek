@@ -1,4 +1,14 @@
 export default class Immob {
+  // Generally are simple, non-moving, squared or circular ent interactable
+  // objects. The Immob is the essence of all objects in the game, while it is
+  // similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
+  // shapes and behavioral properties and thus use a separate data description
+
+  // Make up the majority of the game's swallowables
+
+  // Immobs do not include terrain as the latter belongs solely to the world
+  // object and has disparate state structure
+  
   static entGroup = 'immob'
   static species = 'immob'
   entGroup = 'immob'
@@ -14,6 +24,9 @@ export default class Immob {
     baseTime: 1000,
   }
   directionAngleRadian = 0
+  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
+  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  get hitR() { return this.r + 1 }
 
   #primaryColorHue = { start: 125, end: 125 }
   #primaryColorSat = { start: 70, end: 30 }
@@ -79,9 +92,6 @@ export default class Immob {
       }
     }
   }
-  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
-  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
-  get hitR() { return this.r + 1 }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx
@@ -142,6 +152,7 @@ export default class Immob {
   }
 
   drawComponents(ctx) {
+    // * NB drawShadow not here because invoked by drawBody()
     this.drawBody(ctx)
   }
 
@@ -151,9 +162,6 @@ export default class Immob {
     ctx.strokeStyle = this.primaryColor
     ctx.lineWidth = 2
     ctx.stroke()
-  }
-
-  update() {
   }
 
   render() {

@@ -284,7 +284,18 @@ export default class DebugGUI {
       // snek.state.mobile = false
       this.game.snek = snek
 
-      const a = addEnt(Apple)
+      // const a = addEnt(Apple)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
+      addEnt(Pebble)
       // for(let i = 0; i < a.digestion.baseTime; i++) {
       //   a.digestion.timeLeft -= 1
       //   a.render()
