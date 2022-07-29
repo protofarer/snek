@@ -231,7 +231,7 @@ export default class Game {
   initSpawn() {
     this.snek = new Snek(this.ctx, null, this)
 
-    this.spawnEnts(Apple, 45)
+    this.spawnEnts(Apple, 105)
     // this.spawnEnts(Pebble, 75)
     // this.spawnEnts(Mango, 5)
     // this.spawnEnts(Ant, 52)

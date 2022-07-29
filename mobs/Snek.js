@@ -97,20 +97,29 @@ export default class Snek extends Mob {
       // Drop any non-swallowable carried ents
     }
   }
-
-  drawDebugOverlays() {
+  drawHitOverlays() {
     // Mouth Hit
     this.ctx.beginPath()
     this.ctx.arc(this.mouthCoords.x, this.mouthCoords.y, 2, 0, 2 * Math.PI)
     this.ctx.fillStyle = 'blue'
     this.ctx.fill()
+  }
 
-    let downSeg = this.downstreamSegment
-    let downSegs = []
+  drawDebugOverlays() {
+    this.drawHitOverlays()
+    // this.downstreamSegment.drawDebugOverlays()
+    if (this.downstreamSegment) {
+      let downSeg = this.downstreamSegment
+      let downSegs = []
+
     while(downSeg) {
-      downSegs.push(downSeg)
+      downSeg = downSeg.downstreamSegment
+      if (downSeg) {
+        downSegs.push(downSeg)
+      }
     }
     downSegs.forEach(s => s.drawDebugOverlays())
+    }
   }
 
   drawHead() {
@@ -282,22 +291,37 @@ export class Segment {
     if (this.entUnderDigestion.digestion.timeLeft > 0) {
       // console.log(`digesting timeleft:`, this.entUnderDigestion.digestion.timeLeft)
       this.entUnderDigestion.digestion.timeLeft -= 17    // TODO subtract timeElapsed since last digest tick
-      this.entUnderDigestion.species !== 'poop' && this.entUnderDigestion.absorbExp(this.getHeadEnt())
+      this.entUnderDigestion.species !== 'poop' 
+        && this.entUnderDigestion.absorbExp(this.getHeadEnt())
     } else {
       // * Upon fully digesting contents transform ent into poop and pass
       this.cancelDigestionEffect()
       this.cancelDigestionEffect = null
 
+      
       if (this.entUnderDigestion.species === 'poop') {
         this.pass()
       } else {
+        // * "Disintegrate" the fully digested ent
+        // ! consider recycling aka ring buffer to restore disintegrated ents
+        // ! for reuse
+        // ! Below needs to be more thorough
+        this.entUnderDigestion.position = {x: -100, y: -100}
+        this.entUnderDigestion.hitArea = new Path2D
+        Entity.remove(this.entUnderDigestion.id)
+
         this.makePoop()
       }
     }
   }
+
   makePoop() {
     // TODO recycle or destroy the digested ent object
     const poop = new Poop(this.ctx, this.position, this)
+    
+    // ! Patch until interactive, detachable segments implemented
+    poop.hitArea = new Path2D()
+
     new Entity(poop)
     this.entUnderDigestion = poop
     this.cancelDigestionEffect = this.entUnderDigestion.digestionEffect(this.getHeadEnt())

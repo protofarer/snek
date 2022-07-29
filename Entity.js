@@ -5,6 +5,7 @@ export default class Entity {
   constructor(ent) {
     this.id = Entity.ix++
     Entity.stack[ this.id ] = ent
+    ent.id = this.id
   }
 
   static byId(id) { return Entity.stack[ id ]}
@@ -25,5 +26,9 @@ export default class Entity {
       if (v.entGroup === entGroup) found[k] = v
     }
     return found
+  }
+
+  static remove(id) {
+    delete Entity.stack[id]
   }
 }
