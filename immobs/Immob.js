@@ -123,6 +123,10 @@ export default class Immob {
     this.ctx.stroke(this.hitArea)
   }
 
+  drawDebugOverlays() {
+    this.drawHitOverlays()
+  }
+
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(

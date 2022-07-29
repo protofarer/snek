@@ -20,7 +20,7 @@ export default class DebugGUI {
 
     this.params = {
       isDebugOn: false,
-      showHitOverlay: false,
+      showDebugOverlays: false,
       isClockDrawn: false,
       isTurningRandomly: false,
       timeToReset: 2000,
@@ -58,7 +58,7 @@ export default class DebugGUI {
     this.setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
     this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
     this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
-    this.setupBooleanToggler(this.params, 'showHitOverlay', guiTestParams, 'show overlay')
+    this.setupBooleanToggler(this.params, 'showDebugOverlays', guiTestParams, 'show overlay')
     this.setupNumericSlider({
       obj: this.params,
       key: 'gameTickMultiplier',
@@ -154,8 +154,8 @@ export default class DebugGUI {
           window.sessionStorage.setItem('isDebugOn', this.params.isDebugOn)
           break
         case 'q':
-          this.params.showHitOverlay = !this.params.showHitOverlay
-          window.sessionStorage.setItem('showHitOverlay', this.params.showHitOverlay)
+          this.params.showDebugOverlays = !this.params.showDebugOverlays
+          window.sessionStorage.setItem('showDebugOverlays', this.params.showDebugOverlays)
           break
         default:
           break
@@ -229,6 +229,10 @@ export default class DebugGUI {
     Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
   }
 
+  drawDebugOverlays() {
+    Object.values(Entity.stack).forEach( ent => ent.drawDebugOverlays())
+  }
+
   async invokeOnDebugGameStart(resetGame) {
     if (this.params.isDebugOn) {
       console.log(`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%`, )
@@ -250,11 +254,6 @@ export default class DebugGUI {
     this.frames.times.push(t)
     this.frames.fps = this.frames.times.length
 
-
-    if (this.params.showHitOverlay) {
-      this.drawHitOverlays()
-    }
-
     if (this.game.snek) {
       if (this.params.isTurningRandomly) {
         const q = Math.random()
@@ -273,19 +272,34 @@ export default class DebugGUI {
     }
   }
 
+  render() {
+    if (this.params.showDebugOverlays) {
+      this.drawDebugOverlays()
+    }
+    // if (this.params.showHitOverlay) {
+    //   this.drawHitOverlays()
+    // }
+  }
+
   addTestObjects() {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     const addEnt = this.game.addEnt.bind(this.game)
 
     if (this.params.isDebugOn) {
 
-      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      // this.game.snek = snek
+      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      this.game.snek = snek
 
-      addEnt(Centipede).setMobile(true)
+      // addEnt(Centipede).setMobile(true)
       // addEnt(Ant).setMobile(true).setTurnable(true)
 
-      // const a = addEnt(Apple)
+      const a = addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
       // for(let i = 0; i < a.digestion.baseTime; i++) {
       //   a.digestion.timeLeft -= 1
       //   a.render()

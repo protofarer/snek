@@ -80,6 +80,10 @@ export default class Mob {
     this.ctx.stroke(this.hitArea)
   }
 
+  drawDebugOverlays() {
+    this.drawHitOverlays()
+  }
+
   drawBody(ctx) {
     ctx.beginPath()
     ctx.rect(0,0,10,10)

@@ -30,9 +30,12 @@ export function startNewGame() {
     if (elapsed > 16 / game.params.speed) {
       start = t
       game.clr()
+
       game.update(loopID)
       debugGUI && debugGUI.update(t, loopID)
+
       game.render()
+      debugGUI && debugGUI.render()
     }
     loopID = requestAnimationFrame(draw)
   }

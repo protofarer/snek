@@ -1,4 +1,5 @@
 import CONSTANTS from './Constants'
+import Audio from './audio'
 import Clock from './utils/Clock'
 import World from './ents/World'
 import Panel from './Panel'
@@ -49,6 +50,9 @@ export default class Game {
     this.clock = new Clock(this.ctx, this)
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
+
+    const Sounds = Audio()
+    this.play = Sounds.play
 
     const isDebugOn = window.sessionStorage.getItem('isDebugOn') 
     if (isDebugOn === 'false' || isDebugOn === null) {
@@ -189,6 +193,7 @@ export default class Game {
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.swallow(ent)
+              this.play.playRandomSwallowSound()
               this.score++
             }
           }
@@ -203,6 +208,7 @@ export default class Game {
 
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
+              this.play.playRandomSwallowSound()
               this.snek.swallow(ent)
               this.score++
             }

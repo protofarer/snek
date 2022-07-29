@@ -10,7 +10,6 @@ export default class Snek extends Mob {
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
 
   r = 10
-  position = { x: 400, y: 400 }
   get hitR() { return this.r }
 
   exp = 0
@@ -76,6 +75,7 @@ export default class Snek extends Mob {
     ent.parentEnt = this
     ent.hitArea = new Path2D()
     ent.swallowEffect(this)
+
 
     switch (ent.species) {
       case 'apple':
