@@ -40,11 +40,31 @@ export default class Centipede extends Mob {
   }
 
   addSegments(n) {
+    const drawLegs = (ctx) => {
+      const legColor = 'hsl(30, 70%, 10%)'
+      ctx.beginPath()
+      ctx.moveTo(0, -4.5*this.r)
+      ctx.lineTo(0, 4.5*this.r)
+      ctx.lineWidth = 1
+      ctx.strokeStyle = legColor
+      ctx.stroke()
+    }
+
+    function drawComponents (ctx) {
+      this.drawLegs(ctx)
+      this.drawBody(ctx)
+    }
+
     for(let i = 0; i < n; i++) {
       if (!this.downstreamSegment){
-        this.downstreamSegment = new LeggedSegment(this.ctx, this)
+        this.downstreamSegment = new Segment(this.ctx, this)
+        this.downstreamSegment.drawLegs = drawLegs
+        this.downstreamSegment.drawComponents = drawComponents
       } else {
-        const newSegment = new LeggedSegment(this.ctx, this)
+        const newSegment = new Segment(this.ctx, this)
+        newSegment.drawLegs = drawLegs
+        newSegment.drawComponents = drawComponents
+
         const oldSegment = this.downstreamSegment
         oldSegment.upstreamSegment = newSegment
         newSegment.downstreamSegment = oldSegment
@@ -172,7 +192,6 @@ export default class Centipede extends Mob {
 }
 
 export class LeggedSegment extends Segment {
-  legColor = 'hsl(30, 70%, 7%)'
   constructor(ctx, upstreamSegment) {
     super(ctx, upstreamSegment)
   }
