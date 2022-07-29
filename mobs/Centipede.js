@@ -1,48 +1,34 @@
 import { moveEdgeWrap } from '../behaviors'
 import { Segment } from './Snek'
 import { turnRandomlySmoothly } from '../behaviors'
+import Mob from './Mob'
 
-export default class Centipede {
-  static entGroup = 'mob'
+export default class Centipede extends Mob {
   static species = 'centipede'
-  entGroup = 'mob'
   species = 'centipede'
 
   swallowables = ['snek']
 
   r = 10
+  moveSpeed = 3
+  nSegments = 8
+  get turnRate() { return this.moveSpeed + 10 }
+  primaryColor = 'hsl(35, 50%, 55%)'
+  secondaryColor = 'hsl(30, 70%, 7%)'
   get headCoords() { return {
     x: this.position.x,
     y: this.position.y
   }}
-  position = { x: 0, y: 0 }
-  moveSpeed = 3
-  nSegments = 8
-  directionAngle = 0
-  turnDirection = 0
-  mobile = true
-  set directionRad(val) { this.directionAngle = val * 180 / Math.PI }
-  get directionRad() { return this.directionAngle * Math.PI / 180 }
-  get turnRate() { return this.moveSpeed + 10 }
   get mouthCoords() { return {
       x: this.headCoords.x + this.r * Math.cos(this.directionRad),
       y: this.headCoords.y + this.r * Math.sin(this.directionRad)
   }}
-  bodyColor = 'hsl(35, 50%, 55%)'
-  legColor = 'hsl(30, 70%, 7%)'
-  exp = 10
-  scale = {
-    x: 1,
-    y: 1,
-  }
 
   constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
-    this.ctx = ctx
-    this.state.position = startPosition || this.state.position
-    this.parentEnt = parentEnt
+    super(ctx, startPosition, parentEnt)
 
     this.nSegments = nSegments || this.state.nSegments
-    this.segments = new LeggedSegments(this.ctx, this.state, nSegments || 15)
+    this.segments = new LeggedSegment(this.ctx, this.state, nSegments || 15)
     this.hitSideLength = this.state.r
     this.setHitAreas()
   }
@@ -174,7 +160,7 @@ export default class Centipede {
 
 }
 
-export class LeggedSegments extends Segment {
+export class LeggedSegment extends Segment {
   constructor(ctx, state, nSegments=0) {
     super(ctx, state, nSegments)
     this.ctx = ctx

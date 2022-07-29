@@ -33,15 +33,22 @@ export default class Snek extends Mob {
   isTongueOut = false
   tongueDirection = 0
 
-  nSegments = 2
-  downstreamSegment = {}
+  nInitSegments = 3
+  downstreamSegment
 
-  constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
+  constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
     super(ctx, startPosition, parentEnt)
 
-    this.nSegments = nSegments || this.nSegments
-    for(let i = 0; i < this.nSegments; i++) {
-      if (i === 0){
+    this.nInitSegments = nInitSegments || this.nInitSegments
+    this.addSegments(this.nInitSegments)
+
+    this.hitR = this.r + 1
+    this.initEventListeners()
+  }
+
+  addSegments(n) {
+    for(let i = 0; i < n; i++) {
+      if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
       } else {
         const newSegment = new Segment(this.ctx, this)
@@ -50,15 +57,10 @@ export default class Snek extends Mob {
         newSegment.downstreamSegment = oldSegment
         this.downstreamSegment = newSegment
       }
+      this.nSegments++
+      console.log(`added seg`, )
+      
     }
-
-    this.hitR = this.r + 1
-    this.initEventListeners()
-  }
-
-  addSegment() {
-    this.nSegments++
-    // this.segments.addSegment()
   }
 
   initEventListeners() {
@@ -178,6 +180,7 @@ export default class Snek extends Mob {
   }
 
   render() {
+    // ! game should end before downstreamSegment is gone?
     this.downstreamSegment.render()
     // this.segments.render()
     this.ctx.save()
@@ -221,7 +224,7 @@ export default class Snek extends Mob {
     // this.segments.update(this.position)
     // console.log(`this.downstreamseg`, this.downstreamSegment)
     
-    this?.downstreamSegment.update()
+    this.downstreamSegment?.update()
   }
 }
 
@@ -390,8 +393,9 @@ export class Segment {
     ctx.restore()
   }
 
-  drawComponents(ctx) {
+  drawComponents(ctx, externalComponentDraws=[]) {
     this.drawBody(ctx)
+    externalComponentDraws.forEach(c => c())
   }
 
   drawBody(ctx) {
