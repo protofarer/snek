@@ -25,12 +25,21 @@ export default class Mob {
   secondaryColor
   bodyColor = 'hsl(35, 50%, 55%)'
 
-  moveSpeed = 1
+  minMoveSpeed = 0.3
+  baseMoveSpeed = 1
+  currMoveSpeed = this.baseMoveSpeed
+  get moveSpeed() { return this.currMoveSpeed }
+  set moveSpeed(val) { this.currMoveSpeed = Math.max(this.minMoveSpeed, val)}
+
   isMobile = true
 
   isTurnable = true
   turnDirection = 0
-  turnRate = this.moveSpeed + 5
+
+  baseTurnRate = 5
+  currTurnRate = this.baseTurnRate
+  get turnRate() { return this.currMoveSpeed + this.currTurnRate }
+  set turnRate(val) { this.currTurnRate = Math.max(0, val) }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx

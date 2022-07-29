@@ -12,7 +12,7 @@ export default class Centipede extends Mob {
   r = 10
   get hitR() { return this.r }
 
-  moveSpeed = 3
+  baseMoveSpeed = 3
 
   primaryColor = 'hsl(35, 50%, 55%)'
   secondaryColor = 'hsl(30, 70%, 7%)'
@@ -27,7 +27,7 @@ export default class Centipede extends Mob {
       y: this.headCoords.y + this.r * Math.sin(this.directionAngleRadians)
   }}
 
-  turnRate = this.moveSpeed + 3
+  turnRate = this.baseMoveSpeed + 3
 
   nInitSegments = 5
   downstreamSegment
@@ -178,9 +178,9 @@ export default class Centipede extends Mob {
   }
 
   move() {
-    this.position.x += this.moveSpeed 
+    this.position.x += this.currMoveSpeed 
       * Math.cos(this.directionAngleRadians)
-    this.position.y += this.moveSpeed 
+    this.position.y += this.currMoveSpeed 
       * Math.sin(this.directionAngleRadians)
 
     turnRandomlySmoothly.call(this)

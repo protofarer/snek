@@ -215,9 +215,9 @@ export default class Snek extends Mob {
   }
 
   move() {
-    this.position.x += this.moveSpeed 
+    this.position.x += this.currMoveSpeed 
       * Math.cos(this.directionAngleRadians)
-    this.position.y += this.moveSpeed 
+    this.position.y += this.currMoveSpeed 
       * Math.sin(this.directionAngleRadians)
     moveEdgeWrap.call(this)
     this.setHitAreas()
