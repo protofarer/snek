@@ -7,7 +7,7 @@ export default class Mob {
   r = 1
   position = { x: 0, y: 0 }
   scale = { x: 1, y: 1 }
-  hitR = this.r
+  get hitR() { return this.r }
 
   directionAngleRadians = 0
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
@@ -70,8 +70,8 @@ export default class Mob {
     this.hitArea.rect(
       this.position.x - this.hitR, 
       this.position.y - this.hitR,
-      2 * this.hitR * this.scale,
-      2 * this.hitR * this.scale
+      2 * this.hitR,
+      2 * this.hitR
     )
   }
 

@@ -279,12 +279,13 @@ export default class DebugGUI {
 
     if (this.params.isDebugOn) {
 
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
+      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      // this.game.snek = snek
 
+      addEnt(Centipede).setMobile(true)
       // addEnt(Ant).setMobile(true).setTurnable(true)
 
-      const a = addEnt(Apple)
+      // const a = addEnt(Apple)
       // for(let i = 0; i < a.digestion.baseTime; i++) {
       //   a.digestion.timeLeft -= 1
       //   a.render()

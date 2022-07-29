@@ -10,11 +10,8 @@ export default class Snek extends Mob {
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
 
   r = 10
-  position = { x: 4000, y: 400 }
-
-  directionAngleRadians = 0
-  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
-  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  position = { x: 400, y: 400 }
+  get hitR() { return this.r }
 
   exp = 0
 
@@ -38,11 +35,9 @@ export default class Snek extends Mob {
 
   constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
     super(ctx, startPosition, parentEnt)
-
     this.nInitSegments = nInitSegments || this.nInitSegments
     this.addSegments(this.nInitSegments)
-
-    this.hitR = this.r + 1
+    this.setHitAreas()
     this.initEventListeners()
   }
 
@@ -58,8 +53,6 @@ export default class Snek extends Mob {
         this.downstreamSegment = newSegment
       }
       this.nSegments++
-      console.log(`added seg`, )
-      
     }
   }
 
@@ -105,21 +98,19 @@ export default class Snek extends Mob {
     }
   }
 
-  setHitAreas() {
-    this.hitArea = new Path2D()
-    this.hitArea.rect(
-      this.position.x - this.hitR, 
-      this.position.y - this.hitR,
-      2 * this.hitR,
-      2 * this.hitR
-    )
-  }
-
-  drawHitOverlays() {
+  drawDebugOverlays() {
+    // Mouth Hit
     this.ctx.beginPath()
     this.ctx.arc(this.mouthCoords.x, this.mouthCoords.y, 2, 0, 2 * Math.PI)
     this.ctx.fillStyle = 'blue'
     this.ctx.fill()
+
+    let downSeg = this.downstreamSegment
+    let downSegs = []
+    while(downSeg) {
+      downSegs.push(downSeg)
+    }
+    downSegs.forEach(s => s.drawDebugOverlays())
   }
 
   drawHead() {
@@ -182,16 +173,17 @@ export default class Snek extends Mob {
   render() {
     // ! game should end before downstreamSegment is gone?
     this.downstreamSegment.render()
-    // this.segments.render()
+
     this.ctx.save()
     this.ctx.translate(this.headCoords.x, this.headCoords.y)
     this.ctx.rotate(this.directionAngleRadians)
     this.ctx.save()
-    this.ctx.scale(1 * this.scale.x, 0.8 * this.scale.y)
+    this.ctx.scale(this.scale.x, 0.8 * this.scale.y)
 
     this.drawHead()
 
     this.ctx.restore()
+
     if (!this.isTongueOut) {
       if (Math.random() < 0.05) {
         this.isTongueOut = true
@@ -270,7 +262,6 @@ export class Segment {
     }
     return upstreamSegment
   }
-
 
   ingest(ent) {
     if (this.entUnderDigestion) {
@@ -393,9 +384,8 @@ export class Segment {
     ctx.restore()
   }
 
-  drawComponents(ctx, externalComponentDraws=[]) {
+  drawComponents(ctx) {
     this.drawBody(ctx)
-    externalComponentDraws.forEach(c => c())
   }
 
   drawBody(ctx) {
@@ -407,7 +397,6 @@ export class Segment {
     ctx.shadowColor = 'hsl(0,0%,0%)'
     ctx.fill()
     ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
-    ctx.restore()
   }
 
   render() {
@@ -415,6 +404,7 @@ export class Segment {
     this.drawInitWrapper()
     this.entUnderDigestion?.render()
   }
+
 
   drawDebugOverlays() {
     for(let i = 0; i < this.headPositionHistory.length; i++) {
