@@ -1,4 +1,5 @@
 import { baseAbsorbExp, baseSwallowEffect } from '../behaviors'
+
 export default class Immob {
   // Generally are simple, non-moving, squared or circular ent interactable
   // objects. The Immob is the essence of all objects in the game, while it is

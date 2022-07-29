@@ -1,6 +1,6 @@
-import Game from './Game.js'
-import DebugGUI from './tools/DebugGUI.js'
-import CONSTANTS from './Constants.js'
+import Game from './game/Game'
+import DebugGUI from './game/tools/DebugGUI'
+import CONSTANTS from './game/Constants'
 
 export const ENV = new (function() {
   this.MODE = import.meta.env ? import.meta.env.MODE : 'production' 

@@ -1,4 +1,5 @@
 import Immob from './Immob'
+
 export default class Pebble extends Immob {
   static species ='pebble'
   species = 'pebble'

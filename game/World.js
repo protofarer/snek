@@ -1,7 +1,7 @@
-import Apple from '../immobs/Apple'
-import Pebble from '../immobs/Pebble'
-import Ant from '../mobs/Ant'
-import Centipede from '../mobs/Centipede'
+import Apple from './immobs/Apple'
+import Pebble from './immobs/Pebble'
+import Ant from './mobs/Ant'
+import Centipede from './mobs/Centipede'
 export default class World {
   species = 'world'
   constructor(ctx, game) {

@@ -1,7 +1,7 @@
 import CONSTANTS from './Constants'
 import Audio from './audio'
 import Clock from './utils/Clock'
-import World from './ents/World'
+import World from './World'
 import Panel from './Panel'
 
 import Snek from './mobs/Snek'
