@@ -98,6 +98,9 @@ export default class Snek extends Mob {
     }
   }
   drawHitOverlays() {
+    // Head Hit (from Mob)
+    super.drawHitOverlays()
+
     // Mouth Hit
     this.ctx.beginPath()
     this.ctx.arc(this.mouthCoords.x, this.mouthCoords.y, 2, 0, 2 * Math.PI)
@@ -112,13 +115,13 @@ export default class Snek extends Mob {
       let downSeg = this.downstreamSegment
       let downSegs = []
 
-    while(downSeg) {
-      downSeg = downSeg.downstreamSegment
-      if (downSeg) {
-        downSegs.push(downSeg)
+      while(downSeg) {
+        downSeg = downSeg.downstreamSegment
+        if (downSeg) {
+          downSegs.push(downSeg)
+        }
       }
-    }
-    downSegs.forEach(s => s.drawDebugOverlays())
+      downSegs.forEach(s => s.drawDebugOverlays())
     }
   }
 

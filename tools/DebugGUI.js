@@ -231,7 +231,7 @@ export default class DebugGUI {
 
   drawDebugOverlays() {
     Object.values(Entity.stack).forEach( ent => ent.drawDebugOverlays())
-    this.game.snek.drawDebugOverlays()
+    this.game.snek?.drawDebugOverlays()
   }
 
   async invokeOnDebugGameStart(resetGame) {
