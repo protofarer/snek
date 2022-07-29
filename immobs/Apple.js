@@ -65,6 +65,7 @@ export default class Apple extends Immob {
     ctx.shadowColor = 'hsl(0,0%,20%)'
     ctx.shadowBlur = this.r * 0.2
     ctx.fill()
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
 
   drawLeaf(ctx) {

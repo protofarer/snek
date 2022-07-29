@@ -309,34 +309,29 @@ export class Segment {
       this.entUnderDigestion.species !== 'poop' && this.entUnderDigestion.absorbExp(this.getHeadEnt())
     } else {
       // * Upon fully digesting contents transform ent into poop and pass
-
-      console.log(`finishing digestion effect`, )
-
-
       this.cancelDigestionEffect()
       this.cancelDigestionEffect = null
 
       if (this.entUnderDigestion.species === 'poop') {
         this.pass()
       } else {
-        // TODO recycle or destroy the digested ent object
-        const poop = new Poop(this.ctx, this.position, this)
-        new Entity(poop)
-        this.entUnderDigestion = poop
-        this.cancelDigestionEffect = this.entUnderDigestion.digestionEffect(this.getHeadEnt())
-        this.scale = { x: 1, y: 1.3 }
-        console.log(`Made poo:`, poop)
+        this.makePoop()
       }
     }
   }
+  makePoop() {
+    // TODO recycle or destroy the digested ent object
+    const poop = new Poop(this.ctx, this.position, this)
+    new Entity(poop)
+    this.entUnderDigestion = poop
+    this.cancelDigestionEffect = this.entUnderDigestion.digestionEffect(this.getHeadEnt())
+    this.scale = { x: 1, y: 1.3 }
+  }
 
   pass() {
-    // TODO call the digestionEffect function to reverse
-    // TODO reverse change
     if (!this.downstreamSegment) {
       this.excrete()
     } else {
-      console.log(`Passing`, )
       this.downstreamSegment.ingest(this.entUnderDigestion)
     }
     this.scale = {x: this.getHeadEnt().scale, y: this.getHeadEnt().scale }
@@ -344,28 +339,10 @@ export class Segment {
   }
 
   excrete() {
-    // TODO setup a line based on entity id across bottomn of screen till
-    //    digestion code is complete
-    console.log(`Excreting: ${this.entUnderDigestion.species}`, )
-    
     if (this.entUnderDigestion.entGroup === 'immob') {
       this.entUnderDigestion.setHitAreas()
     }
-
-    // TODO refactor
-    let upstreamEnt = this.upstreamSegment
-    while (upstreamEnt.upstreamSegment) {
-      upstreamEnt = upstreamEnt.upstreamSegment
-    }
-    this.entUnderDigestion.parentEnt = upstreamEnt.parentEnt
-  }
-
-  getHeadMoveSpeed() {
-    let upstreamSegment = this.upstreamSegment
-    while (upstreamSegment.upstreamSegment) {
-        upstreamSegment = upstreamSegment.upstreamSegment
-    }
-    return upstreamSegment.moveSpeed
+    this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
   }
 
   update() {
@@ -376,6 +353,7 @@ export class Segment {
 
     let headTrailElementsToKeep = this.headPositionHistory.length
     let headTrailLength = 0
+
     for (let i = 1; i < this.headPositionHistory.length; i++) {
 
       headTrailLength += Math.sqrt(
@@ -389,6 +367,7 @@ export class Segment {
         break
       }
     }
+
     this.headPositionHistory.splice(headTrailElementsToKeep)
 
     this.position = {
@@ -411,44 +390,43 @@ export class Segment {
     this.bodyColor = this.upstreamSegment.bodyColor
     
     if (this.entUnderDigestion) {
-      // this.r = this.getHeadEnt().r + 3
       this.entUnderDigestion.position = this.position
       this.digest()
-    } else {
-    //  this.r = this.getHeadEnt().r
     }
-    this?.downstreamSegment?.update()
+    this.downstreamSegment?.update()
   }
 
-  drawLegs() {
+  drawInitWrapper(radians=null) {
+    const ctx = this.ctx
+    ctx.save()
+    ctx.translate(this.position.x, this.position.y)
+    ctx.rotate(this.directionAngleRadians)
+    ctx.scale(this.scale.x, this.scale.y - .6)
+
+    this.drawComponents(ctx)
+
+    ctx.restore()
+  }
+
+  drawComponents(ctx) {
+    this.drawBody(ctx)
+  }
+
+  drawBody(ctx) {
+    ctx.beginPath()
+    ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
+    ctx.fillStyle = this.upstreamSegment.bodyColor
+    ctx.shadowOffsetY = 2
+    ctx.shadowBlur = 2
+    ctx.shadowColor = 'hsl(0,0%,0%)'
+    ctx.fill()
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
+    ctx.restore()
   }
 
   render() {
-    // console.log(`IN seg render, stae.pos and dir`, this.position, this.directionRad)
     this.downstreamSegment?.render()
-
-    const position = this.position
-    const angle = this.directionAngleRadians
-
-    this.ctx.save()
-    this.ctx.translate(position.x, position.y)
-    this.ctx.rotate(angle)
-    this.ctx.scale(this.scale.x, this.scale.y - .6)
-
-    this.drawLegs()
-
-    this.ctx.beginPath()
-    this.ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.upstreamSegment.bodyColor
-    this.ctx.shadowOffsetY = 2
-    this.ctx.shadowBlur = 2
-    this.ctx.shadowColor = 'hsl(0,0%,0%)'
-    this.ctx.fill()
-    this.ctx.shadowBlur = this.ctx.shadowOffsetY = this.ctx.shadowColor = null 
-
-    this.ctx.restore()
-
-    // console.log( 'ent under digestion',this.entUnderDigestion?.species )
+    this.drawInitWrapper(this.directionAngleRadians)
     this.entUnderDigestion?.render()
   }
 
@@ -461,6 +439,5 @@ export class Segment {
       this.ctx.fillStyle='red'
       this.ctx.fill()
     }
-
   }
 }

@@ -26,6 +26,7 @@ export default class Pebble extends Immob {
     ctx.shadowColor='hsl(0,0%,10%)'
     ctx.shadowBlur = 0.33 * this.r
     ctx.fill()
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
 
   drawBody(ctx) {

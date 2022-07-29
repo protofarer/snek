@@ -86,14 +86,10 @@ export default class Ant extends Mob {
     // Draw Abdomen
     ctx.arc(-1.4*this.r, 0, 0.7*this.r, 0, 2 * Math.PI)
     ctx.fillStyle = this.primaryColor
-    ctx.fill()
-
-    this.drawShadow(ctx)
-  }
-
-  drawShadow(ctx) {
     ctx.shadowColor = 'hsl(0,0%,25%)'
     ctx.shadowBlur = 6
+    ctx.fill()
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
 
   drawLegs(ctx) {
