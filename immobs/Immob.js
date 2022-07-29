@@ -1,3 +1,4 @@
+import { baseAbsorbExp, baseSwallowEffect } from '../behaviors'
 export default class Immob {
   // Generally are simple, non-moving, squared or circular ent interactable
   // objects. The Immob is the essence of all objects in the game, while it is
@@ -10,24 +11,26 @@ export default class Immob {
   // object and has disparate state structure
   
   static entGroup = 'immob'
-  static species = 'immob'
   entGroup = 'immob'
-  species = 'immob'
 
   r = 1
   position = { x: 400, y: 400 }
-  secondaryColor
-  exp = 10
-  expAbsorbRate = 1
-  digestion = {
-    timeLeft: 1000,
-    baseTime: 1000,
-  }
-  directionAngleRadian = 0
-  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
-  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  scale = { x: 1, y: 1 }
   get hitR() { return this.r + 1 }
 
+  directionAngleRadians = 0
+  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
+  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+
+  exp = 10
+  expAbsorbRate = 1
+
+  digestion = {
+    timeLeft: 3000,
+    baseTime: 3000,
+  }
+
+  secondaryColor
   #primaryColorHue = { start: 125, end: 125 }
   #primaryColorSat = { start: 70, end: 30 }
   #primaryColorLum = { start: 50, end: 25 }
@@ -36,26 +39,20 @@ export default class Immob {
       ${
         this.#primaryColorHue.start 
         + (this.#primaryColorHue.end - this.#primaryColorHue.start)
-        * Math.ceil(
-          (this.digestion.baseTime - this.digestion.timeLeft)
+        * (this.digestion.baseTime - this.digestion.timeLeft)
           / this.digestion.baseTime
-        )
       },
       ${
         this.#primaryColorSat.start 
         + (this.#primaryColorSat.end - this.#primaryColorSat.start)
-        * Math.ceil(
-            (this.digestion.baseTime - this.digestion.timeLeft)
+        * (this.digestion.baseTime - this.digestion.timeLeft)
             / this.digestion.baseTime
-          )
       }%,
       ${
         this.#primaryColorLum.start
         + (this.#primaryColorLum.end - this.#primaryColorLum.start)
-        * Math.ceil(
-          (this.digestion.baseTime - this.digestion.timeLeft)
+        * (this.digestion.baseTime - this.digestion.timeLeft)
           / this.digestion.baseTime
-        )
       }%
     )`
   )}
@@ -101,15 +98,11 @@ export default class Immob {
   }
 
   swallowEffect(entAffected) {
-    entAffected.exp += Math.floor(this.exp / 2)
-    this.exp -= Math.floor(this.exp / 2)
+    baseSwallowEffect.call(this, entAffected)
   }
 
   absorbExp(entAffected) {
-    if (this.exp > 0) {
-      entAffected.exp += this.expAbsorbRate
-      this.exp -= this.expAbsorbRate
-    }
+    baseAbsorbExp.call(this, entAffected)
   }
 
   left() {
@@ -133,8 +126,8 @@ export default class Immob {
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
-      this.position.x - this.hitR, 
-      this.position.y - this.hitR,
+      this.position.x - (this.hitR), 
+      this.position.y - (this.hitR),
       2 * this.hitR,
       2 * this.hitR
     )
@@ -144,6 +137,11 @@ export default class Immob {
     const ctx = this.ctx
     ctx.save()
     ctx.translate(this.position.x, this.position.y)
+
+    if (this.scale.x !== 1 || this.scale.y !== 1) {
+      ctx.scale(this.scale.x, this.scale.y)
+    }
+
     radians && ctx.rotate(radians)
 
     this.drawComponents(ctx)

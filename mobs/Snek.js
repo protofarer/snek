@@ -1,6 +1,6 @@
 import Poop from '../immobs/Poop'
 import Entity from '../Entity'
-import { moveEdgeWrap } from './behaviors'
+import { moveEdgeWrap } from '../behaviors'
 
 export default class Snek {
   static entGroup = 'mob'
@@ -26,7 +26,7 @@ export default class Snek {
       y: this.headCoords.y + this.r * Math.sin(this.directionRad),
     }}
   bodyColor = 'hsl(100, 100%, 32%)'
-  nSegments = 2
+  nSegments = 1
   mobile = true
   hasTongueOut = false
   tongueDirection = 0
@@ -40,14 +40,11 @@ export default class Snek {
     this.parentEnt = parentEnt
     this.nSegments = nSegments || this.nSegments
     for(let i = 0; i < this.nSegments; i++) {
-      console.log(`snek adding seg`, )
       
       if (i === 0){
         this.downstreamSegment = new Segment(this.ctx, this)
-        this.downstreamSegment.id = 0
       } else {
         const newSegment = new Segment(this.ctx, this)
-        newSegment.id = 1
         const oldSegment = this.downstreamSegment
         oldSegment.upstreamSegment = newSegment
         newSegment.downstreamSegment = oldSegment
@@ -229,9 +226,7 @@ export default class Snek {
       * Math.cos(this.directionRad)
     this.position.y += this.moveSpeed 
       * Math.sin(this.directionRad)
-
     moveEdgeWrap.call(this)
-
     this.setHitAreas()
   }
 
@@ -242,56 +237,50 @@ export default class Snek {
     
     this?.downstreamSegment.update()
   }
-
 }
 
 export class Segment {
   static species = 'segment'
   species = 'segment'
 
-  r = 0
   position = {x:0,y:0}
-  directionAngle = 0
-  set directionRad(val) { this.directionAngle = val * 180 / Math.PI }
-  get directionRad() { return this.directionAngle * Math.PI / 180 }
-  entUnderDigestion = null
-  upstreamSegment = null
-  downstreamSegment = null
+
+  directionAngleRadians = 0
+  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
+  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+
   digestionEffect = ''
+  bodyColor = null
+
   linkLength = 0
   headPositionHistory = []
-  bodyColor = null
-  scale = { x: 0, y: 0 }
-  cancelDigestionEffect = null
 
-  constructor(ctx, upstreamSegment=null) {
+  cancelDigestionEffect
+  entUnderDigestion
+  upstreamSegment
+  downstreamSegment
+
+  // TODO replace getHeadEnt with get headState() {}
+  scale = { x: 0, y: 0 }
+  r = 0
+
+  constructor(ctx, upstreamSegment) {
     this.ctx = ctx
     this.upstreamSegment = upstreamSegment
+
     this.r = this.getHeadEnt().r
-    this.bodyColor = this.upstreamSegment.bodyColor
-    this.scale = {x: this.getHeadEnt().scale, y: this.getHeadEnt().scale }
-    /** 
-     * * linkLength is the size of headPositionHistory needed to properly position
-     * * the segment.  Estimated by subtracting upstreamSeg movespeed from
-     * * upstreamSeg cardinal radius/length, aka "r"
-     */
-
-    // TODO adjust the moveSpeed factor
-    // this.linkLength = Math.floor(
-    //   this.r + this.upstreamSegment.r 
-    //     - this.upstreamSegment.moveSpeed
-    // )
-
-    this.directionRad = this.upstreamSegment.directionRad
+    this.directionAngleRadians = this.upstreamSegment.directionAngleRadians
     this.position = {
       x: this.upstreamSegment.position.x,
       y: this.upstreamSegment.position.y
     }
+    this.scale = {x: this.getHeadEnt().scale, y: this.getHeadEnt().scale }
+    this.bodyColor = this.upstreamSegment.bodyColor
   }
 
   getHeadEnt() {
     let upstreamSegment = this.upstreamSegment
-    while (upstreamSegment.upstreamSegment) {
+    while (upstreamSegment?.upstreamSegment) {
         upstreamSegment = upstreamSegment.upstreamSegment
     }
     return upstreamSegment
@@ -299,8 +288,8 @@ export class Segment {
 
 
   ingest(ent) {
-    if (this.entUnderDigestion !== null) {
-      // Forces segment to pass
+    if (this.entUnderDigestion) {
+      // Force segment to pass contents
       this.cancelDigestionEffect()
       this.cancelDigestionEffect = null
       this.pass()
@@ -308,15 +297,14 @@ export class Segment {
     this.entUnderDigestion = ent
     this.entUnderDigestion.parentEnt = this
     this.entUnderDigestion.position = this.position
-    this.cancelDigestionEffect = this.entUnderDigestion.digestionEffect(this.getHeadEnt())
-    console.log(`ent started being digested`)
+    this.cancelDigestionEffect = this.entUnderDigestion
+      .digestionEffect(this.getHeadEnt())
     this.scale = this.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
   }
   
   digest() {
     if (this.entUnderDigestion.digestion.timeLeft > 0) {
       // console.log(`digesting timeleft:`, this.entUnderDigestion.digestion.timeLeft)
-      
       this.entUnderDigestion.digestion.timeLeft -= 17    // TODO subtract timeElapsed since last digest tick
       this.entUnderDigestion.species !== 'poop' && this.entUnderDigestion.absorbExp(this.getHeadEnt())
     } else {
@@ -411,18 +399,18 @@ export class Segment {
     this.upstreamSegmentTailPosition = {
       x: this.upstreamSegment.position.x 
         - this.upstreamSegment.r 
-          * Math.cos(this.upstreamSegment.directionRad),
+          * Math.cos(this.upstreamSegment.directionAngleRadians),
       y: this.upstreamSegment.position.y 
         - this.upstreamSegment.r 
-          * Math.sin(this.upstreamSegment.directionRad),
+          * Math.sin(this.upstreamSegment.directionAngleRadians),
     }
     const dy = (this.upstreamSegmentTailPosition.y - this.position.y)
     const dx = (this.upstreamSegmentTailPosition.x - this.position.x)
-    this.directionRad = Math.atan(dy/dx)
+    this.directionAngleRadians = Math.atan(dy/dx)
 
     this.bodyColor = this.upstreamSegment.bodyColor
     
-    if (this.entUnderDigestion !== null) {
+    if (this.entUnderDigestion) {
       // this.r = this.getHeadEnt().r + 3
       this.entUnderDigestion.position = this.position
       this.digest()
@@ -440,12 +428,12 @@ export class Segment {
     this.downstreamSegment?.render()
 
     const position = this.position
-    const angle = this.directionRad
+    const angle = this.directionAngleRadians
 
     this.ctx.save()
     this.ctx.translate(position.x, position.y)
     this.ctx.rotate(angle)
-    this.ctx.scale(this.scale.x, this.scale.y-.6)
+    this.ctx.scale(this.scale.x, this.scale.y - .6)
 
     this.drawLegs()
 

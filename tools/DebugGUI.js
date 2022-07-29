@@ -280,29 +280,18 @@ export default class DebugGUI {
     if (this.params.isDebugOn) {
 
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game)
+      this.game.snek = snek
       // snek.state.directionAngle = 0
       // snek.state.mobile = false
-      this.game.snek = snek
+      // addEnt(Ant).setMobile(true).setTurnable(true)
 
-      // const a = addEnt(Apple)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
-      addEnt(Pebble)
+      const a = addEnt(Apple)
       // for(let i = 0; i < a.digestion.baseTime; i++) {
       //   a.digestion.timeLeft -= 1
       //   a.render()
       // }
       // const poo = addEnt(Poop, {x:170,y:400})
       
-      // const ant = addEnt(Ant).canTurn(false)
     }
   }
 }

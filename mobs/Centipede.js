@@ -1,4 +1,6 @@
+import { moveEdgeWrap } from '../behaviors'
 import { Segment } from './Snek'
+import { turnRandomlySmoothly } from '../behaviors'
 
 export default class Centipede {
   static entGroup = 'mob'
@@ -7,37 +9,38 @@ export default class Centipede {
   species = 'centipede'
 
   swallowables = ['snek']
-  scaleX = 0.8
 
-  state = {
-    r: 10,
-    get headCoords() { return {
-      x: this.position.x,
-      y: this.position.y
-    }},
-    position: { x: 0, y: 0 },
-    moveSpeed: 3,
-    nSegments: 8,
-    directionAngle: 0,
-    turnDirection: 0,
-    mobile: true,
-    set directionRad(val) { this.directionAngle = val * 180 / Math.PI },
-    get directionRad() { return this.directionAngle * Math.PI / 180 },
-    get turnRate() { return this.moveSpeed + 10 },
-    get mouthCoords() { return {
-        x: this.headCoords.x + this.r * Math.cos(this.directionRad),
-        y: this.headCoords.y + this.r * Math.sin(this.directionRad)
-    }},
-    bodyColor: 'hsl(35, 50%, 55%)',
-    legColor: 'hsl(30, 70%, 7%)',
-    exp: 10,
-    scale: 1,
+  r = 10
+  get headCoords() { return {
+    x: this.position.x,
+    y: this.position.y
+  }}
+  position = { x: 0, y: 0 }
+  moveSpeed = 3
+  nSegments = 8
+  directionAngle = 0
+  turnDirection = 0
+  mobile = true
+  set directionRad(val) { this.directionAngle = val * 180 / Math.PI }
+  get directionRad() { return this.directionAngle * Math.PI / 180 }
+  get turnRate() { return this.moveSpeed + 10 }
+  get mouthCoords() { return {
+      x: this.headCoords.x + this.r * Math.cos(this.directionRad),
+      y: this.headCoords.y + this.r * Math.sin(this.directionRad)
+  }}
+  bodyColor = 'hsl(35, 50%, 55%)'
+  legColor = 'hsl(30, 70%, 7%)'
+  exp = 10
+  scale = {
+    x: 1,
+    y: 1,
   }
 
   constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
     this.ctx = ctx
     this.state.position = startPosition || this.state.position
     this.parentEnt = parentEnt
+
     this.nSegments = nSegments || this.state.nSegments
     this.segments = new LeggedSegments(this.ctx, this.state, nSegments || 15)
     this.hitSideLength = this.state.r
@@ -130,21 +133,6 @@ export default class Centipede {
     this.ctx.stroke()
   }
 
-  turnRandomlySmoothly() {
-    const rng = Math.random()
-    if (rng < 0.15) {
-      this.turnDirection = 0
-    } else if (rng < 0.3) {
-      this.turnDirection = 1
-    } else if (rng < 0.5) {
-      this.turnDirection = 2
-    }
-    if (this.turnDirection === 0) {
-      this.turnLeft()
-    } else if (this.turnDirection === 1) {
-      this.turnRight()
-    }
-  }
 
   drawMouthHitOverlay() {
   }
@@ -155,8 +143,8 @@ export default class Centipede {
     this.state.position.y += this.state.moveSpeed 
       * Math.sin(this.state.directionRad)
 
-    this.turnRandomlySmoothly()
-    this.setHitAreas()
+    turnRandomlySmoothly.call(this)
+    moveEdgeWrap.call(this)
   }
 
   update() {
@@ -168,17 +156,16 @@ export default class Centipede {
         this.move()
       }
     }
+    this.setHitAreas()
     this.segments.update(this.state.headCoords)
   }
 
   render() {
-    this.segments.render()
-
     this.ctx.save()
     this.ctx.translate(this.state.headCoords.x, this.state.headCoords.y)
     this.ctx.rotate(this.state.directionRad)
     this.ctx.scale(this.state.scale, this.state.scale)
-    this.ctx.scale(1, this.scaleX)
+    this.ctx.scale(1, this.scale * 0.8)
 
     this.drawHead()
 

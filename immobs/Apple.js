@@ -9,8 +9,8 @@ export default class Apple extends Immob {
 
   r = 6
   digestion = {
-    timeLeft: 7000,
-    baseTime: 7000
+    timeLeft: 3000,
+    baseTime: 3000
   }
 
   secondaryColor = `hsl(95 60% 50%)`
@@ -25,6 +25,7 @@ export default class Apple extends Immob {
       lumStart: 50,
       lumEnd: 25,
     }
+    this.setHitAreas()
   }
 
   swallowEffect(entAffected) {

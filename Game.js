@@ -13,7 +13,7 @@ import Pebble from './immobs/Pebble'
 import Poop from './immobs/Poop'
 import Background from './Background'
 import Entity from './Entity'
-import { moveEdgeWrap } from './mobs/behaviors'
+import { moveEdgeWrap } from './behaviors'
 
 export default class Game {
   species = 'game'
@@ -158,8 +158,6 @@ export default class Game {
     // * 2. Update all objects
     // **********************************************************************
     this.clock.update()
-
-    this.snek
     this.snek?.update()
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
@@ -169,8 +167,8 @@ export default class Game {
         for(let [id, sweet] of Object.entries(sweets)) {
           const isContacting = this.isContactingMouth(
             sweet.hitArea,
-            ent.state.mouthCoords
-            )
+            ent.mouthCoords
+          )
             
             if (isContacting) {
             ent.grab(sweet)
@@ -225,12 +223,12 @@ export default class Game {
   }
 
   initSpawn() {
-    // this.snek = new Snek(this.ctx, null, this)
+    this.snek = new Snek(this.ctx, null, this)
 
-    // this.spawnEnts(Apple, 25)
+    this.spawnEnts(Apple, 45)
     // this.spawnEnts(Pebble, 75)
     // this.spawnEnts(Mango, 5)
-    // this.spawnEnts(Ant, 12)
+    // this.spawnEnts(Ant, 52)
     // this.spawnEnts(Centipede, 1)
 
     // this.spawnEnts(Apple, 50)
