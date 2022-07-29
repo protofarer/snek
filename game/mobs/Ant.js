@@ -9,9 +9,8 @@ export default class Ant extends Mob {
 
   r = 4
 
-  moveSpeed = 2
-
-  turnRate = this.moveSpeed + 8
+  baseMoveSpeed = 2
+  baseTurnRate = 5
 
   primaryColor = 'black'
 

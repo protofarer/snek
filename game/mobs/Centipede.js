@@ -13,6 +13,7 @@ export default class Centipede extends Mob {
   get hitR() { return this.r }
 
   baseMoveSpeed = 3
+  baseTurnRate = 3
 
   primaryColor = 'hsl(35, 50%, 55%)'
   secondaryColor = 'hsl(30, 70%, 7%)'
@@ -26,8 +27,6 @@ export default class Centipede extends Mob {
       x: this.headCoords.x + this.r * Math.cos(this.directionAngleRadians),
       y: this.headCoords.y + this.r * Math.sin(this.directionAngleRadians)
   }}
-
-  turnRate = this.baseMoveSpeed + 3
 
   nInitSegments = 5
   downstreamSegment

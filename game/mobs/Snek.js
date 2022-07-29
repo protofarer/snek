@@ -26,6 +26,9 @@ export default class Snek extends Mob {
       y: this.headCoords.y + this.r * Math.sin(this.directionAngleRadians),
     }}
 
+  baseMoveSpeed = 1
+  baseTurnRate = 20
+
   isTongueOut = false
   tongueDirection = 0
 
@@ -36,6 +39,8 @@ export default class Snek extends Mob {
     super(ctx, startPosition, parentEnt)
     this.nInitSegments = nInitSegments || this.nInitSegments
     this.addSegments(this.nInitSegments)
+    this.turnRate = this.baseTurnRate
+    this.moveSpeed = this.baseMoveSpeed
     this.setHitAreas()
     this.initEventListeners()
   }
@@ -242,28 +247,24 @@ export class Segment {
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
 
-  digestionEffect = ''
-  primaryColor = null
-
-  linkLength = 0
   headPositionHistory = []
 
-  cancelDigestionEffect
   entUnderDigestion
   upstreamSegment
   downstreamSegment
+  cancelDigestionEffect
 
   constructor(ctx, upstreamSegment) {
     this.ctx = ctx
     this.upstreamSegment = upstreamSegment
 
-    this.r = this.getHeadEnt().r
+    this.r = this.upstreamSegment.r
+    this.scale = this.upstreamSegment.scale
     this.directionAngleRadians = this.upstreamSegment.directionAngleRadians
     this.position = {
       x: this.upstreamSegment.position.x,
       y: this.upstreamSegment.position.y
     }
-    this.scale = this.getHeadEnt().scale
     this.primaryColor = this.upstreamSegment.primaryColor
   }
 
@@ -337,7 +338,7 @@ export class Segment {
     } else {
       this.downstreamSegment.ingest(this.entUnderDigestion)
     }
-    this.scale = this.getHeadEnt().scale
+    this.scale = this.upstreamSegment.scale
     this.entUnderDigestion = null
   }
 
