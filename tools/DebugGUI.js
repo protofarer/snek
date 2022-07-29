@@ -281,8 +281,7 @@ export default class DebugGUI {
 
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
-      // snek.state.directionAngle = 0
-      // snek.state.mobile = false
+
       // addEnt(Ant).setMobile(true).setTurnable(true)
 
       const a = addEnt(Apple)

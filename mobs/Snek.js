@@ -10,6 +10,7 @@ export default class Snek extends Mob {
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
 
   r = 10
+  position = { x: 4000, y: 400 }
 
   directionAngleRadians = 0
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
@@ -17,7 +18,7 @@ export default class Snek extends Mob {
 
   exp = 0
 
-  bodyColor = 'hsl(100, 100%, 32%)'
+  primaryColor = 'hsl(100, 100%, 32%)'
 
   get headCoords() { return {
     x: this.position.x,
@@ -29,7 +30,7 @@ export default class Snek extends Mob {
       y: this.headCoords.y + this.r * Math.sin(this.directionAngleRadians),
     }}
 
-  hasTongueOut = false
+  isTongueOut = false
   tongueDirection = 0
 
   nSegments = 2
@@ -50,6 +51,7 @@ export default class Snek extends Mob {
         this.downstreamSegment = newSegment
       }
     }
+
     this.hitR = this.r + 1
     this.initEventListeners()
   }
@@ -121,7 +123,7 @@ export default class Snek extends Mob {
   drawHead() {
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.bodyColor
+    this.ctx.fillStyle = this.primaryColor
     this.ctx.shadowOffsetY = 2
     this.ctx.shadowBlur = 2
     this.ctx.shadowColor = 'hsl(0,0%,0%)'
@@ -187,15 +189,15 @@ export default class Snek extends Mob {
     this.drawHead()
 
     this.ctx.restore()
-    if (!this.hasTongueOut) {
+    if (!this.isTongueOut) {
       if (Math.random() < 0.05) {
-        this.hasTongueOut = true
+        this.isTongueOut = true
         this.tongueDirection = Math.floor(Math.random() * 3 - 1)
-        setTimeout(() => this.hasTongueOut = false, 100 + Math.random()*700)
+        setTimeout(() => this.isTongueOut = false, 100 + Math.random()*700)
       }
     }
 
-    if (this.hasTongueOut) {
+    if (this.isTongueOut) {
         this.ctx.save()
         this.ctx.rotate(0.3 * this.tongueDirection)
         this.drawTongue()
@@ -234,7 +236,7 @@ export class Segment {
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
 
   digestionEffect = ''
-  bodyColor = null
+  primaryColor = null
 
   linkLength = 0
   headPositionHistory = []
@@ -255,7 +257,7 @@ export class Segment {
       y: this.upstreamSegment.position.y
     }
     this.scale = this.getHeadEnt().scale
-    this.bodyColor = this.upstreamSegment.bodyColor
+    this.primaryColor = this.upstreamSegment.primaryColor
   }
 
   getHeadEnt() {
@@ -367,7 +369,7 @@ export class Segment {
     const dx = (this.upstreamSegmentTailPosition.x - this.position.x)
     this.directionAngleRadians = Math.atan(dy/dx)
 
-    this.bodyColor = this.upstreamSegment.bodyColor
+    this.primaryColor = this.upstreamSegment.primaryColor
     
     if (this.entUnderDigestion) {
       this.entUnderDigestion.position = this.position
@@ -395,7 +397,7 @@ export class Segment {
   drawBody(ctx) {
     ctx.beginPath()
     ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
-    ctx.fillStyle = this.upstreamSegment.bodyColor
+    ctx.fillStyle = this.primaryColor
     ctx.shadowOffsetY = 2
     ctx.shadowBlur = 2
     ctx.shadowColor = 'hsl(0,0%,0%)'

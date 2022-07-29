@@ -12,7 +12,7 @@ export function moveEdgeWrap() {
   }
 }
 
-export function turnRandomlySmoothly(k=1) {
+export function turnRandomlySmoothly() {
   const rng = Math.random()
   if (rng < 0.15) {
     this.turnDirection = 0
@@ -22,9 +22,9 @@ export function turnRandomlySmoothly(k=1) {
     this.turnDirection = 2
   }
   if (this.turnDirection === 0) {
-    this.turnLeft(k)
+    this.turnLeft()
   } else if (this.turnDirection === 1) {
-    this.turnRight(k)
+    this.turnRight()
   }
 }
 
