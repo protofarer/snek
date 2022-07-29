@@ -58,7 +58,7 @@ export default class Mob {
   }
   
   turnLeft() {
-    this.directionAngleDegrees -= this.turnRate
+    this.directionAngleDegrees += -this.turnRate
   }
 
   turnRight() {

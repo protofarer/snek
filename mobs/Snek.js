@@ -1,46 +1,45 @@
 import Poop from '../immobs/Poop'
 import Entity from '../Entity'
 import { moveEdgeWrap } from '../behaviors'
+import Mob from './Mob'
 
-export default class Snek {
-  static entGroup = 'mob'
+export default class Snek extends Mob {
   static species = 'snek'
-  entGroup = 'mob'
   species = 'snek'
 
   swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
 
   r = 10
-  position = { x: 400, y: 400}
+
+  directionAngleRadians = 0
+  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
+  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+
+  exp = 0
+
+  bodyColor = 'hsl(100, 100%, 32%)'
+
   get headCoords() { return {
     x: this.position.x,
     y: this.position.y
   }}
-  moveSpeed = 1
-  directionAngle = 0
-  set directionRad(val) { this.directionAngle = val * 180 / Math.PI }
-  get directionRad() { return this.directionAngle * Math.PI / 180 }
-  turnRate() { return this.moveSpeed + 5 }
+
   get mouthCoords() { return {
-      x: this.headCoords.x + this.r * Math.cos(this.directionRad),
-      y: this.headCoords.y + this.r * Math.sin(this.directionRad),
+      x: this.headCoords.x + this.r * Math.cos(this.directionAngleRadians),
+      y: this.headCoords.y + this.r * Math.sin(this.directionAngleRadians),
     }}
-  bodyColor = 'hsl(100, 100%, 32%)'
-  nSegments = 1
-  mobile = true
+
   hasTongueOut = false
   tongueDirection = 0
-  exp = 0
-  scale = 1
+
+  nSegments = 2
   downstreamSegment = {}
 
   constructor(ctx, startPosition=null, parentEnt=null, nSegments=null) {
-    this.ctx = ctx
-    this.position = startPosition || this.position
-    this.parentEnt = parentEnt
+    super(ctx, startPosition, parentEnt)
+
     this.nSegments = nSegments || this.nSegments
     for(let i = 0; i < this.nSegments; i++) {
-      
       if (i === 0){
         this.downstreamSegment = new Segment(this.ctx, this)
       } else {
@@ -51,14 +50,8 @@ export default class Snek {
         this.downstreamSegment = newSegment
       }
     }
-    // this.segments = new Segments(this.ctx, this)
     this.hitR = this.r + 1
     this.initEventListeners()
-  }
-
-  isMobile(isMobile) {
-    this.mobile = isMobile
-    return this
   }
 
   addSegment() {
@@ -78,17 +71,8 @@ export default class Snek {
         default:
           break
       }
-      // this.directionAngle %= 360 ...why did I even... *_+
     }
     document.addEventListener('keydown', handleKeyDown)
-  }
-
-  turnLeft() {
-    this.directionAngle += this.turnRate() * -1
-  }
-
-  turnRight() {
-    this.directionAngle += this.turnRate() * 1
   }
 
   swallow(ent) {
@@ -196,9 +180,9 @@ export default class Snek {
     // this.segments.render()
     this.ctx.save()
     this.ctx.translate(this.headCoords.x, this.headCoords.y)
-    this.ctx.rotate(this.directionRad)
+    this.ctx.rotate(this.directionAngleRadians)
     this.ctx.save()
-    this.ctx.scale(this.scale, this.scale * 0.8)
+    this.ctx.scale(1 * this.scale.x, 0.8 * this.scale.y)
 
     this.drawHead()
 
@@ -223,15 +207,15 @@ export default class Snek {
 
   move() {
     this.position.x += this.moveSpeed 
-      * Math.cos(this.directionRad)
+      * Math.cos(this.directionAngleRadians)
     this.position.y += this.moveSpeed 
-      * Math.sin(this.directionRad)
+      * Math.sin(this.directionAngleRadians)
     moveEdgeWrap.call(this)
     this.setHitAreas()
   }
 
   update() {
-    this.mobile && this.move()
+    this.isMobile && this.move()
     // this.segments.update(this.position)
     // console.log(`this.downstreamseg`, this.downstreamSegment)
     
@@ -260,10 +244,6 @@ export class Segment {
   upstreamSegment
   downstreamSegment
 
-  // TODO replace getHeadEnt with get headState() {}
-  scale = { x: 0, y: 0 }
-  r = 0
-
   constructor(ctx, upstreamSegment) {
     this.ctx = ctx
     this.upstreamSegment = upstreamSegment
@@ -274,7 +254,7 @@ export class Segment {
       x: this.upstreamSegment.position.x,
       y: this.upstreamSegment.position.y
     }
-    this.scale = {x: this.getHeadEnt().scale, y: this.getHeadEnt().scale }
+    this.scale = this.getHeadEnt().scale
     this.bodyColor = this.upstreamSegment.bodyColor
   }
 
@@ -325,7 +305,7 @@ export class Segment {
     new Entity(poop)
     this.entUnderDigestion = poop
     this.cancelDigestionEffect = this.entUnderDigestion.digestionEffect(this.getHeadEnt())
-    this.scale = { x: 1, y: 1.3 }
+    this.scale.y = 1.3
   }
 
   pass() {
@@ -334,7 +314,7 @@ export class Segment {
     } else {
       this.downstreamSegment.ingest(this.entUnderDigestion)
     }
-    this.scale = {x: this.getHeadEnt().scale, y: this.getHeadEnt().scale }
+    this.scale = this.getHeadEnt().scale
     this.entUnderDigestion = null
   }
 
@@ -396,7 +376,7 @@ export class Segment {
     this.downstreamSegment?.update()
   }
 
-  drawInitWrapper(radians=null) {
+  drawInitWrapper() {
     const ctx = this.ctx
     ctx.save()
     ctx.translate(this.position.x, this.position.y)
@@ -426,7 +406,7 @@ export class Segment {
 
   render() {
     this.downstreamSegment?.render()
-    this.drawInitWrapper(this.directionAngleRadians)
+    this.drawInitWrapper()
     this.entUnderDigestion?.render()
   }
 
