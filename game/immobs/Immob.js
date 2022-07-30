@@ -24,12 +24,16 @@ export default class Immob {
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
 
-  exp = 0
-  expAbsorbRate = 0
-
   digestion = {
     timeLeft: 0,
     baseTime: 0,
+  }
+
+  baseExp = 0
+  currExp = 0
+  get expAbsorbRate() { 
+    const rate = (17 / this.digestion.baseTime) * this.baseExp/2 
+    return rate
   }
 
   swallowEffect = baseSwallowEffect

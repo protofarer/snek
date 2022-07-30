@@ -46,14 +46,27 @@ export function turnErratically() {
 
 export function baseSwallowEffect(entAffected) {
   if (this.digestion.timeLeft === this.digestion.baseTime) {
-    entAffected.currExp += this.exp / 2
-    this.exp -= this.exp / 2
+    entAffected.currExp += this.currExp / 2
+    this.currExp -= this.currExp / 2
+    return this.currExp / 2
   }
+  return 0
+}
+
+export function lowSwallowEffect(entAffected) {
+  if (this.digestion.timeLeft === this.digestion.baseTime) {
+    entAffected.currExp += this.currExp / 5
+    this.currExp -= this.currExp / 5
+    return this.currExp / 5
+  }
+  return 0
 }
 
 export function baseAbsorbExp(entAffected) {
-  if (this.exp > 0) {
-    entAffected.exp += this.expAbsorbRate
-    this.exp -= this.expAbsorbRate
+  console.log(`IN baseAbsorbExp`, )
+  
+  if (this.currExp > 0) {
+    entAffected.currExp += this.expAbsorbRate
+    this.currExp -= this.expAbsorbRate
   }
 }

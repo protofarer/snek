@@ -13,13 +13,18 @@ export default class Snek extends Mob {
   get hitR() { return this.r }
   level = 1
   levelMultiplier = 2
-  baseExp = 50
-  currExp = this.baseExp
-  get exp() { return this.currExp }
-  // How does this work for += operator?
-  set exp(val) { this.currExp = val }
+  baseExp = 100
+  currExp = 0
+  
+  expForLevel(level) {
+    return (this.levelMultiplier**(level - 2)) * this.baseExp
+  }
 
-  primaryColor = 'hsl(100, 100%, 32%)'
+  get expGainedThisLevelOnly() {
+    const expGained = this.currExp - (this.level === 1 ? 0 : this.expForLevel(this.level))
+    return expGained
+  }
+
 
   get headCoords() { return {
     x: this.position.x,
@@ -31,9 +36,6 @@ export default class Snek extends Mob {
       y: this.headCoords.y + this.r * Math.sin(this.directionAngleRadians),
     }}
 
-  baseMoveSpeed = 1
-  baseTurnRate = 5
-
   isTongueOut = false
   tongueDirection = 0
 
@@ -42,14 +44,20 @@ export default class Snek extends Mob {
 
   constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
     super(ctx, startPosition, parentEnt)
+    
+    this.primaryColor = 'hsl(100, 100%, 32%)'
+
+    this.baseTurnRate = this.baseMoveSpeed + 5
+    this.currTurnRate = this.baseTurnRate
+
+    this.baseMoveSpeed = 1
+    this.currMoveSpeed = this.baseMoveSpeed
+
     this.nInitSegments = nInitSegments || this.nInitSegments
     this.addSegments(this.nInitSegments)
-    this.turnRate = this.baseTurnRate
-    this.moveSpeed = this.baseMoveSpeed
+
     this.setHitAreas()
     this.initEventListeners()
-    console.log(`exp`, this.exp)
-    
   }
 
   addSegments(n) {
@@ -100,6 +108,7 @@ export default class Snek extends Mob {
         this.downstreamSegment.ingest(ent)
         break
       case 'mango':
+        this.downstreamSegment.ingest(ent)
         break
       default:
         console.info(`snek.consume() case-switch defaulted`, )
@@ -244,7 +253,7 @@ export default class Snek extends Mob {
     // console.log(`this.downstreamseg`, this.downstreamSegment)
     this.downstreamSegment?.update()
 
-    while(this.currExp >= this.level * this.levelMultiplier * this.baseExp) {
+    while(this.currExp >= this.expForLevel(this.level + 1)) {
       console.log(`Level up!`, )
       this.level++
       this.addSegments(1)
@@ -297,6 +306,7 @@ export class Segment {
     
     if (this.entUnderDigestion) {
       // Force segment to pass contents
+      console.log(`ingest-force-passing ${this.entUnderDigestion.species}`, )
       this.cancelDigestionEffect?.()
       this.cancelDigestionEffect = null
       this.pass()
@@ -322,16 +332,22 @@ export class Segment {
 
       const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
       if (postDigestionData) {
-        this.postDigestionEffects.push(postDigestionData)
+        postDigestionData.forEach(pDD => {
+          this.postDigestionEffects.push(pDD)
+
+          switch (pDD.effect) {
+            case 'moveSpeed':
+              this.getHeadEnt().currMoveSpeed += pDD.moveSpeed
+              break
+            case 'turnRate':
+              this.getHeadEnt().currTurnRate += pDD.turnRate
+              break
+            default:
+              console.log(`snek postDigestionEffect switch/case defaulted`, )
+          }
+          console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
+        })
   
-        switch (postDigestionData.effect) {
-          case 'moveSpeed':
-            this.getHeadEnt().moveSpeed += postDigestionData.moveSpeed
-            break
-          default:
-            console.log(`snek postDigestionEffect switch/case defaulted`, )
-        }
-        console.log(`postDigestEffect ${postDigestionData.effect} from ${this.entUnderDigestion.species} activated`, )
       }
       
       if (this.entUnderDigestion.species === 'poop'
@@ -370,7 +386,7 @@ export class Segment {
     } else {
       this.downstreamSegment.ingest(this.entUnderDigestion)
     }
-    this.scale = this.upstreamSegment.scale
+    this.scale = this.getHeadEnt().scale
     this.entUnderDigestion = null
   }
 
@@ -386,10 +402,14 @@ export class Segment {
     const expiredPostDigestionEffects = this.postDigestionEffects.filter(p => 
       p.timeLeft <= 0
     )
+
     expiredPostDigestionEffects.forEach(postDigestionData => {
       switch (postDigestionData.effect) {
         case 'moveSpeed':
-          this.getHeadEnt().moveSpeed += -postDigestionData.moveSpeed
+          this.getHeadEnt().currMoveSpeed += -postDigestionData.moveSpeed
+          break
+        case 'turnRate':
+          this.getHeadEnt().currTurnRate += -postDigestionData.turnRate
           break
         default:
           console.log(`snek expiredDigestionEffect switch/case defaulted`, )
@@ -400,6 +420,7 @@ export class Segment {
     this.postDigestionEffects = this.postDigestionEffects.filter(postDigestionData =>
       postDigestionData.timeLeft >= 0
     )
+
     this.postDigestionEffects.forEach(postDigestionData => {
       postDigestionData.timeLeft -= 17
     })

@@ -1,10 +1,24 @@
-import Apple from '../immobs/Apple'
+import { lowSwallowEffect } from '../behaviors'
+import Immob from './Immob'
 
-export default class Mango extends Apple {
-  static entGroup = 'immob'
+export default class Mango extends Immob {
   static species = 'mango'
-  entGroup = 'immob'
   species = 'mango'
+
+  r = 6
+  digestion = {
+    timeLeft: 9000,
+    baseTime: 9000
+  }
+
+  baseExp = 40
+  currExp = this.baseExp
+  get expAbsorbRate() {
+    const rate = (17 / this.digestion.baseTime) * this.baseExp * 4 / 5
+    return rate
+  }
+
+  secondaryColor = 'green'
 
   constructor(ctx, position, parentEnt=null) {
     super(ctx, position, parentEnt)
@@ -16,8 +30,24 @@ export default class Mango extends Apple {
       lumStart: 50,
       lumEnd: 25
     }
-    this.secondaryColor = 'green'
+    this.swallowEffect = lowSwallowEffect
+    this.postDigestionData = [
+      {
+        effect: 'turnRate',
+        turnRate: 1,
+        duration: 24000,
+        timeLeft: 24000
+      },
+      {
+        effect: 'moveSpeed',
+        moveSpeed: 0.5,
+        duraction: 24000,
+        timeLeft: 24000
+      }
+    ]
+    this.setHitAreas()
   }
+
 
   drawBody(ctx) {
     ctx.save()
@@ -42,10 +72,15 @@ export default class Mango extends Apple {
     ctx.restore()
   }
 
-  drawComponents(ctx) {
-    this.drawBody(ctx)
+  drawShadow(ctx) {
+    ctx.shadowOffsetY = this.r * 0.4
+    ctx.shadowColor = 'hsl(0,0%,20%)'
+    ctx.shadowBlur = this.r * 0.2
+    ctx.fill()
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
 
-  update() {
+  drawComponents(ctx) {
+    this.drawBody(ctx)
   }
 }

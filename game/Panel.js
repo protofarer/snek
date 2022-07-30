@@ -10,16 +10,15 @@ export default class Panel {
   constructor(game) {
     this.game = game
     this.panelContainer.id = 'panel'
-
     this.expbar.id = 'expbar'
     this.panelContainer.appendChild(this.expbar)
-    const expSegments = []
+    this.expSegments = []
 
     for (let i = 0; i < 10; i++) {
       const expSegment = document.createElement('div')
-      expSegment.id = 'expSegment${i}'
-      expSegment.style.border = '1px solid green'
-      expSegments.push(expSegment)
+      expSegment.id = `expSegment${i}`
+      expSegment.className = 'expSegment'
+      this.expSegments.push(expSegment)
       this.expbar.appendChild(expSegment)
     }
 
@@ -69,6 +68,27 @@ export default class Panel {
 
   render() {
     this.score.innerHTML = `score: ${this.game.score}`
-    this.gameInfo.innerHTML = `exp: ${Math.trunc(this.game.snek?.exp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
+    if (this.game.snek) {
+      this.gameInfo.innerHTML = `exp: ${Math.trunc(this.game.snek.currExp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
+      this.expSegments.forEach((seg, idx) => {
+        const segmentsFilled = Math.floor(
+          10* this.game.snek.expGainedThisLevelOnly
+          / (
+            this.game.snek.expForLevel(this.game.snek.level + 1)
+            - (
+              this.game.snek.level === 1 
+                ? 0
+                : this.game.snek.expForLevel(this.game.snek.level)
+            )
+          )
+        ) 
+        
+        if (segmentsFilled > idx ) {
+          seg.style.backgroundColor = 'purple'
+        } else {
+          seg.style.backgroundColor = 'transparent'
+        }
+      })
+    }
   }
 }

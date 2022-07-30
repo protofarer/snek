@@ -7,15 +7,6 @@ export default class Ant extends Mob {
 
   swallowables = ['apple', 'mango', 'ant', 'pebble', ]
 
-  r = 4
-  exp = 2
-  expAbsorbRate = 0.01
-
-  baseMoveSpeed = 2
-  baseTurnRate = 5
-
-  primaryColor = 'black'
-
   get headCoords() { return { 
     x: this.position.x 
       + Math.cos(this.directionAngleRadians) * this.r * 1.1,
@@ -30,6 +21,19 @@ export default class Ant extends Mob {
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     super(ctx, startPosition, parentEnt)
+
+    this.r = 4
+    this.primaryColor = 'black'
+
+    this.baseExp = 10
+    this.currExp = this.baseExp
+
+    this.baseMoveSpeed = 2
+    this.currMoveSpeed = this.baseMoveSpeed
+
+    this.baseTurnRate = this.baseMoveSpeed + 5
+    this.currTurnRate = this.baseTurnRate
+
     this.carriedEnt = null
     this.carriedOffsetRad = null
     this.setHitAreas()
@@ -41,9 +45,6 @@ export default class Ant extends Mob {
     this.carriedEnt = ent
     this.carriedOffsetRad = this.directionAngleRadians
       - this.carriedEnt.directionAngleRadians
-
-    // console.log(`this.carriedoffsetrad`, this.carriedOffsetRad)
-    // console.log(`carriedent`, this.carriedEnt)
   }
 
   setHitAreas() {
@@ -68,8 +69,8 @@ export default class Ant extends Mob {
   move() {
     if (this.isMobile) {
       if (Math.random() < 0.8) {
-        this.position.x += this.moveSpeed * Math.cos(this.directionAngleRadians)
-        this.position.y += this.moveSpeed * Math.sin(this.directionAngleRadians)
+        this.position.x += this.currMoveSpeed * Math.cos(this.directionAngleRadians)
+        this.position.y += this.currMoveSpeed * Math.sin(this.directionAngleRadians)
       } else {
         this.isTurnable && turnErratically.call(this)
       }

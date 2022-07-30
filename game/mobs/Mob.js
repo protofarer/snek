@@ -13,13 +13,16 @@ export default class Mob {
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
 
-  baseExp = 10
-  currExp = this.baseExp
-  expAbsorbRate = 1
-
   digestion = {
     timeLeft: 3000,
     baseTime: 3000
+  }
+
+  baseExp = 10
+  currExp = this.baseExp
+  get expAbsorbRate() { 
+    const rate = (17 / this.digestion.baseTime) * this.baseExp/2 
+    return rate
   }
 
   swallowEffect = baseSwallowEffect
@@ -32,9 +35,10 @@ export default class Mob {
   // * Override in instance constructor: 1) field specify baseMS 2) this.moveSpeed = this.baseMS
   // * otherwise will be set to below
   isMobile = true
-  minMoveSpeed = 0.3
   baseMoveSpeed = 1
   currMoveSpeed = this.baseMoveSpeed
+  minMoveSpeed = 0.3
+
   get moveSpeed() { return this.currMoveSpeed }
   set moveSpeed(val) { this.currMoveSpeed = Math.max(this.minMoveSpeed, val)}
 
@@ -42,10 +46,9 @@ export default class Mob {
   // * otherwise will be set to below
   isTurnable = true
   turnDirection = 0
-  baseTurnRate = 5
+  baseTurnRate = this.moveSpeed + 5
   currTurnRate = this.baseTurnRate
-  get turnRate() { return this.currMoveSpeed + this.currTurnRate }
-  set turnRate(val) { this.currTurnRate = Math.max(0, val) }
+  minTurnRate = 0
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     this.ctx = ctx

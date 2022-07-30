@@ -12,8 +12,9 @@ export default class Apple extends Immob {
     timeLeft: 6000,
     baseTime: 6000
   }
-  exp = 5
-  expAbsorbRate = 0.01
+
+  baseExp = 10
+  currExp = this.baseExp
 
   secondaryColor = `hsl(95 60% 50%)`
 
@@ -27,14 +28,14 @@ export default class Apple extends Immob {
       lumStart: 50,
       lumEnd: 25,
     }
-
-    this.postDigestionData = {
-      effect: 'moveSpeed',
-      moveSpeed: 0.25,
-      duration: 12000,
-      timeLeft: 12000
-    }
-
+    this.postDigestionData = [
+      {
+        effect: 'moveSpeed',
+        moveSpeed: 0.25,
+        duration: 12000,
+        timeLeft: 12000
+      }
+    ]
     this.setHitAreas()
   }
 

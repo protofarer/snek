@@ -12,12 +12,6 @@ export default class Centipede extends Mob {
   r = 10
   get hitR() { return this.r }
 
-  baseMoveSpeed = 3
-  baseTurnRate = 3
-
-  primaryColor = 'hsl(35, 50%, 55%)'
-  secondaryColor = 'hsl(30, 70%, 7%)'
-
   get headCoords() { return {
     x: this.position.x,
     y: this.position.y
@@ -33,6 +27,19 @@ export default class Centipede extends Mob {
 
   constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
     super(ctx, startPosition, parentEnt)
+
+    this.primaryColor = 'hsl(35, 50%, 55%)'
+    this.secondaryColor = 'hsl(30, 70%, 7%)'
+
+    this.baseExp = 100
+    this.currExp = this.baseExp
+
+    this.baseMoveSpeed = 3
+    this.currMoveSpeed = this.baseMoveSpeed
+
+    this.baseTurnRate = this.baeMoveSpeed + 5
+    this.currTurnRate = this.baseTurnRate
+
     this.nInitSegments = nInitSegments || this.nInitSegments
     this.addSegments(this.nInitSegments)
     this.setHitAreas()
