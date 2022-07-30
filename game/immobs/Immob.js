@@ -23,12 +23,12 @@ export default class Immob {
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
 
-  exp = 10
-  expAbsorbRate = 1
+  exp = 0
+  expAbsorbRate = 0
 
   digestion = {
-    timeLeft: 3000,
-    baseTime: 3000,
+    timeLeft: 0,
+    baseTime: 0,
   }
 
   secondaryColor
@@ -138,20 +138,22 @@ export default class Immob {
     )
   }
 
-  drawInitWrapper(radians=null) {
-    const ctx = this.ctx
-    ctx.save()
-    ctx.translate(this.position.x, this.position.y)
+  drawInitWrapper() {
+    // const ctx = this.ctx
+    this.ctx.save()
+    this.ctx.translate(this.position.x, this.position.y)
+    // console.log(`immob position drawinitwrapp`, this.position)
+    
 
     if (this.scale.x !== 1 || this.scale.y !== 1) {
-      ctx.scale(this.scale.x, this.scale.y)
+      this.ctx.scale(this.scale.x, this.scale.y)
     }
 
-    radians && ctx.rotate(radians)
+    this.ctx.rotate(this.directionAngleRadians)
 
-    this.drawComponents(ctx)
+    this.drawComponents(this.ctx)
 
-    ctx.restore()
+    this.ctx.restore()
   }
 
   drawComponents(ctx) {
@@ -168,6 +170,7 @@ export default class Immob {
   }
 
   render() {
-    this.drawInitWrapper(this.directionRad)
+    this.drawInitWrapper()
+    
   }
 }

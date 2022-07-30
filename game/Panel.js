@@ -56,6 +56,6 @@ export default class Panel {
 
   render() {
     this.score.innerHTML = `score: ${this.game.score}`
-    this.gameInfo.innerHTML = `exp: ${this.game.snek?.exp}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
+    this.gameInfo.innerHTML = `exp: ${Math.trunc(this.game.snek?.exp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
   }
 }

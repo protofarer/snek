@@ -17,10 +17,10 @@ export default class Poop extends Immob {
     super(ctx, startPosition, parentEnt)
   }
 
-  digestionEffect(entAffected) {
-    entAffected.moveSpeed -= 0.1
-    return () => { entAffected.moveSpeed += 0.1 }
-  }
+  // digestionEffect(entAffected) {
+  //   entAffected.moveSpeed -= 0.1
+  //   return () => { entAffected.moveSpeed += 0.1 }
+  // }
 
   excretionEffect(entAffected) {
     console.log(`${entAffected} triggered ${this.species} excretion effect`)

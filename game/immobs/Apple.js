@@ -9,9 +9,11 @@ export default class Apple extends Immob {
 
   r = 6
   digestion = {
-    timeLeft: 3000,
-    baseTime: 3000
+    timeLeft: 6000,
+    baseTime: 6000
   }
+  exp = 5
+  expAbsorbRate = 0.01
 
   secondaryColor = `hsl(95 60% 50%)`
 
@@ -33,15 +35,17 @@ export default class Apple extends Immob {
     this.exp = Math.ceil(this.exp / 2)
   }
 
-  digestionEffect (entAffected) {
-    entAffected.moveSpeed += 1
-    return () => { entAffected.moveSpeed -= 1 }
-  }
+  // onDigestionEffect (entAffected) {
+    // entAffected.moveSpeed = entAffected.moveSpeed + 1
+    // return () => { entAffected.moveSpeed = entAffected.moveSpeed - 1 }
+  // }
 
-  absorbExp(entAffected) {
-    if (this.exp > 0) {
-      entAffected.exp += 1
-      this.exp -= 1
+  postDigestionEffect () {
+    return {
+      effect: 'moveSpeed',
+      moveSpeed: 0.25,
+      duration: 12000,
+      timeLeft: 12000
     }
   }
   
@@ -60,6 +64,7 @@ export default class Apple extends Immob {
     ctx.restore()
   }
 
+  // TODO double-filling body here
   drawShadow(ctx) {
     ctx.shadowOffsetY = this.r * 0.4
     ctx.shadowColor = 'hsl(0,0%,20%)'
@@ -80,12 +85,14 @@ export default class Apple extends Immob {
   }
 
   drawHighlight(ctx) {
+    ctx.save()
     ctx.rotate(-.55 * Math.PI)
     ctx.translate(this.r*0.8, 0)
     ctx.beginPath()
     ctx.arc(0, 0, this.r * 0.28, 0, 2 * Math.PI)
     ctx.fillStyle = 'hsla(0,0%,100%, 0.6)'
     ctx.fill()
+    ctx.restore()
   }
 
   drawStem(ctx) {

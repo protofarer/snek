@@ -1,4 +1,4 @@
-import { turnErratically } from '../behaviors'
+import { baseSwallowEffect, turnErratically } from '../behaviors'
 import Mob from './Mob'
 
 export default class Ant extends Mob {
@@ -8,6 +8,8 @@ export default class Ant extends Mob {
   swallowables = ['apple', 'mango', 'ant', 'pebble', ]
 
   r = 4
+  exp = 2
+  expAbsorbRate = 0.01
 
   baseMoveSpeed = 2
   baseTurnRate = 5
@@ -30,6 +32,7 @@ export default class Ant extends Mob {
     super(ctx, startPosition, parentEnt)
     this.carriedEnt = null
     this.carriedOffsetRad = null
+    this.setHitAreas()
   }
 
   grab(ent) {
@@ -38,6 +41,9 @@ export default class Ant extends Mob {
     this.carriedEnt = ent
     this.carriedOffsetRad = this.directionAngleRadians
       - this.carriedEnt.directionAngleRadians
+
+    // console.log(`this.carriedoffsetrad`, this.carriedOffsetRad)
+    // console.log(`carriedent`, this.carriedEnt)
   }
 
   setHitAreas() {
@@ -109,17 +115,26 @@ export default class Ant extends Mob {
     this.drawLegs(ctx)
     this.drawBody(ctx)
     this.drawHead(ctx)
+    // console.log(`render carriedEnt?`,this?.carriedEnt )
+    
+  }
+  render() {
+    this.drawInitWrapper(this.directionAngleRadians)
+    this.carriedEnt?.render()
   }
 
   update() {
     this.move()
-
+    // TODO carriedEnt renders at 2 times its own positional coordinates
     if (this.carriedEnt) {
       this.carriedEnt.position = this.mouthCoords
-      this.carriedEnt.directionRad = this.directionRad + this.carriedOffsetRad
+      this.carriedEnt.directionAngleRadians = this.directionAngleRadians + this.carriedOffsetRad
+      // console.log(`mouthcoords`, this.mouthCoords)
+      // console.log(`carriedent.pos`, this.carriedEnt.position)
+      
       // ! hitArea null, may be used for snatch mechanic
       // ! current snek will eat both ant and carriedEnt
-      this.carriedEnt.update?.()
     }
+
   }
 }

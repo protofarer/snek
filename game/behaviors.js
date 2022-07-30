@@ -45,8 +45,8 @@ export function turnErratically() {
 }
 
 export function baseSwallowEffect(entAffected) {
-  entAffected.exp += Math.floor(this.exp / 2)
-  this.exp -= Math.floor(this.exp / 2)
+  entAffected.currExp += this.exp / 2
+  this.exp -= this.exp / 2
 }
 
 export function baseAbsorbExp(entAffected) {

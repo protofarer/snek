@@ -101,7 +101,7 @@ export default class Game {
     if (!position) {
       ent.position.x += (50 * bigEnt.id)
     }
-    ent.mobile = false
+    ent.isMobile = false
     // * Handle setting hit area when position arg specified since immobs
     //  only set it only once at instantiation
     if (entClass.entGroup === 'immob') ent.setHitAreas()
@@ -156,7 +156,7 @@ export default class Game {
     // **********************************************************************
     // * 1. Add new objects
     // **********************************************************************
-    this.world.randomSpawns()
+    // this.world.randomSpawns()
 
     // **********************************************************************
     // * 2. Update all objects
@@ -165,7 +165,9 @@ export default class Game {
     this.snek?.update()
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
+
       ent.update?.()
+
       if (ent.species === 'ant' && !ent.carriedEnt) {
         let sweets = Entity.bySpecies(['apple', 'mango'])
         for(let [id, sweet] of Object.entries(sweets)) {
@@ -174,7 +176,7 @@ export default class Game {
             ent.mouthCoords
           )
             
-            if (isContacting) {
+          if (isContacting) {
             ent.grab(sweet)
             this.removeEnt(id)
           }
@@ -192,9 +194,12 @@ export default class Game {
   
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
+              console.log(`IN game, snek swallow:`, ent.species)
+              
               this.snek.swallow(ent)
               this.play.playRandomSwallowSound()
               this.score++
+              // this.removeEnt(id)
             }
           }
         } // * DRY
@@ -208,8 +213,8 @@ export default class Game {
 
           if (isContacting) {
             if (this.snek.swallowables.includes(ent.species)) {
-              this.play.playRandomSwallowSound()
               this.snek.swallow(ent)
+              this.play.playRandomSwallowSound()
               this.score++
             }
           }
@@ -230,12 +235,13 @@ export default class Game {
 
   initSpawn() {
     this.snek = new Snek(this.ctx, null, this)
+    this.snek.position = { x: 200, y: 400 }
 
-    this.spawnEnts(Apple, 105)
-    // this.spawnEnts(Pebble, 75)
-    // this.spawnEnts(Mango, 5)
-    // this.spawnEnts(Ant, 52)
-    // this.spawnEnts(Centipede, 1)
+    this.spawnEnts(Apple, 35)
+    this.spawnEnts(Pebble, 55)
+    this.spawnEnts(Mango, 5)
+    this.spawnEnts(Ant, 25)
+    this.spawnEnts(Centipede, 2)
 
     // this.spawnEnts(Apple, 50)
     // this.spawnEnts(Pebble, 75)

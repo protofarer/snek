@@ -11,8 +11,13 @@ export default class Snek extends Mob {
 
   r = 10
   get hitR() { return this.r }
-
-  exp = 0
+  level = 1
+  levelMultiplier = 2
+  baseExp = 50
+  currExp = this.baseExp
+  get exp() { return this.currExp }
+  // How does this work for += operator?
+  set exp(val) { this.currExp = val }
 
   primaryColor = 'hsl(100, 100%, 32%)'
 
@@ -27,7 +32,7 @@ export default class Snek extends Mob {
     }}
 
   baseMoveSpeed = 1
-  baseTurnRate = 20
+  baseTurnRate = 5
 
   isTongueOut = false
   tongueDirection = 0
@@ -43,6 +48,8 @@ export default class Snek extends Mob {
     this.moveSpeed = this.baseMoveSpeed
     this.setHitAreas()
     this.initEventListeners()
+    console.log(`exp`, this.exp)
+    
   }
 
   addSegments(n) {
@@ -80,15 +87,17 @@ export default class Snek extends Mob {
     ent.parentEnt = this
     ent.hitArea = new Path2D()
     ent.swallowEffect(this)
-
+    console.log(`IN snek, swallow:`, ent.species)
 
     switch (ent.species) {
       case 'apple':
         this.downstreamSegment.ingest(ent)
         break
       case 'pebble':
+        this.downstreamSegment.ingest(ent)
         break
       case 'ant':
+        this.downstreamSegment.ingest(ent)
         break
       case 'mango':
         break
@@ -232,8 +241,13 @@ export default class Snek extends Mob {
     this.isMobile && this.move()
     // this.segments.update(this.position)
     // console.log(`this.downstreamseg`, this.downstreamSegment)
-    
     this.downstreamSegment?.update()
+
+    while(this.currExp >= this.level * this.levelMultiplier * this.baseExp) {
+      console.log(`Level up!`, )
+      this.level++
+      this.addSegments(1)
+    }
   }
 }
 
@@ -253,13 +267,14 @@ export class Segment {
   upstreamSegment
   downstreamSegment
   cancelDigestionEffect
+  postDigestionEffects = []
 
   constructor(ctx, upstreamSegment) {
     this.ctx = ctx
     this.upstreamSegment = upstreamSegment
 
     this.r = this.upstreamSegment.r
-    this.scale = this.upstreamSegment.scale
+    this.scale = this.getHeadEnt().scale
     this.directionAngleRadians = this.upstreamSegment.directionAngleRadians
     this.position = {
       x: this.upstreamSegment.position.x,
@@ -277,9 +292,11 @@ export class Segment {
   }
 
   ingest(ent) {
+    console.log(`ingesting`, )
+    
     if (this.entUnderDigestion) {
       // Force segment to pass contents
-      this.cancelDigestionEffect()
+      this.cancelDigestionEffect?.()
       this.cancelDigestionEffect = null
       this.pass()
     }
@@ -287,7 +304,7 @@ export class Segment {
     this.entUnderDigestion.parentEnt = this
     this.entUnderDigestion.position = this.position
     this.cancelDigestionEffect = this.entUnderDigestion
-      .digestionEffect(this.getHeadEnt())
+      .onDigestionEffect?.(this.getHeadEnt())
     this.scale = this.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
   }
   
@@ -299,11 +316,24 @@ export class Segment {
         && this.entUnderDigestion.absorbExp(this.getHeadEnt())
     } else {
       // * Upon fully digesting contents transform ent into poop and pass
-      this.cancelDigestionEffect()
+      this.cancelDigestionEffect?.()
       this.cancelDigestionEffect = null
 
+      const postDigestionEffect = this.entUnderDigestion.postDigestionEffect?.()
+      if (postDigestionEffect) {
+        postDigestionEffect && this.postDigestionEffects.push(postDigestionEffect)
+  
+        switch (postDigestionEffect.effect) {
+          case 'moveSpeed':
+            this.getHeadEnt().moveSpeed += postDigestionEffect.moveSpeed
+            break
+          default:
+            console.log(`snek postDigestionEffect switch/case defaulted`, )
+        }
+      }
       
-      if (this.entUnderDigestion.species === 'poop') {
+      if (this.entUnderDigestion.species === 'poop'
+        || this.entUnderDigestion.species === 'pebble') {
         this.pass()
       } else {
         // * "Disintegrate" the fully digested ent
@@ -328,7 +358,7 @@ export class Segment {
 
     new Entity(poop)
     this.entUnderDigestion = poop
-    this.cancelDigestionEffect = this.entUnderDigestion.digestionEffect(this.getHeadEnt())
+    this.cancelDigestionEffect = this.entUnderDigestion.onDigestionEffect?.(this.getHeadEnt())
     this.scale.y = 1.3
   }
 
@@ -350,6 +380,26 @@ export class Segment {
   }
 
   update() {
+    const expiredPostDigestionEffects = this.postDigestionEffects.filter(p => 
+      p.timeLeft <= 0
+    )
+    expiredPostDigestionEffects.forEach(p => {
+      switch (p.effect) {
+        case 'moveSpeed':
+          this.getHeadEnt().moveSpeed += -p.moveSpeed
+          break
+        default:
+          console.log(`snek expiredDigestionEffect switch/case defaulted`, )
+      }
+    })
+
+    this.postDigestionEffects = this.postDigestionEffects.filter(p =>
+      p.timeLeft >= 0
+    )
+    this.postDigestionEffects.forEach(p => {
+      p.timeLeft -= 17
+    })
+
     this.headPositionHistory.splice(0, 0, {
       x: this.upstreamSegment.position.x,
       y: this.upstreamSegment.position.y

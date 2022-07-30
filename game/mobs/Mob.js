@@ -13,7 +13,8 @@ export default class Mob {
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
 
-  exp = 10
+  baseExp = 10
+  currExp = this.baseExp
   expAbsorbRate = 1
 
   digestion = {

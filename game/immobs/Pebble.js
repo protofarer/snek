@@ -11,8 +11,8 @@ export default class Pebble extends Immob {
   get weight() { return this.r }
   exp = 0
   digestion = {
-    baseTime: 0,
-    timeLeft: 0
+    baseTime: 5000,
+    timeLeft: 5000
   }
 
   constructor(ctx, startPosition, parentEnt, r=null) {
