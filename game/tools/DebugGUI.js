@@ -290,7 +290,10 @@ export default class DebugGUI {
 
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
-      const a = addEnt(Ant).setMobile(true).setTurnable(false)
+      // const a = addEnt(Ant).setMobile(true).setTurnable(false)
+      addEnt(Apple)
+      addEnt(Apple)
+      addEnt(Apple)
       addEnt(Apple)
 
       // addEnt(Centipede).setMobile(true)

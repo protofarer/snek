@@ -1,4 +1,5 @@
 import { baseAbsorbExp, baseSwallowEffect } from '../behaviors'
+import { setupPostDigestionEffect, setupSwallowEffect } from '../utils/subclassHelpers'
 
 export default class Immob {
   // Generally are simple, non-moving, squared or circular ent interactable
@@ -30,6 +31,8 @@ export default class Immob {
     timeLeft: 0,
     baseTime: 0,
   }
+
+  wasExcreted = false
 
   secondaryColor
   #primaryColorHue = { start: 125, end: 125 }
@@ -96,10 +99,18 @@ export default class Immob {
     this.parentEnt = parentEnt || Error(`Must place ${this.species} under a Parent Entity!`)
     this.position = startPosition || this.position
     this.setHitAreas()
+
+    // * Helpers to reduce boilerplate for subclass overrides
+    this.setupPostDigestionEffect = setupPostDigestionEffect
+    this.setupSwallowEffect = setupSwallowEffect
   }
 
   swallowEffect(entAffected) {
-    baseSwallowEffect.call(this, entAffected)
+    if (!this.wasExcreted) {
+      baseSwallowEffect.call(this, entAffected)
+    } else {
+      console.log(`no swallowEffect, cause wasExcreted`, )
+    }
   }
 
   absorbExp(entAffected) {

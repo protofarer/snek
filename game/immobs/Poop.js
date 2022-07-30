@@ -7,6 +7,7 @@ export default class Poop extends Immob {
   species = 'poop'
 
   r = 5
+  exp = 0
   primaryColor = 'hsl(40, 100%, 13%)'
   digestion = {
     timeLeft: 2000,

@@ -107,6 +107,7 @@ export default class Snek extends Mob {
 
     if (this.swallowables.includes(ent.carriedEnt?.species)) {
       this.swallow(ent.carriedEnt)
+      ent.carriedEnt = null
     } else {
       // Drop any non-swallowable carried ents
     }
@@ -376,6 +377,7 @@ export class Segment {
     if (this.entUnderDigestion.entGroup === 'immob') {
       this.entUnderDigestion.setHitAreas()
     }
+    this.entUnderDigestion.wasExcreted = true
     this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
   }
 

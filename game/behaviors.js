@@ -45,6 +45,7 @@ export function turnErratically() {
 }
 
 export function baseSwallowEffect(entAffected) {
+  if (this.digestion.timeLeft === this.digestion.baseTime)
   entAffected.currExp += this.exp / 2
   this.exp -= this.exp / 2
 }

@@ -10,6 +10,7 @@ export default class Pebble extends Immob {
   primaryColor = 'hsl(220, 10%, 48%)'
   get weight() { return this.r }
   exp = 0
+
   digestion = {
     baseTime: 5000,
     timeLeft: 5000

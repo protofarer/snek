@@ -1,4 +1,4 @@
-import { baseSwallowEffect, turnErratically } from '../behaviors'
+import { turnErratically } from '../behaviors'
 import Mob from './Mob'
 
 export default class Ant extends Mob {

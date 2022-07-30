@@ -1,5 +1,4 @@
 import Immob from './Immob'
-
 export default class Apple extends Immob {
 
   // ! Unsure if entGroup is defined, inherit from Immob
@@ -28,11 +27,13 @@ export default class Apple extends Immob {
       lumEnd: 25,
     }
     this.setHitAreas()
-  }
 
-  swallowEffect(entAffected) {
-    entAffected.exp += Math.ceil(this.exp / 2)
-    this.exp = Math.ceil(this.exp / 2)
+    this.setupPostDigestionEffect.call(this, {
+      effect: 'moveSpeed',
+      moveSpeed: 0.25,
+      duration: 12000,
+      timeLeft: 12000
+    })
   }
 
   // onDigestionEffect (entAffected) {
@@ -40,14 +41,18 @@ export default class Apple extends Immob {
     // return () => { entAffected.moveSpeed = entAffected.moveSpeed - 1 }
   // }
 
-  postDigestionEffect () {
-    return {
-      effect: 'moveSpeed',
-      moveSpeed: 0.25,
-      duration: 12000,
-      timeLeft: 12000
-    }
-  }
+  // postDigestionEffect () {
+  //   if (!this.wasExcreted) {
+  //     return {
+  //       effect: 'moveSpeed',
+  //       moveSpeed: 0.25,
+  //       duration: 12000,
+  //       timeLeft: 12000
+  //     }
+  //   } else {
+  //     return null
+  //   }
+  // }
   
   drawBody(ctx) {
     ctx.save()
