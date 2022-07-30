@@ -1,4 +1,5 @@
 import Immob from './Immob'
+import { baseSwallowEffect } from '../behaviors'
 export default class Apple extends Immob {
 
   // ! Unsure if entGroup is defined, inherit from Immob
@@ -26,14 +27,15 @@ export default class Apple extends Immob {
       lumStart: 50,
       lumEnd: 25,
     }
-    this.setHitAreas()
 
-    this.setupPostDigestionEffect.call(this, {
+    this.postDigestionData = {
       effect: 'moveSpeed',
       moveSpeed: 0.25,
       duration: 12000,
       timeLeft: 12000
-    })
+    }
+
+    this.setHitAreas()
   }
 
   // onDigestionEffect (entAffected) {

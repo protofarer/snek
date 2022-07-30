@@ -22,6 +22,9 @@ export default class Mob {
     baseTime: 3000
   }
 
+  swallowEffect = baseSwallowEffect
+  postDigestionData = null
+
   primaryColor
   secondaryColor
   bodyColor = 'hsl(35, 50%, 55%)'
@@ -51,8 +54,19 @@ export default class Mob {
     this.setHitAreas()
   }
 
-  swallowEffect(entAffected) {
-    baseSwallowEffect.call(this, entAffected)
+  getPostDigestionData() {
+    if (!this.wasExcreted) {
+      return this.postDigestionData
+    }
+    return null
+  }
+
+  swallowBehavior(entAffected) {
+    if (!this.wasExcreted && this.swallowEffect) {
+      this.swallowEffect.call(this, entAffected)
+    } else {
+      console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
+    }
   }
 
   absorbExp(entAffected) {

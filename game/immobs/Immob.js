@@ -32,6 +32,9 @@ export default class Immob {
     baseTime: 0,
   }
 
+  swallowEffect = baseSwallowEffect
+  postDigestionData = null
+
   wasExcreted = false
 
   secondaryColor
@@ -99,17 +102,20 @@ export default class Immob {
     this.parentEnt = parentEnt || Error(`Must place ${this.species} under a Parent Entity!`)
     this.position = startPosition || this.position
     this.setHitAreas()
-
-    // * Helpers to reduce boilerplate for subclass overrides
-    this.setupPostDigestionEffect = setupPostDigestionEffect
-    this.setupSwallowEffect = setupSwallowEffect
   }
 
-  swallowEffect(entAffected) {
+  getPostDigestionData() {
     if (!this.wasExcreted) {
-      baseSwallowEffect.call(this, entAffected)
+      return this.postDigestionData
+    }
+    return null
+  }
+
+  swallowBehavior(entAffected) {
+    if (!this.wasExcreted && this.swallowEffect) {
+      this.swallowEffect.call(this, entAffected)
     } else {
-      console.log(`no swallowEffect, cause wasExcreted`, )
+      console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
     }
   }
 

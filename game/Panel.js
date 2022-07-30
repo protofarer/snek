@@ -1,5 +1,6 @@
 export default class Panel {
   panelContainer = document.createElement('div')
+  expbar = document.createElement('div')
   infobox = document.createElement('div')
   score = document.createElement('div')
   gameInfo = document.createElement('div')
@@ -9,6 +10,18 @@ export default class Panel {
   constructor(game) {
     this.game = game
     this.panelContainer.id = 'panel'
+
+    this.expbar.id = 'expbar'
+    this.panelContainer.appendChild(this.expbar)
+    const expSegments = []
+
+    for (let i = 0; i < 10; i++) {
+      const expSegment = document.createElement('div')
+      expSegment.id = 'expSegment${i}'
+      expSegment.style.border = '1px solid green'
+      expSegments.push(expSegment)
+      this.expbar.appendChild(expSegment)
+    }
 
     this.infobox.id = 'infobox'
     this.panelContainer.appendChild(this.infobox)

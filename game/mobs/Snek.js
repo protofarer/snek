@@ -86,7 +86,7 @@ export default class Snek extends Mob {
   swallow(ent) {
     ent.parentEnt = this
     ent.hitArea = new Path2D()
-    ent.swallowEffect(this)
+    ent.swallowBehavior(this)
     console.log(`IN snek, swallow:`, ent.species)
 
     switch (ent.species) {
@@ -106,7 +106,7 @@ export default class Snek extends Mob {
     }
 
     if (this.swallowables.includes(ent.carriedEnt?.species)) {
-      this.swallow(ent.carriedEnt)
+      this.swallowBehavior(ent.carriedEnt)
       ent.carriedEnt = null
     } else {
       // Drop any non-swallowable carried ents
@@ -293,7 +293,7 @@ export class Segment {
   }
 
   ingest(ent) {
-    console.log(`ingesting`, )
+    console.log(`ingesting ${ent.species}`, )
     
     if (this.entUnderDigestion) {
       // Force segment to pass contents
@@ -320,17 +320,18 @@ export class Segment {
       this.cancelDigestionEffect?.()
       this.cancelDigestionEffect = null
 
-      const postDigestionEffect = this.entUnderDigestion.postDigestionEffect?.()
-      if (postDigestionEffect) {
-        postDigestionEffect && this.postDigestionEffects.push(postDigestionEffect)
+      const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
+      if (postDigestionData) {
+        this.postDigestionEffects.push(postDigestionData)
   
-        switch (postDigestionEffect.effect) {
+        switch (postDigestionData.effect) {
           case 'moveSpeed':
-            this.getHeadEnt().moveSpeed += postDigestionEffect.moveSpeed
+            this.getHeadEnt().moveSpeed += postDigestionData.moveSpeed
             break
           default:
             console.log(`snek postDigestionEffect switch/case defaulted`, )
         }
+        console.log(`postDigestEffect ${postDigestionData.effect} from ${this.entUnderDigestion.species} activated`, )
       }
       
       if (this.entUnderDigestion.species === 'poop'
@@ -385,21 +386,22 @@ export class Segment {
     const expiredPostDigestionEffects = this.postDigestionEffects.filter(p => 
       p.timeLeft <= 0
     )
-    expiredPostDigestionEffects.forEach(p => {
-      switch (p.effect) {
+    expiredPostDigestionEffects.forEach(postDigestionData => {
+      switch (postDigestionData.effect) {
         case 'moveSpeed':
-          this.getHeadEnt().moveSpeed += -p.moveSpeed
+          this.getHeadEnt().moveSpeed += -postDigestionData.moveSpeed
           break
         default:
           console.log(`snek expiredDigestionEffect switch/case defaulted`, )
       }
+      console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
     })
 
-    this.postDigestionEffects = this.postDigestionEffects.filter(p =>
-      p.timeLeft >= 0
+    this.postDigestionEffects = this.postDigestionEffects.filter(postDigestionData =>
+      postDigestionData.timeLeft >= 0
     )
-    this.postDigestionEffects.forEach(p => {
-      p.timeLeft -= 17
+    this.postDigestionEffects.forEach(postDigestionData => {
+      postDigestionData.timeLeft -= 17
     })
 
     this.headPositionHistory.splice(0, 0, {
