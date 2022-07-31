@@ -278,6 +278,7 @@ export class Segment {
   downstreamSegment
   cancelDigestionEffect
   postDigestionEffects = []
+  underDigestionEffects = []
 
   constructor(ctx, upstreamSegment) {
     this.ctx = ctx
@@ -307,28 +308,51 @@ export class Segment {
     if (this.entUnderDigestion) {
       // Force segment to pass contents
       console.log(`ingest-force-passing ${this.entUnderDigestion.species}`, )
-      this.cancelDigestionEffect?.()
-      this.cancelDigestionEffect = null
+      // this.cancelDigestionEffect?.()
+      // this.cancelDigestionEffect = null
       this.pass()
     }
     this.entUnderDigestion = ent
     this.entUnderDigestion.parentEnt = this
     this.entUnderDigestion.position = this.position
-    this.cancelDigestionEffect = this.entUnderDigestion
-      .onDigestionEffect?.(this.getHeadEnt())
+    this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => {
+        switch (underDigestionEffect.effect) {
+          case 'moveSpeed':
+            this.getHeadEnt().currMoveSpeed += underDigestionEffect.moveSpeed
+            break
+          case 'turnRate':
+            this.getHeadEnt().currTurnRate += underDigestionEffect.turnRate
+            break
+          case 'primaryColor':
+            this.getHeadEnt().primaryColor = underDigestionEffect.primaryColor
+            break
+          default:
+            console.log(`snek postDigestionEffect switch/case defaulted`, )
+        }
+
+      this.underDigestionEffects.push(underDigestionEffect)
+    })
+    // this.cancelDigestionEffect = this.entUnderDigestion
+    //   .onDigestionEffect?.(this.getHeadEnt())
     this.scale = this.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
+  }
+
+  reverseDigestionEffect(digestionEffect) {
+
   }
   
   digest() {
     if (this.entUnderDigestion.digestion.timeLeft > 0) {
-      // console.log(`digesting timeleft:`, this.entUnderDigestion.digestion.timeLeft)
-      this.entUnderDigestion.digestion.timeLeft -= 17    // TODO subtract timeElapsed since last digest tick
+      this.entUnderDigestion.digestion.timeLeft = this.entUnderDigestion.digestion.timeLeft - 17 < 0
+        ? 0
+        : this.entUnderDigestion.digestion.timeLeft - 17
+      
       this.entUnderDigestion.species !== 'poop' 
         && this.entUnderDigestion.absorbExp(this.getHeadEnt())
     } else {
       // * Upon fully digesting contents transform ent into poop and pass
-      this.cancelDigestionEffect?.()
-      this.cancelDigestionEffect = null
+      // this.cancelDigestionEffect?.()
+      // this.cancelDigestionEffect = null
 
       const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
       if (postDigestionData) {
@@ -365,6 +389,20 @@ export class Segment {
         this.makePoop()
       }
     }
+
+    if (this.underDigestionEffects.length > 0) {
+      // Remove expended digestion effects
+      this.underDigestionEffects = this.underDigestionEffects.filter(underDigestionEffect => {
+        underDigestionEffect.timeLeft > 0
+      })
+
+      // Tick digestion effect
+      this.underDigestionEffects = this.underDigestionEffects.map(underDigestionEffect => {
+        underDigestionEffect.timeLeft = underDigestionEffect.timeLeft - 17 < 0
+          ? 0
+          : underDigestionEffect.timeLeft - 17
+      })
+    }
   }
 
   makePoop() {
@@ -376,7 +414,7 @@ export class Segment {
 
     new Entity(poop)
     this.entUnderDigestion = poop
-    this.cancelDigestionEffect = this.entUnderDigestion.onDigestionEffect?.(this.getHeadEnt())
+    // this.cancelDigestionEffect = this.entUnderDigestion.onDigestionEffect?.(this.getHeadEnt())
     this.scale.y = 1.3
   }
 

@@ -34,6 +34,20 @@ export default class Apple extends Immob {
         moveSpeed: 0.25,
         duration: 12000,
         timeLeft: 12000
+      },
+    ]
+    this.underDigestionData = [
+      {
+        effect: 'moveSpeed',
+        moveSpeed: 0.25,
+        duration: 3000,
+        timeLeft: 3000
+      },
+      {
+        effect: 'primaryColor',
+        primaryColor: 'red',
+        duration: 5000,
+        timeLeft: 5000
       }
     ]
     this.setHitAreas()
