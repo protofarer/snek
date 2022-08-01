@@ -18,7 +18,7 @@ export default class Immob {
   r = 1
   position = { x: 400, y: 400 }
   scale = { x: 1, y: 1 }
-  get hitR() { return this.r + 1 }
+  get hitR() { return this.r + 3 }
 
   directionAngleRadians = 0
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }

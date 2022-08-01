@@ -291,34 +291,11 @@ export default class DebugGUI {
 
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
-      addEnt(Banana)
-      addEnt(Banana)
-      addEnt(Banana)
-      // const a = addEnt(Ant).setMobile(true).setTurnable(false)
-      // addEnt(Mango)
-      // const a = addEnt(Apple)
-      // a.position = {x:600,y:400}
-      // a.setHitAreas()
-      // addEnt(Apple)
-      // addEnt(Centipede).setMobile(true)
       // addEnt(Ant)
       // addEnt(Apple)
-      // addEnt(Apple)
-      // addEnt(Apple)
-      // addEnt(Apple)
-      // addEnt(Apple)
-
-      // addEnt(Centipede).setMobile(true)
-      // spawnEnts(Ant, 25)
-      // spawnEnts(Apple, 50)
-
-      // const a = addEnt(Apple)
-      // addEnt(Apple)
-      // for(let i = 0; i < a.digestion.baseTime; i++) {
-      //   a.digestion.timeLeft -= 1
-      //   a.render()
-      // }
-      // const poo = addEnt(Poop, {x:170,y:400})
+      // addEnt(Mango)
+      addEnt(Centipede).setMobile(true)
+      // addEnt(Banana)
       
     }
   }

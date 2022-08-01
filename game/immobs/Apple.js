@@ -37,20 +37,20 @@ export default class Apple extends Immob {
       },
     ]
       // TEST
-    this.underDigestionData = [
+    // this.underDigestionData = [
       // {
       //   effect: 'moveSpeed',
       //   moveSpeed: 0.25,
       //   duration: 3000,
       //   timeLeft: 3000
       // },
-      {
-        effect: 'primaryColor',
-        primaryColor: 'red',
-        duration: 5000,
-        timeLeft: 5000
-      }
-    ]
+    //   {
+    //     effect: 'primaryColor',
+    //     primaryColor: 'red',
+    //     duration: 5000,
+    //     timeLeft: 5000
+    //   }
+    // ]
     this.setHitAreas()
   }
 
