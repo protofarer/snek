@@ -230,7 +230,33 @@ export default class DebugGUI {
     Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
   }
 
+  drawGrid() {
+    const ctx = this.game.ctx
+    const n = 10
+    ctx.beginPath()
+    for (let i = 1; i < n; i++) {
+      ctx.moveTo(0, i*(this.game.canvas.height/n))
+      ctx.lineTo(this.game.canvas.width, i*(this.game.canvas.height/n))
+      ctx.moveTo(i*(this.game.canvas.width/n), 0)
+      ctx.lineTo(i*(this.game.canvas.width/n), this.game.canvas.height)
+    }
+    ctx.strokeStyle = 'blue'
+    ctx.lineWidth = 1
+    ctx.stroke()
+
+    ctx.beginPath()
+    ctx.font = 'normal 10px Arial'
+    ctx.fillStyle = 'blue'
+    for (let i = 1; i < n; i++) {
+      ctx.fillText(`${i*(this.game.canvas.width/n)}`, i*(this.game.canvas.width/n) + 3, 12)
+    }
+    for (let i = 1; i < n; i++) {
+      ctx.fillText(`${i*(this.game.canvas.height/n)}`, 3, i*(this.game.canvas.height/n) + 12)
+    }
+  }
+
   drawDebugOverlays() {
+    this.drawGrid()
     Object.values(Entity.stack).forEach( ent => ent.drawDebugOverlays())
     this.game.snek?.drawDebugOverlays()
   }
