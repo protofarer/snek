@@ -62,6 +62,15 @@ export function lowSwallowEffect(entAffected) {
   return 0
 }
 
+export function highSwallowEffect(entAffected) {
+  if (this.digestion.timeLeft === this.digestion.baseTime) {
+    entAffected.currExp += this.currExp * 4 / 5
+    this.currExp -= this.currExp * 4 / 5
+    return this.currExp * 4 / 5
+  }
+  return 0
+}
+
 export function baseAbsorbExp(entAffected) {
   if (this.currExp > 0) {
     entAffected.currExp += this.expAbsorbRate
