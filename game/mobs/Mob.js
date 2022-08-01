@@ -28,8 +28,10 @@ export default class Mob {
   swallowEffect = baseSwallowEffect
   postDigestionData = null
 
-  primaryColor
-  secondaryColor
+  basePrimaryColor = 'lawngreen'
+  currPrimaryColor = this.basePrimaryColor
+  baseSecondaryColor = 'tomato'
+  currSecondaryColor = this.baseSecondaryColor
   bodyColor = 'hsl(35, 50%, 55%)'
 
   // * Override in instance constructor: 1) field specify baseMS 2) this.moveSpeed = this.baseMS
@@ -116,7 +118,7 @@ export default class Mob {
   drawBody(ctx) {
     ctx.beginPath()
     ctx.rect(0,0,10,10)
-    ctx.strokeStyle = this.primaryColor
+    ctx.strokeStyle = this.currPrimaryColor
     ctx.lineWidth = 2
     ctx.stroke()
   }

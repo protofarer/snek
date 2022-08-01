@@ -63,8 +63,6 @@ export function lowSwallowEffect(entAffected) {
 }
 
 export function baseAbsorbExp(entAffected) {
-  console.log(`IN baseAbsorbExp`, )
-  
   if (this.currExp > 0) {
     entAffected.currExp += this.expAbsorbRate
     this.currExp -= this.expAbsorbRate

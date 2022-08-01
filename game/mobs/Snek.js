@@ -45,7 +45,8 @@ export default class Snek extends Mob {
   constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
     super(ctx, startPosition, parentEnt)
     
-    this.primaryColor = 'hsl(100, 100%, 32%)'
+    this.basePrimaryColor = 'hsl(100, 100%, 32%)'
+    this.currPrimaryColor = this.basePrimaryColor
 
     this.baseTurnRate = this.baseMoveSpeed + 5
     this.currTurnRate = this.baseTurnRate
@@ -152,7 +153,7 @@ export default class Snek extends Mob {
   drawHead() {
     this.ctx.beginPath()
     this.ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
-    this.ctx.fillStyle = this.primaryColor
+    this.ctx.fillStyle = this.currPrimaryColor
     this.ctx.shadowOffsetY = 2
     this.ctx.shadowBlur = 2
     this.ctx.shadowColor = 'hsl(0,0%,0%)'
@@ -276,7 +277,6 @@ export class Segment {
   entUnderDigestion
   upstreamSegment
   downstreamSegment
-  cancelDigestionEffect
   postDigestionEffects = []
   underDigestionEffects = []
 
@@ -291,7 +291,7 @@ export class Segment {
       x: this.upstreamSegment.position.x,
       y: this.upstreamSegment.position.y
     }
-    this.primaryColor = this.upstreamSegment.primaryColor
+    this.currPrimaryColor = this.upstreamSegment.currPrimaryColor
   }
 
   getHeadEnt() {
@@ -303,15 +303,20 @@ export class Segment {
   }
 
   ingest(ent) {
+    // * All ents to be digested start here
+    // * Activates digestion effects data for head ent
+
     console.log(`ingesting ${ent.species}`, )
     
+    // * Core mechanic: Ingesting another ent while an existing ent is under
+    // * digestion forces the latter to be passed regardless of digestion state
+
     if (this.entUnderDigestion) {
       // Force segment to pass contents
       console.log(`ingest-force-passing ${this.entUnderDigestion.species}`, )
-      // this.cancelDigestionEffect?.()
-      // this.cancelDigestionEffect = null
       this.pass()
     }
+
     this.entUnderDigestion = ent
     this.entUnderDigestion.parentEnt = this
     this.entUnderDigestion.position = this.position
@@ -324,56 +329,126 @@ export class Segment {
             this.getHeadEnt().currTurnRate += underDigestionEffect.turnRate
             break
           case 'primaryColor':
-            this.getHeadEnt().primaryColor = underDigestionEffect.primaryColor
+            this.getHeadEnt().currPrimaryColor = underDigestionEffect.primaryColor
             break
           default:
             console.log(`snek postDigestionEffect switch/case defaulted`, )
         }
 
+        console.log(`pushing to underdigfx:`, underDigestionEffect)
+        
       this.underDigestionEffects.push(underDigestionEffect)
     })
-    // this.cancelDigestionEffect = this.entUnderDigestion
-    //   .onDigestionEffect?.(this.getHeadEnt())
     this.scale = this.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
   }
 
   reverseDigestionEffect(digestionEffect) {
-
+    // * Must be removed by function outer to this one
+    switch (digestionEffect.effect) {
+      case 'moveSpeed':
+        this.getHeadEnt().currMoveSpeed += -digestionEffect.moveSpeed
+        break
+      case 'turnRate':
+        this.getHeadEnt().currTurnRate += -digestionEffect.turnRate
+        break
+      case 'primaryColor':
+        this.getHeadEnt().currPrimaryColor = this.getHeadEnt().basePrimaryColor
+        break
+      default:
+        console.log(`snek postDigestionEffect switch/case defaulted`, )
+    }
   }
   
   digest() {
     if (this.entUnderDigestion.digestion.timeLeft > 0) {
+
+      // * Overall digestion time for expAbsorb and passing
+
       this.entUnderDigestion.digestion.timeLeft = this.entUnderDigestion.digestion.timeLeft - 17 < 0
         ? 0
         : this.entUnderDigestion.digestion.timeLeft - 17
       
       this.entUnderDigestion.species !== 'poop' 
         && this.entUnderDigestion.absorbExp(this.getHeadEnt())
-    } else {
-      // * Upon fully digesting contents transform ent into poop and pass
-      // this.cancelDigestionEffect?.()
-      // this.cancelDigestionEffect = null
 
-      const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
-      if (postDigestionData) {
-        postDigestionData.forEach(pDD => {
-          this.postDigestionEffects.push(pDD)
+      // TODO put digestion effects here
+      const expiredPostDigestionEffects = this.postDigestionEffects.filter(p => 
+        p.timeLeft <= 0
+      )
 
-          switch (pDD.effect) {
-            case 'moveSpeed':
-              this.getHeadEnt().currMoveSpeed += pDD.moveSpeed
-              break
-            case 'turnRate':
-              this.getHeadEnt().currTurnRate += pDD.turnRate
-              break
-            default:
-              console.log(`snek postDigestionEffect switch/case defaulted`, )
-          }
-          console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
-        })
-  
-      }
+      // * Effects that occur only after content is fully digested
+
+      // * Ensure effects are active while duration remains, then expire
+      expiredPostDigestionEffects.forEach(postDigestionData => {
+        switch (postDigestionData.effect) {
+          case 'moveSpeed':
+            this.getHeadEnt().currMoveSpeed += -postDigestionData.moveSpeed
+            break
+          case 'turnRate':
+            this.getHeadEnt().currTurnRate += -postDigestionData.turnRate
+            break
+          default:
+            console.log(`snek expiredDigestionEffect switch/case defaulted`, )
+        }
+        console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
+      })
+
+      this.postDigestionEffects = this.postDigestionEffects.filter(postDigestionData =>
+        postDigestionData.timeLeft >= 0
+      )
+
+      this.postDigestionEffects.forEach(postDigestionData => {
+        postDigestionData.timeLeft -= 17
+      })
+
+      // * underDigestionEffects
+    if (this.underDigestionEffects.length > 0) {
+      // Reverse and Remove expended digestion effects
+      const expiredUnderDigestionEffects = this.underDigestionEffects.filter(
+        underDigestionEffect => underDigestionEffect.timeLeft <= 0
+      )
+      expiredUnderDigestionEffects.forEach(e => {
+        console.log(`reversing underDigFx`, e)
+        this.reverseDigestionEffect(e)
+      })
+      expiredUnderDigestionEffects.length > 0 && console.log(`expiredDigFx`, expiredUnderDigestionEffects)
       
+      this.underDigestionEffects = this.underDigestionEffects.filter(underDigestionEffect => 
+        underDigestionEffect.timeLeft > 0
+      )
+
+      // Tick under digestion effects
+      this.underDigestionEffects = this.underDigestionEffects.map(underDigestionEffect => {
+        const timeLeft = underDigestionEffect.timeLeft - 17 < 0
+          ? 0
+          : underDigestionEffect.timeLeft - 17
+        return { ...underDigestionEffect, timeLeft }
+      })
+    }
+
+      } else {
+        // * Upon fully digesting contents transform ent into poop and pass
+
+        const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
+        if (postDigestionData) {
+          postDigestionData.forEach(pDD => {
+            this.postDigestionEffects.push(pDD)
+
+            switch (pDD.effect) {
+              case 'moveSpeed':
+                this.getHeadEnt().currMoveSpeed += pDD.moveSpeed
+                break
+              case 'turnRate':
+                this.getHeadEnt().currTurnRate += pDD.turnRate
+                break
+              default:
+                console.log(`snek postDigestionEffect switch/case defaulted`, )
+            }
+            console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
+          })
+    
+        }
+        
       if (this.entUnderDigestion.species === 'poop'
         || this.entUnderDigestion.species === 'pebble') {
         this.pass()
@@ -390,19 +465,6 @@ export class Segment {
       }
     }
 
-    if (this.underDigestionEffects.length > 0) {
-      // Remove expended digestion effects
-      this.underDigestionEffects = this.underDigestionEffects.filter(underDigestionEffect => {
-        underDigestionEffect.timeLeft > 0
-      })
-
-      // Tick digestion effect
-      this.underDigestionEffects = this.underDigestionEffects.map(underDigestionEffect => {
-        underDigestionEffect.timeLeft = underDigestionEffect.timeLeft - 17 < 0
-          ? 0
-          : underDigestionEffect.timeLeft - 17
-      })
-    }
   }
 
   makePoop() {
@@ -414,7 +476,6 @@ export class Segment {
 
     new Entity(poop)
     this.entUnderDigestion = poop
-    // this.cancelDigestionEffect = this.entUnderDigestion.onDigestionEffect?.(this.getHeadEnt())
     this.scale.y = 1.3
   }
 
@@ -437,31 +498,6 @@ export class Segment {
   }
 
   update() {
-    const expiredPostDigestionEffects = this.postDigestionEffects.filter(p => 
-      p.timeLeft <= 0
-    )
-
-    expiredPostDigestionEffects.forEach(postDigestionData => {
-      switch (postDigestionData.effect) {
-        case 'moveSpeed':
-          this.getHeadEnt().currMoveSpeed += -postDigestionData.moveSpeed
-          break
-        case 'turnRate':
-          this.getHeadEnt().currTurnRate += -postDigestionData.turnRate
-          break
-        default:
-          console.log(`snek expiredDigestionEffect switch/case defaulted`, )
-      }
-      console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
-    })
-
-    this.postDigestionEffects = this.postDigestionEffects.filter(postDigestionData =>
-      postDigestionData.timeLeft >= 0
-    )
-
-    this.postDigestionEffects.forEach(postDigestionData => {
-      postDigestionData.timeLeft -= 17
-    })
 
     this.headPositionHistory.splice(0, 0, {
       x: this.upstreamSegment.position.x,
@@ -504,8 +540,9 @@ export class Segment {
     const dx = (this.upstreamSegmentTailPosition.x - this.position.x)
     this.directionAngleRadians = Math.atan(dy/dx)
 
-    this.primaryColor = this.upstreamSegment.primaryColor
+    this.currPrimaryColor = this.upstreamSegment.currPrimaryColor
     
+    // ! Should this be before physics?
     if (this.entUnderDigestion) {
       this.entUnderDigestion.position = this.position
       this.digest()
@@ -532,7 +569,7 @@ export class Segment {
   drawBody(ctx) {
     ctx.beginPath()
     ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
-    ctx.fillStyle = this.primaryColor
+    ctx.fillStyle = this.currPrimaryColor
     ctx.shadowOffsetY = 2
     ctx.shadowBlur = 2
     ctx.shadowColor = 'hsl(0,0%,0%)'
