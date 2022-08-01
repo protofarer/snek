@@ -48,9 +48,8 @@ body {
   font-family: Arial;
 
   display: inline-flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: flex-start;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
   gap: 0.8em;
 }
 
@@ -59,13 +58,13 @@ body {
   flex-flow: row nowrap;
   gap: 3px;
   flex: 1 1;
-  height: 8px;
 }
 
 .expSegment {
   border-radius: 3px;
   border: 1px solid green;
   flex: 1 1;
+  max-height: 10px;
 }
 
 button {
@@ -82,9 +81,9 @@ button:hover {
 
 #newGameButton {
   margin: 0.6em 0.3em 0.6em 0.3em;
-  color: red;
-  background-color: white;
-  border: 3px solid red;
+  color: orange;
+  background-color: transparent;
+  border: 3px solid orange;
 }
 
 #infobox {
@@ -92,12 +91,11 @@ button:hover {
   padding: 0.3em;
 
   display: flex;
-  flex-flow: column nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 0;
   /* gap: 0.3em; */
-
-  flex: 0 0 auto;
 }
 
 #info-score {
@@ -106,8 +104,6 @@ button:hover {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-evenly;
-  /* border: 1px dotted green; */
-  border-bottom: 1px solid red;
 }
 
 
@@ -117,8 +113,6 @@ button:hover {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-evenly;
-  /* border: 1px dotted orange; */
-  border-bottom: 1px solid red;
 }
 
 #info-msg {
@@ -129,7 +123,6 @@ button:hover {
   font-size: smaller;
   background: white;
   /* flex: 1 1 auto; */
-  border: 3px solid green;
 }
 
 @media screen and (min-width: 980px) {
