@@ -28,7 +28,8 @@ export default class Centipede extends Mob {
   constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
     super(ctx, startPosition, parentEnt)
 
-    this.primaryColor = 'hsl(35, 50%, 55%)'
+    this.basePrimaryColor = 'hsl(35, 50%, 55%)'
+    this.currPrimaryColor = this.basePrimaryColor
     this.secondaryColor = 'hsl(30, 70%, 7%)'
 
     this.baseExp = 100
@@ -37,7 +38,7 @@ export default class Centipede extends Mob {
     this.baseMoveSpeed = 3
     this.currMoveSpeed = this.baseMoveSpeed
 
-    this.baseTurnRate = this.baeMoveSpeed + 5
+    this.baseTurnRate = this.baseMoveSpeed + 5
     this.currTurnRate = this.baseTurnRate
 
     this.nInitSegments = nInitSegments || this.nInitSegments

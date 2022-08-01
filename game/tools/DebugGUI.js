@@ -288,14 +288,16 @@ export default class DebugGUI {
 
     if (this.params.isDebugOn) {
 
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
+      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      // this.game.snek = snek
       // const a = addEnt(Ant).setMobile(true).setTurnable(false)
       // addEnt(Mango)
-      const a = addEnt(Apple)
+      // const a = addEnt(Apple)
       // a.position = {x:600,y:400}
       // a.setHitAreas()
-      addEnt(Apple)
+      // addEnt(Apple)
+      addEnt(Centipede).setMobile(true)
+      // addEnt(Ant)
       // addEnt(Apple)
       // addEnt(Apple)
       // addEnt(Apple)
