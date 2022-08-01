@@ -27,6 +27,7 @@ export default class DebugGUI {
       timeToReset: 2000,
       resetAfterElapsed: false,
       gameTickMultiplier: 1,
+      isGridVisible: false,
       set gameSpeed(val) { game.params.speed = val},
       get gameSpeed() { return game.params.speed }
     }
@@ -59,7 +60,8 @@ export default class DebugGUI {
     this.setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
     this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
     this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
-    this.setupBooleanToggler(this.params, 'showDebugOverlays', guiTestParams, 'show overlay')
+    this.setupBooleanToggler(this.params, 'showDebugOverlays', guiTestParams, 'show overlays')
+    this.setupBooleanToggler(this.params, 'isGridVisible', guiTestParams, 'show grid')
     this.setupNumericSlider({
       obj: this.params,
       key: 'gameTickMultiplier',
@@ -256,7 +258,6 @@ export default class DebugGUI {
   }
 
   drawDebugOverlays() {
-    this.drawGrid()
     Object.values(Entity.stack).forEach( ent => ent.drawDebugOverlays())
     this.game.snek?.drawDebugOverlays()
   }
@@ -303,6 +304,10 @@ export default class DebugGUI {
   render() {
     if (this.params.showDebugOverlays) {
       this.drawDebugOverlays()
+
+      if (this.params.isGridVisible) {
+        this.drawGrid()
+      }
     }
     // if (this.params.showHitOverlay) {
     //   this.drawHitOverlays()
