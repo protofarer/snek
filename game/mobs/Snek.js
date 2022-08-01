@@ -306,10 +306,11 @@ export class Segment {
     // * All ents to be digested start here
     // * Activates digestion effects data for head ent
 
-    console.log(`ingesting ${ent.species}`, )
     
     // * Core mechanic: Ingesting another ent while an existing ent is under
     // * digestion forces the latter to be passed regardless of digestion state
+
+    console.log(`ingesting ${ent.species}`, )
 
     if (this.entUnderDigestion) {
       // Force segment to pass contents
@@ -320,6 +321,7 @@ export class Segment {
     this.entUnderDigestion = ent
     this.entUnderDigestion.parentEnt = this
     this.entUnderDigestion.position = this.position
+
     this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => {
         switch (underDigestionEffect.effect) {
           case 'moveSpeed':
@@ -334,9 +336,8 @@ export class Segment {
           default:
             console.log(`snek postDigestionEffect switch/case defaulted`, )
         }
-
-        console.log(`pushing to underdigfx:`, underDigestionEffect)
-        
+      console.log(`adding underdigfx`, underDigestionEffect)
+      
       this.underDigestionEffects.push(underDigestionEffect)
     })
     this.scale = this.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
@@ -480,6 +481,12 @@ export class Segment {
   }
 
   pass() {
+    this.underDigestionEffects.forEach(d => {
+      console.log(`Reversing underDigFx`, d)
+      this.reverseDigestionEffect(d)
+    })
+    this.underDigestionEffects = []
+      
     if (!this.downstreamSegment) {
       this.excrete()
     } else {

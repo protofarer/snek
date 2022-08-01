@@ -295,7 +295,7 @@ export default class DebugGUI {
       const a = addEnt(Apple)
       // a.position = {x:600,y:400}
       // a.setHitAreas()
-      // addEnt(Apple)
+      addEnt(Apple)
       // addEnt(Apple)
       // addEnt(Apple)
       // addEnt(Apple)

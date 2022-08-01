@@ -89,11 +89,11 @@ export default class Mob {
   }
   
   turnLeft() {
-    this.directionAngleDegrees += -this.turnRate
+    this.directionAngleDegrees += -this.currTurnRate
   }
 
   turnRight() {
-    this.directionAngleDegrees += this.turnRate
+    this.directionAngleDegrees += this.currTurnRate
   }
 
   setHitAreas() {

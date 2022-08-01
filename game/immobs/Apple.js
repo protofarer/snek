@@ -36,13 +36,14 @@ export default class Apple extends Immob {
         timeLeft: 12000
       },
     ]
+      // TEST
     this.underDigestionData = [
-      {
-        effect: 'moveSpeed',
-        moveSpeed: 0.25,
-        duration: 3000,
-        timeLeft: 3000
-      },
+      // {
+      //   effect: 'moveSpeed',
+      //   moveSpeed: 0.25,
+      //   duration: 3000,
+      //   timeLeft: 3000
+      // },
       {
         effect: 'primaryColor',
         primaryColor: 'red',
