@@ -141,15 +141,10 @@ export default class Snek extends Mob {
     // this.downstreamSegment.drawDebugOverlays()
     if (this.downstreamSegment) {
       let downSeg = this.downstreamSegment
-      let downSegs = []
-
       while(downSeg) {
+        downSeg.drawDebugOverlays()
         downSeg = downSeg.downstreamSegment
-        if (downSeg) {
-          downSegs.push(downSeg)
-        }
       }
-      downSegs.forEach(s => s.drawDebugOverlays())
     }
   }
 
@@ -274,6 +269,7 @@ export class Segment {
   directionAngleRadians = 0
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  get hitR() { return this.r + 1 }
 
   headPositionHistory = []
 
@@ -295,6 +291,7 @@ export class Segment {
       y: this.upstreamSegment.position.y
     }
     this.currPrimaryColor = this.upstreamSegment.currPrimaryColor
+    this.setHitAreas()
   }
 
   getHeadEnt() {
@@ -508,7 +505,6 @@ export class Segment {
   }
 
   update() {
-
     this.headPositionHistory.splice(0, 0, {
       x: this.upstreamSegment.position.x,
       y: this.upstreamSegment.position.y
@@ -557,6 +553,10 @@ export class Segment {
       this.entUnderDigestion.position = this.position
       this.digest()
     }
+
+    // ! inefficient, running whether moving or not. Segment has no awareness of
+    // ! its own movement except if it were to know about head's isMobile
+    this.setHitAreas()
     this.downstreamSegment?.update()
   }
 
@@ -593,6 +593,21 @@ export class Segment {
     this.entUnderDigestion?.render()
   }
 
+  drawHitOverlays() {
+    this.ctx.strokeStyle = 'blue'
+    this.ctx.stroke(this.hitArea)
+  }
+
+  setHitAreas() {
+    this.hitArea = new Path2D()
+    this.hitArea.rect(
+      this.position.x - (this.hitR), 
+      this.position.y - (this.hitR),
+      2 * this.hitR,
+      2 * this.hitR
+    )
+  }
+
 
   drawDebugOverlays() {
     for(let i = 0; i < this.headPositionHistory.length; i++) {
@@ -603,5 +618,6 @@ export class Segment {
       this.ctx.fillStyle='red'
       this.ctx.fill()
     }
+    this.drawHitOverlays()
   }
 }

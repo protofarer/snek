@@ -51,6 +51,7 @@ export default class Mango extends Immob {
 
   drawBody(ctx) {
     ctx.save()
+    ctx.translate(-0.1*this.r, -0.2*this.r)
     ctx.rotate(1.25)
     ctx.scale(0.8, 1)
     ctx.beginPath()

@@ -10,7 +10,7 @@ export default class Centipede extends Mob {
   swallowables = ['snek']
 
   r = 10
-  get hitR() { return this.r }
+  get hitR() { return this.r + 1}
 
   get headCoords() { return {
     x: this.position.x,
@@ -117,15 +117,11 @@ export default class Centipede extends Mob {
 
     if (this.downstreamSegment) {
       let downSeg = this.downstreamSegment
-      let downSegs = []
 
       while(downSeg) {
+        downSeg.drawDebugOverlays()
         downSeg = downSeg.downstreamSegment
-        if (downSeg) {
-          downSegs.push(downSeg)
-        }
       }
-      downSegs.forEach(s => s.drawDebugOverlays())
     }
   }
 
