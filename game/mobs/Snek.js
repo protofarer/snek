@@ -7,7 +7,7 @@ export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'
 
-  swallowables = ['apple', 'mango', 'ant', 'pebble', 'segment']
+  swallowables = ['apple', 'mango', 'ant', 'pebble', 'banana']
 
   r = 10
   get hitR() { return this.r }
@@ -109,6 +109,9 @@ export default class Snek extends Mob {
         this.downstreamSegment.ingest(ent)
         break
       case 'mango':
+        this.downstreamSegment.ingest(ent)
+        break
+      case 'banana':
         this.downstreamSegment.ingest(ent)
         break
       default:
