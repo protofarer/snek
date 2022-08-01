@@ -1,5 +1,5 @@
 import { moveEdgeWrap } from '../behaviors'
-import { Segment } from './Snek'
+import Segment from './Segment'
 import { turnRandomlySmoothly } from '../behaviors'
 import Mob from './Mob'
 
@@ -7,7 +7,7 @@ export default class Centipede extends Mob {
   static species = 'centipede'
   species = 'centipede'
 
-  swallowables = ['snek']
+  swallowables = ['snek', 'snek-segment']
 
   r = 10
   get hitR() { return this.r + 1}
@@ -179,28 +179,41 @@ export default class Centipede extends Mob {
   }
 
   move() {
-    if (this.isMobile) {
+    // if (this.isMobile) {
       // if (Math.random() < 0.005) {
       //   this.isMobile = false
       //   setTimeout(() => this.isMobile = true, 200 + Math.random() * 2000)
       // } else {
+        console.log(`x before move`, this.position.x)
+        
+        // const dirVectorX = Math.cos(this.directionAngleRadians)
+        // console.log(`direvectox`, dirVectorX)
+        // const dirVectorY = Math.sin(this.directionAngleRadians)
+
+        // console.log(`direvectoy`, dirVectorY)
+        
+        
         this.position.x += this.currMoveSpeed 
           * Math.cos(this.directionAngleRadians)
         this.position.y += this.currMoveSpeed 
           * Math.sin(this.directionAngleRadians)
+
+        console.log(`next x step`, this.position.x)
     
-        this.isTurnable && turnRandomlySmoothly.call(this)
-        console.log(`isturnable`, this.isTurnable)
+        // this.isTurnable && turnRandomlySmoothly.call(this)
         
-        moveEdgeWrap.call(this)
+        console.log(`next x after moveedgewrap`, this.position.x )
+
+        
         this.setHitAreas()
       // }
-    }
+    // }
   }
 
   update() {
     this.move()
     this.downstreamSegment?.update()
+    console.log(`centipede obj`, this)
   }
 }
 

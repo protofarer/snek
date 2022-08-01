@@ -41,8 +41,8 @@ export default class Mob {
   currMoveSpeed = this.baseMoveSpeed
   minMoveSpeed = 0.3
 
-  get moveSpeed() { return this.currMoveSpeed }
-  set moveSpeed(val) { this.currMoveSpeed = Math.max(this.minMoveSpeed, val)}
+  // get moveSpeed() { return this.currMoveSpeed }
+  // set moveSpeed(val) { this.currMoveSpeed = Math.max(this.minMoveSpeed, val)}
 
   // * Override in instance constructor: 1) field specify baseTR 2) this.turnRate = this.baseTR
   // * otherwise will be set to below

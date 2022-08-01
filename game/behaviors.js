@@ -2,13 +2,13 @@ export function moveEdgeWrap() {
   if (this.position.x >= this.ctx.canvas.width) {
     this.position.x = 0
   } else if (this.position.x < 0) {
-    this.position.x = this.ctx.canvas.width
+    this.position.x = this.ctx.canvas.width - 1
   }
 
   if (this.position.y >= this.ctx.canvas.height) {
     this.position.y = 0
   } else if (this.position.y < 0) {
-    this.position.y = this.ctx.canvas.height
+    this.position.y = this.ctx.canvas.height - 1
   }
 }
 

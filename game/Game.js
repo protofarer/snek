@@ -204,6 +204,27 @@ export default class Game {
             }
           }
         } // * DRY
+
+        if (ent.species === 'centipede') {
+
+          // TODO centipede mouth hit snek head
+          const sneksegs = Entity.bySpecies('snek-segment') 
+          for(let snekseg of Object.values(sneksegs)) {
+            const isContacting = this.isContactingMouth(
+              snekseg.hitArea,
+              ent.mouthCoords,
+            )
+
+            if (isContacting) {
+              console.log(`IN game, cent bite:`, ent.species)
+              // snekseg.detach()
+              // TODO detach segments
+              // TODO ent.bite(snekseg)
+              // TODO playRandomBiteSound
+            }
+
+          }
+        }
       } else if (ent.entGroup === 'immob') {
 
         if (this.snek) {
