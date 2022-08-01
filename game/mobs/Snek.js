@@ -39,10 +39,10 @@ export default class Snek extends Mob {
   isTongueOut = false
   tongueDirection = 0
 
-  nInitSegments = 3
+  baseSegmentCount = 3
   downstreamSegment
 
-  constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
+  constructor(ctx, startPosition=null, parentEnt=null, initSegmentCount=null) {
     super(ctx, startPosition, parentEnt)
     
     this.basePrimaryColor = 'hsl(100, 100%, 32%)'
@@ -54,8 +54,8 @@ export default class Snek extends Mob {
     this.baseMoveSpeed = 1
     this.currMoveSpeed = this.baseMoveSpeed
 
-    this.nInitSegments = nInitSegments || this.nInitSegments
-    this.addSegments(this.nInitSegments)
+    this.currSegmentCount = initSegmentCount || this.baseSegmentCount
+    this.addSegments(this.currSegmentCount)
 
     this.setHitAreas()
     this.initEventListeners()
@@ -65,8 +65,10 @@ export default class Snek extends Mob {
     for(let i = 0; i < n; i++) {
       if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
+        new Entity(this.downstreamSegment)
       } else {
         const newSegment = new Segment(this.ctx, this)
+        new Entity(newSegment)
         const oldSegment = this.downstreamSegment
         oldSegment.upstreamSegment = newSegment
         newSegment.downstreamSegment = oldSegment
@@ -93,7 +95,6 @@ export default class Snek extends Mob {
   }
 
   swallow(ent) {
-    ent.parentEnt = this
     ent.hitArea = new Path2D()
     ent.swallowBehavior(this)
     console.log(`IN snek, swallow:`, ent.species)
@@ -207,7 +208,7 @@ export default class Snek extends Mob {
 
   render() {
     // ! game should end before downstreamSegment is gone?
-    this.downstreamSegment.render()
+    // this.downstreamSegment.render()
 
     this.ctx.save()
     this.ctx.translate(this.headCoords.x, this.headCoords.y)
@@ -248,9 +249,7 @@ export default class Snek extends Mob {
 
   update() {
     this.isMobile && this.move()
-    // this.segments.update(this.position)
-    // console.log(`this.downstreamseg`, this.downstreamSegment)
-    this.downstreamSegment?.update()
+    // this.downstreamSegment?.update()
 
     while(this.currExp >= this.expForLevel(this.level + 1)) {
       console.log(`Level up!`, )
@@ -261,6 +260,8 @@ export default class Snek extends Mob {
 }
 
 export class Segment {
+  static entGroup = 'segment'
+  entGroup = 'segment'
   static species = 'segment'
   species = 'segment'
 
@@ -282,7 +283,7 @@ export class Segment {
   constructor(ctx, upstreamSegment) {
     this.ctx = ctx
     this.upstreamSegment = upstreamSegment
-
+    this.parentEnt = this.getHeadEnt().parentEnt
     this.r = this.upstreamSegment.r
     this.scale = this.getHeadEnt().scale
     this.directionAngleRadians = this.upstreamSegment.directionAngleRadians
@@ -319,7 +320,6 @@ export class Segment {
     }
 
     this.entUnderDigestion = ent
-    this.entUnderDigestion.parentEnt = this
     this.entUnderDigestion.position = this.position
 
     this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => {
@@ -501,7 +501,6 @@ export class Segment {
       this.entUnderDigestion.setHitAreas()
     }
     this.entUnderDigestion.wasExcreted = true
-    this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
   }
 
   update() {

@@ -182,6 +182,7 @@ export default class Game {
           }
         }
       }
+
       if (ent.entGroup === 'mob') {
         
         moveEdgeWrap.call(ent)

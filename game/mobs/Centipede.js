@@ -104,8 +104,6 @@ export default class Centipede extends Mob {
     // }
   }
 
-
-
   drawDebugOverlays() {
     // Head Hit (from Mob)
     super.drawHitOverlays()
@@ -181,25 +179,27 @@ export default class Centipede extends Mob {
   }
 
   move() {
-    this.position.x += this.currMoveSpeed 
-      * Math.cos(this.directionAngleRadians)
-    this.position.y += this.currMoveSpeed 
-      * Math.sin(this.directionAngleRadians)
-
-    turnRandomlySmoothly.call(this)
-    moveEdgeWrap.call(this)
-    this.setHitAreas()
+    if (this.isMobile) {
+      // if (Math.random() < 0.005) {
+      //   this.isMobile = false
+      //   setTimeout(() => this.isMobile = true, 200 + Math.random() * 2000)
+      // } else {
+        this.position.x += this.currMoveSpeed 
+          * Math.cos(this.directionAngleRadians)
+        this.position.y += this.currMoveSpeed 
+          * Math.sin(this.directionAngleRadians)
+    
+        this.isTurnable && turnRandomlySmoothly.call(this)
+        console.log(`isturnable`, this.isTurnable)
+        
+        moveEdgeWrap.call(this)
+        this.setHitAreas()
+      // }
+    }
   }
 
   update() {
-    if (this.isMobile) {
-      if (Math.random() < 0.005) {
-        this.isMobile = false
-        setTimeout(() => this.isMobile = true, 200 + Math.random() * 2000)
-      } else {
-        this.move()
-      }
-    }
+    this.move()
     this.downstreamSegment?.update()
   }
 }

@@ -317,11 +317,10 @@ export default class DebugGUI {
 
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
-      // addEnt(Ant)
-      // addEnt(Apple)
-      // addEnt(Mango)
-      addEnt(Centipede).setMobile(true)
-      // addEnt(Banana)
+
+      // const c = addEnt(Centipede).setMobile(true).setTurnable(false)
+      // c.directionAngleRadians = - Math.PI / 2
+      // c.position = {x:150,y:550}
       
     }
   }
