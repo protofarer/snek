@@ -49,6 +49,7 @@ export default class Segment {
       y: this.upstreamSegment.position.y
     }
     this.currPrimaryColor = this.upstreamSegment.currPrimaryColor
+    this.currExp = this.baseExp
     this.postDigestionData = [
       {
         effect: 'moveSpeed',
@@ -241,9 +242,9 @@ export default class Segment {
         // * "Disintegrate" the fully digested ent
         // ! consider recycling aka ring buffer to restore disintegrated ents
         // ! for reuse
-        // ! Below needs to be more thorough
         this.entUnderDigestion.position = {x: -100, y: -100}
         this.entUnderDigestion.hitArea = new Path2D
+
         Entity.remove(this.entUnderDigestion.id)
 
         this.makePoop()
@@ -253,10 +254,9 @@ export default class Segment {
   }
 
   makePoop() {
-    // TODO recycle or destroy the digested ent object
     const poop = new Poop(this.ctx, this.position, this)
     
-    // ! Patch until interactive, detachable segments implemented
+    // ! Patch for until interactive, detachable segments implemented
     poop.hitArea = new Path2D()
 
     new Entity(poop)

@@ -120,6 +120,15 @@ export default class Snek extends Mob {
         default:
           console.info(`snek.consume() case-switch defaulted`, )
       }
+    } else {
+      // * Bite behavior: move ent behind snek and ensure hittable
+      console.log(`bitbehavior`, )
+      
+      ent.position = {
+        x: this.position.x - this.r * Math.cos(this.directionAngleRadians),
+        y: this.position.y - this.r * Math.sin(this.directionAngleRadians)
+      }
+      ent.setHitAreas()
     }
 
     if (this.swallowables.includes(ent.carriedEnt?.species)) {

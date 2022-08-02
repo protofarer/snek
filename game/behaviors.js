@@ -1,3 +1,5 @@
+import Entity from './Entity'
+
 export function moveEdgeWrap() {
   if (this.position.x >= this.ctx.canvas.width) {
     this.position.x = 0
@@ -45,12 +47,21 @@ export function turnErratically() {
 }
 
 export function baseSwallowEffect(entAffected) {
-  if (this.digestion.timeLeft === this.digestion.baseTime) {
-    entAffected.currExp += this.currExp / 2
-    this.currExp -= this.currExp / 2
-    return this.currExp / 2
-  }
-  return 0
+    // Consume all on the 3rd bite
+    if (this.currExp / this.baseExp <= 0.25) {
+      entAffected.currExp += this.currExp
+      this.currExp = 0
+      this.digestion.timeLeft = 0
+
+      // ! recycle ent
+      this.hitArea = new Path2D()
+      this.position = {x: -100, y: -100}
+      Entity.remove(this.id)
+    } else {
+      entAffected.currExp += this.currExp / 2
+      this.currExp -= this.currExp / 2
+      this.digestion.timeLeft *= 0.5
+    }
 }
 
 export function lowSwallowEffect(entAffected) {

@@ -116,6 +116,8 @@ export default class Immob {
 
   swallowBehavior(entAffected) {
     if (!this.wasExcreted && this.swallowEffect) {
+      console.log(`calling swallowEffect`, )
+      
       this.swallowEffect.call(this, entAffected)
     } else {
       console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
