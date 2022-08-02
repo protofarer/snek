@@ -18,13 +18,16 @@ import Ant from './mobs/Ant'
 import { moveEdgeWrap } from './behaviors'
 
 export default class Game {
-  species = 'game'
 
-  // * Related to normal game flow and info directly relevant to player
-  // * Used by: game.panel
-  msg = ''
-  phase = CONSTANTS.PHASE_PLAY
-  score = 0
+  // * Game object is a singleton (or will be) that:
+  // * - sets up html containers
+  // * - initializes sound, external panel, world objects
+  // * - generally invokes objects' update and render functions
+  // * - keeps a list of all ents aka entities (interactive objects)
+  // * - defines interstitial behavior: defines interaction between objects at the root layer aka world
+  // *   - eg collision detection, spawning, world events
+  // * - provides ent instantiation via addEnt(test) and spawnEnt(random position/orientation for production)
+
 
   constructor (container) {
     this.container = container
@@ -36,12 +39,20 @@ export default class Game {
     this.ctx = this.canvas.getContext('2d')
     this.rect = this.canvas.getBoundingClientRect()
 
+    this.isDebugOn = window.sessionStorage.getItem('isDebugOn') 
+
     // * Adjustable parameters for testing design, performance, and debugging
     this.params = {
       // speed capped at 1 on test slider because of how it divides the elapsed time 't' from draw= {
       speed: 1,
       pauseInterval: 1000
     }
+
+    // * Related to normal game flow and info directly relevant to player
+    // * Used by: game.panel
+    this.msg = ''
+    this.phase = CONSTANTS.PHASE_PLAY
+    this.score = 0
 
     this.snek = null
     this.mobs = []
@@ -56,7 +67,6 @@ export default class Game {
     const Sounds = Audio()
     this.play = Sounds.play
 
-    this.isDebugOn = window.sessionStorage.getItem('isDebugOn') 
     this.initSpawn()
   }
 
@@ -190,6 +200,7 @@ export default class Game {
         if (ent.species === 'ant' && !ent.carriedEnt) {
           let sweets = Entity.bySpecies(['apple', 'mango'])
           for(let sweet of Object.values(sweets)) {
+            // TODO collisionresolver
             const isContacting = this.isContactingMouth(
               sweet.hitArea,
               ent.mouthCoords
@@ -207,29 +218,25 @@ export default class Game {
           
           moveEdgeWrap.call(ent)
   
-          if (this.snek) {
+          if (this.snek && this.snek.swallowables.includes(ent.species)) {
+
+            // TODO collisionresolver
             const isContacting = this.isContactingMouth(
               ent.hitArea,
               this.snek.mouthCoords,
             )
     
             if (isContacting) {
-              if (this.snek.swallowables.includes(ent.species)) {
-                console.log(`IN game, snek swallow:`, ent.species)
-                
-                this.snek.swallow(ent)
-                this.play.playRandomSwallowSound()
-                this.score++
-                // this.removeEnt(id)
-              }
+              this.snek.swallow(ent)
+              this.play.playRandomSwallowSound()
+              this.score++
             }
-          } // * DRY
-  
-          if (ent.species === 'centipede') {
-  
-            // TODO centipede mouth hit snek head
-            const sneksegs = Entity.bySpecies(['snek-segment']) 
+          }
+
+          const sneksegs = Entity.bySpecies(['snek-segment']) 
+          if (ent.species === 'centipede' && sneksegs.length > 0) {
             for(let snekseg of Object.values(sneksegs)) {
+            // TODO collisionresolver
               const isContacting = this.isContactingMouth(
                 snekseg.hitArea,
                 ent.mouthCoords,
@@ -251,6 +258,7 @@ export default class Game {
         } else if (ent.entGroup === 'immob') {
   
           if (this.snek) {
+            // TODO collisionresolver
             const isContacting = this.isContactingMouth(
               ent.hitArea,
               this.snek.mouthCoords, 
@@ -274,11 +282,23 @@ export default class Game {
     // **********************************************************************
       // this.panel.updateMsg()
 
+    // **********************************************************************
+    // * 4. Misc
+    // **********************************************************************
+
     // * Enter PHASE_END via game.checkEndCondition()
     if (this.phase === CONSTANTS.PHASE_END) {
       cancelAnimationFrame(loopID)
       this.end()
     }
+  }
+
+  collisionResolver(aggressor, defender, resolver) {
+    const isContacting = this.isContactingMouth(
+      defender.hitArea,
+      aggressor.mouthCoords,
+    )
+    isContacting && resolver()
   }
 
   initSpawn() {
