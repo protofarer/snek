@@ -12,7 +12,7 @@ export default class Background {
 
   draw() {
     // night color hsl 52 30 32
-    this.ctx.fillStyle = 'hsl(35,40%,35%)'
+    this.ctx.fillStyle = 'hsl(35,40%,29%)'
     // this.ctx.fillStyle = 'white'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
     const n = 1000

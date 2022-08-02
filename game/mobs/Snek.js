@@ -13,11 +13,19 @@ export default class Snek extends Mob {
   get hitR() { return this.r }
   level = 1
   levelMultiplier = 2
+  segLevelMultiplier = 1.25
   baseExp = 100
   currExp = 0
-  
+
+  currSegExp = this.currExp
+
   expForLevel(level) {
     return (this.levelMultiplier**(level - 2)) * this.baseExp
+  }
+
+  // * segCount is equivalent to seg level
+  segExpForLevel(segCount) {
+    return (this.segLevelMultiplier**(segCount - 2)) * this.baseExp
   }
 
   get expGainedThisLevelOnly() {
@@ -41,6 +49,7 @@ export default class Snek extends Mob {
   baseSegmentCount = 3
   downstreamSegment
   currKnownSegmentCount = 0
+  get maxSegmentCount() { return this.level }
 
   activeEffects = []
 
@@ -101,6 +110,8 @@ export default class Snek extends Mob {
     ent.swallowBehavior(this)
 
     if (this.downstreamSegment) {
+      ent.parentEnt = this
+
       switch (ent.species) {
         case 'apple':
           this.downstreamSegment.ingest(ent)
@@ -109,6 +120,7 @@ export default class Snek extends Mob {
           this.downstreamSegment.ingest(ent)
           break
         case 'ant':
+          ent.setMobile(false)
           this.downstreamSegment.ingest(ent)
           break
         case 'mango':
@@ -306,6 +318,9 @@ export default class Snek extends Mob {
   }
 
   update() {
+    // * currKnownSegmentCount updated on a need to know basis, eg
+    // * when segCount decrease event occurs or manually via growth adds aka
+    // * segExp level ups
     if (this.countSegments() < this.currKnownSegmentCount) {
       // Panic
       this.activateEffects([
@@ -318,6 +333,7 @@ export default class Snek extends Mob {
         }
       ])
       this.currKnownSegmentCount = this.countSegments()
+      this.currSegExp = this.expForLevel(this.countSegments())
     }
     this.processEffects()
 
@@ -326,6 +342,11 @@ export default class Snek extends Mob {
     while(this.currExp >= this.expForLevel(this.level + 1)) {
       console.log(`Level up!`, )
       this.level++
+    }
+    
+    while(this.currSegExp >= this.segExpForLevel(this.countSegments() + 1)
+      && this.countSegments() < this.maxSegmentCount) {
+      console.log(`New seg from seg level up`, )
       this.addSegments(1)
     }
   }

@@ -95,6 +95,7 @@ export default class Game {
       }, 
       this
     )
+    ent.parentEnt = this
     
     const bigEnt = new Entity(ent)
     
@@ -172,85 +173,95 @@ export default class Game {
 
       ent.update?.()
 
-      if (ent.species === 'ant' && !ent.carriedEnt) {
-        let sweets = Entity.bySpecies(['apple', 'mango'])
-        for(let [id, sweet] of Object.entries(sweets)) {
-          const isContacting = this.isContactingMouth(
-            sweet.hitArea,
-            ent.mouthCoords
-          )
-            
-          if (isContacting) {
-            console.log(`iscontacting`, )
-            
-            ent.grab(sweet)
-          }
-        }
-      }
+      // **********************************************************************
+      // * Hit Detection
+      // *  only when parentEnt = game
+      // **********************************************************************
 
-      if (ent.entGroup === 'mob') {
-        
-        moveEdgeWrap.call(ent)
+      if (ent.parentEnt === this) {
 
-        if (this.snek) {
-          const isContacting = this.isContactingMouth(
-            ent.hitArea,
-            this.snek.mouthCoords,
-          )
-  
-          if (isContacting) {
-            if (this.snek.swallowables.includes(ent.species)) {
-              console.log(`IN game, snek swallow:`, ent.species)
-              
-              this.snek.swallow(ent)
-              this.play.playRandomSwallowSound()
-              this.score++
-              // this.removeEnt(id)
-            }
-          }
-        } // * DRY
-
-        if (ent.species === 'centipede') {
-
-          // TODO centipede mouth hit snek head
-          const sneksegs = Entity.bySpecies(['snek-segment']) 
-          for(let snekseg of Object.values(sneksegs)) {
+        if (ent.species === 'ant' && !ent.carriedEnt) {
+          let sweets = Entity.bySpecies(['apple', 'mango'])
+          for(let sweet of Object.values(sweets)) {
             const isContacting = this.isContactingMouth(
-              snekseg.hitArea,
-              ent.mouthCoords,
+              sweet.hitArea,
+              ent.mouthCoords
             )
-
-            if (isContacting) {
-              console.log(`IN game, cent bite:`, ent.species)
-              snekseg.detach()
-              console.log(`snekseg species`, snekseg.species)
               
-              ent.swallow(snekseg)
-              // TODO detach segments
-              // TODO ent.bite(snekseg)
-              // TODO playRandomBiteSound
+            if (isContacting) {
+              console.log(`iscontacting`, )
+              
+              ent.grab(sweet)
             }
-
           }
         }
-      } else if (ent.entGroup === 'immob') {
-
-        if (this.snek) {
-          const isContacting = this.isContactingMouth(
-            ent.hitArea,
-            this.snek.mouthCoords, 
-          )
-
-          if (isContacting) {
-            if (this.snek.swallowables.includes(ent.species)) {
-              this.snek.swallow(ent)
-              this.play.playRandomSwallowSound()
-              this.score++
+  
+        if (ent.entGroup === 'mob') {
+          
+          moveEdgeWrap.call(ent)
+  
+          if (this.snek) {
+            const isContacting = this.isContactingMouth(
+              ent.hitArea,
+              this.snek.mouthCoords,
+            )
+    
+            if (isContacting) {
+              if (this.snek.swallowables.includes(ent.species)) {
+                console.log(`IN game, snek swallow:`, ent.species)
+                
+                this.snek.swallow(ent)
+                this.play.playRandomSwallowSound()
+                this.score++
+                // this.removeEnt(id)
+              }
+            }
+          } // * DRY
+  
+          if (ent.species === 'centipede') {
+  
+            // TODO centipede mouth hit snek head
+            const sneksegs = Entity.bySpecies(['snek-segment']) 
+            for(let snekseg of Object.values(sneksegs)) {
+              const isContacting = this.isContactingMouth(
+                snekseg.hitArea,
+                ent.mouthCoords,
+              )
+  
+              if (isContacting) {
+                console.log(`IN game, cent bite:`, ent.species)
+                snekseg.detach()
+                console.log(`snekseg species`, snekseg.species)
+                
+                ent.swallow(snekseg)
+                // TODO detach segments
+                // TODO ent.bite(snekseg)
+                // TODO playRandomBiteSound
+              }
+  
+            }
+          }
+        } else if (ent.entGroup === 'immob') {
+  
+          if (this.snek) {
+            const isContacting = this.isContactingMouth(
+              ent.hitArea,
+              this.snek.mouthCoords, 
+            )
+  
+            if (isContacting) {
+              if (this.snek.swallowables.includes(ent.species)) {
+                this.snek.swallow(ent)
+                this.play.playRandomSwallowSound()
+                this.score++
+              }
             }
           }
         }
       }
     }
+
+
     // **********************************************************************
     // * 3. Update UI
     // **********************************************************************

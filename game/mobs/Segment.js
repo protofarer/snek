@@ -89,15 +89,14 @@ export default class Segment {
     // * All ents to be digested start here
     // * Activates digestion effects data for head ent
 
-    
     // * Core mechanic: Ingesting another ent while an existing ent is under
     // * digestion forces the latter to be passed regardless of digestion state
 
-    console.log(`ingesting ${ent.species}`, )
+    // console.log(`ingesting ${ent.species}`, )
 
     if (this.entUnderDigestion) {
       // Force segment to pass contents
-      console.log(`ingest-force-passing ${this.entUnderDigestion.species}`, )
+      // console.log(`ingest-force-passing ${this.entUnderDigestion.species}`, )
       this.pass()
     }
 
@@ -154,89 +153,68 @@ export default class Segment {
       this.entUnderDigestion.species !== 'poop' 
         && this.entUnderDigestion.absorbExp(this.getHeadEnt())
 
-      // TODO put digestion effects here
-      const expiredPostDigestionEffects = this.postDigestionEffects.filter(p => 
-        p.timeLeft <= 0
-      )
 
-      // * Effects that occur only after content is fully digested
+      // * Under Digestion Effects
+      if (this.underDigestionEffects.length > 0) {
 
-      // * Ensure effects are active while duration remains, then expire
-      expiredPostDigestionEffects.forEach(postDigestionData => {
-        switch (postDigestionData.effect) {
-          case 'moveSpeed':
-            this.getHeadEnt().currMoveSpeed += -postDigestionData.moveSpeed
-            break
-          case 'turnRate':
-            this.getHeadEnt().currTurnRate += -postDigestionData.turnRate
-            break
-          default:
-            console.log(`snek expiredDigestionEffect switch/case defaulted`, )
-        }
-        console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
-      })
+        // Reverse and Remove expended digestion effects
+        const expiredUnderDigestionEffects = this.underDigestionEffects.filter(
+          underDigestionEffect => underDigestionEffect.timeLeft <= 0
+        )
 
-      this.postDigestionEffects = this.postDigestionEffects.filter(postDigestionData =>
-        postDigestionData.timeLeft >= 0
-      )
+        expiredUnderDigestionEffects.forEach(e => {
+          console.log(`reversing underDigFx`, e)
+          this.reverseDigestionEffect(e)
+        })
 
-      this.postDigestionEffects.forEach(postDigestionData => {
-        postDigestionData.timeLeft -= 17
-      })
-
-      // * underDigestionEffects
-    if (this.underDigestionEffects.length > 0) {
-      // Reverse and Remove expended digestion effects
-      const expiredUnderDigestionEffects = this.underDigestionEffects.filter(
-        underDigestionEffect => underDigestionEffect.timeLeft <= 0
-      )
-      expiredUnderDigestionEffects.forEach(e => {
-        console.log(`reversing underDigFx`, e)
-        this.reverseDigestionEffect(e)
-      })
-      expiredUnderDigestionEffects.length > 0 && console.log(`expiredDigFx`, expiredUnderDigestionEffects)
-      
-      this.underDigestionEffects = this.underDigestionEffects.filter(underDigestionEffect => 
-        underDigestionEffect.timeLeft > 0
-      )
-
-      // Tick under digestion effects
-      this.underDigestionEffects = this.underDigestionEffects.map(underDigestionEffect => {
-        const timeLeft = underDigestionEffect.timeLeft - 17 < 0
-          ? 0
-          : underDigestionEffect.timeLeft - 17
-        return { ...underDigestionEffect, timeLeft }
-      })
-    }
-
-      } else {
-        // * Upon fully digesting contents transform ent into poop and pass
-
-        const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
-        if (postDigestionData) {
-          postDigestionData.forEach(pDD => {
-            this.postDigestionEffects.push(pDD)
-
-            switch (pDD.effect) {
-              case 'moveSpeed':
-                this.getHeadEnt().currMoveSpeed += pDD.moveSpeed
-                break
-              case 'turnRate':
-                this.getHeadEnt().currTurnRate += pDD.turnRate
-                break
-              default:
-                console.log(`snek postDigestionEffect switch/case defaulted`, )
-            }
-            console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
-          })
-    
-        }
+        expiredUnderDigestionEffects.length > 0 && console.log(`expiredDigFx`, expiredUnderDigestionEffects)
         
+        this.underDigestionEffects = this.underDigestionEffects.filter(underDigestionEffect => 
+          underDigestionEffect.timeLeft > 0
+        )
+
+        // Tick under digestion effects
+        this.underDigestionEffects = this.underDigestionEffects.map(underDigestionEffect => {
+          const timeLeft = underDigestionEffect.timeLeft - 17 < 0
+            ? 0
+            : underDigestionEffect.timeLeft - 17
+          return { ...underDigestionEffect, timeLeft }
+        })
+
+      }
+
+    } else {
+
+      // * Upon fully digesting contents:
+      // * - Active Post Digestion Effects
+
+      const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
+
+      if (postDigestionData) {
+        postDigestionData.forEach(pDD => {
+          this.postDigestionEffects.push(pDD)
+
+          switch (pDD.effect) {
+            case 'moveSpeed':
+              this.getHeadEnt().currMoveSpeed += pDD.moveSpeed
+              break
+            case 'turnRate':
+              this.getHeadEnt().currTurnRate += pDD.turnRate
+              break
+            default:
+              console.log(`snek postDigestionEffect switch/case defaulted`, )
+          }
+          console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
+        })
+      }
+        
+      // * - If digested ent was poop, pass it immediately?
       if (this.entUnderDigestion.species === 'poop'
         || this.entUnderDigestion.species === 'pebble') {
         this.pass()
       } else {
-        // * "Disintegrate" the fully digested ent
+        // * - Recycle the fully digested ent
+        // * - Transform digested ent into poop
         // ! consider recycling aka ring buffer to restore disintegrated ents
         // ! for reuse
         this.entUnderDigestion.position = {x: -100, y: -100}
@@ -281,6 +259,8 @@ export default class Segment {
     if (this.entUnderDigestion.entGroup === 'immob') {
       this.entUnderDigestion.setHitAreas()
     }
+    this.entUnderDigestion.setMobile?.(true)
+    this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
   }
 
   drawHitOverlays() {
@@ -363,59 +343,91 @@ export default class Segment {
         y: this.upstreamSegment.position.y
       })
 
-    let headTrailElementsToKeep = this.headPositionHistory.length
-    let headTrailLength = 0
+      let headTrailElementsToKeep = this.headPositionHistory.length
+      let headTrailLength = 0
 
-    for (let i = 1; i < this.headPositionHistory.length; i++) {
+      for (let i = 1; i < this.headPositionHistory.length; i++) {
 
-      headTrailLength += Math.sqrt(
-        (this.headPositionHistory[i].x - this.headPositionHistory[i-1].x)**2
-        + (this.headPositionHistory[i].y - this.headPositionHistory[i-1].y)**2
+        headTrailLength += Math.sqrt(
+          (this.headPositionHistory[i].x - this.headPositionHistory[i-1].x)**2
+          + (this.headPositionHistory[i].y - this.headPositionHistory[i-1].y)**2
+        )
+
+        // * Tweak Segment Follow distance here: coefficient to r
+        if (headTrailLength >= (this.r*1.8)) {
+          headTrailElementsToKeep = i
+          break
+        }
+      }
+
+      this.headPositionHistory.splice(headTrailElementsToKeep)
+
+      this.position = {
+        x: this.headPositionHistory.at(-1).x,
+        y: this.headPositionHistory.at(-1).y
+      }
+
+      this.upstreamSegmentTailPosition = {
+        x: this.upstreamSegment.position.x 
+          - this.upstreamSegment.r 
+            * Math.cos(this.upstreamSegment.directionAngleRadians),
+        y: this.upstreamSegment.position.y 
+          - this.upstreamSegment.r 
+            * Math.sin(this.upstreamSegment.directionAngleRadians),
+      }
+      const dy = (this.upstreamSegmentTailPosition.y - this.position.y)
+      const dx = (this.upstreamSegmentTailPosition.x - this.position.x)
+      this.directionAngleRadians = Math.atan(dy/dx)
+
+      // * Post Digestion Effects: occur after content is fully digested
+
+      // * Expire used up effects
+
+      // TODO put digestion effects here
+      const expiredPostDigestionEffects = this.postDigestionEffects.filter(e => 
+        e.timeLeft <= 0
       )
 
-      // * Tweak Segment Follow distance here: coefficient to r
-      if (headTrailLength >= (this.r*1.8)) {
-        headTrailElementsToKeep = i
-        break
+      if (this.postDigestionEffects.length > 0 ) {
+
+        expiredPostDigestionEffects.forEach(postDigestionData => {
+          switch (postDigestionData.effect) {
+            case 'moveSpeed':
+              this.getHeadEnt().currMoveSpeed -= postDigestionData.moveSpeed
+              break
+            case 'turnRate':
+              this.getHeadEnt().currTurnRate -= postDigestionData.turnRate
+              break
+            default:
+              console.log(`snek expiredDigestionEffect switch/case defaulted`, )
+          }
+          console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
+        })
+  
+        this.postDigestionEffects = this.postDigestionEffects.filter(postDigestionData =>
+          postDigestionData.timeLeft >= 0
+        )
+  
+        this.postDigestionEffects.forEach(postDigestionData => {
+          postDigestionData.timeLeft -= 17
+        })
+
       }
+
+      // ! Should this be before physics?
+      if (this.entUnderDigestion) {
+        this.entUnderDigestion.position = this.position
+        this.digest()
+      }
+
     }
 
-    this.headPositionHistory.splice(headTrailElementsToKeep)
-
-    this.position = {
-      x: this.headPositionHistory.at(-1).x,
-      y: this.headPositionHistory.at(-1).y
-    }
-
-    this.upstreamSegmentTailPosition = {
-      x: this.upstreamSegment.position.x 
-        - this.upstreamSegment.r 
-          * Math.cos(this.upstreamSegment.directionAngleRadians),
-      y: this.upstreamSegment.position.y 
-        - this.upstreamSegment.r 
-          * Math.sin(this.upstreamSegment.directionAngleRadians),
-    }
-    const dy = (this.upstreamSegmentTailPosition.y - this.position.y)
-    const dx = (this.upstreamSegmentTailPosition.x - this.position.x)
-    this.directionAngleRadians = Math.atan(dy/dx)
-  }
-
-  // * Without an upstream segment/head, the segment acts as the head
-  // * and maintains last known state, eg position, direction, color
-  // * state of contents' digestion processes.
+    // * Without an upstream segment/head, the segment acts as the head
+    // * and maintains last known state, eg position, direction, color
+    // * state of contents' digestion processes.
 
     this.currPrimaryColor = this.getHeadEnt().currPrimaryColor
     
-    // ! Should this be before physics?
-    if (this.entUnderDigestion 
-      && (
-        this.getHeadEnt().species === 'snek' 
-        || this.getHeadEnt().species === 'centipede'
-      )
-    ) {
-      this.entUnderDigestion.position = this.position
-      this.digest()
-    }
 
     // ! inefficient, running whether moving or not. Segment has no awareness of
     // ! its own movement except if it were to know about head's isMobile

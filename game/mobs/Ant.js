@@ -40,14 +40,20 @@ export default class Ant extends Mob {
   }
 
   grab(ent) {
-    ent.parentEnt = this
-    ent.hitArea = new Path2D()
     this.carriedEnt = ent
+    this.carriedEnt.parentEnt = this
+    this.carriedEnt.hitArea = new Path2D()
     this.carriedOffsetRad = this.directionAngleRadians
       - this.carriedEnt.directionAngleRadians
   }
 
   drop() {
+    let parentEnt = this.parentEnt
+    while (parentEnt) {
+      this.carriedEnt.parentEnt = parentEnt
+      parentEnt = parentEnt.parentEnt
+    }
+    
     this.carriedEnt.setHitAreas()
     this.carriedOffsetRad = null
     this.carriedEnt = null

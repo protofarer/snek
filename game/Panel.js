@@ -3,6 +3,7 @@ export default class Panel {
   expbar = document.createElement('div')
   infobox = document.createElement('div')
   score = document.createElement('div')
+  level = document.createElement('div')
   gameInfo = document.createElement('div')
   statusMsg = document.createElement('div')
   newGameButton = document.createElement('button')
@@ -27,6 +28,9 @@ export default class Panel {
   
     this.score.id = 'info-score'
     this.infobox.appendChild(this.score)
+
+    this.level.id = 'info-level'
+    this.infobox.appendChild(this.level)
   
     this.gameInfo.id = 'info-game'
     this.infobox.appendChild(this.gameInfo)
@@ -43,6 +47,7 @@ export default class Panel {
     this.infobox.style.color = 'lawngreen'
     this.statusMsg.innerText = '$msg'
     this.score.innerText = '$score'
+    this.level.innerText = '$level'
     this.gameInfo.innerText = '$exp'
     console.info('%cUI initializing', 'color: orange')
 
@@ -68,6 +73,7 @@ export default class Panel {
 
   render() {
     this.score.innerHTML = `score: ${this.game.score}`
+    this.level.innerHTML = `level: ${this.game.snek.level}`
     if (this.game.snek) {
       this.gameInfo.innerHTML = `exp: ${Math.trunc(this.game.snek.currExp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
       this.expSegments.forEach((seg, idx) => {

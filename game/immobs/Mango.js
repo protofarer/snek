@@ -26,9 +26,9 @@ export default class Mango extends Immob {
       hueStart: 35,
       hueEnd: 35,
       satStart: 100,
-      satEnd: 30,
+      satEnd: 25,
       lumStart: 50,
-      lumEnd: 25
+      lumEnd: 40
     }
     this.swallowEffect = lowSwallowEffect
     this.postDigestionData = [
