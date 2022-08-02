@@ -1,5 +1,4 @@
 import { baseAbsorbExp, baseSwallowEffect } from '../behaviors'
-import { setupPostDigestionEffect, setupSwallowEffect } from '../utils/subclassHelpers'
 
 export default class Immob {
   // Generally are simple, non-moving, squared or circular ent interactable

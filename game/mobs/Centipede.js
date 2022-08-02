@@ -1,4 +1,3 @@
-import { moveEdgeWrap } from '../behaviors'
 import Segment from './Segment'
 import { turnRandomlySmoothly } from '../behaviors'
 import Mob from './Mob'
