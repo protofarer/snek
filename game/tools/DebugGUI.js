@@ -17,7 +17,7 @@ export default class DebugGUI {
     const gui = new GUI()
     this.gui = gui
     this.game = game
-    this.parentEnt = null
+    this.parentEnt = undefined
 
     this.params = {
       isDebugOn: false,

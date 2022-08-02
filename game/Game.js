@@ -142,11 +142,8 @@ export default class Game {
   }
 
   removeEnt(id) {
+    // ! Placeholder until ent recycling in working order
     delete Entity.stack[id]
-  }
-
-  reAddEnt(ent) {
-    new Entity(ent)
   }
 
   render() {
@@ -162,24 +159,30 @@ export default class Game {
     // **********************************************************************
     // * 1. Add new objects
     // **********************************************************************
+
+    // Reserved for gameplay testing
     // this.world.randomSpawns()
 
     // **********************************************************************
     // * 2. Update all objects
     // **********************************************************************
+
     this.clock.update()
+
     if (this.snek) {
       this.snek.update()
       moveEdgeWrap.call(this.snek)
     }
 
-    for(const [id, ent] of Object.entries(Entity.stack)) {
+    for(const ent of Object.values(Entity.stack)) {
 
+      // Generally, immobs don't have an update function since they are *acted
+      // upon* or manipulated by other ents
       ent.update?.()
 
       // **********************************************************************
       // * Hit Detection
-      // *  only when parentEnt = game
+      // * - only when parentEnt = game
       // **********************************************************************
 
       if (ent.parentEnt === this) {

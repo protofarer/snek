@@ -48,6 +48,7 @@ export default class Ant extends Mob {
   }
 
   drop() {
+    // TODO use helper
     let parentEnt = this.parentEnt
     while (parentEnt) {
       this.carriedEnt.parentEnt = parentEnt
