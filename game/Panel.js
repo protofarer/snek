@@ -73,8 +73,8 @@ export default class Panel {
 
   render() {
     this.score.innerHTML = `score: ${this.game.score}`
-    this.level.innerHTML = `level: ${this.game.snek.level}`
     if (this.game.snek) {
+      this.level.innerHTML = `level: ${this.game.snek.level}`
       this.gameInfo.innerHTML = `exp: ${Math.trunc(this.game.snek.currExp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(

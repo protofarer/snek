@@ -56,10 +56,8 @@ export default class Game {
     const Sounds = Audio()
     this.play = Sounds.play
 
-    const isDebugOn = window.sessionStorage.getItem('isDebugOn') 
-    if (isDebugOn === 'false' || isDebugOn === null) {
-      this.initSpawn()
-    }
+    this.isDebugOn = window.sessionStorage.getItem('isDebugOn') 
+    this.initSpawn()
   }
 
   isContactingMouth(objHitArea, mouthCoords) {
@@ -102,14 +100,18 @@ export default class Game {
     const bigEnt = new Entity(ent)
     
     if (!position) {
-      // ent.position.x += (50 * bigEnt.id)
-      // * So snek segs don't count toward displacement along x
-      const minsSegsLength = Object.values(Entity.stack).filter(e => e.entGroup === 'segment').length
+      // * For testing purposes so snek segs don't count toward displacement
+      // * along x
+      const minsSegsLength = Object.values(Entity.stack).filter(e => 
+        e.entGroup === 'segment'
+      ).length
       ent.position.x += (50 * (bigEnt.id - minsSegsLength))
     }
+
     ent.isMobile = false
+
     // * Handle setting hit area when position arg specified since immobs
-    //  only set it only once at instantiation
+    // * set it only once during their instantiation by design
     if (entClass.entGroup === 'immob') ent.setHitAreas()
     
     return ent
@@ -122,8 +124,8 @@ export default class Game {
         this.ctx, 
         position || 
         {
-          x:Math.random()*this.canvas.width,
-          y:Math.random()*this.canvas.height,
+          x:Math.random()*this.canvas.width - 1,
+          y:Math.random()*this.canvas.height - 1,
         }, 
         this
       )
@@ -277,19 +279,21 @@ export default class Game {
   }
 
   initSpawn() {
-    this.snek = new Snek(this.ctx, null, this)
-    this.snek.position = { x: 200, y: 400 }
+    if (this.isDebugOn === 'false' || this.isDebugOn === null) {
+      this.snek = new Snek(this.ctx, null, this)
+      this.snek.position = { x: 200, y: 400 }
 
-    this.spawnEnts(Apple, 35)
-    this.spawnEnts(Pebble, 55)
-    this.spawnEnts(Mango, 5)
-    this.spawnEnts(Ant, 25)
-    this.spawnEnts(Centipede, 2)
+      this.spawnEnts(Apple, 35)
+      this.spawnEnts(Pebble, 55)
+      this.spawnEnts(Mango, 5)
+      this.spawnEnts(Ant, 25)
+      this.spawnEnts(Centipede, 2)
 
-    // this.spawnEnts(Apple, 50)
-    // this.spawnEnts(Pebble, 75)
-    // this.spawnEnts(Ant, 70)
-    // this.spawnEnts(Mango, 25)
-    // this.spawnEnts(Centipede, 5)
+      // this.spawnEnts(Apple, 50)
+      // this.spawnEnts(Pebble, 75)
+      // this.spawnEnts(Ant, 70)
+      // this.spawnEnts(Mango, 25)
+      // this.spawnEnts(Centipede, 5)
+    }
   }
 }
