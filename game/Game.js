@@ -196,26 +196,27 @@ export default class Game {
       // **********************************************************************
 
       if (ent.parentEnt === this) {
-  
-        if (ent.entGroup === 'mob') {
 
-          moveEdgeWrap.call(ent)
-
-          if (ent.species === 'ant' && !ent.carriedEnt) {
-            let sweets = Entity.bySpecies(['apple', 'mango'])
-            for(let sweet of Object.values(sweets)) {
-              // TODO collisionresolver
-              const isContacting = this.isContactingMouth(
-                sweet.hitArea,
-                ent.mouthCoords
-              )
-                
-              if (isContacting) {
-                ent.grab(sweet)
-              }
+        if (ent.species === 'ant' && !ent.carriedEnt) {
+          let sweets = Entity.bySpecies(['apple', 'mango'])
+          for(let sweet of Object.values(sweets)) {
+            // TODO collisionresolver
+            const isContacting = this.isContactingMouth(
+              sweet.hitArea,
+              ent.mouthCoords
+            )
+              
+            if (isContacting) {
+              console.log(`iscontacting`, )
+              
+              ent.grab(sweet)
             }
           }
+        }
+  
+        if (ent.entGroup === 'mob') {
           
+          moveEdgeWrap.call(ent)
   
           if (this.snek && this.snek.swallowables.includes(ent.species)) {
 
@@ -232,9 +233,7 @@ export default class Game {
             }
           }
 
-          const sneksegs = Object.values(Entity.bySpecies(['snek-segment']))
-          console.log(`sneksegs.length`, sneksegs.length)
-          
+          const sneksegs = Entity.bySpecies(['snek-segment']) 
           if (ent.species === 'centipede' && sneksegs.length > 0) {
             for(let snekseg of Object.values(sneksegs)) {
             // TODO collisionresolver

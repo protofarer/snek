@@ -7,7 +7,7 @@ export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'
 
-  swallowables = [ 'apple', 'mango', 'ant', 'pebble', 'banana']
+  swallowables = [ 'mango', 'ant', 'pebble', 'banana']
 
   r = 10
   get hitR() { return this.r }
@@ -108,7 +108,6 @@ export default class Snek extends Mob {
   swallow(ent) {
     ent.hitArea = new Path2D()
     ent.swallowBehavior(this)
-    ent.setMobile?.(false)
 
     if (this.downstreamSegment) {
 
