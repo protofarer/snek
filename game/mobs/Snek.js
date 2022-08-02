@@ -108,6 +108,7 @@ export default class Snek extends Mob {
   swallow(ent) {
     ent.hitArea = new Path2D()
     ent.swallowBehavior(this)
+    ent.setMobile?.(false)
 
     if (this.downstreamSegment) {
       ent.parentEnt = this
