@@ -359,10 +359,10 @@ export default class DebugGUI {
       // const b = addEnt(Apple)
       // b.position = {x: 300, y:400}
       // b.setHitAreas()
-      // const a = addEnt(Ant).setMobile(false).setTurnable(false)
-      // a.directionAngleRadians = 0
-      // a.position = {x: 170, y:400}
-      // a.setHitAreas()
+      const a = addEnt(Ant).setMobile(true).setTurnable(false)
+      a.directionAngleRadians = -Math.PI
+      a.position = {x: 170, y:400}
+      a.setHitAreas()
 
       // const b = addEnt(Apple)
       // b.position = {x:180, y:400}

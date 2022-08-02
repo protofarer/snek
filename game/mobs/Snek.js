@@ -7,7 +7,7 @@ export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'
 
-  swallowables = [ 'mango', 'ant', 'pebble', 'banana']
+  swallowables = [ 'apple', 'mango', 'ant', 'pebble', 'banana']
 
   r = 10
   get hitR() { return this.r }
