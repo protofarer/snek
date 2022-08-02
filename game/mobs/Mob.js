@@ -60,17 +60,14 @@ export default class Mob {
   }
 
   getPostDigestionData() {
-    if (!this.wasExcreted) {
-      return this.postDigestionData
-    }
-    return null
+    return this.postDigestionData
   }
 
   swallowBehavior(entAffected) {
-    if (!this.wasExcreted && this.swallowEffect) {
+    if (this.swallowEffect) {
       this.swallowEffect.call(this, entAffected)
     } else {
-      console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
+      console.log(`no swalloweffect triggered, none defined on ent`, )
     }
   }
 

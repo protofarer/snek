@@ -99,7 +99,10 @@ export default class Game {
     const bigEnt = new Entity(ent)
     
     if (!position) {
-      ent.position.x += (50 * bigEnt.id)
+      // ent.position.x += (50 * bigEnt.id)
+      // * So snek segs don't count toward displacement along x
+      const minsSegsLength = Object.values(Entity.stack).filter(e => e.entGroup === 'segment').length
+      ent.position.x += (50 * (bigEnt.id - minsSegsLength))
     }
     ent.isMobile = false
     // * Handle setting hit area when position arg specified since immobs
@@ -160,8 +163,10 @@ export default class Game {
     // * 2. Update all objects
     // **********************************************************************
     this.clock.update()
-    this.snek?.update()
-    moveEdgeWrap.call(this.snek)
+    if (this.snek) {
+      this.snek.update()
+      moveEdgeWrap.call(this.snek)
+    }
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
 
@@ -176,8 +181,9 @@ export default class Game {
           )
             
           if (isContacting) {
+            console.log(`iscontacting`, )
+            
             ent.grab(sweet)
-            this.removeEnt(id)
           }
         }
       }
@@ -207,7 +213,7 @@ export default class Game {
         if (ent.species === 'centipede') {
 
           // TODO centipede mouth hit snek head
-          const sneksegs = Entity.bySpecies('snek-segment') 
+          const sneksegs = Entity.bySpecies(['snek-segment']) 
           for(let snekseg of Object.values(sneksegs)) {
             const isContacting = this.isContactingMouth(
               snekseg.hitArea,

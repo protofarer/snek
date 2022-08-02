@@ -47,6 +47,12 @@ export default class Ant extends Mob {
       - this.carriedEnt.directionAngleRadians
   }
 
+  drop() {
+    this.carriedEnt.setHitAreas()
+    this.carriedOffsetRad = null
+    this.carriedEnt = null
+  }
+
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(

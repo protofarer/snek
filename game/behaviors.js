@@ -53,7 +53,7 @@ export function baseSwallowEffect(entAffected) {
       this.currExp = 0
       this.digestion.timeLeft = 0
 
-      // ! recycle ent
+      // TODO recycle ent
       this.hitArea = new Path2D()
       this.position = {x: -100, y: -100}
       Entity.remove(this.id)

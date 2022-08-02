@@ -9,8 +9,8 @@ export default class Apple extends Immob {
 
   r = 6
   digestion = {
-    timeLeft: 6000,
-    baseTime: 6000
+    timeLeft: 12000,
+    baseTime: 12000
   }
 
   baseExp = 10
@@ -32,8 +32,8 @@ export default class Apple extends Immob {
       {
         effect: 'moveSpeed',
         moveSpeed: 0.25,
-        duration: 12000,
-        timeLeft: 12000
+        duration: 18000,
+        timeLeft: 18000
       },
     ]
       // TEST

@@ -323,10 +323,15 @@ export default class DebugGUI {
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
 
-      const c = addEnt(Centipede).setMobile(true).setTurnable(false)
-      c.directionAngleRadians = - Math.PI/2
-      c.position = {x:150,y:550}
-      addEnt(Apple)
+      // const b = addEnt(Apple)
+      // b.position = {x: 300, y:400}
+      // b.setHitAreas()
+      const a = addEnt(Ant).setMobile(true).setTurnable(false)
+      a.directionAngleRadians = Math.PI
+      a.position = {x: 340, y:400}
+      // const c = addEnt(Centipede).setMobile(true).setTurnable(false)
+      // c.directionAngleRadians = - Math.PI/2
+      // c.position = {x:150,y:550}
       
     }
   }

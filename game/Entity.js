@@ -10,10 +10,12 @@ export default class Entity {
 
   static byId(id) { return Entity.stack[ id ]}
 
-  static bySpecies(species) {
+  static bySpecies(speciesList) {
     let found = {}
     for(const [k,v] of Object.entries(Entity.stack)) {
-      if (v.species === species) found[k] =  v
+      speciesList.forEach(s => {
+        if (v.species === s) found[k] =  v
+      })
     }
     return found
   }

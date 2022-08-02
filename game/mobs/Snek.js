@@ -131,11 +131,9 @@ export default class Snek extends Mob {
       ent.setHitAreas()
     }
 
-    if (this.swallowables.includes(ent.carriedEnt?.species)) {
-      this.swallowBehavior(ent.carriedEnt)
-      ent.carriedEnt = null
-    } else {
-      // Drop any non-swallowable carried ents
+    // TODO doesn't feel right to be here
+    if (ent.carriedEnt) {
+      ent.drop()
     }
   }
   drawHitOverlays() {

@@ -62,10 +62,10 @@ export default class Segment {
   }
 
   swallowBehavior(entAffected) {
-    if (!this.wasExcreted && this.swallowEffect) {
+    if (this.swallowEffect) {
       this.swallowEffect.call(this, entAffected)
     } else {
-      console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
+      console.log(`no swalloweffect triggered, missing`, )
     }
   }
 
@@ -74,10 +74,7 @@ export default class Segment {
   }
 
   getPostDigestionData() {
-    if (!this.wasExcreted) {
-      return this.postDigestionData
-    }
-    return null
+    return this.postDigestionData
   }
 
   getHeadEnt() {
@@ -284,7 +281,6 @@ export default class Segment {
     if (this.entUnderDigestion.entGroup === 'immob') {
       this.entUnderDigestion.setHitAreas()
     }
-    this.entUnderDigestion.wasExcreted = true
   }
 
   drawHitOverlays() {

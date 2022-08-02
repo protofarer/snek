@@ -38,8 +38,6 @@ export default class Immob {
   swallowEffect = baseSwallowEffect
   postDigestionData = null
 
-  wasExcreted = false
-
   secondaryColor
   #primaryColorHue = { start: 125, end: 125 }
   #primaryColorSat = { start: 70, end: 30 }
@@ -108,14 +106,11 @@ export default class Immob {
   }
 
   getPostDigestionData() {
-    if (!this.wasExcreted) {
-      return this.postDigestionData
-    }
-    return null
+    return this.postDigestionData
   }
 
   swallowBehavior(entAffected) {
-    if (!this.wasExcreted && this.swallowEffect) {
+    if (this.swallowEffect) {
       console.log(`calling swallowEffect`, )
       
       this.swallowEffect.call(this, entAffected)
