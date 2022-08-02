@@ -1,11 +1,13 @@
 import Poop from '../immobs/Poop'
 import Entity from '../Entity'
+import { baseSwallowEffect } from '../behaviors'
+import { baseAbsorbExp } from '../behaviors'
 
 export default class Segment {
   static entGroup = 'segment'
   entGroup = 'segment'
-  static species = 'segment'
-  species = 'segment'
+
+  // * Species initialized upon attachment to a head
 
   position = {x:0,y:0}
 
@@ -13,6 +15,19 @@ export default class Segment {
   get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
   set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
   get hitR() { return this.r + 1 }
+
+  baseExp = 10
+  get expAbsorbRate() {
+    const rate = (17 / this.digestion.baseTime) * this.baseExp / 2
+    return rate
+  }
+
+  swallowEffect = baseSwallowEffect
+
+  digestion = {
+    timeLeft: 6000,
+    baseTime: 6000
+  }
 
   headPositionHistory = []
 
@@ -34,7 +49,34 @@ export default class Segment {
       y: this.upstreamSegment.position.y
     }
     this.currPrimaryColor = this.upstreamSegment.currPrimaryColor
+    this.postDigestionData = [
+      {
+        effect: 'moveSpeed',
+        moveSpeed: 0.5,
+        duration: 24000,
+        timeLeft: 24000
+      },
+    ]
     this.setHitAreas()
+  }
+
+  swallowBehavior(entAffected) {
+    if (!this.wasExcreted && this.swallowEffect) {
+      this.swallowEffect.call(this, entAffected)
+    } else {
+      console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
+    }
+  }
+
+  absorbExp(entAffected) {
+    baseAbsorbExp.call(this, entAffected)
+  }
+
+  getPostDigestionData() {
+    if (!this.wasExcreted) {
+      return this.postDigestionData
+    }
+    return null
   }
 
   getHeadEnt() {
@@ -76,7 +118,7 @@ export default class Segment {
             this.getHeadEnt().currPrimaryColor = underDigestionEffect.primaryColor
             break
           default:
-            console.log(`snek postDigestionEffect switch/case defaulted`, )
+            console.log(`snek underDigestionEffect switch/case defaulted`, )
         }
       console.log(`adding underdigfx`, underDigestionEffect)
       
@@ -300,7 +342,6 @@ export default class Segment {
   }
 
   render() {
-    this.downstreamSegment?.render()
     this.drawInitWrapper()
     this.entUnderDigestion?.render()
   }

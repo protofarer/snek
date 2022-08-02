@@ -2,6 +2,7 @@ import { moveEdgeWrap } from '../behaviors'
 import Segment from './Segment'
 import { turnRandomlySmoothly } from '../behaviors'
 import Mob from './Mob'
+import Entity from '../Entity'
 
 export default class Centipede extends Mob {
   static species = 'centipede'
@@ -49,12 +50,18 @@ export default class Centipede extends Mob {
   addSegments(n) {
     const drawLegs = (ctx) => {
       const legColor = 'hsl(30, 70%, 10%)'
+      ctx.save()
+
+      // ! janky, need to exclude legs from scaling altogether
+      ctx.scale(1,0.5)
+
       ctx.beginPath()
       ctx.moveTo(0, -4.5*this.r)
       ctx.lineTo(0, 4.5*this.r)
       ctx.lineWidth = 1
       ctx.strokeStyle = legColor
       ctx.stroke()
+      ctx.restore()
     }
 
     function drawComponents (ctx) {
@@ -65,10 +72,14 @@ export default class Centipede extends Mob {
     for(let i = 0; i < n; i++) {
       if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
+        this.downstreamSegment.species = 'centipede-segment'
+        new Entity(this.downstreamSegment)
         this.downstreamSegment.drawLegs = drawLegs
         this.downstreamSegment.drawComponents = drawComponents
       } else {
         const newSegment = new Segment(this.ctx, this)
+        newSegment.species = 'centipede-segment'
+        new Entity(newSegment)
         newSegment.drawLegs = drawLegs
         newSegment.drawComponents = drawComponents
 
@@ -82,18 +93,15 @@ export default class Centipede extends Mob {
   }
 
   swallow(ent) {
-    ent.parentEnt = this
     ent.hitArea = new Path2D
-    ent.swallowEffect(this)
+    ent.swallowBehavior(this)
 
     switch (ent.species) {
-      case 'ant':
+      case 'snek-segment':
         this.downstreamSegment.ingest(ent)
         break
-      case 'pebble':
-        break
       default:
-        console.info(`centipede.consume() defaulted`, )
+        console.info(`centipede.swallow() defaulted`, )
     }
     ent?.carriedEnt && this.swallow(ent.carriedEnt)
 
@@ -184,27 +192,11 @@ export default class Centipede extends Mob {
       //   this.isMobile = false
       //   setTimeout(() => this.isMobile = true, 200 + Math.random() * 2000)
       // } else {
-        console.log(`x before move`, this.position.x)
-        
-        // const dirVectorX = Math.cos(this.directionAngleRadians)
-        // console.log(`direvectox`, dirVectorX)
-        // const dirVectorY = Math.sin(this.directionAngleRadians)
-
-        // console.log(`direvectoy`, dirVectorY)
-        
-        
         this.position.x += this.currMoveSpeed 
           * Math.cos(this.directionAngleRadians)
         this.position.y += this.currMoveSpeed 
           * Math.sin(this.directionAngleRadians)
-
-        console.log(`next x step`, this.position.x)
-    
-        // this.isTurnable && turnRandomlySmoothly.call(this)
-        
-        console.log(`next x after moveedgewrap`, this.position.x )
-
-        
+        this.isTurnable && turnRandomlySmoothly.call(this)
         this.setHitAreas()
       // }
     // }
@@ -213,7 +205,6 @@ export default class Centipede extends Mob {
   update() {
     this.move()
     this.downstreamSegment?.update()
-    console.log(`centipede obj`, this)
   }
 }
 

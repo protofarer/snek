@@ -144,9 +144,7 @@ export default class Game {
   render() {
     this.clock.render()
     for(const ent of Object.values(Entity.stack)) {
-      if (ent.parentEnt === this) {
-        ent.render()
-      }
+      ent.render()
     }
     this.snek?.render()
     this.panel.render()
@@ -163,6 +161,7 @@ export default class Game {
     // **********************************************************************
     this.clock.update()
     this.snek?.update()
+    moveEdgeWrap.call(this.snek)
 
     for(const [id, ent] of Object.entries(Entity.stack)) {
 
@@ -217,7 +216,10 @@ export default class Game {
 
             if (isContacting) {
               console.log(`IN game, cent bite:`, ent.species)
-              // snekseg.detach()
+              snekseg.detach()
+              console.log(`snekseg species`, snekseg.species)
+              
+              ent.swallow(snekseg)
               // TODO detach segments
               // TODO ent.bite(snekseg)
               // TODO playRandomBiteSound

@@ -320,12 +320,13 @@ export default class DebugGUI {
 
     if (this.params.isDebugOn) {
 
-      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      // this.game.snek = snek
+      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      this.game.snek = snek
 
-      const c = addEnt(Centipede).setMobile(true)
-      c.directionAngleRadians = -2 * Math.PI / 3
-      c.position = {x:150,y:550}
+      // const c = addEnt(Centipede).setMobile(true).setTurnable(false)
+      // c.directionAngleRadians = - Math.PI/2
+      // c.position = {x:150,y:550}
+      addEnt(Apple)
       
     }
   }
