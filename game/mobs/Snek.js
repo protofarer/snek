@@ -7,7 +7,7 @@ export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'
 
-  swallowables = ['apple', 'mango', 'ant', 'pebble', 'banana']
+  swallowables = [ 'mango', 'ant', 'pebble', 'banana']
 
   r = 10
   get hitR() { return this.r }
@@ -111,28 +111,17 @@ export default class Snek extends Mob {
     ent.setMobile?.(false)
 
     if (this.downstreamSegment) {
+
       ent.parentEnt = this
 
-      switch (ent.species) {
-        case 'apple':
-          this.downstreamSegment.ingest(ent)
-          break
-        case 'pebble':
-          this.downstreamSegment.ingest(ent)
-          break
-        case 'ant':
-          ent.setMobile(false)
-          this.downstreamSegment.ingest(ent)
-          break
-        case 'mango':
-          this.downstreamSegment.ingest(ent)
-          break
-        case 'banana':
-          this.downstreamSegment.ingest(ent)
-          break
-        default:
-          console.info(`snek.consume() case-switch defaulted`, )
+      if (this.swallowables.includes(ent.species)) {
+        this.downstreamSegment.ingest(ent)
+      } else {
+        console.log(`cant swallow dat`, )
+        
+        throw new Error('Cannot swallow an ent not specified in snek.swallowables')
       }
+
     } else {
       // * Bite behavior: move ent behind snek and ensure hittable
       console.log(`bitbehavior`, )
