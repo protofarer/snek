@@ -349,6 +349,7 @@ export default class Segment {
   detach() {
   // * Digestion: halt, reverse effects, maintain digestion contents state
     console.log('seg detaching')
+    this.upstreamSegment.downstreamSegment = null
     this.upstreamSegment = null
   }
 

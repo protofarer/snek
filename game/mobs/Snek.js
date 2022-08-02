@@ -40,6 +40,9 @@ export default class Snek extends Mob {
 
   baseSegmentCount = 3
   downstreamSegment
+  currKnownSegmentCount = 0
+
+  activeEffects = []
 
   constructor(ctx, startPosition=null, parentEnt=null, initSegmentCount=null) {
     super(ctx, startPosition, parentEnt)
@@ -53,9 +56,7 @@ export default class Snek extends Mob {
     this.baseMoveSpeed = 1
     this.currMoveSpeed = this.baseMoveSpeed
 
-    this.currSegmentCount = initSegmentCount || this.baseSegmentCount
-    this.addSegments(this.currSegmentCount)
-
+    this.addSegments(initSegmentCount || this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
   }
@@ -75,7 +76,7 @@ export default class Snek extends Mob {
         newSegment.downstreamSegment = oldSegment
         this.downstreamSegment = newSegment
       }
-      this.nSegments++
+      this.currKnownSegmentCount++
     }
   }
 
@@ -98,26 +99,27 @@ export default class Snek extends Mob {
   swallow(ent) {
     ent.hitArea = new Path2D()
     ent.swallowBehavior(this)
-    console.log(`IN snek, swallow:`, ent.species)
 
-    switch (ent.species) {
-      case 'apple':
-        this.downstreamSegment.ingest(ent)
-        break
-      case 'pebble':
-        this.downstreamSegment.ingest(ent)
-        break
-      case 'ant':
-        this.downstreamSegment.ingest(ent)
-        break
-      case 'mango':
-        this.downstreamSegment.ingest(ent)
-        break
-      case 'banana':
-        this.downstreamSegment.ingest(ent)
-        break
-      default:
-        console.info(`snek.consume() case-switch defaulted`, )
+    if (this.downstreamSegment) {
+      switch (ent.species) {
+        case 'apple':
+          this.downstreamSegment.ingest(ent)
+          break
+        case 'pebble':
+          this.downstreamSegment.ingest(ent)
+          break
+        case 'ant':
+          this.downstreamSegment.ingest(ent)
+          break
+        case 'mango':
+          this.downstreamSegment.ingest(ent)
+          break
+        case 'banana':
+          this.downstreamSegment.ingest(ent)
+          break
+        default:
+          console.info(`snek.consume() case-switch defaulted`, )
+      }
     }
 
     if (this.swallowables.includes(ent.carriedEnt?.species)) {
@@ -247,9 +249,72 @@ export default class Snek extends Mob {
     this.setHitAreas()
   }
 
+  activateEffects(effectDataList) {
+    effectDataList.forEach( effectData => {
+      switch (effectData.effect) {
+        case 'panic':
+          this.currMoveSpeed += effectData.moveSpeed
+          this.currTurnRate += effectData.turnRate
+          this.activeEffects.push(effectData)
+          break
+        default:
+          console.log(`snek defaulted on activateEffects data`, )
+      }
+    })
+  }
+
+  deactivateEffect(effectData) {
+    switch (effectData.effect) {
+      case 'panic':
+        this.currMoveSpeed -= effectData.moveSpeed
+        this.currTurnRate -= effectData.turnRate
+        break
+      default:
+        console.log(`snek default deactivateEffect`, )
+    }
+  }
+
+  processEffects() {
+    const expiredEffects = this.activeEffects.filter(effect => effect.timeLeft === 0)
+    expiredEffects.forEach(effect => this.deactivateEffect(effect))
+
+    this.activeEffects = this.activeEffects.filter(effect => effect.timeLeft > 0)
+
+    this.activeEffects = this.activeEffects.map(effect => {
+      const timeLeft = effect.timeLeft - 17 < 0
+        ? 0
+        : effect.timeLeft - 17
+      return { ...effect, timeLeft}
+    })
+  }
+
+  countSegments() {
+    let n = 0
+    let downSeg = this.downstreamSegment
+    while (downSeg) {
+      n++
+      downSeg = downSeg.downstreamSegment
+    }
+    return n
+  }
+
   update() {
+    if (this.countSegments() < this.currKnownSegmentCount) {
+      // Panic
+      this.activateEffects([
+        {
+          effect: 'panic',
+          moveSpeed: 3,
+          turnRate: 10,
+          timeLeft: 5000,
+          duration: 5000
+        }
+      ])
+      this.currKnownSegmentCount = this.countSegments()
+    }
+    this.processEffects()
+
     this.isMobile && this.move()
-    // this.downstreamSegment?.update()
 
     while(this.currExp >= this.expForLevel(this.level + 1)) {
       console.log(`Level up!`, )
