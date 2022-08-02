@@ -28,6 +28,7 @@ export default class DebugGUI {
       resetAfterElapsed: false,
       gameTickMultiplier: 1,
       isGridVisible: false,
+      isSnekInitialized: false,
       set gameSpeed(val) { game.params.speed = val},
       get gameSpeed() { return game.params.speed }
     }
@@ -134,6 +135,9 @@ export default class DebugGUI {
     // guiPointerTracking.add(this.game.pointerCoords.square, 'col').name('pointer.col').listen()
     // guiPointerTracking.add(this.game.pointerCoords.square, 'row').name('pointer.row').listen()
 
+
+
+
     // guiPointerTracking.show(false)
     guiGamePositioning.show(false)
 
@@ -166,6 +170,30 @@ export default class DebugGUI {
     })
     this.addTestObjects()
   }
+
+  initSnekStateGUI() {
+    const snek = this.game.snek
+    if (snek) {
+      const guiSnek = this.gui.addFolder('Snek')
+
+      guiSnek.add(snek, 'currExp').listen()
+      guiSnek.add(snek, 'level').listen()
+
+      const seg = guiSnek.addFolder('Segments')
+      seg.add(snek, 'currKnownSegmentCount').listen()
+      seg.add(snek, 'countSegments').listen()
+      seg.add(snek, 'maxSegmentCount').listen()
+
+      seg.add(snek, 'currSegExp').listen()
+      const nextSegExp = () => {
+        return this.game.snek.segExpForLevel(this.game.snek.countSegments + 1)
+      }
+      const segexpObj = { get nextSegExp() { return nextSegExp() }}
+      seg.add(segexpObj, 'nextSegExp').listen()
+    }
+
+  }
+
 
   
   setParamsFromSessionStorage() {
@@ -294,6 +322,11 @@ export default class DebugGUI {
       }
     }
 
+    if (this.game.snek && this.params.isSnekInitialized === false) {
+      this.params.isSnekInitialized = true
+      this.initSnekStateGUI()
+    }
+
     if (this.params.isDebugOn){
       for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
         this.game.update()
@@ -323,6 +356,11 @@ export default class DebugGUI {
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
 
+      addEnt(Mango)
+      addEnt(Mango)
+      addEnt(Mango)
+      addEnt(Mango)
+      addEnt(Mango)
       addEnt(Mango)
       addEnt(Mango)
       addEnt(Mango)

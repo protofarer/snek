@@ -307,7 +307,7 @@ export default class Snek extends Mob {
     })
   }
 
-  countSegments() {
+  get countSegments() {
     let n = 0
     let downSeg = this.downstreamSegment
     while (downSeg) {
@@ -321,7 +321,7 @@ export default class Snek extends Mob {
     // * currKnownSegmentCount updated on a need to know basis, eg
     // * when segCount decrease event occurs or manually via growth adds aka
     // * segExp level ups
-    if (this.countSegments() < this.currKnownSegmentCount) {
+    if (this.countSegments < this.currKnownSegmentCount) {
       // Panic
       this.activateEffects([
         {
@@ -332,8 +332,8 @@ export default class Snek extends Mob {
           duration: 5000
         }
       ])
-      this.currKnownSegmentCount = this.countSegments()
-      this.currSegExp = this.expForLevel(this.countSegments())
+      this.currKnownSegmentCount = this.countSegments
+      this.currSegExp = this.expForLevel(this.countSegments)
     }
     this.processEffects()
 
@@ -344,8 +344,8 @@ export default class Snek extends Mob {
       this.level++
     }
     
-    while(this.currSegExp >= this.segExpForLevel(this.countSegments() + 1)
-      && this.countSegments() < this.maxSegmentCount) {
+    while(this.currSegExp >= this.segExpForLevel(this.countSegments + 1)
+      && this.countSegments < this.maxSegmentCount) {
       console.log(`New seg from seg level up`, )
       this.addSegments(1)
     }
