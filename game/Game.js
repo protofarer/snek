@@ -1,25 +1,27 @@
 import CONSTANTS from './Constants'
 import Audio from './audio'
 import Clock from './utils/Clock'
-import World from './World'
 import Panel from './Panel'
+import Background from './Background'
+
+import Entity from './Entity'
+import World from './World'
+
+import Apple from './immobs/Apple'
+import Mango from './immobs/Mango'
+import Pebble from './immobs/Pebble'
 
 import Snek from './mobs/Snek'
 import Centipede from './mobs/Centipede'
 import Ant from './mobs/Ant'
 
-import Apple from './immobs/Apple'
-import Mango from './immobs/Mango'
-import Pebble from './immobs/Pebble'
-import Poop from './immobs/Poop'
-import Background from './Background'
-import Entity from './Entity'
 import { moveEdgeWrap } from './behaviors'
 
 export default class Game {
   species = 'game'
 
   // * Related to normal game flow and info directly relevant to player
+  // * Used by: game.panel
   msg = ''
   phase = CONSTANTS.PHASE_PLAY
   score = 0
@@ -36,7 +38,7 @@ export default class Game {
 
     // * Adjustable parameters for testing design, performance, and debugging
     this.params = {
-      // * capped at 1 on test slider because of how it divides the elapsed time 't' from draw= {
+      // speed capped at 1 on test slider because of how it divides the elapsed time 't' from draw= {
       speed: 1,
       pauseInterval: 1000
     }
@@ -46,10 +48,10 @@ export default class Game {
     this.immobs = []
 
     new Background(container, 'hsl(51, 50%, 20%)')
-    this.world = new World(this.ctx, this),
     this.clock = new Clock(this.ctx, this)
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
+    this.world = new World(this.ctx, this)
 
     const Sounds = Audio()
     this.play = Sounds.play

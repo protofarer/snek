@@ -356,17 +356,6 @@ export default class DebugGUI {
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
 
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
-      addEnt(Mango)
       // const b = addEnt(Apple)
       // b.position = {x: 300, y:400}
       // b.setHitAreas()

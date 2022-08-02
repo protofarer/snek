@@ -37,6 +37,7 @@ export function startNewGame() {
       game.render()
       debugGUI && debugGUI.render()
     }
+
     loopID = requestAnimationFrame(draw)
   }
 
