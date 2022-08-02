@@ -102,6 +102,7 @@ export default class Segment {
 
     this.entUnderDigestion = ent
     this.entUnderDigestion.position = this.position
+    this.entUnderDigestion.parentEnt = this.getHeadEnt()
 
     this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => {
         switch (underDigestionEffect.effect) {
