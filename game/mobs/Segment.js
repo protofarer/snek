@@ -16,17 +16,14 @@ export default class Segment {
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
   get hitR() { return this.r + 1 }
 
-  baseExp = 10
-  get expAbsorbRate() {
-    const rate = (17 / this.digestion.baseTime) * this.baseExp / 2
-    return rate
-  }
+  baseExp = 20
+  currExp = this.baseExp
 
-  swallowEffect = baseChompEffect
+  chompEffect = baseChompEffect
 
   digestion = {
-    timeLeft: 6000,
-    baseTime: 6000
+    timeLeft: 20000,
+    baseTime: 20000
   }
 
   headPositionHistory = []
@@ -54,27 +51,11 @@ export default class Segment {
       {
         effect: 'moveSpeed',
         moveSpeed: 0.5,
-        duration: 24000,
-        timeLeft: 24000
+        duration: 20000,
+        timeLeft: 20000
       },
     ]
     this.setHitAreas()
-  }
-
-  swallowBehavior(entAffected) {
-    if (this.swallowEffect) {
-      this.swallowEffect.call(this, entAffected)
-    } else {
-      console.log(`no swalloweffect triggered, missing`, )
-    }
-  }
-
-  absorbExp(entAffected) {
-    baseAbsorbExp.call(this, entAffected)
-  }
-
-  getPostDigestionData() {
-    return this.postDigestionData
   }
 
   getHeadEnt() {
@@ -197,7 +178,7 @@ export default class Segment {
       // * Upon fully digesting contents:
       // * - Active Post Digestion Effects
 
-      const postDigestionData = this.entUnderDigestion.getPostDigestionData?.()
+      const postDigestionData = this.entUnderDigestion.postDigestionData
 
       if (postDigestionData) {
         postDigestionData.forEach(pDD => {

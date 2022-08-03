@@ -357,13 +357,12 @@ export default class DebugGUI {
       this.game.snek = snek
 
       // const b = addEnt(Apple)
-      addEnt(Mango)
       // b.position = {x: 300, y:400}
       // b.setHitAreas()
-      // const a = addEnt(Ant).setMobile(false).setTurnable(false)
-      // a.headingRadians = 0
-      // a.position = {x: 170, y:400}
-      // a.setHitAreas()
+      const a = addEnt(Ant).setMobile(false).setTurnable(false)
+      a.headingRadians = 0
+      a.position = {x: 170, y:400}
+      a.setHitAreas()
 
       // const b = addEnt(Apple)
       // b.position = {x:180, y:400}

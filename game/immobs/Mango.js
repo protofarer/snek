@@ -38,22 +38,31 @@ export default class Mango extends Immob {
       }
     ]
 
-    // this.postDigestionData = [
-    //   {
-    //     effect: 'turnRate',
-    //     type: 'boolean',
-    //     turnRate: 1,
-    //     duration: 24000,
-    //     timeLeft: 24000
-    //   },
-    //   {
-    //     effect: 'moveSpeed',
-    //     type: 'boolean',
-    //     moveSpeed: 0.5,
-    //     duraction: 24000,
-    //     timeLeft: 24000
-    //   }
-    // ]
+    // TODO
+    // const refreshEffect = (entAffected) => {
+    // }
+
+    this.postDigestionData = [
+      {
+        effect: 'turnRate',
+        type: 'boolean',
+        turnRate: 1,
+        duration: 32000,
+        timeLeft: 32000
+      },
+      {
+        effect: 'moveSpeed',
+        type: 'boolean',
+        moveSpeed: 0.5,
+        duration: 32000,
+        timeLeft: 32000
+      },
+      // {
+      //   effect: 'refresh',
+      //   type: 'function',
+      //   refresh:
+      // }
+    ]
     this.setHitAreas()
   }
 
