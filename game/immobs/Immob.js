@@ -1,4 +1,5 @@
-import { baseAbsorbExp, baseSwallowEffect } from '../behaviors/digestion'
+import { baseSwallowEffect } from '../behaviors/digestion'
+import { baseAbsorbExp } from '../behaviors/exp'
 
 export default class Immob {
   // * Generally are simple, non-moving, squared or circular interactable
@@ -28,12 +29,12 @@ export default class Immob {
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 
   digestion = {
-    timeLeft: 0,
-    baseTime: 0,
+    timeLeft: 3000,
+    baseTime: 3000,
   }
 
-  baseExp = 0
-  currExp = 0
+  baseExp = 10
+  currExp = this.baseExp
   get expAbsorbRate() { 
     const rate = (17 / this.digestion.baseTime) * this.baseExp/2 
     return rate
