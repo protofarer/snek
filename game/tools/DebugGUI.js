@@ -257,7 +257,7 @@ export default class DebugGUI {
   }
 
   drawHitOverlays() {
-    Object.values(Entity.stack).forEach( ent => ent.drawHitOverlays())
+    Entity.stack.values().forEach( ent => ent.drawHitOverlays())
   }
 
   drawGrid() {
@@ -286,7 +286,7 @@ export default class DebugGUI {
   }
 
   drawDebugOverlays() {
-    Object.values(Entity.stack).forEach( ent => ent.drawDebugOverlays())
+    Entity.stack.values().forEach( ent => ent.drawDebugOverlays())
     this.game.snek?.drawDebugOverlays()
   }
 
