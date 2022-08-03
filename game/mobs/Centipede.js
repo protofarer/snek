@@ -93,22 +93,34 @@ export default class Centipede extends Mob {
 
   swallow(ent) {
     ent.hitArea = new Path2D
-    ent.swallowBehavior(this)
+    ent.chompEffect(this)
 
-    switch (ent.species) {
-      case 'snek-segment':
-        this.downstreamSegment.ingest(ent)
-        break
-      default:
-        console.info(`centipede.swallow() defaulted`, )
+    if (this.downstreamSegment) {
+      switch (ent.species) {
+        case 'snek-segment':
+          this.downstreamSegment.ingest(ent)
+          break
+        default:
+          console.info(`centipede.swallow() defaulted`, )
+      }
+      ent?.carriedEnt && this.swallow(ent.carriedEnt)
+  
+      // if (this.swallowables.includes(ent.carriedEnt?.species)) {
+      //   this.swallow(ent.carriedEnt)
+      // } else {
+      //   // Drop any non-swallowable carried ents
+      // }
+    } else {
+      // * Chomp without ingest aka bite behavior: 
+      // * move ent behind snek and ensure hittable
+      console.log(`bitbehavior`, )
+      ent.position = {
+        x: this.position.x - this.r * Math.cos(this.headingRadians),
+        y: this.position.y - this.r * Math.sin(this.headingRadians)
+      }
+      ent.setHitAreas()
+
     }
-    ent?.carriedEnt && this.swallow(ent.carriedEnt)
-
-    // if (this.swallowables.includes(ent.carriedEnt?.species)) {
-    //   this.swallow(ent.carriedEnt)
-    // } else {
-    //   // Drop any non-swallowable carried ents
-    // }
   }
 
   drawDebugOverlays() {

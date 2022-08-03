@@ -375,9 +375,10 @@ export default class DebugGUI {
       // const d = addEnt(Pebble)
       // d.position={x:180, y:400}
       // d.setHitAreas()
-      // const c = addEnt(Centipede).setMobile(true).setTurnable(false)
-      // c.headingRadians = - Math.PI/2
-      // c.position = {x:150,y:550}
+
+      const c = addEnt(Centipede).setMobile(true).setTurnable(false)
+      c.headingRadians = - Math.PI/2
+      c.position = {x:150,y:550}
       
     }
   }
