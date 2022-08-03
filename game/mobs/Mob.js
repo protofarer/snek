@@ -5,13 +5,13 @@ export default class Mob {
   entGroup = 'mob'
 
   r = 1
-  position = { x: 0, y: 0 }
+  position = { x: 400, y: 400 }
   scale = { x: 1, y: 1 }
-  get hitR() { return this.r + 1}
+  get hitR() { return this.r + 1 }
 
-  directionAngleRadians = 0
-  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
-  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  headingRadians = 0
+  get headingDegrees() { return this.headingRadians * 180 / Math.PI }
+  set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 
   digestion = {
     timeLeft: 3000,
@@ -86,11 +86,11 @@ export default class Mob {
   }
   
   turnLeft() {
-    this.directionAngleDegrees += -this.currTurnRate
+    this.headingDegrees += -this.currTurnRate
   }
 
   turnRight() {
-    this.directionAngleDegrees += this.currTurnRate
+    this.headingDegrees += this.currTurnRate
   }
 
   setHitAreas() {
@@ -139,6 +139,6 @@ export default class Mob {
   }
 
   render() {
-    this.drawInitWrapper(this.directionAngleRadians)
+    this.drawInitWrapper(this.headingRadians)
   }
 }

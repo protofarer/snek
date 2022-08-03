@@ -9,14 +9,14 @@ export default class Ant extends Mob {
 
   get headCoords() { return { 
     x: this.position.x 
-      + Math.cos(this.directionAngleRadians) * this.r * 1.1,
+      + Math.cos(this.headingRadians) * this.r * 1.1,
     y: this.position.y 
-      + Math.sin(this.directionAngleRadians) * this.r * 1.1
+      + Math.sin(this.headingRadians) * this.r * 1.1
   }}
 
   get mouthCoords() { return {
-      x: this.headCoords.x + 0.6 * this.r * Math.cos(this.directionAngleRadians),
-      y: this.headCoords.y + 0.6 * this.r * Math.sin(this.directionAngleRadians),
+      x: this.headCoords.x + 0.6 * this.r * Math.cos(this.headingRadians),
+      y: this.headCoords.y + 0.6 * this.r * Math.sin(this.headingRadians),
   }}
 
   constructor(ctx, startPosition=null, parentEnt=null) {
@@ -43,8 +43,8 @@ export default class Ant extends Mob {
     this.carriedEnt = ent
     this.carriedEnt.parentEnt = this
     this.carriedEnt.hitArea = new Path2D()
-    this.carriedOffsetRad = this.directionAngleRadians
-      - this.carriedEnt.directionAngleRadians
+    this.carriedOffsetRad = this.headingRadians
+      - this.carriedEnt.headingRadians
   }
 
   drop() {
@@ -82,8 +82,8 @@ export default class Ant extends Mob {
   move() {
     if (this.isMobile) {
       if (Math.random() < 0.8) {
-        this.position.x += this.currMoveSpeed * Math.cos(this.directionAngleRadians)
-        this.position.y += this.currMoveSpeed * Math.sin(this.directionAngleRadians)
+        this.position.x += this.currMoveSpeed * Math.cos(this.headingRadians)
+        this.position.y += this.currMoveSpeed * Math.sin(this.headingRadians)
       } else {
         this.isTurnable && turnErratically.call(this)
       }
@@ -133,7 +133,7 @@ export default class Ant extends Mob {
     
   }
   render() {
-    this.drawInitWrapper(this.directionAngleRadians)
+    this.drawInitWrapper(this.headingRadians)
     this.carriedEnt?.render()
   }
 
@@ -142,7 +142,7 @@ export default class Ant extends Mob {
     // TODO carriedEnt renders at 2 times its own positional coordinates
     if (this.carriedEnt) {
       this.carriedEnt.position = this.mouthCoords
-      this.carriedEnt.directionAngleRadians = this.directionAngleRadians + this.carriedOffsetRad
+      this.carriedEnt.headingRadians = this.headingRadians + this.carriedOffsetRad
       // console.log(`mouthcoords`, this.mouthCoords)
       // console.log(`carriedent.pos`, this.carriedEnt.position)
       

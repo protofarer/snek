@@ -19,7 +19,7 @@ export default class Pebble extends Immob {
   constructor(ctx, startPosition, parentEnt, r=null) {
     super(ctx, startPosition, parentEnt)
     this.r = r || 2 + Math.ceil(Math.random() * 2)     // TODO skewed gaussian random dist
-    this.directionAngleDegrees = Math.random() * 359
+    this.headingDegrees = Math.random() * 359
     this.setHitAreas()
   }
 

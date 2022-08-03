@@ -38,8 +38,8 @@ export default class Snek extends Mob {
   }}
 
   get mouthCoords() { return {
-      x: this.headCoords.x + this.r * Math.cos(this.directionAngleRadians),
-      y: this.headCoords.y + this.r * Math.sin(this.directionAngleRadians),
+      x: this.headCoords.x + this.r * Math.cos(this.headingRadians),
+      y: this.headCoords.y + this.r * Math.sin(this.headingRadians),
     }}
 
   isTongueOut = false
@@ -125,8 +125,8 @@ export default class Snek extends Mob {
       console.log(`bitbehavior`, )
       
       ent.position = {
-        x: this.position.x - this.r * Math.cos(this.directionAngleRadians),
-        y: this.position.y - this.r * Math.sin(this.directionAngleRadians)
+        x: this.position.x - this.r * Math.cos(this.headingRadians),
+        y: this.position.y - this.r * Math.sin(this.headingRadians)
       }
       ent.setHitAreas()
     }
@@ -222,7 +222,7 @@ export default class Snek extends Mob {
 
     this.ctx.save()
     this.ctx.translate(this.headCoords.x, this.headCoords.y)
-    this.ctx.rotate(this.directionAngleRadians)
+    this.ctx.rotate(this.headingRadians)
     this.ctx.save()
     this.ctx.scale(this.scale.x, 0.8 * this.scale.y)
 
@@ -250,9 +250,9 @@ export default class Snek extends Mob {
 
   move() {
     this.position.x += this.currMoveSpeed 
-      * Math.cos(this.directionAngleRadians)
+      * Math.cos(this.headingRadians)
     this.position.y += this.currMoveSpeed 
-      * Math.sin(this.directionAngleRadians)
+      * Math.sin(this.headingRadians)
     this.setHitAreas()
   }
 
