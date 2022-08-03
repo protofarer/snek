@@ -355,6 +355,7 @@ export default class DebugGUI {
 
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
+      new Entity(snek)
 
       // const a = addEnt(Apple)
       // a.position = {x: 300, y:400}

@@ -179,11 +179,6 @@ export default class Game {
 
     this.clock.update()
 
-    if (this.snek) {
-      this.snek.update()
-      moveEdgeWrap.call(this.snek)
-    }
-
     for(const ent of Object.values(Entity.stack)) {
 
       // Generally, immobs don't have an update function since they are *acted
@@ -261,6 +256,7 @@ export default class Game {
     if (this.isDebugOn === 'false' || this.isDebugOn === null) {
       this.snek = new Snek(this.ctx, null, this)
       this.snek.position = { x: 200, y: 400 }
+      new Entity(this.snek)
 
       this.spawnEnts(Apple, 35)
       this.spawnEnts(Pebble, 55)
