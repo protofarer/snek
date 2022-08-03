@@ -234,7 +234,7 @@ export default class Game {
           }
 
           const sneksegs = Entity.bySpecies(['snek-segment']) 
-          if (ent.species === 'centipede' && sneksegs.length > 0) {
+          if (ent.species === 'centipede' && Object.values(sneksegs).length > 0) {
             for(let snekseg of Object.values(sneksegs)) {
             // TODO collisionresolver
               const isContacting = this.isContactingMouth(
