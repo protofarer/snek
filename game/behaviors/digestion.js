@@ -19,8 +19,7 @@ export function baseChompEffect(entAffected) {
     }
     this.currExp = 0
     this.digestion.timeLeft = 0
-    // recycle(this)
-
+    recycle(this)
   }
 }
 
@@ -45,7 +44,7 @@ export function bigChompEffect(entAffected) {
       entAffected.currSegExp += this.currExp
     }
     this.digestion.timeLeft = 0
-    // recycle(this)
+    recycle(this)
 
   }
 }
@@ -72,7 +71,7 @@ export function smallChompEffect(entAffected) {
     }
     this.currExp = 0
     this.digestion.timeLeft = 0
-    // recycle(this)
+    recycle(this)
 
   }
 }
@@ -82,5 +81,4 @@ function recycle(ent) {
   ent.hitArea = new Path2D()
   ent.position = {x: -100, y: -100}
   Entity.remove(ent.id)
-
 }
