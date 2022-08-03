@@ -11,9 +11,9 @@ export default class Segment {
 
   position = {x:0,y:0}
 
-  directionAngleRadians = 0
-  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
-  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  headingRadians = 0
+  get headingDegrees() { return this.headingRadians * 180 / Math.PI }
+  set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
   get hitR() { return this.r + 1 }
 
   baseExp = 10
@@ -43,7 +43,7 @@ export default class Segment {
     this.parentEnt = this.getHeadEnt().parentEnt
     this.r = this.upstreamSegment.r
     this.scale = this.getHeadEnt().scale
-    this.directionAngleRadians = this.upstreamSegment.directionAngleRadians
+    this.headingRadians = this.upstreamSegment.headingRadians
     this.position = {
       x: this.upstreamSegment.position.x,
       y: this.upstreamSegment.position.y
@@ -295,7 +295,7 @@ export default class Segment {
     const ctx = this.ctx
     ctx.save()
     ctx.translate(this.position.x, this.position.y)
-    ctx.rotate(this.directionAngleRadians)
+    ctx.rotate(this.headingRadians)
     ctx.scale(this.scale.x, this.scale.y - .6)
 
     this.drawComponents(ctx)
@@ -371,14 +371,14 @@ export default class Segment {
       this.upstreamSegmentTailPosition = {
         x: this.upstreamSegment.position.x 
           - this.upstreamSegment.r 
-            * Math.cos(this.upstreamSegment.directionAngleRadians),
+            * Math.cos(this.upstreamSegment.headingRadians),
         y: this.upstreamSegment.position.y 
           - this.upstreamSegment.r 
-            * Math.sin(this.upstreamSegment.directionAngleRadians),
+            * Math.sin(this.upstreamSegment.headingRadians),
       }
       const dy = (this.upstreamSegmentTailPosition.y - this.position.y)
       const dx = (this.upstreamSegmentTailPosition.x - this.position.x)
-      this.directionAngleRadians = Math.atan(dy/dx)
+      this.headingRadians = Math.atan(dy/dx)
 
       // * Post Digestion Effects: occur after content is fully digested
 

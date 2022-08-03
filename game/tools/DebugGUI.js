@@ -360,7 +360,7 @@ export default class DebugGUI {
       // b.position = {x: 300, y:400}
       // b.setHitAreas()
       // const a = addEnt(Ant).setMobile(false).setTurnable(false)
-      // a.directionAngleRadians = 0
+      // a.headingRadians = 0
       // a.position = {x: 170, y:400}
       // a.setHitAreas()
 
@@ -376,7 +376,7 @@ export default class DebugGUI {
       // d.position={x:180, y:400}
       // d.setHitAreas()
       // const c = addEnt(Centipede).setMobile(true).setTurnable(false)
-      // c.directionAngleRadians = - Math.PI/2
+      // c.headingRadians = - Math.PI/2
       // c.position = {x:150,y:550}
       
     }

@@ -1,15 +1,19 @@
 import { baseAbsorbExp, baseSwallowEffect } from '../behaviors/digestion'
 
 export default class Immob {
-  // Generally are simple, non-moving, squared or circular ent interactable
-  // objects. The Immob is the essence of all objects in the game, while it is
-  // similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
-  // shapes and behavioral properties and thus use a separate data description
+  // * Generally are simple, non-moving, squared or circular interactable
+  // * objects. The Immob is the essence of all objects in the game, while it is
+  // * similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
+  // * shapes and behavioral properties and thus use a separate data description.
 
-  // Make up the majority of the game's swallowables
+  // * Make up the majority of the game's swallowables
 
-  // Immobs do not include terrain as the latter belongs solely to the world
-  // object and has disparate state structure
+  // * Immobs do not include terrain as the latter belongs solely to the world
+  // * object and has disparate state structure
+
+  // ! This is not a clear distinction and a resolution is being considered:
+  // * use entity at top of hierarchy, with child Immob with child Mob as a sort
+  // * of evolution of increasing complexity and specificity.
   
   static entGroup = 'immob'
   entGroup = 'immob'
@@ -19,9 +23,9 @@ export default class Immob {
   scale = { x: 1, y: 1 }
   get hitR() { return this.r + 3 }
 
-  directionAngleRadians = 0
-  get directionAngleDegrees() { return this.directionAngleRadians * 180 / Math.PI }
-  set directionAngleDegrees(val) { this.directionAngleRadians = val * Math.PI / 180 }
+  headingRadians = 0
+  get headingDegrees() { return this.headingRadians * 180 / Math.PI }
+  set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 
   digestion = {
     timeLeft: 0,
@@ -166,7 +170,7 @@ export default class Immob {
       this.ctx.scale(this.scale.x, this.scale.y)
     }
 
-    this.ctx.rotate(this.directionAngleRadians)
+    this.ctx.rotate(this.headingRadians)
 
     this.drawComponents(this.ctx)
 
