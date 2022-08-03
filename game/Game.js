@@ -112,7 +112,7 @@ export default class Game {
     if (!position) {
       // * For testing purposes so snek segs don't count toward displacement
       // * along x
-      const minsSegsLength = Object.values(Entity.stack).filter(e => 
+      const minsSegsLength = Entity.stack.values().filter(e => 
         e.entGroup === 'segment'
       ).length
       ent.position.x += (50 * (bigEnt.id - minsSegsLength))
@@ -153,12 +153,12 @@ export default class Game {
 
   removeEnt(id) {
     // ! Placeholder until ent recycling in working order
-    delete Entity.stack[id]
+    Entity.stack.delete(id)
   }
 
   render() {
     this.clock.render()
-    for(const ent of Object.values(Entity.stack)) {
+    for(const ent of Entity.stack.values()) {
       ent.render()
     }
     this.snek?.render()
@@ -179,7 +179,7 @@ export default class Game {
 
     this.clock.update()
 
-    for(const ent of Object.values(Entity.stack)) {
+    for(const ent of Entity.stack.values()) {
 
       // Generally, immobs don't have an update function since they are *acted
       // upon* or manipulated by other ents

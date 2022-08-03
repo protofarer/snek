@@ -1,34 +1,34 @@
 export default class Entity {
   static ix = 0
-  static stack = {}
+  static stack = new Map()
 
   constructor(ent) {
     this.id = Entity.ix++
-    Entity.stack[ this.id ] = ent
+    Entity.stack.set(this.id, ent)
     ent.id = this.id
   }
 
-  static byId(id) { return Entity.stack[ id ]}
+  static byId(id) { return Entity.stack.get(id)}
 
   static bySpecies(speciesList) {
-    let found = {}
-    for(const [k,v] of Object.entries(Entity.stack)) {
+    let found = new Map()
+    for(const [k,v] of Entity.stack) {
       speciesList.forEach(s => {
-        if (v.species === s) found[k] =  v
+        if (v.species === s) found.set(k, v)
       })
     }
     return found
   }
 
   static byEntGroup(entGroup) {
-    let found = {}
-    for(const [k,v] of Object.entries(Entity.stack)) {
-      if (v.entGroup === entGroup) found[k] = v
+    let found = new Map()
+    for(const [k,v] of Entity.stack) {
+      if (v.entGroup === entGroup) found.set(k, v)
     }
     return found
   }
 
   static remove(id) {
-    delete Entity.stack[id]
+    Entity.stack.delete(id)
   }
 }
