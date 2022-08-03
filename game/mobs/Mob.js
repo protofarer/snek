@@ -26,14 +26,10 @@ export default class Mob {
 
   baseExp = 10
   currExp = this.baseExp
-  get expAbsorbRate() { 
-    const rate = (17 / this.digestion.baseTime) * this.baseExp/2 
-    return rate
-  }
 
   // TODO
-  swallowEffect = baseChompEffect
-  postDigestionData = null
+  chompEffect = baseChompEffect
+  postDigestionData
 
   basePrimaryColor = 'lawngreen'
   currPrimaryColor = this.basePrimaryColor
@@ -63,23 +59,16 @@ export default class Mob {
     this.ctx = ctx
     this.position = startPosition || this.position
     this.parentEnt = parentEnt
+
+    const expEffect = baseAbsorbExp.bind(this)
+    this.underDigestionData = [
+      {
+        effect: 'exp',
+        type: 'function',
+        exp: expEffect,
+      }
+    ]
     this.setHitAreas()
-  }
-
-  getPostDigestionData() {
-    return this.postDigestionData
-  }
-
-  swallowBehavior(entAffected) {
-    if (this.swallowEffect) {
-      this.swallowEffect.call(this, entAffected)
-    } else {
-      console.log(`no swalloweffect triggered, none defined on ent`, )
-    }
-  }
-
-  absorbExp(entAffected) {
-    baseAbsorbExp.call(this, entAffected)
   }
 
   setTurnable(setTurnable) {

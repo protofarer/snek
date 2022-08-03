@@ -35,7 +35,6 @@ export default class Immob {
 
   baseExp = 10
   currExp = this.baseExp
-  // absorbExp = baseAbsorbExp.bind(this)
 
   chompEffect = baseChompEffect
   postDigestionData
@@ -106,25 +105,6 @@ export default class Immob {
     this.position = startPosition || this.position
     this.setHitAreas()
   }
-
-  getPostDigestionData() {
-    return this.postDigestionData
-  }
-
-  // ! now named chompEffect
-  // swallowBehavior(entAffected) {
-  //   if (this.swallowEffect) {
-  //     console.log(`calling swallowEffect`, )
-      
-  //     this.swallowEffect.call(this, entAffected)
-  //   } else {
-  //     console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
-  //   }
-  // }
-
-  // absorbExp(entAffected) {
-  //   baseAbsorbExp.call(this, entAffected)
-  // }
 
   left() {
     return { x:this.position.x - this.hitSideLength, y: this.position.y}
