@@ -1,4 +1,4 @@
-import { highSwallowEffect } from '../behaviors/digestion'
+import { bigChompEffect } from '../behaviors/digestion'
 import Immob from './Immob'
 
 export default class Banana extends Immob {
@@ -30,12 +30,13 @@ export default class Banana extends Immob {
       lumStart: 50,
       lumEnd: 20
     }
-    this.swallowEffect = highSwallowEffect
+    this.chompEffect = bigChompEffect
     this.underDigestionData = [
       {
         effect: 'moveSpeed',
+        type: 'boolean',
         moveSpeed: 3,
-        duraction: 2000,
+        duration: 2000,
         timeLeft: 2000
       }
     ]

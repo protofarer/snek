@@ -94,7 +94,7 @@ export default class Segment {
     // * Ingesting another ent while an existing ent is under
     // * digestion forces the latter to be passed regardless of it's
     // * digestion state
-
+    
     if (this.entUnderDigestion) {
       this.pass()
     }
@@ -105,6 +105,7 @@ export default class Segment {
 
     // TODO modifications to consumers' state should be guarded by public method
     this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => {
+      if (underDigestionEffect.type === 'boolean') {
         switch (underDigestionEffect.effect) {
           case 'moveSpeed':
             this.getHeadEnt().currMoveSpeed += underDigestionEffect.moveSpeed
@@ -118,9 +119,10 @@ export default class Segment {
           default:
             console.log(`snek underDigestionEffect switch/case defaulted`, )
         }
-      console.log(`adding underdigfx`, underDigestionEffect)
-      
-      this.underDigestionEffects.push(underDigestionEffect)
+        console.log(`adding underdigfx`, underDigestionEffect)
+        
+        this.underDigestionEffects.push(underDigestionEffect)
+      }
     })
 
     // * Segment enlarges to fit ingested ent
@@ -131,10 +133,11 @@ export default class Segment {
     if (this.entUnderDigestion.digestion.timeLeft > 0) {
 
       // * Overall digestion time for expAbsorb and passing
-
-      this.entUnderDigestion.digestion.timeLeft = this.entUnderDigestion.digestion.timeLeft - 17 < 0
-        ? 0
-        : this.entUnderDigestion.digestion.timeLeft - 17
+      
+      this.entUnderDigestion.digestion.timeLeft = 
+        this.entUnderDigestion.digestion.timeLeft - 17 < 0
+          ? 0
+          : this.entUnderDigestion.digestion.timeLeft - 17
       
 
 
@@ -213,6 +216,7 @@ export default class Segment {
           console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
         })
       }
+        // this.underDigestionEffects = []
         
       // * - If digested ent was poop, pass it immediately?
       if (this.entUnderDigestion.species === 'poop'
@@ -225,7 +229,6 @@ export default class Segment {
         // ! for reuse
         this.entUnderDigestion.position = {x: -100, y: -100}
         this.entUnderDigestion.hitArea = new Path2D
-
         Entity.remove(this.entUnderDigestion.id)
 
         this.makePoop()
@@ -251,7 +254,6 @@ export default class Segment {
     }
   }
   
-
   makePoop() {
     const poop = new Poop(this.ctx, this.position, this)
     
