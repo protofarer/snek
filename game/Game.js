@@ -227,7 +227,7 @@ export default class Game {
             )
     
             if (isContacting) {
-              this.snek.swallow(ent)
+              this.snek.chomp(ent)
               this.play.playRandomSwallowSound()
               this.score++
             }
@@ -266,7 +266,7 @@ export default class Game {
   
             if (isContacting) {
               if (this.snek.swallowables.includes(ent.species)) {
-                this.snek.swallow(ent)
+                this.snek.chomp(ent)
                 this.play.playRandomSwallowSound()
                 this.score++
               }
