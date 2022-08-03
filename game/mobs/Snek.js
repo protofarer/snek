@@ -1,3 +1,4 @@
+import { chomp } from '../behaviors/collisions'
 import Entity from '../Entity'
 import Mob from './Mob'
 import Segment from './Segment'
@@ -64,6 +65,8 @@ export default class Snek extends Mob {
     this.baseMoveSpeed = 1
     this.currMoveSpeed = this.baseMoveSpeed
 
+    this.chomp = chomp
+
     this.addSegments(initSegmentCount || this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
@@ -104,41 +107,6 @@ export default class Snek extends Mob {
     document.addEventListener('keydown', handleKeyDown)
   }
 
-  chomp(ent) {
-    ent.hitArea = new Path2D()
-    ent.chompEffect(this)
-
-    // If snek has segments, begin digestion process
-    if (this.downstreamSegment) {
-
-      if (this.swallowables.includes(ent.species)) {
-
-        if (ent.carriedEnt) {
-          ent.drop()
-        }
-
-        this.downstreamSegment.ingest(ent)
-
-      } else {
-
-        console.log(`cant swallow that`, )
-        // ! this error doesn't stop program process?
-        throw new Error('Cannot swallow an ent not specified in snek.swallowables')
-
-      }
-
-    } else {
-      // * Chomp without ingest aka bite behavior: 
-      // * move ent behind snek and ensure hittable
-      console.log(`bitbehavior`, )
-      ent.position = {
-        x: this.position.x - this.r * Math.cos(this.headingRadians),
-        y: this.position.y - this.r * Math.sin(this.headingRadians)
-      }
-      ent.setHitAreas()
-    }
-
-  }
   drawHitOverlays() {
     // Head Hit (from Mob)
     super.drawHitOverlays()

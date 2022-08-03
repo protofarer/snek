@@ -29,6 +29,7 @@ export default class Mob {
 
   // TODO
   chompEffect = baseChompEffect
+  expEffect = baseAbsorbExp.bind(this)
   postDigestionData
 
   basePrimaryColor = 'lawngreen'
@@ -60,12 +61,11 @@ export default class Mob {
     this.position = startPosition || this.position
     this.parentEnt = parentEnt
 
-    const expEffect = baseAbsorbExp.bind(this)
     this.underDigestionData = [
       {
         effect: 'exp',
         type: 'function',
-        exp: expEffect,
+        exp: this.expEffect,
       }
     ]
     this.setHitAreas()

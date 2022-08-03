@@ -7,18 +7,14 @@ export default class Banana extends Immob {
 
   r = 7
   digestion = {
-    timeLeft: 4000,
-    baseTime: 4000
+    timeLeft: 6000,
+    baseTime: 6000
   }
 
   baseExp = 20
   currExp = this.baseExp
-  get expAbsorbRate() {
-    const rate = (17 / this.digestion.baseTime) * this.baseExp * 4 / 5
-    return rate
-  }
 
-  secondaryColor = 'brown'
+  secondaryColor = 'black'
 
   constructor(ctx, position, parentEnt=null) {
     super(ctx, position, parentEnt)
@@ -36,8 +32,13 @@ export default class Banana extends Immob {
         effect: 'moveSpeed',
         type: 'boolean',
         moveSpeed: 3,
-        duration: 2000,
-        timeLeft: 2000
+        duration: 3000,
+        timeLeft: 3000
+      },
+      {
+        effect: 'exp',
+        type: 'function',
+        exp: this.expEffect
       }
     ]
     this.setHitAreas()
@@ -68,7 +69,7 @@ export default class Banana extends Immob {
       this.r*1.45*Math.sin(1.88)
     )
     ctx.lineWidth = this.r/6
-    ctx.strokeStyle = 'black'
+    ctx.strokeStyle = this.secondaryColor
     ctx.stroke()
 
     ctx.restore()

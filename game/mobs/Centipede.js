@@ -2,6 +2,7 @@ import Segment from './Segment'
 import { turnRandomlySmoothly } from '../behaviors/movements'
 import Mob from './Mob'
 import Entity from '../Entity'
+import { chomp } from '../behaviors/collisions'
 
 export default class Centipede extends Mob {
   static species = 'centipede'
@@ -40,6 +41,8 @@ export default class Centipede extends Mob {
 
     this.baseTurnRate = this.baseMoveSpeed + 5
     this.currTurnRate = this.baseTurnRate
+
+    this.chomp = chomp
 
     this.nInitSegments = nInitSegments || this.nInitSegments
     this.addSegments(this.nInitSegments)
@@ -88,38 +91,6 @@ export default class Centipede extends Mob {
         this.downstreamSegment = newSegment
       }
       this.nSegments++
-    }
-  }
-
-  swallow(ent) {
-    ent.hitArea = new Path2D
-    ent.chompEffect(this)
-
-    if (this.downstreamSegment) {
-      switch (ent.species) {
-        case 'snek-segment':
-          this.downstreamSegment.ingest(ent)
-          break
-        default:
-          console.info(`centipede.swallow() defaulted`, )
-      }
-      ent?.carriedEnt && this.swallow(ent.carriedEnt)
-  
-      // if (this.swallowables.includes(ent.carriedEnt?.species)) {
-      //   this.swallow(ent.carriedEnt)
-      // } else {
-      //   // Drop any non-swallowable carried ents
-      // }
-    } else {
-      // * Chomp without ingest aka bite behavior: 
-      // * move ent behind snek and ensure hittable
-      console.log(`bitbehavior`, )
-      ent.position = {
-        x: this.position.x - this.r * Math.cos(this.headingRadians),
-        y: this.position.y - this.r * Math.sin(this.headingRadians)
-      }
-      ent.setHitAreas()
-
     }
   }
 

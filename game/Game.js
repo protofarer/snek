@@ -198,80 +198,36 @@ export default class Game {
       if (ent.parentEnt === this) {
 
         if (ent.species === 'ant' && !ent.carriedEnt) {
-          let sweets = Entity.bySpecies(['apple', 'mango'])
+          let sweets = Entity.bySpecies(['apple', 'mango', 'banana'])
           for(let sweet of Object.values(sweets)) {
-            // TODO collisionresolver
-            const isContacting = this.isContactingMouth(
-              sweet.hitArea,
-              ent.mouthCoords
-            )
-              
-            if (isContacting) {
-              console.log(`iscontacting`, )
-              
-              ent.grab(sweet)
-            }
+            this.collisionResolver(ent, sweet, () => ent.grab(sweet))
           }
         }
   
         if (ent.entGroup === 'mob') {
           
           moveEdgeWrap.call(ent)
-  
-          if (this.snek && this.snek.swallowables.includes(ent.species)) {
-
-            // TODO collisionresolver
-            const isContacting = this.isContactingMouth(
-              ent.hitArea,
-              this.snek.mouthCoords,
-            )
-    
-            if (isContacting) {
-              this.snek.chomp(ent)
-              this.play.playRandomSwallowSound()
-              this.score++
-            }
-          }
 
           const sneksegs = Entity.bySpecies(['snek-segment']) 
           if (ent.species === 'centipede' && Object.values(sneksegs).length > 0) {
             for(let snekseg of Object.values(sneksegs)) {
-            // TODO collisionresolver
-              const isContacting = this.isContactingMouth(
-                snekseg.hitArea,
-                ent.mouthCoords,
-              )
-  
-              if (isContacting) {
-                console.log(`IN game, cent bite:`, ent.species)
+              this.collisionResolver(ent, snekseg, () => {
                 snekseg.detach()
-                console.log(`snekseg species`, snekseg.species)
-                
-                ent.swallow(snekseg)
-                // TODO detach segments
-                // TODO ent.bite(snekseg)
-                // TODO playRandomBiteSound
-              }
-  
+                ent.chomp(snekseg)
+              })
             }
           }
-        } else if (ent.entGroup === 'immob') {
-  
-          if (this.snek) {
-            // TODO collisionresolver
-            const isContacting = this.isContactingMouth(
-              ent.hitArea,
-              this.snek.mouthCoords, 
-            )
-  
-            if (isContacting) {
-              if (this.snek.swallowables.includes(ent.species)) {
-                this.snek.chomp(ent)
-                this.play.playRandomSwallowSound()
-                this.score++
-              }
+
+        }
+
+        if (this.snek && this.snek.swallowables.includes(ent.species)) {
+          this.collisionResolver(this.snek, ent, () => {
+            if (this.snek.swallowables.includes(ent.species)) {
+              this.snek.chomp(ent)
+              this.play.playRandomSwallowSound()
+              this.score++
             }
-          }
+          })
         }
       }
     }
