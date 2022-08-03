@@ -8,8 +8,8 @@ export default class Mango extends Immob {
 
   r = 6
   digestion = {
-    timeLeft: 9000,
-    baseTime: 9000
+    timeLeft: 16000,
+    baseTime: 16000
   }
 
   baseExp = 40

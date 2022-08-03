@@ -9,7 +9,7 @@ export function baseChompEffect(entAffected) {
       entAffected.currSegExp += expDiff
     }
     this.currExp -= expDiff
-    this.digestion.timeLeft *= chompRatio
+    this.digestion.timeLeft *= 1 - chompRatio
 
   } else {
   // Consume all on the 3rd clean bite or when ent low on digestable material
@@ -35,7 +35,7 @@ export function bigChompEffect(entAffected) {
       entAffected.currSegExp += expDiff
     }
     this.currExp -= expDiff
-    this.digestion.timeLeft *= chompRatio
+    this.digestion.timeLeft *= 1 - chompRatio
 
   } else {
 
@@ -62,7 +62,7 @@ export function smallChompEffect(entAffected) {
       entAffected.currSegExp += expDiff
     }
     this.currExp -= expDiff
-    this.digestion.timeLeft *= chompRatio
+    this.digestion.timeLeft *= 1 - chompRatio
 
   } else {
 
