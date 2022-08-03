@@ -1,3 +1,4 @@
+import { baseAbsorbExp } from '../behaviors/exp'
 import Immob from './Immob'
 export default class Apple extends Immob {
 
@@ -27,6 +28,7 @@ export default class Apple extends Immob {
       lumStart: 50,
       lumEnd: 25,
     }
+
     this.postDigestionData = [
       {
         effect: 'moveSpeed',
@@ -35,21 +37,23 @@ export default class Apple extends Immob {
         timeLeft: 18000
       },
     ]
-      // TEST
-    // this.underDigestionData = [
-      // {
-      //   effect: 'moveSpeed',
-      //   moveSpeed: 0.25,
-      //   duration: 3000,
-      //   timeLeft: 3000
-      // },
-    //   {
-    //     effect: 'primaryColor',
-    //     primaryColor: 'red',
-    //     duration: 5000,
-    //     timeLeft: 5000
-    //   }
-    // ]
+    const expEffect = baseAbsorbExp.bind(this)
+    const expDuration = this.digestion.baseTime
+    const expTimeLeft = () => this.digestion.timeLeft
+    this.underDigestionData = [
+      {
+        effect: 'primaryColor',
+        type: 'boolean',
+        primaryColor: 'red',
+        duration: 5000,
+        timeLeft: 5000
+      },
+      {
+        effect: 'exp',
+        type: 'function',
+        exp: expEffect,
+      }
+    ]
     this.setHitAreas()
   }
 

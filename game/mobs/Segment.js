@@ -127,23 +127,6 @@ export default class Segment {
     this.scale = this.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
   }
 
-  reverseDigestionEffect(digestionEffect) {
-    // * Must be removed by function outer to this one
-    switch (digestionEffect.effect) {
-      case 'moveSpeed':
-        this.getHeadEnt().currMoveSpeed += -digestionEffect.moveSpeed
-        break
-      case 'turnRate':
-        this.getHeadEnt().currTurnRate += -digestionEffect.turnRate
-        break
-      case 'primaryColor':
-        this.getHeadEnt().currPrimaryColor = this.getHeadEnt().basePrimaryColor
-        break
-      default:
-        console.log(`snek postDigestionEffect switch/case defaulted`, )
-    }
-  }
-  
   digest() {
     if (this.entUnderDigestion.digestion.timeLeft > 0) {
 
@@ -153,37 +136,57 @@ export default class Segment {
         ? 0
         : this.entUnderDigestion.digestion.timeLeft - 17
       
-      this.entUnderDigestion.species !== 'poop' 
-        && this.entUnderDigestion.absorbExp(this.getHeadEnt())
 
 
       // * Under Digestion Effects
       if (this.underDigestionEffects.length > 0) {
 
-        // Reverse and Remove expended digestion effects
+        // Reverse and Remove expirable digestion effects
         const expiredUnderDigestionEffects = this.underDigestionEffects.filter(
-          underDigestionEffect => underDigestionEffect.timeLeft <= 0
+          underDigestionEffect => 
+            underDigestionEffect.type === 'boolean' && underDigestionEffect.timeLeft <= 0
         )
 
-        expiredUnderDigestionEffects.forEach(e => {
+        expiredUnderDigestionEffects.length > 0 && console.log(`expiredDigFx`, expiredUnderDigestionEffects)
+
+        const reversibleEffects = expiredUnderDigestionEffects.filter(e =>
+          e.type === 'boolean'
+        )
+
+        reversibleEffects.forEach(e => {
           console.log(`reversing underDigFx`, e)
           this.reverseDigestionEffect(e)
         })
 
-        expiredUnderDigestionEffects.length > 0 && console.log(`expiredDigFx`, expiredUnderDigestionEffects)
         
-        this.underDigestionEffects = this.underDigestionEffects.filter(underDigestionEffect => 
-          underDigestionEffect.timeLeft > 0
+        this.underDigestionEffects = this.underDigestionEffects
+        .filter(underDigestionEffect => 
+          (
+            underDigestionEffect.type === 'boolean' 
+            && underDigestionEffect.timeLeft > 0
+          ) 
+          || underDigestionEffect.type === 'function'
         )
 
-        // Tick under digestion effects
-        this.underDigestionEffects = this.underDigestionEffects.map(underDigestionEffect => {
-          const timeLeft = underDigestionEffect.timeLeft - 17 < 0
-            ? 0
-            : underDigestionEffect.timeLeft - 17
-          return { ...underDigestionEffect, timeLeft }
-        })
+        // Execute function effect types
 
+        const functionEffects = this.underDigestionEffects
+        .filter(underDigestionEffect => underDigestionEffect.type === 'function')
+
+        functionEffects.forEach(effect => 
+          effect[effect.effect](this.getHeadEnt())
+        )
+
+        // Tick duration tickType effects
+        this.underDigestionEffects = this.underDigestionEffects.map(underDigestionEffect => {
+          if (underDigestionEffect.type === 'boolean') {
+            const timeLeft = underDigestionEffect.timeLeft - 17 < 0
+              ? 0
+              : underDigestionEffect.timeLeft - 17
+            return { ...underDigestionEffect, timeLeft }
+          }
+          return underDigestionEffect
+        })
       }
 
     } else {
@@ -231,6 +234,24 @@ export default class Segment {
 
   }
 
+  reverseDigestionEffect(digestionEffect) {
+    // * Must be removed by function outer to this one
+    switch (digestionEffect.effect) {
+      case 'moveSpeed':
+        this.getHeadEnt().currMoveSpeed += -digestionEffect.moveSpeed
+        break
+      case 'turnRate':
+        this.getHeadEnt().currTurnRate += -digestionEffect.turnRate
+        break
+      case 'primaryColor':
+        this.getHeadEnt().currPrimaryColor = this.getHeadEnt().basePrimaryColor
+        break
+      default:
+        console.log(`snek postDigestionEffect switch/case defaulted`, )
+    }
+  }
+  
+
   makePoop() {
     const poop = new Poop(this.ctx, this.position, this)
     
@@ -243,10 +264,14 @@ export default class Segment {
   }
 
   pass() {
-    this.underDigestionEffects.forEach(d => {
+    const reversibleEffects = this.underDigestionEffects.filter(e =>
+      e.type === 'boolean')
+
+    reversibleEffects.forEach(d => {
       console.log(`Reversing underDigFx`, d)
       this.reverseDigestionEffect(d)
     })
+
     this.underDigestionEffects = []
       
     if (!this.downstreamSegment) {
