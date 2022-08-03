@@ -1,7 +1,7 @@
 import Poop from '../immobs/Poop'
 import Entity from '../Entity'
 import { baseSwallowEffect } from '../behaviors/digestion'
-import { baseAbsorbExp } from '../behaviors/digestion'
+import { baseAbsorbExp } from '../behaviors/exp'
 
 export default class Segment {
   static entGroup = 'segment'

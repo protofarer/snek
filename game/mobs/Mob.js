@@ -1,6 +1,12 @@
-import { baseAbsorbExp, baseSwallowEffect } from '../behaviors/digestion'
+import { baseSwallowEffect } from '../behaviors/digestion'
+import { baseAbsorbExp } from '../behaviors/exp'
 
 export default class Mob {
+  // Mobs are entities that are generally more dynamic than immobs. They can
+  // change their own position via a move function and have some level of
+  // autonomy in the form of swallows, bites, grabs, and have sets of behaviors
+  // and state-modifying effects.
+
   static entGroup = 'mob'
   entGroup = 'mob'
 
