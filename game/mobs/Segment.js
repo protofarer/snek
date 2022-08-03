@@ -121,8 +121,8 @@ export default class Segment {
         }
         console.log(`adding underdigfx`, underDigestionEffect)
         
-        this.underDigestionEffects.push(underDigestionEffect)
       }
+      this.underDigestionEffects.push(underDigestionEffect)
     })
 
     // * Segment enlarges to fit ingested ent

@@ -35,10 +35,10 @@ export default class Immob {
 
   baseExp = 10
   currExp = this.baseExp
-  absorbExp = baseAbsorbExp.bind(this)
+  // absorbExp = baseAbsorbExp.bind(this)
 
-  chompEffect = baseChompEffect.bind(this)
-  postDigestionData = null
+  chompEffect = baseChompEffect
+  postDigestionData
 
   secondaryColor
   #primaryColorHue = { start: 125, end: 125 }

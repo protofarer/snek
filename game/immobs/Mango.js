@@ -27,6 +27,7 @@ export default class Mango extends Immob {
       lumStart: 50,
       lumEnd: 40
     }
+
     this.chompEffect = smallChompEffect
     const expEffect = baseAbsorbExp.bind(this)
     this.underDigestionData = [
@@ -36,22 +37,23 @@ export default class Mango extends Immob {
         exp: expEffect
       }
     ]
-    this.postDigestionData = [
-      {
-        effect: 'turnRate',
-        type: 'boolean',
-        turnRate: 1,
-        duration: 24000,
-        timeLeft: 24000
-      },
-      {
-        effect: 'moveSpeed',
-        type: 'boolean',
-        moveSpeed: 0.5,
-        duraction: 24000,
-        timeLeft: 24000
-      }
-    ]
+
+    // this.postDigestionData = [
+    //   {
+    //     effect: 'turnRate',
+    //     type: 'boolean',
+    //     turnRate: 1,
+    //     duration: 24000,
+    //     timeLeft: 24000
+    //   },
+    //   {
+    //     effect: 'moveSpeed',
+    //     type: 'boolean',
+    //     moveSpeed: 0.5,
+    //     duraction: 24000,
+    //     timeLeft: 24000
+    //   }
+    // ]
     this.setHitAreas()
   }
 
