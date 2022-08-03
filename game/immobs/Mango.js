@@ -1,4 +1,5 @@
-import { lowSwallowEffect } from '../behaviors/digestion'
+import { smallChompEffect } from '../behaviors/digestion'
+import { baseAbsorbExp } from '../behaviors/exp'
 import Immob from './Immob'
 
 export default class Mango extends Immob {
@@ -13,10 +14,6 @@ export default class Mango extends Immob {
 
   baseExp = 40
   currExp = this.baseExp
-  get expAbsorbRate() {
-    const rate = (17 / this.digestion.baseTime) * this.baseExp * 4 / 5
-    return rate
-  }
 
   secondaryColor = 'green'
 
@@ -30,16 +27,26 @@ export default class Mango extends Immob {
       lumStart: 50,
       lumEnd: 40
     }
-    this.swallowEffect = lowSwallowEffect
+    this.chompEffect = smallChompEffect
+    const expEffect = baseAbsorbExp.bind(this)
+    this.underDigestionData = [
+      {
+        effect: 'exp',
+        type: 'function',
+        exp: expEffect
+      }
+    ]
     this.postDigestionData = [
       {
         effect: 'turnRate',
+        type: 'boolean',
         turnRate: 1,
         duration: 24000,
         timeLeft: 24000
       },
       {
         effect: 'moveSpeed',
+        type: 'boolean',
         moveSpeed: 0.5,
         duraction: 24000,
         timeLeft: 24000

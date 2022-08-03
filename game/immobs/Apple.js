@@ -9,8 +9,8 @@ export default class Apple extends Immob {
 
   r = 6
   digestion = {
-    timeLeft: 12000,
-    baseTime: 12000
+    timeLeft: 10000,
+    baseTime: 10000
   }
 
   baseExp = 10
@@ -33,20 +33,18 @@ export default class Apple extends Immob {
       {
         effect: 'moveSpeed',
         moveSpeed: 0.25,
-        duration: 18000,
-        timeLeft: 18000
+        duration: 20000,
+        timeLeft: 20000
       },
     ]
     const expEffect = baseAbsorbExp.bind(this)
-    const expDuration = this.digestion.baseTime
-    const expTimeLeft = () => this.digestion.timeLeft
     this.underDigestionData = [
       {
         effect: 'primaryColor',
         type: 'boolean',
         primaryColor: 'red',
-        duration: 5000,
-        timeLeft: 5000
+        duration: 2000,
+        timeLeft: 2000
       },
       {
         effect: 'exp',
