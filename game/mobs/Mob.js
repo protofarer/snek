@@ -1,4 +1,4 @@
-import { baseSwallowEffect } from '../behaviors/digestion'
+import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 
 export default class Mob {
@@ -31,7 +31,8 @@ export default class Mob {
     return rate
   }
 
-  swallowEffect = baseSwallowEffect
+  // TODO
+  swallowEffect = baseChompEffect
   postDigestionData = null
 
   basePrimaryColor = 'lawngreen'

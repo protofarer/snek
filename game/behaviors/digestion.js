@@ -1,8 +1,10 @@
 import Entity from '../Entity'
 
-export function baseSwallowEffect(entAffected) {
-    // Consume all on the 3rd bite
+export function baseChompEffect(entAffected) {
+
+    // Consume all on the 3rd clean bite or when ent low on digestable material
     if (this.currExp / this.baseExp <= 0.25) {
+
       entAffected.currExp += this.currExp
       if (entAffected.currSegExp) {
         
@@ -15,7 +17,9 @@ export function baseSwallowEffect(entAffected) {
       this.hitArea = new Path2D()
       this.position = {x: -100, y: -100}
       Entity.remove(this.id)
+
     } else {
+
       const expDiff = this.currExp / 2
       entAffected.currExp += expDiff
       if (entAffected.currSegExp) {

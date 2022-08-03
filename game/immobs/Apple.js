@@ -1,5 +1,4 @@
 import Immob from './Immob'
-import { baseSwallowEffect } from '../behaviors/digestion'
 export default class Apple extends Immob {
 
   // ! Unsure if entGroup is defined, inherit from Immob

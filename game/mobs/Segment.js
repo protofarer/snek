@@ -1,6 +1,6 @@
 import Poop from '../immobs/Poop'
 import Entity from '../Entity'
-import { baseSwallowEffect } from '../behaviors/digestion'
+import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 
 export default class Segment {
@@ -22,7 +22,7 @@ export default class Segment {
     return rate
   }
 
-  swallowEffect = baseSwallowEffect
+  swallowEffect = baseChompEffect
 
   digestion = {
     timeLeft: 6000,
@@ -86,17 +86,16 @@ export default class Segment {
   }
 
   ingest(ent) {
-    // * All ents to be digested start here
-    // * Activates digestion effects data for head ent
 
-    // * Core mechanic: Ingesting another ent while an existing ent is under
-    // * digestion forces the latter to be passed regardless of digestion state
+    // * Digestion starts by setting up ownership of ingest ent and
+    // * collecting digestion effects data for segment's head 
+    // * (ent being affected by effects)
 
-    // console.log(`ingesting ${ent.species}`, )
+    // * Ingesting another ent while an existing ent is under
+    // * digestion forces the latter to be passed regardless of it's
+    // * digestion state
 
     if (this.entUnderDigestion) {
-      // Force segment to pass contents
-      // console.log(`ingest-force-passing ${this.entUnderDigestion.species}`, )
       this.pass()
     }
 
@@ -104,6 +103,7 @@ export default class Segment {
     this.entUnderDigestion.position = this.position
     this.entUnderDigestion.parentEnt = this.getHeadEnt()
 
+    // TODO modifications to consumers' state should be guarded by public method
     this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => {
         switch (underDigestionEffect.effect) {
           case 'moveSpeed':
@@ -122,6 +122,8 @@ export default class Segment {
       
       this.underDigestionEffects.push(underDigestionEffect)
     })
+
+    // * Segment enlarges to fit ingested ent
     this.scale = this.entUnderDigestion.species === 'poop' ? { x: 1, y: 1.2 }: { x: 1, y: 1.5 }
   }
 

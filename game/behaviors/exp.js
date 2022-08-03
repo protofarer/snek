@@ -1,9 +1,10 @@
 export function baseAbsorbExp(entAffected) {
   if (this.currExp > 0) {
-    entAffected.currExp += this.expAbsorbRate
+    const rate = (17 / this.digestion.baseTime) * this.baseExp/2 
+    entAffected.currExp += rate
     if (entAffected.currSegExp != undefined) {
-      entAffected.currSegExp += this.expAbsorbRate
+      entAffected.currSegExp += rate
     }
-    this.currExp -= this.expAbsorbRate
+    this.currExp -= rate
   }
 }

@@ -1,4 +1,4 @@
-import { baseSwallowEffect } from '../behaviors/digestion'
+import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 
 export default class Immob {
@@ -39,8 +39,9 @@ export default class Immob {
     const rate = (17 / this.digestion.baseTime) * this.baseExp/2 
     return rate
   }
+  absorbExp = baseAbsorbExp.bind(this)
 
-  swallowEffect = baseSwallowEffect
+  chompEffect = baseChompEffect.bind(this)
   postDigestionData = null
 
   secondaryColor
@@ -114,19 +115,20 @@ export default class Immob {
     return this.postDigestionData
   }
 
-  swallowBehavior(entAffected) {
-    if (this.swallowEffect) {
-      console.log(`calling swallowEffect`, )
+  // ! now named chompEffect
+  // swallowBehavior(entAffected) {
+  //   if (this.swallowEffect) {
+  //     console.log(`calling swallowEffect`, )
       
-      this.swallowEffect.call(this, entAffected)
-    } else {
-      console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
-    }
-  }
+  //     this.swallowEffect.call(this, entAffected)
+  //   } else {
+  //     console.log(`no swalloweffect triggered, either wasExcreted or missing`, )
+  //   }
+  // }
 
-  absorbExp(entAffected) {
-    baseAbsorbExp.call(this, entAffected)
-  }
+  // absorbExp(entAffected) {
+  //   baseAbsorbExp.call(this, entAffected)
+  // }
 
   left() {
     return { x:this.position.x - this.hitSideLength, y: this.position.y}
