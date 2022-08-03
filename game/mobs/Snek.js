@@ -1,5 +1,4 @@
 import Entity from '../Entity'
-import { moveEdgeWrap } from '../behaviors'
 import Mob from './Mob'
 import Segment from './Segment'
 
@@ -7,7 +6,7 @@ export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'
 
-  swallowables = [ 'mango', 'ant', 'pebble', 'banana']
+  swallowables = [ 'apple', 'mango', 'ant', 'pebble', 'banana' ]
 
   r = 10
   get hitR() { return this.r }

@@ -1,5 +1,5 @@
 import Segment from './Segment'
-import { turnRandomlySmoothly } from '../behaviors'
+import { turnRandomlySmoothly } from '../behaviors/movements'
 import Mob from './Mob'
 import Entity from '../Entity'
 

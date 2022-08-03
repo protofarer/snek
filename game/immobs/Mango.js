@@ -1,4 +1,4 @@
-import { lowSwallowEffect } from '../behaviors'
+import { lowSwallowEffect } from '../behaviors/digestion'
 import Immob from './Immob'
 
 export default class Mango extends Immob {
