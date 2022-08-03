@@ -37,6 +37,7 @@ export default class Immob {
   currExp = this.baseExp
 
   chompEffect = baseChompEffect
+  expEffect = baseAbsorbExp.bind(this)
   postDigestionData
 
   secondaryColor

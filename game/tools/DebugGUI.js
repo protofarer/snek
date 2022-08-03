@@ -356,29 +356,32 @@ export default class DebugGUI {
       const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       this.game.snek = snek
 
-      // const b = addEnt(Apple)
-      // b.position = {x: 300, y:400}
-      // b.setHitAreas()
-      const a = addEnt(Ant).setMobile(false).setTurnable(false)
-      a.headingRadians = 0
-      a.position = {x: 170, y:400}
-      a.setHitAreas()
+      // const a = addEnt(Apple)
+      // a.position = {x: 300, y:400}
+      // a.setHitAreas()
 
-      // const b = addEnt(Apple)
-      // b.position = {x:180, y:400}
-      // b.setHitAreas()
+      // addEnt(Mango)
 
-      // const c = addEnt(Pebble)
-      // c.position={x:170, y:400}
+      const b = addEnt(Ant).setMobile(false).setTurnable(false)
+      b.headingRadians = 0
+      b.position = {x: 170, y:400}
+      b.setHitAreas()
+
+      // const c = addEnt(Banana)
+      // c.position = {x:190, y:400}
       // c.setHitAreas()
 
       // const d = addEnt(Pebble)
-      // d.position={x:180, y:400}
+      // d.position={x:170, y:400}
       // d.setHitAreas()
 
-      const c = addEnt(Centipede).setMobile(true).setTurnable(false)
-      c.headingRadians = - Math.PI/2
-      c.position = {x:150,y:550}
+      // const e = addEnt(Pebble)
+      // e.position={x:180, y:400}
+      // e.setHitAreas()
+
+      // const f = addEnt(Centipede).setMobile(true).setTurnable(false)
+      // f.headingRadians = - Math.PI/2
+      // f.position = {x:150,y:550}
       
     }
   }

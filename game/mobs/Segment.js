@@ -246,7 +246,7 @@ export default class Segment {
     this.scale.y = 1.3
   }
 
-  pass() {
+  cancelUnderDigestionBooleanEffects() {
     const reversibleEffects = this.underDigestionEffects.filter(e =>
       e.type === 'boolean')
 
@@ -256,7 +256,11 @@ export default class Segment {
     })
 
     this.underDigestionEffects = []
-      
+  }
+
+  pass() {
+    this.cancelUnderDigestionBooleanEffects()
+
     if (!this.downstreamSegment) {
       this.excrete()
     } else {
@@ -276,6 +280,7 @@ export default class Segment {
   restoreEntUnderDigestion() {
     this.entUnderDigestion.setMobile?.(true)
     this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
+    this.entUnderDigestion = null
   }
 
   drawHitOverlays() {
@@ -340,9 +345,13 @@ export default class Segment {
   detach() {
   // * Digestion: halt, reverse effects, maintain digestion contents state
     console.log('seg detaching')
+    this.cancelUnderDigestionBooleanEffects()
+
     if (this.entUnderDigestion) {
       this.restoreEntUnderDigestion()
     }
+
+    
     this.upstreamSegment.downstreamSegment = null
     this.upstreamSegment = null
   }

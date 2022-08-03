@@ -31,7 +31,6 @@ export default class Apple extends Immob {
       lumEnd: 25,
     }
 
-    const expEffect = baseAbsorbExp.bind(this)
     this.underDigestionData = [
       {
         effect: 'primaryColor',
@@ -43,7 +42,7 @@ export default class Apple extends Immob {
       {
         effect: 'exp',
         type: 'function',
-        exp: expEffect,
+        exp: this.expEffect,
       }
     ]
 

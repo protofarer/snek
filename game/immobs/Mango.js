@@ -29,12 +29,12 @@ export default class Mango extends Immob {
     }
 
     this.chompEffect = smallChompEffect
-    const expEffect = baseAbsorbExp.bind(this)
+
     this.underDigestionData = [
       {
         effect: 'exp',
         type: 'function',
-        exp: expEffect
+        exp: this.expEffect
       }
     ]
 
