@@ -31,14 +31,6 @@ export default class Apple extends Immob {
       lumEnd: 25,
     }
 
-    this.postDigestionData = [
-      {
-        effect: 'moveSpeed',
-        moveSpeed: 0.25,
-        duration: 20000,
-        timeLeft: 20000
-      },
-    ]
     const expEffect = baseAbsorbExp.bind(this)
     this.underDigestionData = [
       {
@@ -53,6 +45,15 @@ export default class Apple extends Immob {
         type: 'function',
         exp: expEffect,
       }
+    ]
+
+    this.postDigestionData = [
+      {
+        effect: 'moveSpeed',
+        moveSpeed: 0.25,
+        duration: 20000,
+        timeLeft: 20000
+      },
     ]
     this.setHitAreas()
   }
