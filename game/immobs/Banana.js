@@ -1,4 +1,4 @@
-import { highSwallowEffect } from '../behaviors'
+import { highSwallowEffect } from '../behaviors/digestion'
 import Immob from './Immob'
 
 export default class Banana extends Immob {

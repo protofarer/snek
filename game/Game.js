@@ -15,7 +15,7 @@ import Snek from './mobs/Snek'
 import Centipede from './mobs/Centipede'
 import Ant from './mobs/Ant'
 
-import { moveEdgeWrap } from './behaviors'
+import { moveEdgeWrap } from './behaviors/movements'
 
 export default class Game {
 
