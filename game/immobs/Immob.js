@@ -35,10 +35,6 @@ export default class Immob {
 
   baseExp = 10
   currExp = this.baseExp
-  get expAbsorbRate() { 
-    const rate = (17 / this.digestion.baseTime) * this.baseExp/2 
-    return rate
-  }
   absorbExp = baseAbsorbExp.bind(this)
 
   chompEffect = baseChompEffect.bind(this)
