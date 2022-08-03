@@ -270,6 +270,10 @@ export default class Segment {
     if (this.entUnderDigestion.entGroup === 'immob') {
       this.entUnderDigestion.setHitAreas()
     }
+    this.restoreEntUnderDigestion()
+  }
+
+  restoreEntUnderDigestion() {
     this.entUnderDigestion.setMobile?.(true)
     this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
   }
@@ -336,6 +340,9 @@ export default class Segment {
   detach() {
   // * Digestion: halt, reverse effects, maintain digestion contents state
     console.log('seg detaching')
+    if (this.entUnderDigestion) {
+      this.restoreEntUnderDigestion()
+    }
     this.upstreamSegment.downstreamSegment = null
     this.upstreamSegment = null
   }
