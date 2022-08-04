@@ -363,10 +363,10 @@ export default class DebugGUI {
 
       // addEnt(Mango)
 
-      const b = addEnt(Ant).setMobile(false).setTurnable(false)
-      b.headingRadians = 0
-      b.position = {x: 170, y:400}
-      b.setHitAreas()
+      // const b = addEnt(Ant).setMobile(false).setTurnable(false)
+      // b.headingRadians = 0
+      // b.position = {x: 170, y:400}
+      // b.setHitAreas()
 
       // const c = addEnt(Banana)
       // c.position = {x:190, y:400}
@@ -380,9 +380,9 @@ export default class DebugGUI {
       // e.position={x:180, y:400}
       // e.setHitAreas()
 
-      // const f = addEnt(Centipede).setMobile(true).setTurnable(false)
-      // f.headingRadians = - Math.PI/2
-      // f.position = {x:150,y:550}
+      const f = addEnt(Centipede).setMobile(true).setTurnable(false)
+      f.headingRadians = - Math.PI/2
+      f.position = {x:150,y:550}
       
     }
   }

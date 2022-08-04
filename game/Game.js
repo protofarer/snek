@@ -112,7 +112,7 @@ export default class Game {
     if (!position) {
       // * For testing purposes so snek segs don't count toward displacement
       // * along x
-      const minsSegsLength = Entity.stack.values().filter(e => 
+      const minsSegsLength = Array.from(Entity.stack.values()).filter(e => 
         e.entGroup === 'segment'
       ).length
       ent.position.x += (50 * (bigEnt.id - minsSegsLength))
@@ -204,8 +204,8 @@ export default class Game {
           moveEdgeWrap.call(ent)
 
           const sneksegs = Entity.bySpecies(['snek-segment']) 
-          if (ent.species === 'centipede' && Object.values(sneksegs).length > 0) {
-            for(let snekseg of Object.values(sneksegs)) {
+          if (ent.species === 'centipede' && Array.from(sneksegs.values()).length > 0) {
+            for(let snekseg of sneksegs.values()) {
               this.collisionResolver(ent, snekseg, () => {
                 snekseg.detach()
                 ent.chomp(snekseg)
@@ -258,7 +258,7 @@ export default class Game {
       this.snek.position = { x: 200, y: 400 }
       new Entity(this.snek)
 
-      this.spawnEnts(Apple, 35)
+      this.spawnEnts(Apple, 45)
       this.spawnEnts(Pebble, 55)
       this.spawnEnts(Mango, 5)
       this.spawnEnts(Ant, 25)
