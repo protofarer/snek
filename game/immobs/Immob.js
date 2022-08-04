@@ -34,7 +34,7 @@ export default class Immob extends Entity {
     timeLeft: 3000,
   }
 
-  baseExp = 10
+  baseExp = 0
   currExp = this.baseExp
 
   expEffect = baseAbsorbExp.bind(this)

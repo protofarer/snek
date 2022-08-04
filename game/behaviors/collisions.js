@@ -1,7 +1,7 @@
 export function chomp(ent) {
 
   ent.hitArea = new Path2D()
-  ent.chompEffect(this)
+  ent.chompEffect?.(this)
 
   // If snek has segments, begin digestion process
   if (this.downstreamSegment) {
