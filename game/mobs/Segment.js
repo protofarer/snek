@@ -1,9 +1,6 @@
 import Poop from '../immobs/Poop'
-import { baseChompEffect } from '../behaviors/digestion'
-import { baseAbsorbExp } from '../behaviors/exp'
 import Immob from '../immobs/Immob'
 import { recycle } from '../utils/helpers'
-import Entity from '../Entity'
 
 export default class Segment extends Immob {
   static species = 'segment'

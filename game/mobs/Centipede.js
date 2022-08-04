@@ -25,6 +25,7 @@ export default class Centipede extends Mob {
 
   nInitSegments = 5
   downstreamSegment
+  postDigestionEffects = []
 
   constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
     super(ctx, startPosition, parentEnt)
@@ -58,8 +59,8 @@ export default class Centipede extends Mob {
       ctx.scale(1,0.5)
 
       ctx.beginPath()
-      ctx.moveTo(0, -4.5*this.r)
-      ctx.lineTo(0, 4.5*this.r)
+      ctx.moveTo(0, -4.2*this.r)
+      ctx.lineTo(0, 4.2*this.r)
       ctx.lineWidth = 1
       ctx.strokeStyle = legColor
       ctx.stroke()
@@ -74,14 +75,12 @@ export default class Centipede extends Mob {
     for(let i = 0; i < n; i++) {
       if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
-        this.downstreamSegment.species = 'centipede-segment'
-        new Entity(this.downstreamSegment)
+        this.downstreamSegment.subSpecies = 'centipede'
         this.downstreamSegment.drawLegs = drawLegs
         this.downstreamSegment.drawComponents = drawComponents
       } else {
         const newSegment = new Segment(this.ctx, this)
-        newSegment.species = 'centipede-segment'
-        new Entity(newSegment)
+        newSegment.subSpecies = 'centipede'
         newSegment.drawLegs = drawLegs
         newSegment.drawComponents = drawComponents
 
@@ -117,7 +116,7 @@ export default class Centipede extends Mob {
     ctx.beginPath()
     ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
     ctx.lineWidth = 2
-    ctx.fillStyle = this.bodyColor
+    ctx.fillStyle = this.currPrimaryColor
     ctx.fill()
 
     // eyes
@@ -187,25 +186,5 @@ export default class Centipede extends Mob {
   update() {
     this.move()
     this.downstreamSegment?.update()
-  }
-}
-
-export class LeggedSegment extends Segment {
-  constructor(ctx, upstreamSegment) {
-    super(ctx, upstreamSegment)
-  }
-
-  drawLegs(ctx) {
-    ctx.beginPath()
-    ctx.moveTo(0, -4.5*this.r)
-    ctx.lineTo(0, 4.5*this.r)
-    ctx.lineWidth = 1
-    ctx.strokeStyle = this.legColor
-    ctx.stroke()
-  }
-
-  drawComponents(ctx) {
-    this.drawLegs(ctx)
-    this.drawBody(ctx)
   }
 }

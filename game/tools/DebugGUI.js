@@ -358,14 +358,14 @@ export default class DebugGUI {
       // new Entity(snek)
       console.log('entitystack', Entity.stack)
 
-      // const a = addEnt(Apple)
+      const a = addEnt(Apple)
       
       // a.position = {x: 300, y:400}
       // a.setHitAreas()
 
-      addEnt(Banana)
-      addEnt(Apple)
-      addEnt(Mango)
+      // addEnt(Pebble)
+      // addEnt(Mango)
+      // addEnt(Apple)
 
       // const b = addEnt(Ant).setMobile(false).setTurnable(false)
       // b.headingRadians = 0
