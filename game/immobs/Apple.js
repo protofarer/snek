@@ -1,9 +1,5 @@
-import { baseAbsorbExp } from '../behaviors/exp'
 import Immob from './Immob'
 export default class Apple extends Immob {
-
-  // ! Unsure if entGroup is defined, inherit from Immob
-
   static species = 'apple'
   species = 'apple'
 
@@ -57,11 +53,6 @@ export default class Apple extends Immob {
     this.setHitAreas()
   }
 
-  // onDigestionEffect (entAffected) {
-    // entAffected.moveSpeed = entAffected.moveSpeed + 1
-    // return () => { entAffected.moveSpeed = entAffected.moveSpeed - 1 }
-  // }
-
   // postDigestionEffect () {
   //   if (!this.wasExcreted) {
   //     return {
@@ -83,9 +74,12 @@ export default class Apple extends Immob {
     ctx.arc(this.r*0.3, 0, this.r, 0, 2 * Math.PI)
     ctx.arc(-this.r*0.3, 0, this.r, 0, 2 * Math.PI)
     ctx.fillStyle = this.primaryColor
-    ctx.fill()
 
     this.drawShadow(ctx)
+
+    ctx.fill()
+
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
 
     ctx.restore()
   }
@@ -95,8 +89,6 @@ export default class Apple extends Immob {
     ctx.shadowOffsetY = this.r * 0.4
     ctx.shadowColor = 'hsl(0,0%,20%)'
     ctx.shadowBlur = this.r * 0.2
-    ctx.fill()
-    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
 
   drawLeaf(ctx) {

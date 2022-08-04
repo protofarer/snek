@@ -1,7 +1,8 @@
 import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
+import Entity from '../Entity'
 
-export default class Immob {
+export default class Immob extends Entity {
   // * Generally are simple, non-moving, squared or circular interactable
   // * objects. The Immob is the essence of all objects in the game, while it is
   // * similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
@@ -101,9 +102,19 @@ export default class Immob {
   }
 
   constructor(ctx, startPosition=null, parentEnt=null) {
+    super()
     this.ctx = ctx
     this.parentEnt = parentEnt || Error(`Must place ${this.species} under a Parent Entity!`)
     this.position = startPosition || this.position
+
+    this.underDigestionData = [
+      {
+        effect: 'exp',
+        type: 'function',
+        exp: this.expEffect,
+      }
+    ]
+
     this.setHitAreas()
   }
 
@@ -140,21 +151,21 @@ export default class Immob {
   }
 
   drawInitWrapper() {
-    // const ctx = this.ctx
-    this.ctx.save()
-    this.ctx.translate(this.position.x, this.position.y)
+    const ctx = this.ctx
+    ctx.save()
+    ctx.translate(this.position.x, this.position.y)
     // console.log(`immob position drawinitwrapp`, this.position)
     
 
     if (this.scale.x !== 1 || this.scale.y !== 1) {
-      this.ctx.scale(this.scale.x, this.scale.y)
+      ctx.scale(this.scale.x, this.scale.y)
     }
 
-    this.ctx.rotate(this.headingRadians)
+    ctx.rotate(this.headingRadians)
 
-    this.drawComponents(this.ctx)
+    this.drawComponents(ctx)
 
-    this.ctx.restore()
+    ctx.restore()
   }
 
   drawComponents(ctx) {
@@ -172,6 +183,5 @@ export default class Immob {
 
   render() {
     this.drawInitWrapper()
-    
   }
 }

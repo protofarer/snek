@@ -286,7 +286,7 @@ export default class DebugGUI {
   }
 
   drawDebugOverlays() {
-    Entity.stack.values().forEach( ent => ent.drawDebugOverlays())
+    Array.from(Entity.stack.values()).forEach( ent => ent.drawDebugOverlays())
     this.game.snek?.drawDebugOverlays()
   }
 
@@ -353,17 +353,18 @@ export default class DebugGUI {
 
     if (this.params.isDebugOn) {
 
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      new Entity(snek)
+      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      // this.game.snek = snek
+      // new Entity(snek)
 
-      const a = addEnt(Apple)
+      // const a = addEnt(Apple)
+      
       // a.position = {x: 300, y:400}
       // a.setHitAreas()
 
       // addEnt(Mango)
 
-      // const b = addEnt(Ant).setMobile(false).setTurnable(false)
+      const b = addEnt(Ant).setMobile(false).setTurnable(false)
       // b.headingRadians = 0
       // b.position = {x: 170, y:400}
       // b.setHitAreas()

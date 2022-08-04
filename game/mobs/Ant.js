@@ -71,7 +71,8 @@ export default class Ant extends Mob {
   }
 
   drawHitOverlays() {
-    super.drawHitOverlays()
+    this.ctx.strokeStyle = 'blue'
+    this.ctx.stroke(this.hitArea)
 
     this.ctx.beginPath()
     this.ctx.arc(this.mouthCoords.x, this.mouthCoords.y, 2, 0, 2 * Math.PI)

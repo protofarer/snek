@@ -1,7 +1,6 @@
-import { baseChompEffect } from '../behaviors/digestion'
-import { baseAbsorbExp } from '../behaviors/exp'
+import Immob from '../immobs/Immob'
 
-export default class Mob {
+export default class Mob extends Immob {
   // Mobs are entities that are generally more dynamic than immobs. They can
   // change their own position via a move function and have some level of
   // autonomy in the form of swallows, bites, grabs, and have sets of behaviors
@@ -10,33 +9,10 @@ export default class Mob {
   static entGroup = 'mob'
   entGroup = 'mob'
 
-  r = 1
-  position = { x: 400, y: 400 }
-  scale = { x: 1, y: 1 }
   get hitR() { return this.r + 1 }
 
-  headingRadians = 0
-  get headingDegrees() { return this.headingRadians * 180 / Math.PI }
-  set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
-
-  digestion = {
-    timeLeft: 3000,
-    baseTime: 3000
-  }
-
-  baseExp = 10
-  currExp = this.baseExp
-
-  // TODO
-  chompEffect = baseChompEffect
-  expEffect = baseAbsorbExp.bind(this)
-  postDigestionData
-
-  basePrimaryColor = 'lawngreen'
-  currPrimaryColor = this.basePrimaryColor
-  baseSecondaryColor = 'tomato'
-  currSecondaryColor = this.baseSecondaryColor
-  bodyColor = 'hsl(35, 50%, 55%)'
+  primaryColor = 'blue'
+  secondaryColor = ''
 
   // * Override in instance constructor: 1) field specify baseMS 2) this.moveSpeed = this.baseMS
   // * otherwise will be set to below
@@ -57,18 +33,7 @@ export default class Mob {
   minTurnRate = 0
 
   constructor(ctx, startPosition=null, parentEnt=null) {
-    this.ctx = ctx
-    this.position = startPosition || this.position
-    this.parentEnt = parentEnt
-
-    this.underDigestionData = [
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: this.expEffect,
-      }
-    ]
-    this.setHitAreas()
+    super(ctx, startPosition, parentEnt)
   }
 
   setTurnable(setTurnable) {
@@ -89,29 +54,10 @@ export default class Mob {
     this.headingDegrees += this.currTurnRate
   }
 
-  setHitAreas() {
-    this.hitArea = new Path2D()
-    this.hitArea.rect(
-      this.position.x - this.hitR, 
-      this.position.y - this.hitR,
-      2 * this.hitR,
-      2 * this.hitR
-    )
-  }
-
-  drawHitOverlays() {
-    this.ctx.strokeStyle = 'blue'
-    this.ctx.stroke(this.hitArea)
-  }
-
-  drawDebugOverlays() {
-    this.drawHitOverlays()
-  }
-
   drawBody(ctx) {
     ctx.beginPath()
     ctx.rect(0,0,10,10)
-    ctx.strokeStyle = this.currPrimaryColor
+    ctx.strokeStyle = this.primaryColor
     ctx.lineWidth = 2
     ctx.stroke()
   }

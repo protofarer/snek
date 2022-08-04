@@ -107,7 +107,7 @@ export default class Game {
     )
     ent.parentEnt = this
     
-    const bigEnt = new Entity(ent)
+    // const bigEnt = new Entity(ent)
     
     if (!position) {
       // * For testing purposes so snek segs don't count toward displacement
@@ -115,7 +115,7 @@ export default class Game {
       const minsSegsLength = Array.from(Entity.stack.values()).filter(e => 
         e.entGroup === 'segment'
       ).length
-      ent.position.x += (50 * (bigEnt.id - minsSegsLength))
+      ent.position.x += (50 * (ent.id - minsSegsLength))
     }
 
     ent.isMobile = false
@@ -123,7 +123,7 @@ export default class Game {
     // * Handle setting hit area when position arg specified since immobs
     // * set it only once during their instantiation by design
     if (entClass.entGroup === 'immob') ent.setHitAreas()
-    
+    console.log(`ent`, ent)
     return ent
   }
 
@@ -143,8 +143,6 @@ export default class Game {
       if (ent.entGroup === 'mob') {
         ent.headingDegrees = Math.random() * 360
       }
-
-      new Entity(ent)
       ents.push(ent)
     }
     
@@ -158,9 +156,11 @@ export default class Game {
 
   render() {
     this.clock.render()
+
     for(const ent of Entity.stack.values()) {
       ent.render()
     }
+
     this.snek?.render()
     this.panel.render()
   }
@@ -254,15 +254,15 @@ export default class Game {
 
   initSpawn() {
     if (this.isDebugOn === 'false' || this.isDebugOn === null) {
-      this.snek = new Snek(this.ctx, null, this)
-      this.snek.position = { x: 200, y: 400 }
-      new Entity(this.snek)
+      // this.snek = new Snek(this.ctx, null, this)
+      // this.snek.position = { x: 200, y: 400 }
+      // new Entity(this.snek)
 
-      this.spawnEnts(Apple, 45)
-      this.spawnEnts(Pebble, 55)
-      this.spawnEnts(Mango, 5)
-      this.spawnEnts(Ant, 25)
-      this.spawnEnts(Centipede, 2)
+      // this.spawnEnts(Apple, 45)
+      // this.spawnEnts(Pebble, 55)
+      // this.spawnEnts(Mango, 5)
+      // this.spawnEnts(Ant, 25)
+      // this.spawnEnts(Centipede, 2)
 
       // this.spawnEnts(Apple, 50)
       // this.spawnEnts(Pebble, 75)
