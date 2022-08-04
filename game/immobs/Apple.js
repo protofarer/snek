@@ -20,6 +20,8 @@ export default class Apple extends Immob {
 
   constructor(ctx, startPosition, parentEnt) {
     super(ctx, startPosition, parentEnt)
+
+    this.directionAngleDegrees = -135 + 135*Math.random()
     this.primaryColor = { 
       hueStart: 0, 
       hueEnd: 25, 
