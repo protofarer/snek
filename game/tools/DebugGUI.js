@@ -357,7 +357,7 @@ export default class DebugGUI {
       this.game.snek = snek
       new Entity(snek)
 
-      // const a = addEnt(Apple)
+      const a = addEnt(Apple)
       // a.position = {x: 300, y:400}
       // a.setHitAreas()
 
@@ -380,9 +380,9 @@ export default class DebugGUI {
       // e.position={x:180, y:400}
       // e.setHitAreas()
 
-      const f = addEnt(Centipede).setMobile(true).setTurnable(false)
-      f.headingRadians = - Math.PI/2
-      f.position = {x:150,y:550}
+      // const f = addEnt(Centipede).setMobile(true).setTurnable(false)
+      // f.headingRadians = - Math.PI/2
+      // f.position = {x:150,y:550}
       
     }
   }

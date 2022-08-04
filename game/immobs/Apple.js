@@ -30,13 +30,13 @@ export default class Apple extends Immob {
     }
 
     this.underDigestionData = [
-      {
-        effect: 'primaryColor',
-        type: 'boolean',
-        primaryColor: 'red',
-        duration: 2000,
-        timeLeft: 2000
-      },
+      // {
+      //   effect: 'primaryColor',
+      //   type: 'boolean',
+      //   primaryColor: 'red',
+      //   duration: 2000,
+      //   timeLeft: 2000
+      // },
       {
         effect: 'exp',
         type: 'function',
