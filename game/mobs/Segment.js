@@ -242,7 +242,6 @@ export default class Segment extends Immob {
     // ! Patch for until interactive, detachable segments implemented
     poop.hitArea = new Path2D()
 
-    new Entity(poop)
     this.entUnderDigestion = poop
     this.scale.y = 1.3
   }

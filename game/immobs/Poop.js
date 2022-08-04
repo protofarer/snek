@@ -2,18 +2,25 @@ import Immob from './Immob'
 
 export default class Poop extends Immob {
   static entGroup = 'immob'
-  static species = 'poop'
   entGroup = 'immob'
+
+  static species = 'poop'
   species = 'poop'
 
   r = 5
-  baseExp = 0
-  currExp = this.baseExp
-  primaryColor = 'hsl(40, 100%, 13%)'
+
   digestion = {
     timeLeft: 2000,
     baseTime: 2000,
   }
+
+  baseExp = 0
+  currExp = this.baseExp
+
+  primaryColor = 'hsl(40, 100%, 13%)'
+
+  chompEffect = undefined
+  underDigestionData = []
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     super(ctx, startPosition, parentEnt)
