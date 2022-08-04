@@ -203,7 +203,12 @@ export default class Game {
           
           moveEdgeWrap.call(ent)
 
-          const sneksegs = Entity.bySpecies(['snek-segment']) 
+          const sneksegs = Entity.bySpecies([
+            {
+              species: 'segment',
+              subSpecies: 'snek'
+            }
+          ]) 
           if (ent.species === 'centipede' && Array.from(sneksegs.values()).length > 0) {
             for(let snekseg of sneksegs.values()) {
               this.collisionResolver(ent, snekseg, () => {
