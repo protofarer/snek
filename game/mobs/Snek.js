@@ -71,10 +71,10 @@ export default class Snek extends Mob {
     for(let i = 0; i < n; i++) {
       if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
-        this.downstreamSegment.species = 'snek-segment'
+        this.downstreamSegment.subSpecies = 'snek'
       } else {
         const newSegment = new Segment(this.ctx, this)
-        newSegment.species = 'snek-segment'
+        newSegment.subSpecies = 'snek'
         const oldSegment = this.downstreamSegment
         oldSegment.upstreamSegment = newSegment
         newSegment.downstreamSegment = oldSegment

@@ -15,11 +15,24 @@ export default class Entity {
 
   static byId(id) { return Entity.stack.get(id)}
 
-  static bySpecies(speciesList) {
+  static bySpecies(queryList) {
+
+    // * queryList is an array of effective Maps,
+    // * specifying values for keys "species" and "subSpecies"
+    // * Subspecies is optional
+
     let found = new Map()
     for(const [k,v] of Entity.stack) {
-      speciesList.forEach(s => {
-        if (v.species === s) found.set(k, v)
+      queryList.forEach(query => {
+        if (v.species === query.species) {
+          if (query.subSpecies) {
+            if (query.subSpecies === v.subSpecies) {
+              found.set(k, v)
+            }
+          } else {
+            found.set(k, v)
+          }
+        }
       })
     }
     return found

@@ -37,8 +37,8 @@ export default class Immob extends Entity {
   baseExp = 10
   currExp = this.baseExp
 
+  expEffect = baseAbsorbExp
   chompEffect = baseChompEffect
-  expEffect = baseAbsorbExp.bind(this)
   postDigestionData = []
 
   secondaryColor = ''

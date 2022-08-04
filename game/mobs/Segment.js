@@ -8,26 +8,21 @@ import Entity from '../Entity'
 export default class Segment extends Immob {
   static species = 'segment'
   species = 'segment'
+  subSpecies = ''
 
-  // * Species initialized upon attachment to a head
-
-  position = {x:0,y:0}
-
-  headingRadians = 0
-  get headingDegrees() { return this.headingRadians * 180 / Math.PI }
-  set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
-  get hitR() { return this.r + 1 }
-
-  baseExp = 20
-  currExp = this.baseExp
-  expEffect = baseAbsorbExp
-
-  chompEffect = baseChompEffect
+  get hitR() { return this.r }
 
   digestion = {
     timeLeft: 20000,
     baseTime: 20000
   }
+
+  baseExp = 20
+  currExp = this.baseExp
+
+  expEffect = baseAbsorbExp
+  chompEffect = baseChompEffect
+
 
   headPositionHistory = []
 
