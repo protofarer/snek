@@ -99,9 +99,8 @@ export default class Segment extends Immob {
     )
 
     // * Segment enlarges to fit ingested ent
-    this.scale = this.entUnderDigestion.species === 'poop' 
-      ? { x: 1, y: 1.2 }
-      : { x: 1, y: 1.5 }
+    // TODO scale with ent or have ent scale to segment
+    this.scale = { x: 1, y: 1.3 }
   }
 
   digest() {
@@ -296,7 +295,7 @@ export default class Segment extends Immob {
   drawBody(ctx) {
     ctx.save()
 
-    ctx.scale(1, 1 - .6)
+    ctx.scale(this.scale.x, this.scale.y - .6)
 
     ctx.beginPath()
     ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
