@@ -1,11 +1,16 @@
 export default class Entity {
-  static ix = 0
-  static stack = new Map()
+  static entGroup = 'entity'
+  entGroup = 'entity'
 
-  constructor(ent) {
-    this.id = Entity.ix++
-    Entity.stack.set(this.id, ent)
-    ent.id = this.id
+  static idx = 0   // Class's simple id counter
+  static stack = new Map()    // Game's account of ents
+
+  constructor() {
+    this.id = Entity.idx++
+    Entity.stack.set(this.id, this)
+
+    // TODO
+    // this.parentEnt = Game
   }
 
   static byId(id) { return Entity.stack.get(id)}
