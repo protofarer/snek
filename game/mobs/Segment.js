@@ -3,7 +3,7 @@ import Entity from '../Entity'
 import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 
-export default class Segment {
+export default class Segment extends Entity {
   static entGroup = 'segment'
   entGroup = 'segment'
 
@@ -35,6 +35,7 @@ export default class Segment {
   underDigestionEffects = []
 
   constructor(ctx, upstreamSegment) {
+    super()
     this.ctx = ctx
     this.upstreamSegment = upstreamSegment
     this.parentEnt = this.getHeadEnt().parentEnt
