@@ -30,14 +30,14 @@ export default class Immob extends Entity {
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 
   digestion = {
-    timeLeft: 3000,
     baseTime: 3000,
+    timeLeft: 3000,
   }
 
   baseExp = 10
   currExp = this.baseExp
 
-  expEffect = baseAbsorbExp
+  expEffect = baseAbsorbExp.bind(this)
   chompEffect = baseChompEffect
   postDigestionData = []
 
@@ -100,6 +100,13 @@ export default class Immob extends Entity {
       }
     }
   }
+    underDigestionData = [
+      {
+        effect: 'exp',
+        type: 'function',
+        exp: this.expEffect,
+      }
+    ]
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     super()
@@ -107,13 +114,6 @@ export default class Immob extends Entity {
     this.parentEnt = parentEnt || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
     this.position = startPosition || this.position
 
-    this.underDigestionData = [
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: this.expEffect,
-      }
-    ]
 
     this.setHitAreas()
   }

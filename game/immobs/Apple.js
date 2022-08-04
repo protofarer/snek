@@ -27,21 +27,6 @@ export default class Apple extends Immob {
       lumEnd: 25,
     }
 
-    this.underDigestionData = [
-      // {
-      //   effect: 'primaryColor',
-      //   type: 'boolean',
-      //   primaryColor: 'red',
-      //   duration: 2000,
-      //   timeLeft: 2000
-      // },
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: this.expEffect,
-      }
-    ]
-
     this.postDigestionData = [
       {
         effect: 'moveSpeed',

@@ -1,5 +1,4 @@
 import { smallChompEffect } from '../behaviors/digestion'
-import { baseAbsorbExp } from '../behaviors/exp'
 import Immob from './Immob'
 
 export default class Mango extends Immob {
@@ -17,32 +16,12 @@ export default class Mango extends Immob {
 
   secondaryColor = 'green'
 
-  constructor(ctx, position, parentEnt=null) {
-    super(ctx, position, parentEnt)
-    this.primaryColor = {
-      hueStart: 35,
-      hueEnd: 35,
-      satStart: 100,
-      satEnd: 25,
-      lumStart: 50,
-      lumEnd: 40
-    }
-
-    this.chompEffect = smallChompEffect
-
-    this.underDigestionData = [
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: this.expEffect
-      }
-    ]
+  chompEffect = smallChompEffect
 
     // TODO
     // const refreshEffect = (entAffected) => {
     // }
-
-    this.postDigestionData = [
+    postDigestionData = [
       {
         effect: 'turnRate',
         type: 'boolean',
@@ -57,15 +36,28 @@ export default class Mango extends Immob {
         duration: 32000,
         timeLeft: 32000
       },
+      // TODO
       // {
       //   effect: 'refresh',
       //   type: 'function',
       //   refresh:
       // }
     ]
+
+  constructor(ctx, position, parentEnt=null) {
+    super(ctx, position, parentEnt)
+
+    this.primaryColor = {
+      hueStart: 35,
+      hueEnd: 35,
+      satStart: 100,
+      satEnd: 25,
+      lumStart: 50,
+      lumEnd: 40
+    }
+
     this.setHitAreas()
   }
-
 
   drawBody(ctx) {
     ctx.save()
@@ -84,9 +76,12 @@ export default class Mango extends Immob {
     grad.addColorStop(0.2, this.primaryColor)
     grad.addColorStop(0.9,'green')
     ctx.fillStyle = grad
-    ctx.fill()
 
     this.drawShadow(ctx)
+
+    ctx.fill()
+
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
 
     ctx.restore()
   }
@@ -95,8 +90,6 @@ export default class Mango extends Immob {
     ctx.shadowOffsetY = this.r * 0.4
     ctx.shadowColor = 'hsl(0,0%,20%)'
     ctx.shadowBlur = this.r * 0.2
-    ctx.fill()
-    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
 
   drawComponents(ctx) {
