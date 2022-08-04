@@ -353,24 +353,21 @@ export default class DebugGUI {
 
     if (this.params.isDebugOn) {
 
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      // new Entity(snek)
-      console.log('entitystack', Entity.stack)
+      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      // this.game.snek = snek
 
       const a = addEnt(Apple)
-      
-      // a.position = {x: 300, y:400}
-      // a.setHitAreas()
+      a.position = {x: 200, y:400}
+      a.setHitAreas()
 
       // addEnt(Pebble)
       // addEnt(Mango)
       // addEnt(Apple)
 
-      // const b = addEnt(Ant).setMobile(false).setTurnable(false)
-      // b.headingRadians = 0
-      // b.position = {x: 170, y:400}
-      // b.setHitAreas()
+      const b = addEnt(Ant).setMobile(true).setTurnable(false)
+      b.headingRadians = 0
+      b.position = {x: 170, y:400}
+      b.setHitAreas()
 
       // const c = addEnt(Banana)
       // c.position = {x:190, y:400}

@@ -7,6 +7,7 @@ export default class Ant extends Mob {
   species = 'ant'
 
   swallowables = ['apple', 'mango', 'ant', 'pebble', ]
+  get hitR() { return this.r }
 
   get headCoords() { return { 
     x: this.position.x 

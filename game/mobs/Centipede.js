@@ -1,7 +1,6 @@
 import Segment from './Segment'
 import { turnRandomlySmoothly } from '../behaviors/movements'
 import Mob from './Mob'
-import Entity from '../Entity'
 import { chomp } from '../behaviors/collisions'
 
 export default class Centipede extends Mob {
