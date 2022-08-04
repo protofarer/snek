@@ -113,7 +113,7 @@ export default class Game {
       // * For testing purposes so snek segs don't count toward displacement
       // * along x
       const minsSegsLength = Array.from(Entity.stack.values()).filter(e => 
-        e.entGroup === 'segment'
+        e.species === 'segment'
       ).length
       ent.position.x += (50 * (ent.id - minsSegsLength))
     }
