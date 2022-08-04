@@ -363,7 +363,7 @@ export default class DebugGUI {
       // a.position = {x: 300, y:400}
       // a.setHitAreas()
 
-      // addEnt(Mango)
+      addEnt(Mango)
 
       // const b = addEnt(Ant).setMobile(false).setTurnable(false)
       // b.headingRadians = 0
