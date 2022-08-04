@@ -1,5 +1,4 @@
 import { chomp } from '../behaviors/collisions'
-import Entity from '../Entity'
 import Mob from './Mob'
 import Segment from './Segment'
 
