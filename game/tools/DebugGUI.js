@@ -368,6 +368,8 @@ export default class DebugGUI {
       b.headingRadians = 0
       b.position = {x: 170, y:400}
       b.setHitAreas()
+      console.log(`entitystack`, Entity.stack)
+      
 
       // const c = addEnt(Banana)
       // c.position = {x:190, y:400}

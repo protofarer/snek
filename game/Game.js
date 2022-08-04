@@ -193,8 +193,8 @@ export default class Game {
       if (ent.parentEnt === this) {
 
         if (ent.species === 'ant' && !ent.carriedEnt) {
-          let sweets = Entity.bySpecies(['apple', 'mango', 'banana'])
-          for(let sweet of Object.values(sweets)) {
+          let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])
+          for(let sweet of sweets.values()) {
             this.collisionResolver(ent, sweet, () => ent.grab(sweet))
           }
         }
