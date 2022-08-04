@@ -104,7 +104,7 @@ export default class Immob extends Entity {
   constructor(ctx, startPosition=null, parentEnt=null) {
     super()
     this.ctx = ctx
-    this.parentEnt = parentEnt || Error(`Must place ${this.species} under a Parent Entity!`)
+    this.parentEnt = parentEnt || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
     this.position = startPosition || this.position
 
     this.underDigestionData = [
@@ -154,8 +154,6 @@ export default class Immob extends Entity {
     const ctx = this.ctx
     ctx.save()
     ctx.translate(this.position.x, this.position.y)
-    // console.log(`immob position drawinitwrapp`, this.position)
-    
 
     if (this.scale.x !== 1 || this.scale.y !== 1) {
       ctx.scale(this.scale.x, this.scale.y)
