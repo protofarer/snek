@@ -38,9 +38,9 @@ export default class Immob {
 
   chompEffect = baseChompEffect
   expEffect = baseAbsorbExp.bind(this)
-  postDigestionData
+  postDigestionData = []
 
-  secondaryColor
+  secondaryColor = ''
   #primaryColorHue = { start: 125, end: 125 }
   #primaryColorSat = { start: 70, end: 30 }
   #primaryColorLum = { start: 50, end: 25 }
@@ -108,16 +108,16 @@ export default class Immob {
   }
 
   left() {
-    return { x:this.position.x - this.hitSideLength, y: this.position.y}
+    return { x:this.position.x - this.hitR, y: this.position.y}
   }
   right() {
-    return { x:this.position.x + this.hitSideLength, y:this.position.y}
+    return { x:this.position.x + this.hitR, y:this.position.y}
   }
   top() {
-    return { x: this.position.x,y: this.position.y - this.hitSideLength }
+    return { x: this.position.x,y: this.position.y - this.hitR }
   }
   bottom() {
-    return { x: this.position.x, y: this.position.y + this.hitSideLength }
+    return { x: this.position.x, y: this.position.y + this.hitR }
   }
 
   drawHitOverlays() {
