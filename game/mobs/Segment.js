@@ -3,10 +3,11 @@ import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 import Immob from '../immobs/Immob'
 import { recycle } from '../utils/helpers'
+import Entity from '../Entity'
 
 export default class Segment extends Immob {
-  static entGroup = 'segment'
-  entGroup = 'segment'
+  static species = 'segment'
+  species = 'segment'
 
   // * Species initialized upon attachment to a head
 
