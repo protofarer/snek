@@ -16,6 +16,23 @@ export default class Banana extends Immob {
 
   secondaryColor = 'black'
 
+  chompEffect = bigChompEffect
+
+  underDigestionData = [
+    {
+      effect: 'moveSpeed',
+      type: 'boolean',
+      moveSpeed: 3,
+      duration: 3000,
+      timeLeft: 3000
+    },
+    {
+      effect: 'exp',
+      type: 'function',
+      exp: this.expEffect
+    }
+  ]
+
   constructor(ctx, position, parentEnt=null) {
     super(ctx, position, parentEnt)
     this.primaryColor = {
@@ -26,21 +43,6 @@ export default class Banana extends Immob {
       lumStart: 50,
       lumEnd: 20
     }
-    this.chompEffect = bigChompEffect
-    this.underDigestionData = [
-      {
-        effect: 'moveSpeed',
-        type: 'boolean',
-        moveSpeed: 3,
-        duration: 3000,
-        timeLeft: 3000
-      },
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: this.expEffect
-      }
-    ]
     this.setHitAreas()
   }
 

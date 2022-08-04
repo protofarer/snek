@@ -363,6 +363,8 @@ export default class DebugGUI {
       // a.position = {x: 300, y:400}
       // a.setHitAreas()
 
+      addEnt(Banana)
+      addEnt(Apple)
       addEnt(Mango)
 
       // const b = addEnt(Ant).setMobile(false).setTurnable(false)
