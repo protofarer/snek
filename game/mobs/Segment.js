@@ -20,23 +20,18 @@ export default class Segment extends Immob {
   baseExp = 20
   currExp = this.baseExp
 
-  expEffect = baseAbsorbExp
-  chompEffect = baseChompEffect
-
-
   headPositionHistory = []
 
-  entUnderDigestion
-  upstreamSegment
-  downstreamSegment
+  entUnderDigestion = undefined
+  upstreamSegment = undefined
+  downstreamSegment = undefined
   underDigestionEffects = []
 
   constructor(ctx, upstreamSegment) {
-    super()
-    this.ctx = ctx
+    super(ctx)
     this.upstreamSegment = upstreamSegment
     this.parentEnt = this.getHeadEnt().parentEnt
-    this.r = this.upstreamSegment.r
+    this.r = this.getHeadEnt().r
     this.scale = this.getHeadEnt().scale
     this.headingRadians = this.upstreamSegment.headingRadians
     this.position = {
@@ -44,13 +39,6 @@ export default class Segment extends Immob {
       y: this.upstreamSegment.position.y
     }
     this.currPrimaryColor = this.upstreamSegment.currPrimaryColor
-    this.underDigestion = [
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: this.expEffect
-      }
-    ]
     this.postDigestionData = [
       {
         effect: 'moveSpeed',
@@ -296,22 +284,8 @@ export default class Segment extends Immob {
     this.entUnderDigestion = null
   }
 
-  drawHitOverlays() {
-    this.ctx.strokeStyle = 'blue'
-    this.ctx.stroke(this.hitArea)
-  }
-
-  setHitAreas() {
-    this.hitArea = new Path2D()
-    this.hitArea.rect(
-      this.position.x - (this.hitR), 
-      this.position.y - (this.hitR),
-      2 * this.hitR,
-      2 * this.hitR
-    )
-  }
-
   drawDebugOverlays() {
+    // Draw the trail of the upstream segment/head this segment is tracking to
     for(let i = 0; i < this.headPositionHistory.length; i++) {
       this.ctx.beginPath()
       this.ctx.arc(
@@ -323,31 +297,28 @@ export default class Segment extends Immob {
     this.drawHitOverlays()
   }
 
-  drawInitWrapper() {
-    const ctx = this.ctx
+  drawBody(ctx) {
     ctx.save()
-    ctx.translate(this.position.x, this.position.y)
-    ctx.rotate(this.headingRadians)
-    ctx.scale(this.scale.x, this.scale.y - .6)
 
-    this.drawComponents(ctx)
+    ctx.scale(1, 1 - .6)
+
+    ctx.beginPath()
+    ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
+    ctx.fillStyle = this.currPrimaryColor
+
+    this.drawShadow(ctx)
+
+    ctx.fill()
+
+    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
 
     ctx.restore()
   }
 
-  drawComponents(ctx) {
-    this.drawBody(ctx)
-  }
-
-  drawBody(ctx) {
-    ctx.beginPath()
-    ctx.arc(0, 0, this.r, 0, 2 * Math.PI)
-    ctx.fillStyle = this.currPrimaryColor
+  drawShadow(ctx) {
     ctx.shadowOffsetY = 2
     ctx.shadowBlur = 2
     ctx.shadowColor = 'hsl(0,0%,0%)'
-    ctx.fill()
-    ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
 
   render() {
