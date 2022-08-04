@@ -52,6 +52,7 @@ export default class Snek extends Mob {
   get maxSegmentCount() { return this.level }
 
   activeEffects = []
+  postDigestionEffects = []
 
   constructor(ctx, startPosition=null, parentEnt=null, initSegmentCount=null) {
     super(ctx, startPosition, parentEnt)
