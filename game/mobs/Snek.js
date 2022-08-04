@@ -10,7 +10,7 @@ export default class Snek extends Mob {
   swallowables = [ 'apple', 'mango', 'ant', 'pebble', 'banana' ]
 
   r = 10
-  get hitR() { return this.r }
+
   level = 1
   levelMultiplier = 2
   segLevelMultiplier = 1.25
@@ -33,14 +33,9 @@ export default class Snek extends Mob {
     return expGained
   }
 
-  get headCoords() { return {
-    x: this.position.x,
-    y: this.position.y
-  }}
-
   get mouthCoords() { return {
-      x: this.headCoords.x + this.r * Math.cos(this.headingRadians),
-      y: this.headCoords.y + this.r * Math.sin(this.headingRadians),
+      x: this.position.x + this.r * Math.cos(this.headingRadians),
+      y: this.position.y + this.r * Math.sin(this.headingRadians),
     }}
 
   isTongueOut = false
@@ -78,11 +73,9 @@ export default class Snek extends Mob {
       if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
         this.downstreamSegment.species = 'snek-segment'
-        new Entity(this.downstreamSegment)
       } else {
         const newSegment = new Segment(this.ctx, this)
         newSegment.species = 'snek-segment'
-        new Entity(newSegment)
         const oldSegment = this.downstreamSegment
         oldSegment.upstreamSegment = newSegment
         newSegment.downstreamSegment = oldSegment
@@ -193,7 +186,7 @@ export default class Snek extends Mob {
     // this.downstreamSegment.render()
 
     this.ctx.save()
-    this.ctx.translate(this.headCoords.x, this.headCoords.y)
+    this.ctx.translate(this.position.x, this.position.y)
     this.ctx.rotate(this.headingRadians)
     this.ctx.save()
     this.ctx.scale(this.scale.x, 0.8 * this.scale.y)
