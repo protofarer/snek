@@ -1,4 +1,4 @@
-import Entity from '../Entity'
+import { recycle } from '../utils/helpers'
 
 export function baseChompEffect(entAffected) {
   const chompRatio = 0.5
@@ -74,11 +74,4 @@ export function smallChompEffect(entAffected) {
     recycle(this)
 
   }
-}
-
-// TODO improve
-function recycle(ent) {
-  ent.hitArea = new Path2D()
-  ent.position = {x: -100, y: -100}
-  Entity.remove(ent.id)
 }

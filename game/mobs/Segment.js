@@ -1,9 +1,10 @@
 import Poop from '../immobs/Poop'
-import Entity from '../Entity'
 import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
+import Immob from '../immobs/Immob'
+import { recycle } from '../utils/helpers'
 
-export default class Segment extends Entity {
+export default class Segment extends Immob {
   static entGroup = 'segment'
   entGroup = 'segment'
 
@@ -227,10 +228,7 @@ export default class Segment extends Entity {
         // * - Transform digested ent into poop
         // ! consider recycling aka ring buffer to restore disintegrated ents
         // ! for reuse
-        this.entUnderDigestion.position = {x: -100, y: -100}
-        this.entUnderDigestion.hitArea = new Path2D
-        Entity.remove(this.entUnderDigestion.id)
-
+        recycle(this.entUnderDigestion)
         this.makePoop()
       }
     }
