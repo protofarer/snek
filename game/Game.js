@@ -259,15 +259,14 @@ export default class Game {
 
   initSpawn() {
     if (this.isDebugOn === 'false' || this.isDebugOn === null) {
-      // this.snek = new Snek(this.ctx, null, this)
-      // this.snek.position = { x: 200, y: 400 }
-      // new Entity(this.snek)
+      this.snek = new Snek(this.ctx, null, this)
+      this.snek.position = { x: 200, y: 400 }
 
-      // this.spawnEnts(Apple, 45)
-      // this.spawnEnts(Pebble, 55)
-      // this.spawnEnts(Mango, 5)
-      // this.spawnEnts(Ant, 25)
-      // this.spawnEnts(Centipede, 2)
+      this.spawnEnts(Apple, 45)
+      this.spawnEnts(Pebble, 55)
+      this.spawnEnts(Mango, 5)
+      this.spawnEnts(Ant, 25)
+      this.spawnEnts(Centipede, 2)
 
       // this.spawnEnts(Apple, 50)
       // this.spawnEnts(Pebble, 75)
