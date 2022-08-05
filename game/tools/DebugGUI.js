@@ -123,24 +123,8 @@ export default class DebugGUI {
       maxVal: 1,
       stepVal: 0.05,
     })
-    // guiGameTest.add(this.game.params, 'speed', 0.05, 1, 0.05)
 
-    // const guiPointerTracking = gui.addFolder('PointerTracking')
-    // guiPointerTracking.add(this.game.pointerCoords.client, 'x').name('client.x').listen()
-    // guiPointerTracking.add(this.game.pointerCoords.client, 'y').name('client.y').listen()
-    // guiPointerTracking.add(this.game.pointerCoords.canvas, 'x').name('canvas.x').listen()
-    // guiPointerTracking.add(this.game.pointerCoords.canvas, 'y').name('canvas.y').listen()
-    // guiPointerTracking.add(this.game.pointerCoords.board, 'x').name('board.x').listen()
-    // guiPointerTracking.add(this.game.pointerCoords.board, 'y').name('board.y').listen()
-    // guiPointerTracking.add(this.game.pointerCoords.square, 'col').name('pointer.col').listen()
-    // guiPointerTracking.add(this.game.pointerCoords.square, 'row').name('pointer.row').listen()
-
-
-
-
-    // guiPointerTracking.show(false)
     guiGamePositioning.show(false)
-
 
     document.addEventListener('keydown', async (e) => {
       switch (e.key) {
@@ -179,6 +163,13 @@ export default class DebugGUI {
       guiSnek.add(snek, 'currExp').listen()
       guiSnek.add(snek, 'level').listen()
       guiSnek.add(snek, 'currMoveSpeed').listen()
+      guiSnek.add(snek, 'currTurnRate').listen()
+
+      // const nPostDigestionEffects = {
+      //   n: snek.postDigestionEffects.length
+      // }
+
+      guiSnek.add(snek.postDigestionEffects, 'length').listen().name('nPDE')
 
       const seg = guiSnek.addFolder('Segments')
       seg.add(snek, 'currKnownSegmentCount').listen()

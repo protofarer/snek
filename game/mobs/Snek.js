@@ -1,6 +1,7 @@
 import { chomp } from '../behaviors/collisions'
 import Mob from './Mob'
 import Segment from './Segment'
+import { cancelPostDigestionEffects } from '../behaviors/digestion'
 
 export default class Snek extends Mob {
   static species = 'snek'
@@ -269,7 +270,36 @@ export default class Snek extends Mob {
     return n
   }
 
+  updatePostDigestionEffects() {
+    // * Post Digestion Effects: occur after content is fully digested
+
+    // * Expire used up effects
+
+    const expiredPostDigestionEffects = this.postDigestionEffects
+    .filter(e => 
+        e.timeLeft <= 0
+    )
+
+    if (this.postDigestionEffects.length > 0 ) {
+
+      cancelPostDigestionEffects.call(this, expiredPostDigestionEffects)
+
+      this.postDigestionEffects = this
+        .postDigestionEffects.filter(postDigestionData =>
+          postDigestionData.timeLeft >= 0
+      )
+
+      this.postDigestionEffects.forEach(postDigestionData => {
+        postDigestionData.timeLeft -= 17
+      })
+
+    }
+  }
+
   update() {
+
+    this.updatePostDigestionEffects()
+
     // * currKnownSegmentCount updated on a need to know basis, eg
     // * when segCount decrease event occurs or manually via growth adds aka
     // * segExp level ups
