@@ -70,6 +70,7 @@ export default class Segment extends Immob {
     }
 
     this.entUnderDigestion = ent
+    this.entUnderDigestion.setMobile?.(false)
     this.entUnderDigestion.position = this.position
     this.entUnderDigestion.parentEnt = this.getHeadEnt()
 

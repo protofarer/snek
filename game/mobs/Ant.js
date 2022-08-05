@@ -1,6 +1,6 @@
 import { turnErratically } from '../behaviors/movements'
-// import { getGameObject } from '../utils/helpers'
 import Mob from './Mob'
+import { getGameObject } from '../utils/helpers'
 
 export default class Ant extends Mob {
   static species = 'ant'
@@ -51,12 +51,12 @@ export default class Ant extends Mob {
 
   drop() {
     // TODO use helper:
-    // this.carriedEnt.parentEnt = getGameObject.call(this)
-    let parentEnt = this.parentEnt
-    while (parentEnt) {
-      this.carriedEnt.parentEnt = parentEnt
-      parentEnt = parentEnt.parentEnt
-    }
+    this.carriedEnt.parentEnt = getGameObject.call(this)
+    // let parentEnt = this.parentEnt
+    // while (parentEnt) {
+    //   this.carriedEnt.parentEnt = parentEnt
+    //   parentEnt = parentEnt.parentEnt
+    // }
     
     this.carriedEnt.setHitAreas()
     this.carriedOffsetRad = null
