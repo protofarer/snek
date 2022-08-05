@@ -415,7 +415,6 @@ export default class DebugGUI {
     }
 
     if (this.params.isDebugOn) {
-      testSnekEatWalkingAnt ()
       // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       // this.game.snek = snek
 
@@ -423,6 +422,7 @@ export default class DebugGUI {
       // addEnt(Mango)
       // addEnt(Apple)
 
+      // testSnekEatWalkingAnt ()
       // testAntCarry()
       // testSnekEatAntCarry()
       // testSnekEatWalkingAntCarry()
