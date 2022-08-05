@@ -11,12 +11,8 @@ export function getHead() {
 
 export function getGameObject() {
   let currentEnt = this.parentEnt
-  while (currentEnt) {
-    if (currentEnt.parentEnt) {
+  while (currentEnt.parentEnt) {
       currentEnt = currentEnt.parentEnt
-    } else {
-      return currentEnt
-    }
   }
   return currentEnt
 }
