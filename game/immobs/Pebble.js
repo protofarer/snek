@@ -18,8 +18,8 @@ export default class Pebble extends Immob {
   chompEffect = undefined
   expEffect = undefined
 
-  constructor(ctx, startPosition, parentEnt, r=null) {
-    super(ctx, startPosition, parentEnt)
+  constructor(ctx, startPosition, parent, r=null) {
+    super(ctx, startPosition, parent)
     this.r = r || 2 + Math.ceil(Math.random() * 2)     // TODO skewed gaussian random dist
     this.headingDegrees = Math.random() * 359
     this.setHitAreas()

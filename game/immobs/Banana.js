@@ -33,8 +33,8 @@ export default class Banana extends Immob {
     }
   ]
 
-  constructor(ctx, position, parentEnt=null) {
-    super(ctx, position, parentEnt)
+  constructor(ctx, position, parent=null) {
+    super(ctx, position, parent)
     this.primaryColor = {
       hueStart: 65,
       hueEnd: 50,

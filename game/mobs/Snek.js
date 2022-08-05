@@ -48,8 +48,8 @@ export default class Snek extends Mob {
   activeEffects = []
   postDigestionEffects = []
 
-  constructor(ctx, startPosition=null, parentEnt=null, initSegmentCount=null) {
-    super(ctx, startPosition, parentEnt)
+  constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
+    super(ctx, startPosition, parent)
     
     this.basePrimaryColor = 'hsl(100, 100%, 32%)'
     this.currPrimaryColor = this.basePrimaryColor

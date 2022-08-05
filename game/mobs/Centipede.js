@@ -26,8 +26,8 @@ export default class Centipede extends Mob {
   downstreamSegment
   postDigestionEffects = []
 
-  constructor(ctx, startPosition=null, parentEnt=null, nInitSegments=null) {
-    super(ctx, startPosition, parentEnt)
+  constructor(ctx, startPosition=null, parent=null, nInitSegments=null) {
+    super(ctx, startPosition, parent)
 
     this.basePrimaryColor = 'hsl(35, 50%, 55%)'
     this.currPrimaryColor = this.basePrimaryColor

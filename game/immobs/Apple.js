@@ -14,10 +14,8 @@ export default class Apple extends Immob {
 
   secondaryColor = `hsl(95 60% 50%)`
 
-  constructor(ctx, startPosition, parentEnt) {
-    super(ctx, startPosition, parentEnt)
-
-    this.directionAngleDegrees = -135 + 135*Math.random()
+  constructor(ctx, startPosition, parent) {
+    super(ctx, startPosition, parent)
     this.primaryColor = { 
       hueStart: 0, 
       hueEnd: 25, 

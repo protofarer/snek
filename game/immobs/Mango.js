@@ -18,34 +18,34 @@ export default class Mango extends Immob {
 
   chompEffect = smallChompEffect
 
+  // TODO
+  // const refreshEffect = (entAffected) => {
+  // }
+  postDigestionData = [
+    {
+      effect: 'turnRate',
+      type: 'boolean',
+      turnRate: 1,
+      duration: 32000,
+      timeLeft: 32000
+    },
+    {
+      effect: 'moveSpeed',
+      type: 'boolean',
+      moveSpeed: 0.5,
+      duration: 32000,
+      timeLeft: 32000
+    },
     // TODO
-    // const refreshEffect = (entAffected) => {
+    // {
+    //   effect: 'refresh',
+    //   type: 'function',
+    //   refresh:
     // }
-    postDigestionData = [
-      {
-        effect: 'turnRate',
-        type: 'boolean',
-        turnRate: 1,
-        duration: 32000,
-        timeLeft: 32000
-      },
-      {
-        effect: 'moveSpeed',
-        type: 'boolean',
-        moveSpeed: 0.5,
-        duration: 32000,
-        timeLeft: 32000
-      },
-      // TODO
-      // {
-      //   effect: 'refresh',
-      //   type: 'function',
-      //   refresh:
-      // }
-    ]
+  ]
 
-  constructor(ctx, position, parentEnt=null) {
-    super(ctx, position, parentEnt)
+  constructor(ctx, position, parent=null) {
+    super(ctx, position, parent)
 
     this.primaryColor = {
       hueStart: 35,

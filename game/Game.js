@@ -105,7 +105,7 @@ export default class Game {
       }, 
       this
     )
-    ent.parentEnt = this
+    ent.parent = this
     
     // const bigEnt = new Entity(ent)
     
@@ -186,10 +186,10 @@ export default class Game {
 
       // **********************************************************************
       // * Hit Detection
-      // * - only when parentEnt = game
+      // * - only when parent = game
       // **********************************************************************
 
-      if (ent.parentEnt === this) {
+      if (ent.parent === this) {
 
         if (ent.species === 'ant' && !ent.carriedEnt) {
           let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])

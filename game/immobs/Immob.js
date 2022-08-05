@@ -63,10 +63,10 @@ export default class Immob extends Entity {
     }
   ]
 
-  constructor(ctx, startPosition=null, parentEnt=null) {
+  constructor(ctx, startPosition=null, parent=null) {
     super()
     this.ctx = ctx
-    this.parentEnt = parentEnt || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
+    this.parent = parent || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
     this.position = startPosition || this.position
     this.primaryColor = {
       hueStart: 125, 

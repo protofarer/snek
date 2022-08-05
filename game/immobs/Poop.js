@@ -22,8 +22,8 @@ export default class Poop extends Immob {
   chompEffect = undefined
   underDigestionData = []
 
-  constructor(ctx, startPosition=null, parentEnt=null) {
-    super(ctx, startPosition, parentEnt)
+  constructor(ctx, startPosition=null, parent=null) {
+    super(ctx, startPosition, parent)
   }
 
   drawBody(ctx) {

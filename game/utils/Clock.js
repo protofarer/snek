@@ -6,9 +6,9 @@ export default class Clock {
   elapsed = 0
   t
   
-  constructor(ctx, parentEnt=null) {
+  constructor(ctx, parent=null) {
     this.ctx = ctx
-    this.parentEnt = parentEnt
+    this.parent = parent
   }
 
   getElapsedSeconds() {

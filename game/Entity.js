@@ -10,7 +10,7 @@ export default class Entity {
     Entity.stack.set(this.id, this)
 
     // TODO
-    // this.parentEnt = Game
+    // this.parent = Game
   }
 
   static byId(id) { return Entity.stack.get(id)}

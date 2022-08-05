@@ -10,9 +10,9 @@ export function getHead() {
 }
 
 export function getGameObject() {
-  let currentEnt = this.parentEnt
-  while (currentEnt.parentEnt) {
-      currentEnt = currentEnt.parentEnt
+  let currentEnt = this.parent
+  while (currentEnt.parent) {
+      currentEnt = currentEnt.parent
   }
   return currentEnt
 }

@@ -32,8 +32,8 @@ export default class Mob extends Immob {
   currTurnRate = this.baseTurnRate
   minTurnRate = 0
 
-  constructor(ctx, startPosition=null, parentEnt=null) {
-    super(ctx, startPosition, parentEnt)
+  constructor(ctx, startPosition=null, parent=null) {
+    super(ctx, startPosition, parent)
   }
 
   setTurnable(setTurnable) {

@@ -17,7 +17,7 @@ export default class DebugGUI {
     const gui = new GUI()
     this.gui = gui
     this.game = game
-    this.parentEnt = undefined
+    this.parent = undefined
 
     this.params = {
       isDebugOn: false,
@@ -426,14 +426,14 @@ export default class DebugGUI {
     }
 
     if (this.params.isDebugOn) {
-      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      // this.game.snek = snek
+      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      this.game.snek = snek
 
       // addEnt(Pebble)
-      // addEnt(Mango)
+      addEnt(Mango)
       // addEnt(Apple)
 
-      testSnekEatAllFruit()
+      // testSnekEatAllFruit()
       // testSnekEatWalkingAnt ()
       // testAntCarry()
       // testSnekEatAntCarry()

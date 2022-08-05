@@ -27,7 +27,7 @@ export default class Segment extends Immob {
   constructor(ctx, upstreamSegment) {
     super(ctx)
     this.upstreamSegment = upstreamSegment
-    this.parentEnt = this.getHeadEnt().parentEnt
+    this.parent = this.getHeadEnt().parent
     this.r = this.getHeadEnt().r
     this.scale = this.getHeadEnt().scale
     this.headingRadians = this.upstreamSegment.headingRadians
@@ -72,7 +72,7 @@ export default class Segment extends Immob {
     this.entUnderDigestion = ent
     this.entUnderDigestion.setMobile?.(false)
     this.entUnderDigestion.position = this.position
-    this.entUnderDigestion.parentEnt = this.getHeadEnt()
+    this.entUnderDigestion.parent = this.getHeadEnt()
 
     // TODO modifications to consumers' state should be guarded by public method
     this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => 
@@ -269,7 +269,7 @@ export default class Segment extends Immob {
 
   excrete() {
     this.entUnderDigestion.setMobile?.(true)
-    this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
+    this.entUnderDigestion.parent = this.getHeadEnt().parent
 
     this.entUnderDigestion.position = {
       x: this.entUnderDigestion.position.x - this.r * Math.cos(this.headingRadians),

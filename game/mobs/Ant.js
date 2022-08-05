@@ -21,8 +21,8 @@ export default class Ant extends Mob {
       y: this.headCoords.y + 0.6 * this.r * Math.sin(this.headingRadians),
   }}
 
-  constructor(ctx, startPosition=null, parentEnt=null) {
-    super(ctx, startPosition, parentEnt)
+  constructor(ctx, startPosition=null, parent=null) {
+    super(ctx, startPosition, parent)
 
     this.r = 4
     this.primaryColor = 'black'
@@ -43,7 +43,7 @@ export default class Ant extends Mob {
 
   grab(ent) {
     this.carriedEnt = ent
-    this.carriedEnt.parentEnt = this
+    this.carriedEnt.parent = this
     this.carriedEnt.hitArea = new Path2D()
     this.carriedOffsetRad = this.headingRadians
       - this.carriedEnt.headingRadians
@@ -51,11 +51,11 @@ export default class Ant extends Mob {
 
   drop() {
     // TODO use helper:
-    this.carriedEnt.parentEnt = getGameObject.call(this)
-    // let parentEnt = this.parentEnt
-    // while (parentEnt) {
-    //   this.carriedEnt.parentEnt = parentEnt
-    //   parentEnt = parentEnt.parentEnt
+    this.carriedEnt.parent = getGameObject.call(this)
+    // let parent = this.parent
+    // while (parent) {
+    //   this.carriedEnt.parent = parent
+    //   parent = parent.parent
     // }
     
     this.carriedEnt.setHitAreas()
