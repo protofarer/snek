@@ -268,7 +268,7 @@ export default class Segment extends Immob {
   }
 
   excrete() {
-    if (this.entUnderDigestion.entGroup === 'immob') {
+    if (this.entUnderDigestion?.entGroup === 'immob') {
       this.entUnderDigestion.setHitAreas()
     }
     this.restoreEntUnderDigestion()
@@ -277,6 +277,7 @@ export default class Segment extends Immob {
   restoreEntUnderDigestion() {
     this.entUnderDigestion.setMobile?.(true)
     this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
+    this.entUnderDigestion.setHitAreas()
     this.entUnderDigestion = null
   }
 
@@ -327,9 +328,7 @@ export default class Segment extends Immob {
     console.log('seg detaching')
     this.cancelUnderDigestionBooleanEffects()
 
-    if (this.entUnderDigestion) {
-      this.restoreEntUnderDigestion()
-    }
+    this.excrete()
 
   // ! game crashed during normal play
   //  if (this.upstreamSegment.downstreamSegment) {

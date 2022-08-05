@@ -413,6 +413,18 @@ export default class DebugGUI {
       addEnt(Apple)
     }
 
+    const testDetachedSegmentsDigestion = () => {
+      const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
+      this.game.snek = snek
+      addEnt(Mango)
+      addEnt(Mango)
+
+      const f = addEnt(Centipede).setMobile(true).setTurnable(false)
+      f.headingRadians = - Math.PI/2
+      f.position = {x:250,y:650}
+
+    }
+
     if (this.params.isDebugOn) {
       // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       // this.game.snek = snek
@@ -425,6 +437,7 @@ export default class DebugGUI {
       // testAntCarry()
       // testSnekEatAntCarry()
       // testSnekEatWalkingAntCarry()
+      testDetachedSegmentsDigestion()
     }
   }
 }
