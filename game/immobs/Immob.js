@@ -1,7 +1,7 @@
 import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 import Entity from '../Entity'
-
+import { getPrimaryColorParameters, setPrimaryColorParameters } from '../utils/colormorph'
 export default class Immob extends Entity {
   // * Generally are simple, non-moving, squared or circular interactable
   // * objects. The Immob is the essence of all objects in the game, while it is
@@ -41,79 +41,41 @@ export default class Immob extends Entity {
   chompEffect = baseChompEffect
   postDigestionData = []
 
-  secondaryColor = ''
-  #primaryColorHue = { start: 125, end: 125 }
-  #primaryColorSat = { start: 70, end: 30 }
-  #primaryColorLum = { start: 50, end: 25 }
-  get primaryColor() { return (
-    `hsl(
-      ${
-        this.#primaryColorHue.start 
-        + (this.#primaryColorHue.end - this.#primaryColorHue.start)
-        * (this.digestion.baseTime - this.digestion.timeLeft)
-          / this.digestion.baseTime
-      },
-      ${
-        this.#primaryColorSat.start 
-        + (this.#primaryColorSat.end - this.#primaryColorSat.start)
-        * (this.digestion.baseTime - this.digestion.timeLeft)
-            / this.digestion.baseTime
-      }%,
-      ${
-        this.#primaryColorLum.start
-        + (this.#primaryColorLum.end - this.#primaryColorLum.start)
-        * (this.digestion.baseTime - this.digestion.timeLeft)
-          / this.digestion.baseTime
-      }%
-    )`
-  )}
-  set primaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) {
-    // ! Doesn't catch out of range (x < 0, x > 255)
-    if (typeof hueStart === 'number' || typeof hueEnd === 'number') {
-      if (typeof hueStart !== 'number' || typeof hueEnd !== 'number') {
-        throw Error(`Must specify both start & end values for #primaryColorHue`)
-      } else if (hueStart < 0 || hueStart > 255 || hueEnd < 0 || hueEnd > 255) {
-        throw Error(`${this.species} #primaryColorHue values must be in [0, 255]`)
-      } else {
-        this.#primaryColorHue = { start: hueStart, end: hueEnd } 
-          || this.#primaryColorHue
-      }
-    }
-    if (typeof satStart === 'number' || typeof satEnd === 'number') {
-      if (typeof satStart !== 'number' || typeof satEnd !== 'number') {
-          throw Error(`Must specify both start & end values for #primaryColorHue`)
-      } else if (satStart < 0 || satStart > 100 || satEnd < 0 || satEnd > 100) {
-        throw Error(`${this.species} #primaryColorSat values must be in [0, 100]`)
-      } else {
-        this.#primaryColorSat = { start: satStart, end: satEnd } 
-          || this.#primaryColorSat
-      }
-    }
-    if (typeof lumStart === 'number' || typeof lumEnd === 'number') {
-      if (typeof lumStart !== 'number' || typeof lumEnd !== 'number') {
-          throw Error(`Must specify both start & end values for #primaryColorHue`)
-      } else if (lumStart < 0 || lumStart > 100 || lumEnd < 0 || lumEnd > 100) {
-        throw Error(`${this.species} #primaryColorHue values must be in [0, 255]`)
-      } else {
-        this.#primaryColorLum = { start: lumStart, end: lumEnd } 
-          || this.#primaryColorLum
-      }
-    }
+
+  primaryColorParameters = {}
+
+  getPrimaryColor = getPrimaryColorParameters.bind(this)
+  setPrimaryColor = setPrimaryColorParameters.bind(this)
+
+  get primaryColor() { return this.getPrimaryColor() }
+  set primaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) { 
+    this.setPrimaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) 
   }
-    underDigestionData = [
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: this.expEffect,
-      }
-    ]
+
+  secondaryColor = ''
+
+
+  underDigestionData = [
+    {
+      effect: 'exp',
+      type: 'function',
+      exp: this.expEffect,
+    }
+  ]
 
   constructor(ctx, startPosition=null, parentEnt=null) {
     super()
     this.ctx = ctx
     this.parentEnt = parentEnt || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
     this.position = startPosition || this.position
-
+    this.primaryColor = {
+      hueStart: 125, 
+      hueEnd: 125 ,
+      satStart: 70, 
+      satEnd: 30,
+      lumStart: 50, 
+      lumEnd: 25,
+    }
 
     this.setHitAreas()
   }

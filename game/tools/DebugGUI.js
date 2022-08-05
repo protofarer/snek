@@ -433,11 +433,12 @@ export default class DebugGUI {
       // addEnt(Mango)
       // addEnt(Apple)
 
+      testSnekEatAllFruit()
       // testSnekEatWalkingAnt ()
       // testAntCarry()
       // testSnekEatAntCarry()
       // testSnekEatWalkingAntCarry()
-      testDetachedSegmentsDigestion()
+      // testDetachedSegmentsDigestion()
     }
   }
 }

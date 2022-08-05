@@ -123,7 +123,6 @@ export default class Game {
     // * Handle setting hit area when position arg specified since immobs
     // * set it only once during their instantiation by design
     if (entClass.entGroup === 'immob') ent.setHitAreas()
-    console.log(`ent`, ent)
     return ent
   }
 
