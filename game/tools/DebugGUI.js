@@ -178,6 +178,7 @@ export default class DebugGUI {
 
       guiSnek.add(snek, 'currExp').listen()
       guiSnek.add(snek, 'level').listen()
+      guiSnek.add(snek, 'currMoveSpeed').listen()
 
       const seg = guiSnek.addFolder('Segments')
       seg.add(snek, 'currKnownSegmentCount').listen()
@@ -194,8 +195,6 @@ export default class DebugGUI {
 
   }
 
-
-  
   setParamsFromSessionStorage() {
     // Read debug and game params from sessionStorage for persistence across game runs
     const setParamFromSession = (key) => {

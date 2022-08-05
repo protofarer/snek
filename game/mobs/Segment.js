@@ -331,8 +331,10 @@ export default class Segment extends Immob {
       this.restoreEntUnderDigestion()
     }
 
-    
-    this.upstreamSegment.downstreamSegment = null
+  // ! game crashed during normal play
+  //  if (this.upstreamSegment.downstreamSegment) {
+     this.upstreamSegment.downstreamSegment = null
+  //  } 
     this.upstreamSegment = null
   }
 
