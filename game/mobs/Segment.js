@@ -268,17 +268,19 @@ export default class Segment extends Immob {
   }
 
   excrete() {
-    if (this.entUnderDigestion?.entGroup === 'immob') {
-      this.entUnderDigestion.setHitAreas()
-    }
-    this.restoreEntUnderDigestion()
-  }
-
-  restoreEntUnderDigestion() {
     this.entUnderDigestion.setMobile?.(true)
     this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
-    this.entUnderDigestion.setHitAreas()
+
+    this.entUnderDigestion.position = {
+      x: this.entUnderDigestion.position.x - this.r * Math.cos(this.headingRadians),
+      y: this.entUnderDigestion.position.y - this.r * Math.sin(this.headingRadians)
+    }
+    
+    this.entUnderDigestion.entGroup === 'immob' 
+      && this.entUnderDigestion.setHitAreas()
+
     this.entUnderDigestion = null
+    this.scale = { x: 1, y: 1 }
   }
 
   drawDebugOverlays() {
@@ -325,6 +327,13 @@ export default class Segment extends Immob {
 
   detach() {
   // * Digestion: halt, reverse effects, maintain digestion contents state
+
+    let downSeg = this.downstreamSegment
+    while (downSeg.downstreamSegment) {
+      this.downstreamSegment.excrete()
+      downSeg = downSeg.downstreamSegment
+    }
+
     console.log('seg detaching')
     this.cancelUnderDigestionBooleanEffects()
 
