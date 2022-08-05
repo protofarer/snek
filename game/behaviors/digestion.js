@@ -75,6 +75,7 @@ export function smallChompEffect(entAffected) {
 
   }
 }
+<<<<<<< HEAD
 
 export function activatePostDigestionEffects(postDigestionData, headEnt) {
   postDigestionData.forEach(pDD => {
@@ -112,3 +113,5 @@ export function cancelPostDigestionEffects(expiredPostDigestionEffects) {
   console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
   })
 }
+=======
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e

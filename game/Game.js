@@ -123,6 +123,10 @@ export default class Game {
     // * Handle setting hit area when position arg specified since immobs
     // * set it only once during their instantiation by design
     if (entClass.entGroup === 'immob') ent.setHitAreas()
+<<<<<<< HEAD
+=======
+    console.log(`ent`, ent)
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
     return ent
   }
 
@@ -186,7 +190,11 @@ export default class Game {
 
       // **********************************************************************
       // * Hit Detection
+<<<<<<< HEAD
       // * - only when parent = game
+=======
+      // * - only when parentEnt = game
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
       // **********************************************************************
 
       if (ent.parent === this) {

@@ -1,6 +1,7 @@
 import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 import Entity from '../Entity'
+<<<<<<< HEAD
 import { getPrimaryColorParameters, setPrimaryColorParameters } from '../utils/colormorph'
 export default class Immob extends Entity {
   // * Generally are simple, non-moving, squared or circular interactable
@@ -13,6 +14,20 @@ export default class Immob extends Entity {
   // * Immobs do not include terrain as the latter belongs solely to the world
   // * object and has disparate state structure
 
+=======
+
+export default class Immob extends Entity {
+  // * Generally are simple, non-moving, squared or circular interactable
+  // * objects. The Immob is the essence of all objects in the game, while it is
+  // * similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
+  // * shapes and behavioral properties and thus use a separate data description.
+
+  // * Make up the majority of the game's swallowables
+
+  // * Immobs do not include terrain as the latter belongs solely to the world
+  // * object and has disparate state structure
+
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
   // ! This is not a clear distinction and a resolution is being considered:
   // * use entity at top of hierarchy, with child Immob with child Mob as a sort
   // * of evolution of increasing complexity and specificity.

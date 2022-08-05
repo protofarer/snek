@@ -17,7 +17,11 @@ export default class DebugGUI {
     const gui = new GUI()
     this.gui = gui
     this.game = game
+<<<<<<< HEAD
     this.parent = undefined
+=======
+    this.parentEnt = undefined
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
     this.params = {
       isDebugOn: false,
@@ -163,6 +167,7 @@ export default class DebugGUI {
       guiSnek.add(snek, 'currExp').listen()
       guiSnek.add(snek, 'level').listen()
       guiSnek.add(snek, 'currMoveSpeed').listen()
+<<<<<<< HEAD
       guiSnek.add(snek, 'currTurnRate').listen()
 
       // const nPostDigestionEffects = {
@@ -170,6 +175,8 @@ export default class DebugGUI {
       // }
 
       guiSnek.add(snek.postDigestionEffects, 'length').listen().name('nPDE')
+=======
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
       const seg = guiSnek.addFolder('Segments')
       seg.add(snek, 'currKnownSegmentCount').listen()
@@ -404,6 +411,7 @@ export default class DebugGUI {
       addEnt(Apple)
     }
 
+<<<<<<< HEAD
     const testDetachedSegmentsDigestion = () => {
       const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
       this.game.snek = snek
@@ -416,6 +424,8 @@ export default class DebugGUI {
 
     }
 
+=======
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
     if (this.params.isDebugOn) {
       // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       // this.game.snek = snek
@@ -424,13 +434,19 @@ export default class DebugGUI {
       // addEnt(Mango)
       // addEnt(Apple)
 
+<<<<<<< HEAD
       // testSnekEatAllFruit()
+=======
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
       // testSnekEatWalkingAnt ()
       // testAntCarry()
       // testSnekEatAntCarry()
       // testSnekEatWalkingAntCarry()
+<<<<<<< HEAD
       testCentBiteSnek()
       // testDetachedSegmentsDigestion()
+=======
+>>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
     }
   }
 }
