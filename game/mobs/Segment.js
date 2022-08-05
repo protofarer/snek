@@ -252,19 +252,21 @@ export default class Segment extends Immob {
   }
 
   excrete() {
-    this.entUnderDigestion.setMobile?.(true)
-    this.entUnderDigestion.parent = this.getHeadEnt().parent
-
-    this.entUnderDigestion.position = {
-      x: this.entUnderDigestion.position.x - this.r * Math.cos(this.headingRadians),
-      y: this.entUnderDigestion.position.y - this.r * Math.sin(this.headingRadians)
+    if (this.entUnderDigestion) {
+      this.entUnderDigestion.setMobile?.(true)
+      this.entUnderDigestion.parent = this.getHeadEnt().parent
+  
+      this.entUnderDigestion.position = {
+        x: this.entUnderDigestion.position.x - this.r * Math.cos(this.headingRadians),
+        y: this.entUnderDigestion.position.y - this.r * Math.sin(this.headingRadians)
+      }
+      
+      this.entUnderDigestion.entGroup === 'immob' 
+        && this.entUnderDigestion.setHitAreas()
+  
+      this.entUnderDigestion = null
+      this.scale = { x: 1, y: 1 }
     }
-    
-    this.entUnderDigestion.entGroup === 'immob' 
-      && this.entUnderDigestion.setHitAreas()
-
-    this.entUnderDigestion = null
-    this.scale = { x: 1, y: 1 }
   }
 
   drawDebugOverlays() {
@@ -312,16 +314,17 @@ export default class Segment extends Immob {
   detach() {
   // * Digestion: halt, reverse effects, maintain digestion contents state
 
-    let downSeg = this.downstreamSegment
-    while (downSeg.downstreamSegment) {
-      this.downstreamSegment.excrete()
-      downSeg = downSeg.downstreamSegment
+  // TODO use force-pass all downstream segs instead of weirdly having them excrete
+    let currSeg = this
+    this.excrete()
+    while (currSeg.downstreamSegment) {
+      currSeg = currSeg.downstreamSegment
+      currSeg.excrete()
     }
 
     console.log('seg detaching')
     this.cancelUnderDigestionBooleanEffects()
 
-    this.excrete()
 
   // ! game crashed during normal play
   //  if (this.upstreamSegment.downstreamSegment) {

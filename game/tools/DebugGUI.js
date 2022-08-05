@@ -417,11 +417,11 @@ export default class DebugGUI {
     }
 
     if (this.params.isDebugOn) {
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
+      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
+      // this.game.snek = snek
 
       // addEnt(Pebble)
-      addEnt(Mango)
+      // addEnt(Mango)
       // addEnt(Apple)
 
       // testSnekEatAllFruit()
@@ -429,6 +429,7 @@ export default class DebugGUI {
       // testAntCarry()
       // testSnekEatAntCarry()
       // testSnekEatWalkingAntCarry()
+      testCentBiteSnek()
       // testDetachedSegmentsDigestion()
     }
   }
