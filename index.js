@@ -14,6 +14,16 @@ document.body.appendChild(container)
 // **********************************************************************
 // * Play Game: PHASE_PLAY
 
+/** 
+ * The game object contains a render and update method that is the parent of all
+ * subobjects that run in the game, e.g. have their own update and render
+ * methods which are called by the game. 
+ * @function
+ * @property start - time (ms) at start of a frame
+ * @property elapsed - time (ms) elapsed since start of a frame
+ * @property loopID - return value of requestAnimationFrame, used to stop the
+ *    function 
+ */
 export function startNewGame() {
   let game = new Game(container)
 

@@ -1,7 +1,8 @@
-// TODO make this more useful
-
-// TODO jsdoc for trackPointer method
-
+/** 
+ * Provider for the generalized pointer (eg mouse or touch) information and
+ * event handling
+ * @class
+*/
 export default class PointerHandler {
   pointerCoords = {
     canvas: {

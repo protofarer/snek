@@ -1,4 +1,8 @@
-export function getPrimaryColorParameters() { return (
+/** Produces a design space oriented CSS color string that responds to a set of
+ * parameters that specify how the color changes over the period of digestion 
+ * @return {string} "hsl(hue, saturation, luminance)"
+ */
+export function getColorParameters() { return (
     `hsl(
       ${
         this.primaryColorParameters.hue.start 
@@ -21,7 +25,11 @@ export function getPrimaryColorParameters() { return (
     )`
   )}
 
-export function setPrimaryColorParameters({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) {
+  /** Validates the colormorph parameters and sets them respectively
+   * @function
+   * @return undefined
+  */
+export function setColorParameters({hueStart, hueEnd, satStart, satEnd, lumStart, lumEnd}) {
   // ! Doesn't catch out of range (x < 0, x > 255)
   if (typeof hueStart === 'number' || typeof hueEnd === 'number') {
     if (typeof hueStart !== 'number' || typeof hueEnd !== 'number') {

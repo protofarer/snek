@@ -1,3 +1,15 @@
+/**
+ * Utility class for reading and triggering off of the game loop time variable
+ * @class
+ * @property {number} clockCycle60 - perpetually ticks [0, 60) on the game loop
+ * @property {number} clockCycle5Min - perpetually ticks [0, 18000) on the 
+ *    game loop
+ * @property {boolean} isClockDrawn - flag for showing the debug clock 
+ *    animation
+ * @property {number} elapsed - time (ms) elapsed since start of frame
+ * @property {number} t - time (ms) of current game loop provided by 
+ *    requestAnimationFrame
+ */
 export default class Clock {
   typename = 'clock'
   clockCycle60 = 0

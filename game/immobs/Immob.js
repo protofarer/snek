@@ -1,36 +1,54 @@
 import { baseChompEffect } from '../behaviors/digestion'
 import { baseAbsorbExp } from '../behaviors/exp'
 import Entity from '../Entity'
-<<<<<<< HEAD
-import { getPrimaryColorParameters, setPrimaryColorParameters } from '../utils/colormorph'
+import { getColorParameters, setColorParameters } from '../utils/colormorph'
 export default class Immob extends Entity {
-  // * Generally are simple, non-moving, squared or circular interactable
-  // * objects. The Immob is the essence of all objects in the game, while it is
-  // * similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
-  // * shapes and behavioral properties and thus use a separate data description.
-
-  // * Make up the majority of the game's swallowables
-
-  // * Immobs do not include terrain as the latter belongs solely to the world
-  // * object and has disparate state structure
-
-=======
-
-export default class Immob extends Entity {
-  // * Generally are simple, non-moving, squared or circular interactable
-  // * objects. The Immob is the essence of all objects in the game, while it is
-  // * similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
-  // * shapes and behavioral properties and thus use a separate data description.
-
-  // * Make up the majority of the game's swallowables
-
-  // * Immobs do not include terrain as the latter belongs solely to the world
-  // * object and has disparate state structure
-
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
-  // ! This is not a clear distinction and a resolution is being considered:
-  // * use entity at top of hierarchy, with child Immob with child Mob as a sort
-  // * of evolution of increasing complexity and specificity.
+  /**
+   * The core interactive game entity. 
+   * 
+   * The Immob is the essence of all objects in the game, while it is
+   * similar to Mobs, Mobs doesn't inherit from Immob due to their irregular
+   * shapes and behavioral properties and thus use a separate data description.
+   * 
+   * Make up the majority of the game's swallowables.
+   * 
+   * Immobs do not include terrain as the latter belongs solely to the world
+   * object and has disparate state structure.
+   * 
+   * Properties expounded on below will only be included as they are introduced
+   * at each subclass in the inheritance chain, e.g.: Immob -> Mob -> ...
+   * 
+   * This is the exemplar layout and functionality of what constitutes an interactive entity
+   * in code form. Because it is immob aka immobile, it does not initiate action
+   * and is usually consumed by entities of type "mob"
+   * 
+   * @property {string} species - used as a basic in-game type 
+   * @property {number} r - the fundamental size value
+   * @property {Object} position - primary x and y canvas coordinates of entity
+   * @property {Object} scale - primary scale factor for canvas transforms
+   * @property {function} hitR - (get) primary value for setting the hit area
+   * @property {float} headingRadians - primary axis for rendering and movement
+   * @property {function} headingDegrees - (get/set) translates degrees to 
+   *    radians
+   * @property {Object} digestion - data for entity's base digestion behavior
+   * @property {number} digestion.baseTime - constant for total digestion time
+   * @property {number} digestion.timeLeft - counts down time left until
+   *    fully digested
+   * @property {number} baseExp - constant that stores starting experience value
+   * @property {number} currExp - variable for current experience
+   * @property {function} expEffect - base exp behavior used in under digestion 
+   *    phase
+   * @property {function} chompEffect - behavior when this ent contacts another ent
+   *    with its mouth
+   * @property {Array} postDigestionData - data for effects this ent produces 
+   *    after it is fully digested by a consuming ent
+   * @property {Object} primaryColorParameters - contains parameters for color-
+   *    morphing behavior
+   * @property {function} primaryColor - (get/set) for primaryColorParameters
+   * @property {string} secondaryColor - self-evident
+   * @property {Array} underDigestionData - data for effects this ent produces when under
+   *    digestion
+   */
   
   static entGroup = 'immob'
   entGroup = 'immob'
@@ -59,8 +77,8 @@ export default class Immob extends Entity {
 
   primaryColorParameters = {}
 
-  getPrimaryColor = getPrimaryColorParameters.bind(this)
-  setPrimaryColor = setPrimaryColorParameters.bind(this)
+  getPrimaryColor = getColorParameters.bind(this)
+  setPrimaryColor = setColorParameters.bind(this)
 
   get primaryColor() { return this.getPrimaryColor() }
   set primaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) { 
@@ -95,28 +113,59 @@ export default class Immob extends Entity {
     this.setHitAreas()
   }
 
+  /**
+   * Utility function for left hit area coordinate
+   * @method
+   */
   left() {
     return { x:this.position.x - this.hitR, y: this.position.y}
   }
+
+  /**
+   * Utility function for right hit area coordinate
+   * @method
+   */
   right() {
     return { x:this.position.x + this.hitR, y:this.position.y}
   }
+
+  /**
+   * Utility function for top hit area coordinate
+   * @method
+   */
   top() {
     return { x: this.position.x,y: this.position.y - this.hitR }
   }
+
+  /**
+   * Utility function for bottom hit area coordinate
+   * @method
+   */
   bottom() {
     return { x: this.position.x, y: this.position.y + this.hitR }
   }
 
+  /**
+   * Debug render function for hit area
+   * @method
+   */
   drawHitOverlays() {
     this.ctx.strokeStyle = 'blue'
     this.ctx.stroke(this.hitArea)
   }
 
+  /**
+   * Catch-all render function for all debug renders
+   * @method
+   */
   drawDebugOverlays() {
     this.drawHitOverlays()
   }
 
+  /**
+   * Defines the hit area according to ent's visual occupation
+   * @method
+   */
   setHitAreas() {
     this.hitArea = new Path2D()
     this.hitArea.rect(
@@ -127,6 +176,11 @@ export default class Immob extends Entity {
     )
   }
 
+  /**
+   * Wraps canvas transforms and draw functions in a way that subclasses can use
+   * as is and simply define component render functions 
+   * @method
+   */
   drawInitWrapper() {
     const ctx = this.ctx
     ctx.save()
@@ -143,11 +197,20 @@ export default class Immob extends Entity {
     ctx.restore()
   }
 
+  /**
+   * Subclasses should override this function and its nested functions
+   * @param {CanvasRenderingContext2D} ctx - passed in so components don't have 
+   *    to use "this"
+   */
   drawComponents(ctx) {
     // * NB drawShadow not here because invoked by drawBody()
     this.drawBody(ctx)
   }
 
+  /**
+   * Essential render method for drawing the ent on the screen
+   * @param {CanvasRenderingContext2D} ctx - passed in so components don't have 
+   */
   drawBody(ctx) {
     ctx.beginPath()
     ctx.rect(0,0,10,10)

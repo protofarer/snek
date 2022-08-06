@@ -3,6 +3,10 @@ import Mob from './Mob'
 import Segment from './Segment'
 import { cancelPostDigestionEffects } from '../behaviors/digestion'
 
+/**
+ * The main player controllable character.
+ * @property {String[]} swallowables - defines what Snek can swallow
+ */
 export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'

@@ -1,3 +1,14 @@
+/** Informational and Player Controls panel external to canvas element 
+ * @class
+ * @property {HTMLDivElement} panelContainer - Panel's top level container
+ * @property {HTMLDivElement} expbar - displays Snek's exp graphically
+ * @property {HTMLDivElement} infobox - container for informational elements
+ * @property {HTMLDivElement} score - displays score for current level
+ * @property {HTMLDivElement} level - displays Snek's level
+ * @property {HTMLDivElement} gameInfo - displays Snek's exp numerically
+ * @property {HTMLDivElement} statusMsg - displays textual information
+ * @property {HTMLButtonElement} newGameButton - starts a new game
+*/
 export default class Panel {
   panelContainer = document.createElement('div')
   expbar = document.createElement('div')

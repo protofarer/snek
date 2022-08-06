@@ -17,18 +17,24 @@ import Ant from './mobs/Ant'
 
 import { moveEdgeWrap } from './behaviors/movements'
 
+/** 
+ * Game object is used to:
+ *  - sets up html container
+ *  - initializes sound, external panel, and world utility objects
+ *  - calls all entities' update and/or render functions
+ *  - keeps a queryable map of all entities
+ *  - defines interstitial behavior: the top level interactions between entities
+ *      that don't belong to any entity itself, e.g. collision detection, etc...
+ *  - provides entity instantiation via addEnt and spawnEnt methods
+ * @param {HTMLDivElement} container - Top level container
+ * @property {boolean} isDebugOn - window session stored debug mode state
+ * @property {Object} params - adjustable game parameters
+ * @property {Number} params.speed - speed game can be tweaked to run for debug purposes, range is [0.005, 1]
+ * @property {string} msg - information for player
+ * @property {Number} phase - the phase that the game is currently in
+ * @property {Number} score - number of items snek has swallowed
+ */
 export default class Game {
-
-  // * Game object is a singleton (or will be) that:
-  // * - sets up html containers
-  // * - initializes sound, external panel, world objects
-  // * - generally invokes objects' update and render functions
-  // * - keeps a list of all ents aka entities (interactive objects)
-  // * - defines interstitial behavior: defines interaction between objects at the root layer aka world
-  // *   - eg collision detection, spawning, world events
-  // * - provides ent instantiation via addEnt(test) and spawnEnt(random position/orientation for production)
-
-
   constructor (container) {
     this.container = container
     this.canvas = document.createElement('canvas')
@@ -43,20 +49,14 @@ export default class Game {
 
     // * Adjustable parameters for testing design, performance, and debugging
     this.params = {
-      // speed capped at 1 on test slider because of how it divides the elapsed time 't' from draw= {
       speed: 1,
-      pauseInterval: 1000
     }
 
-    // * Related to normal game flow and info directly relevant to player
-    // * Used by: game.panel
     this.msg = ''
     this.phase = CONSTANTS.PHASE_PLAY
     this.score = 0
 
     this.snek = null
-    this.mobs = []
-    this.immobs = []
 
     new Background(container, 'hsl(51, 50%, 20%)')
     this.clock = new Clock(this.ctx, this)
@@ -74,15 +74,6 @@ export default class Game {
     return this.ctx.isPointInPath(objHitArea, mouthCoords.x, mouthCoords.y)
   }
 
-  checkEndCondition() {
-    // Set game.phase to PHASE_END conditionally
-    console.log('IN checkEndCondition()')
-  }
-
-  end() {
-    console.log(`Ending game...`, )
-  }
-
   clr() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
@@ -96,6 +87,11 @@ export default class Game {
     location.reload()
   }
 
+  /** Controlled ent placement in world. 
+   *  - automatically positions ents for testing.
+   *  - immobilizes ent
+   * @function
+   */
   addEnt(entClass, position=null) {
     const ent = new entClass(
       this.ctx, 
@@ -123,13 +119,12 @@ export default class Game {
     // * Handle setting hit area when position arg specified since immobs
     // * set it only once during their instantiation by design
     if (entClass.entGroup === 'immob') ent.setHitAreas()
-<<<<<<< HEAD
-=======
-    console.log(`ent`, ent)
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
     return ent
   }
 
+  /** Randomized ent placement in world
+   * @method
+   */
   spawnEnts(entClass, n=1, position=null) {
     const ents = []
     for(let i = 0; i < n; i++) {
@@ -190,20 +185,18 @@ export default class Game {
 
       // **********************************************************************
       // * Hit Detection
-<<<<<<< HEAD
       // * - only when parent = game
-=======
-      // * - only when parentEnt = game
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
       // **********************************************************************
 
       if (ent.parent === this) {
 
         if (ent.species === 'ant' && !ent.carriedEnt) {
+
           let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])
           for(let sweet of sweets.values()) {
             this.collisionResolver(ent, sweet, () => ent.grab(sweet))
           }
+
         }
   
         if (ent.entGroup === 'mob') {
@@ -216,25 +209,34 @@ export default class Game {
               subSpecies: 'snek'
             }
           ]) 
+
           if (ent.species === 'centipede' && Array.from(sneksegs.values()).length > 0) {
+
             for(let snekseg of sneksegs.values()) {
+
               this.collisionResolver(ent, snekseg, () => {
                 snekseg.detach()
                 ent.chomp(snekseg)
               })
+
             }
+
           }
 
         }
 
         if (this.snek && this.snek.swallowables.includes(ent.species)) {
+
           this.collisionResolver(this.snek, ent, () => {
+
             if (this.snek.swallowables.includes(ent.species)) {
               this.snek.chomp(ent)
               this.play.playRandomSwallowSound()
               this.score++
             }
+
           })
+
         }
       }
     }
@@ -256,6 +258,13 @@ export default class Game {
     }
   }
 
+  /** Determine whether ent mouth is contacting another ent's body 
+   * @function
+   * @param {Entity} aggressor - entity with an initiating action, 
+   *    e.g. chomp or carry
+   * @param {Entity} defender - entity being initiated upon
+   * @param {function} resolver - aggressor ent initiating action method
+  */
   collisionResolver(aggressor, defender, resolver) {
     const isContacting = this.isContactingMouth(
       defender.hitArea,
@@ -264,6 +273,9 @@ export default class Game {
     isContacting && resolver()
   }
 
+  /** Initial spawn method used for playable game/levels.
+   * @method
+   */
   initSpawn() {
     if (this.isDebugOn === 'false' || this.isDebugOn === null) {
       this.snek = new Snek(this.ctx, null, this)

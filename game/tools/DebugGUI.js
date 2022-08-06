@@ -10,6 +10,15 @@ import Centipede from '../mobs/Centipede'
 import Ant from '../mobs/Ant'
 import Snek from '../mobs/Snek'
 import Poop from '../immobs/Poop'
+
+/**
+ * Contains debug GUI functionality (uses lil-gui package) and includes
+ * capability for manual game design and testing
+ * @class
+ * @property {Object} frames - Object containing framerate data
+ * @property {Object} params - Contains flags that save to window session
+ * @property {function} params.gameSpeed - get/set game's speed
+ */
 export default class DebugGUI {
   frames = { fps: 0, times: []}
 
@@ -17,11 +26,7 @@ export default class DebugGUI {
     const gui = new GUI()
     this.gui = gui
     this.game = game
-<<<<<<< HEAD
     this.parent = undefined
-=======
-    this.parentEnt = undefined
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
     this.params = {
       isDebugOn: false,
@@ -159,6 +164,10 @@ export default class DebugGUI {
     this.addTestObjects()
   }
 
+  /**
+   * Initializes the gui for snek's state.
+   * @function
+   */
   initSnekStateGUI() {
     const snek = this.game.snek
     if (snek) {
@@ -167,7 +176,6 @@ export default class DebugGUI {
       guiSnek.add(snek, 'currExp').listen()
       guiSnek.add(snek, 'level').listen()
       guiSnek.add(snek, 'currMoveSpeed').listen()
-<<<<<<< HEAD
       guiSnek.add(snek, 'currTurnRate').listen()
 
       // const nPostDigestionEffects = {
@@ -175,8 +183,6 @@ export default class DebugGUI {
       // }
 
       guiSnek.add(snek.postDigestionEffects, 'length').listen().name('nPDE')
-=======
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
       const seg = guiSnek.addFolder('Segments')
       seg.add(snek, 'currKnownSegmentCount').listen()
@@ -193,6 +199,10 @@ export default class DebugGUI {
 
   }
 
+  /**
+   * Sets debug flags from window session storage and removes 
+   * undefined/null values.
+   */
   setParamsFromSessionStorage() {
     // Read debug and game params from sessionStorage for persistence across game runs
     const setParamFromSession = (key) => {
@@ -344,6 +354,10 @@ export default class DebugGUI {
     // }
   }
 
+  /**
+   * Manual design and testing functionality
+   * @function
+   */
   addTestObjects() {
     const spawnEnts = this.game.spawnEnts.bind(this.game)
     const addEnt = this.game.addEnt.bind(this.game)
@@ -393,7 +407,6 @@ export default class DebugGUI {
       b.position = {x: 230, y:400}
       b.headingDegrees = 180
       b.setHitAreas()
-
     }
 
     const testCentBiteSnek = () => {
@@ -411,7 +424,6 @@ export default class DebugGUI {
       addEnt(Apple)
     }
 
-<<<<<<< HEAD
     const testDetachedSegmentsDigestion = () => {
       const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
       this.game.snek = snek
@@ -424,8 +436,6 @@ export default class DebugGUI {
 
     }
 
-=======
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
     if (this.params.isDebugOn) {
       // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
       // this.game.snek = snek
@@ -434,19 +444,13 @@ export default class DebugGUI {
       // addEnt(Mango)
       // addEnt(Apple)
 
-<<<<<<< HEAD
       // testSnekEatAllFruit()
-=======
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
       // testSnekEatWalkingAnt ()
       // testAntCarry()
       // testSnekEatAntCarry()
       // testSnekEatWalkingAntCarry()
-<<<<<<< HEAD
       testCentBiteSnek()
       // testDetachedSegmentsDigestion()
-=======
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
     }
   }
 }

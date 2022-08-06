@@ -1,10 +1,7 @@
 import Poop from '../immobs/Poop'
 import Immob from '../immobs/Immob'
 import { recycle } from '../utils/helpers'
-<<<<<<< HEAD
 import { activatePostDigestionEffects } from '../behaviors/digestion'
-=======
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
 export default class Segment extends Immob {
   static species = 'segment'
@@ -31,11 +28,7 @@ export default class Segment extends Immob {
   constructor(ctx, upstreamSegment) {
     super(ctx)
     this.upstreamSegment = upstreamSegment
-<<<<<<< HEAD
     this.parent = this.getHeadEnt().parent
-=======
-    this.parentEnt = this.getHeadEnt().parentEnt
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
     this.r = this.getHeadEnt().r
     this.scale = this.getHeadEnt().scale
     this.headingRadians = this.upstreamSegment.headingRadians
@@ -80,11 +73,7 @@ export default class Segment extends Immob {
     this.entUnderDigestion = ent
     this.entUnderDigestion.setMobile?.(false)
     this.entUnderDigestion.position = this.position
-<<<<<<< HEAD
     this.entUnderDigestion.parent = this.getHeadEnt()
-=======
-    this.entUnderDigestion.parentEnt = this.getHeadEnt()
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
     // TODO modifications to consumers' state should be guarded by public method
     this.entUnderDigestion.underDigestionData?.forEach( underDigestionEffect => 
@@ -192,28 +181,7 @@ export default class Segment extends Immob {
       const postDigestionData = this.entUnderDigestion.postDigestionData
 
       if (postDigestionData) {
-<<<<<<< HEAD
         activatePostDigestionEffects.call(this, postDigestionData, this.getHeadEnt())
-=======
-        postDigestionData.forEach(pDD => {
-          this.getHeadEnt().postDigestionEffects.push(pDD)
-
-          switch (pDD.effect) {
-            case 'moveSpeed':
-              this.getHeadEnt().currMoveSpeed += pDD.moveSpeed
-              break
-            case 'turnRate':
-              this.getHeadEnt().currTurnRate += pDD.turnRate
-              break
-            default:
-              console.log(`snek postDigestionEffect switch/case defaulted`, )
-          }
-          console.log(`\
-            postDigestEffect ${pDD.effect} from \
-            ${this.entUnderDigestion.species} activated`, 
-          )
-        })
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
       }
         
       // * - If digested ent was poop, pass it immediately?
@@ -299,16 +267,6 @@ export default class Segment extends Immob {
       this.entUnderDigestion = null
       this.scale = { x: 1, y: 1 }
     }
-<<<<<<< HEAD
-=======
-    this.restoreEntUnderDigestion()
-  }
-
-  restoreEntUnderDigestion() {
-    this.entUnderDigestion.setMobile?.(true)
-    this.entUnderDigestion.parentEnt = this.getHeadEnt().parentEnt
-    this.entUnderDigestion = null
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
   }
 
   drawDebugOverlays() {
@@ -367,12 +325,6 @@ export default class Segment extends Immob {
     console.log('seg detaching')
     this.cancelUnderDigestionBooleanEffects()
 
-<<<<<<< HEAD
-=======
-    if (this.entUnderDigestion) {
-      this.restoreEntUnderDigestion()
-    }
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
   // ! game crashed during normal play
   //  if (this.upstreamSegment.downstreamSegment) {
@@ -437,44 +389,6 @@ export default class Segment extends Immob {
       const dx = (this.upstreamSegmentTailPosition.x - this.position.x)
       this.headingRadians = Math.atan(dy/dx)
 
-<<<<<<< HEAD
-=======
-      // * Post Digestion Effects: occur after content is fully digested
-
-      // * Expire used up effects
-
-      const expiredPostDigestionEffects = this.getHeadEnt()
-        .postDigestionEffects.filter(e => 
-          e.timeLeft <= 0
-      )
-
-      if (this.getHeadEnt().postDigestionEffects.length > 0 ) {
-
-        expiredPostDigestionEffects.forEach(postDigestionData => {
-          switch (postDigestionData.effect) {
-            case 'moveSpeed':
-              this.getHeadEnt().currMoveSpeed -= postDigestionData.moveSpeed
-              break
-            case 'turnRate':
-              this.getHeadEnt().currTurnRate -= postDigestionData.turnRate
-              break
-            default:
-              console.log(`snek expiredDigestionEffect switch/case defaulted`, )
-          }
-          console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
-        })
-  
-        this.getHeadEnt().postDigestionEffects = this.getHeadEnt()
-          .postDigestionEffects.filter(postDigestionData =>
-            postDigestionData.timeLeft >= 0
-        )
-  
-        this.getHeadEnt().postDigestionEffects.forEach(postDigestionData => {
-          postDigestionData.timeLeft -= 17
-        })
-
-      }
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
 
       // ! Should this be before physics?
       if (this.entUnderDigestion) {

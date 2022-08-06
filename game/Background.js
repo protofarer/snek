@@ -1,3 +1,7 @@
+/** 
+ * Background canvas renders at bottom-most layer in canvas stack 
+ * @class
+ */
 export default class Background {
   canvas = document.createElement('canvas')
   constructor(container) {

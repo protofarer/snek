@@ -1,5 +1,10 @@
 import Entity from '../Entity'
 
+/**
+ * Returns upstream-most entity in a segment chain, including head ents
+ * @function
+ * @returns {Entity} upstreamSegment
+ */
 export function getHead() {
   // * For Segments
   let upstreamSegment = this.upstreamSegment
@@ -9,21 +14,24 @@ export function getHead() {
   return upstreamSegment ? upstreamSegment : this
 }
 
+/**
+ * Returns the topmost parent object aka game
+ * @function
+ * @returns Game
+ */
 export function getGameObject() {
-<<<<<<< HEAD
   let currentEnt = this.parent
   while (currentEnt.parent) {
       currentEnt = currentEnt.parent
-=======
-  let currentEnt = this.parentEnt
-  while (currentEnt.parentEnt) {
-      currentEnt = currentEnt.parentEnt
->>>>>>> dede83c40f5d66d6e3612719391b6fdb22679d3e
   }
   return currentEnt
 }
 
-// TODO improve
+/**
+ * Janky way to recycle an entity that's no longer used. Needs improvement.
+ * @function
+ * @param {Entity} ent 
+ */
 export function recycle(ent) {
   ent.hitArea = new Path2D()
   ent.position = {x: -100, y: -100}
