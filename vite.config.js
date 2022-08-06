@@ -15,7 +15,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        a: 'index.js',
+        index: 'index.js',
       },
       output: {
         dir: 'dist'
