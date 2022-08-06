@@ -159,7 +159,6 @@ export default class Game {
       ent.render()
     }
 
-    this.snek?.render()
     this.panel.render()
   }
 
