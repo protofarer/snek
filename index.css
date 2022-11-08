@@ -1,24 +1,29 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: black;
+  background-color: white;
   box-sizing: border-box;
+  font-family: Arial;
 }
 
 #container {
   display: flex;
   flex-flow: column nowrap;
+  align-items: center;
   /* justify-content: space-between; */
   /* gap: 3px; */
-  width: 100%;
+
+  /* width: 100%;
   height: 100%;
-  max-height: 100vh;
+  max-height: 100vh; */
+
+  width: 100vw;
 }
 
 #layerBackground {
   position: absolute;
-  width: 100vw;
-  height: calc(100vw * 3 / 2);
+  /* width: 100vw;
+  height: calc(100vw * 3 / 2); */
 
   /* flex: 0 0 0%; */
   z-index: 1;
@@ -26,11 +31,12 @@ body {
 
 #layerGame {
   /* border: 5vh solid hsl(28, 55%, 55%); */
-  background-color: transparent;
-  /* touch-action: none; */
-  width: 100vw;
+  background-color: green;
   height: calc(100vw * 3 / 2);
+  max-height: 80vh;
+  max-width: calc(80vh * 2 / 3);
 
+  /* touch-action: none; */
   /* flex: 1 1 0%; */
   z-index: 2;
 }
@@ -40,19 +46,18 @@ body {
 }
 
 #panel {
-  height: calc(100vh - 100vw * 3 / 2);
-  width: 100vw;
   padding: 0.5em 0 0.5em 0;
   background-color: black;
   border-top: 3px solid rgb(50, 84, 255);
 
-  font-family: Arial;
+  width: 100%;
+  max-width: calc(80vh * 2 / 3);
+  height: 18vh;
 
-  display: inline-flex;
+  display: flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
   align-items: center;
-  /* gap: 1em; */
 }
 
 #expbar {
@@ -104,10 +109,9 @@ button {
   margin: 0;
   padding: 0.3em;
   font-size: larger;
-  font-family: Arial;
   border: none;
 }
 
-button:hover {
-  background-color: hsl(59, 100%, 73%);
+#newGameButton:hover, button:hover {
+  color: hsl(59, 100%, 73%);
 }
