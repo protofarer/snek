@@ -19,6 +19,7 @@ import { moveEdgeWrap } from './behaviors/movements'
 
 import StateMachine from './StateMachine'
 import StartState from './states/StartState'
+import PlayState from './states/PlayState'
 
 /** 
  * Game object is used to:
@@ -72,7 +73,7 @@ export default class Game {
 
     this.stateMachine = new StateMachine({
         start: StartState,
-        // playState: PlayState,
+        play: PlayState
       },
       this
     )

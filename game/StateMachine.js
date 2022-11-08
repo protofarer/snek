@@ -10,13 +10,12 @@ export default class StateMachine {
     this.game = game
   }
 
-  change(stateName) {
+  change(stateName, params) {
     if (!Object.keys(this.states).includes(stateName)) {
       throw Error('Cannot change state, invalid state name')
     }
     this.current.exit()
-    this.current = new this.states[stateName](this.game)
-    this.current.enter(this.game)
+    this.current = new this.states[stateName](this.game, params)
   }
 
   update() {

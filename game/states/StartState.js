@@ -1,5 +1,5 @@
-import StateMachine from '../StateMachine'
 import BaseState from './BaseState'
+import Snek from '../mobs/Snek'
 
 export default class StartState extends BaseState {
   modes = ['Normal', 'Survival']
@@ -8,12 +8,8 @@ export default class StartState extends BaseState {
   constructor(game) {
     super()
     this.game = game
-  }
 
-  enter() {
     // TODO adapt to whether user is on mobile or desktop
-
-    // TODO eventlisteners for up, down, enter
     this.handleKeyDown = (e) => {
       switch (e.key) {
         case 'ArrowDown':
@@ -26,7 +22,11 @@ export default class StartState extends BaseState {
           break
         case 'Enter':
           this.game.mode = this.modes[this.mode]
-          this.game.stateMachine.change('play')
+          this.game.stateMachine.change('play', {
+            mode: this.modes[this.mode],
+            snek: new Snek(this.game.ctx),
+            level: 0
+          })
           break
       }
     }
