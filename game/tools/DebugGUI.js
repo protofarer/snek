@@ -32,14 +32,16 @@ export default class DebugGUI {
       isGridVisible: false,
       isSnekInitialized: false,
       isDebugGUIShown: true,
+      isDebugGUIOpen: true,
       set gameSpeed(val) { game.params.speed = val},
       get gameSpeed() { return game.params.speed }
     }
 
     const resetGame = this.game.resetGame
 
-    this.setParamsFromSessionStorage(this.params)
+    this.setParamsFromSessionStorage()
     this.invokeOnDebugGameStart(resetGame)
+    this.reactToParams()
 
     const rectpos = {
       left: `${Math.floor(game.rect.left)}`,
@@ -229,6 +231,10 @@ export default class DebugGUI {
     }
   }
 
+  reactToParams() {
+    this.params.isDebugGUIOpen ? this.gui.open() : this.gui.close()
+  }
+
   setupNumericSlider = ({
     obj, key, folder, minVal, maxVal, stepVal, label
   }) => {
@@ -340,11 +346,20 @@ export default class DebugGUI {
       }
     }
 
-    console.log(`this.paramsisdebugguishown`, this.params.isDebugGUIShown)
+    // because via hotkey, keyboard handler can toggle gui state variable
     if (this.params.isDebugGUIShown) {
       this.gui.show()
     } else {
       this.gui.hide()
+    }
+
+    // because via mouseclick, read state delta here
+    if (this.gui._closed === false && !this.params.isDebugGUIOpen) {
+      this.params.isDebugGUIOpen = true
+      window.sessionStorage.setItem('isDebugGUIOpen', 'true')
+    } else if (this.gui._closed === true && this.params.isDebugGUIOpen) {
+      this.params.isDebugGUIOpen = false
+      window.sessionStorage.setItem('isDebugGUIOpen', 'false')
     }
   }
 
