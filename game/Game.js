@@ -31,7 +31,7 @@ export default class Game {
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'layerGame'
     this.canvas.width = 400
-    this.canvas.height = 500
+    this.canvas.height = 600
     this.container.appendChild(this.canvas)
 
     this.ctx = this.canvas.getContext('2d')

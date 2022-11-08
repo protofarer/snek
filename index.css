@@ -18,7 +18,7 @@ body {
 #layerBackground {
   position: absolute;
   width: 100vw;
-  height: 133vw;
+  height: calc(100vw * 3 / 2);
 
   /* flex: 0 0 0%; */
   z-index: 1;
@@ -29,7 +29,7 @@ body {
   background-color: transparent;
   /* touch-action: none; */
   width: 100vw;
-  height: 133vw;
+  height: calc(100vw * 3 / 2);
 
   /* flex: 1 1 0%; */
   z-index: 2;
@@ -40,7 +40,7 @@ body {
 }
 
 #panel {
-  height: calc(100vh - 133vw);
+  height: calc(100vh - 100vw * 3 / 2);
   width: 100vw;
   padding: 0.5em 0 0.5em 0;
   background-color: black;
@@ -76,8 +76,7 @@ button {
   font-size: larger;
   font-family: Arial;
   border: none;
-  width: 25%;
-  flex: 0 1;
+  width: 33%;
 }
 
 button:hover {
