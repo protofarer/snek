@@ -27,6 +27,7 @@ export default class Panel {
   constructor(game) {
     this.game = game
     this.panelContainer.id = 'panel'
+    this.panelContainer.className = 'layerUI'
     this.expbar.id = 'expbar'
     this.panelContainer.appendChild(this.expbar)
     this.expSegments = []
