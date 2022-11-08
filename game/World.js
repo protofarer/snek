@@ -95,6 +95,7 @@ export default class World {
         && this.game.clock.getElapsedSeconds() !== 0 && this.isSpawning === false
     ) {
       this.isSpawning = true
+      // eslint-disable-next-line no-unused-vars
       await new Promise (_ => { setTimeout(_ => this.isSpawning = false, 1000) })
       
       const rng = Math.random()

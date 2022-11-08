@@ -10,8 +10,8 @@ export default class Scenarios {
   constructor(game) {
     this.game = game
     this.snek = this.game.world.snek
-    this.spawnEnts = this.game.world.spawnEnts
-    this.addEnt = this.game.world.addEnt
+    this.spawnEnts = this.game.world.spawnEnts.bind(this.game)
+    this.addEnt = this.game.world.addEnt.bind(this.game)
 
     this.snek.position = { 
       x: this.game.canvas.width * 0.1, 
@@ -20,16 +20,20 @@ export default class Scenarios {
     this.snek.headingDegrees = 0
   }
 
+  base() {
+    this.addEnt(Apple)
+  }
+
   antCarry() {
-    const b = this.addEnt(Ant).setMobile(true).setTurnable(false)
-    b.headingRadians = 0
-    b.position = {x: 170, y:400}
-    b.setHitAreas()
+    // const b = this.addEnt(Ant).setMobile(true).setTurnable(false)
+    // b.headingRadians = 0
+    // b.position = {x: 170, y:400}
+    // b.setHitAreas()
   
-    const a = this.addEnt(Apple)
-    a.position = {x: 200, y:400}
-    a.setHitAreas()
-    return {a, b}
+    // const a = this.addEnt(Apple)
+    // a.position = {x: 200, y:400}
+    // a.setHitAreas()
+    // return {a, b}
   }
 
   snekEatAntCarry() {
