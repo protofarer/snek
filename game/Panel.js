@@ -11,17 +11,10 @@
 export default class Panel {
   panelContainer = document.createElement('div')
   expbar = document.createElement('div')
-
   infobox = document.createElement('div')
-
   infoA = document.createElement('div')
-  level = document.createElement('div')
-  exp = document.createElement('div')
-
-  infoB = document.createElement('div')
   score = document.createElement('div')
   lifespan = document.createElement('div')
-
   newGameButton = document.createElement('button')
 
   constructor(game) {
@@ -47,31 +40,18 @@ export default class Panel {
     this.infoA.className = 'infoSubBox'
     this.infobox.appendChild(this.infoA)
 
-    this.level.id = 'info-level'
-    this.infoA.appendChild(this.level)
-
-    this.exp.id = 'info-exp'
-    this.infoA.appendChild(this.exp)
-
-    this.infoB.id = 'infoB'
-    this.infoB.className = 'infoSubBox'
-    this.infobox.appendChild(this.infoB)
-
     this.score.id = 'info-score'
-    this.infoB.appendChild(this.score)
+    this.infoA.appendChild(this.score)
 
     this.lifespan.id = 'info-lifespan'
-    this.infoB.appendChild(this.lifespan)
+    this.infoA.appendChild(this.lifespan)
   
     this.newGameButton.id = 'newGameButton'
     this.newGameButton.innerText = 'New Game'
     this.panelContainer.appendChild(this.newGameButton)
   
-  
     // before init, for debug
     this.infobox.style.color = 'lawngreen'
-    this.level.innerText = '$level'
-    this.exp.innerText = '$exp'
     this.score.innerText = '$score'
     this.lifespan.innerText = '$lifespan'
 
@@ -88,8 +68,6 @@ export default class Panel {
     this.score.innerHTML = `Score: ${this.game.stateMachine.current?.score}`
 
     if (this.snek) {
-      this.level.innerHTML = `Snek!'s level: ${this.snek.level}`
-      this.exp.innerHTML = `Exp for level up: ${Math.trunc(this.snek.expForLevel(this.snek.level + 1) - this.snek.currExp)}`
       this.lifespan.innerHTML = `Lifespan: ${this.game.clock.getElapsedSeconds()}s`
 
       this.expSegments.forEach((seg, idx) => {

@@ -161,7 +161,7 @@ export default class DebugGUI {
    * @function
    */
   initSnekStateGUI() {
-    const snek = this.game.snek
+    const snek = this.game.world.snek
     if (snek) {
       const guiSnek = this.gui.addFolder('Snek')
 
@@ -183,7 +183,7 @@ export default class DebugGUI {
 
       seg.add(snek, 'currSegExp').listen()
       const nextSegExp = () => {
-        return this.game.snek.segExpForLevel(this.game.snek.countSegments + 1)
+        return this.game.world.snek.segExpForLevel(this.game.world.snek.countSegments + 1)
       }
       const segexpObj = { get nextSegExp() { return nextSegExp() }}
       seg.add(segexpObj, 'nextSegExp').listen()
@@ -286,7 +286,7 @@ export default class DebugGUI {
 
   drawDebugOverlays() {
     Array.from(Entity.stack.values()).forEach( ent => ent.drawDebugOverlays())
-    this.game.snek?.drawDebugOverlays()
+    this.game.world.snek?.drawDebugOverlays()
   }
 
   async invokeOnDebugGameStart(resetGame) {
@@ -310,18 +310,18 @@ export default class DebugGUI {
     this.frames.times.push(t)
     this.frames.fps = this.frames.times.length
 
-    if (this.game.snek) {
+    if (this.game.world.snek) {
       if (this.params.isTurningRandomly) {
         const q = Math.random()
         if (q < 0.25) {
-          this.game.snek.turnLeft()
+          this.game.world.snek.turnLeft()
         } else if (q < 0.50){
-          this.game.snek.turnRight()
+          this.game.world.snek.turnRight()
         }
       }
     }
-
-    if (this.game.snek && this.params.isSnekInitialized === false) {
+    
+    if (this.game.world.snek && this.params.isSnekInitialized === false) {
       this.params.isSnekInitialized = true
       this.initSnekStateGUI()
     }

@@ -1,6 +1,5 @@
 import Ant from '../mobs/Ant'
 import Centipede from '../mobs/Centipede'
-import Snek from '../mobs/Snek'
 import Apple from '../immobs/Apple'
 import Mango from '../immobs/Mango'
 import Pebble from '../immobs/Pebble'
