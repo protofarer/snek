@@ -449,7 +449,7 @@ export default class DebugGUI {
       // testAntCarry()
       // testSnekEatAntCarry()
       // testSnekEatWalkingAntCarry()
-      testCentBiteSnek()
+      // testCentBiteSnek()
       // testDetachedSegmentsDigestion()
     }
   }

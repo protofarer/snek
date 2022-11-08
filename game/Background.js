@@ -19,10 +19,14 @@ export default class Background {
     this.ctx.fillStyle = 'hsl(35,40%,29%)'
     // this.ctx.fillStyle = 'white'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+
     const n = 1000
     for(let i = 0; i < n; i++) {
+      // Choose random coordinates
       const ry = Math.random() * this.canvas.height
       const rx = Math.random() * this.canvas.width
+
+      // Draw dirt particles
       this.ctx.moveTo(rx, ry)
       this.ctx.lineTo(rx+1, ry)
       this.ctx.strokeStyle=`hsla(0,0%,${Math.random()*40}%,${0.3 + Math.random() * 0.3})`

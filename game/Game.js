@@ -17,6 +17,9 @@ import Ant from './mobs/Ant'
 
 import { moveEdgeWrap } from './behaviors/movements'
 
+import StateMachine from './StateMachine'
+import StartState from './states/StartState'
+
 /** 
  * Game object is used to:
  *  - sets up html container
@@ -67,7 +70,16 @@ export default class Game {
     const Sounds = Audio()
     this.play = Sounds.play
 
-    this.initSpawn()
+    this.stateMachine = new StateMachine({
+        start: StartState,
+        // playState: PlayState,
+      },
+      this
+    )
+
+    this.stateMachine.change('start')
+
+    // this.initSpawn()
   }
 
   isContactingMouth(objHitArea, mouthCoords) {
@@ -155,11 +167,13 @@ export default class Game {
   render() {
     this.clock.render()
 
-    for(const ent of Entity.stack.values()) {
-      ent.render()
-    }
+    this.stateMachine.render()
 
-    this.panel.render()
+    // for(const ent of Entity.stack.values()) {
+    //   ent.render()
+    // }
+
+    // this.panel.render()
   }
 
   update(loopID) {
