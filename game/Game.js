@@ -66,9 +66,9 @@ export default class Game {
       this
     )
 
-    console.log(`isdebugon`, this.isDebugOn)
-    
     if (this.isDebugOn === 'true') {
+      console.log(`playSurvival debug`, )
+      
       this.stateMachine.change(
         'playSurvival',
         {
@@ -131,4 +131,8 @@ export default class Game {
     }
   }
 
+  setSnek(snek) {
+    this.world.snek = snek
+    this.panel.snek = snek
+  }
 }

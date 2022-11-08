@@ -2,13 +2,7 @@ import GUI from 'lil-gui'
 import CONSTANTS from '../Constants'
 
 import Entity from '../Entity'
-import Banana from '../immobs/Banana'
-import Pebble from '../immobs/Pebble'
-import Apple from '../immobs/Apple'
-import Mango from '../immobs/Mango'
 import Centipede from '../mobs/Centipede'
-import Ant from '../mobs/Ant'
-import Snek from '../mobs/Snek'
 
 /**
  * Contains debug GUI functionality (uses lil-gui package) and includes
@@ -160,7 +154,6 @@ export default class DebugGUI {
           break
       }
     })
-    this.addTestObjects()
   }
 
   /**
@@ -353,103 +346,4 @@ export default class DebugGUI {
     // }
   }
 
-  /**
-   * Manual design and testing functionality
-   * @function
-   */
-  addTestObjects() {
-    const spawnEnts = this.game.world.spawnEnts.bind(this.game)
-    const addEnt = this.game.world.addEnt.bind(this.game)
-
-    const testAntCarry = () => {
-      const b = addEnt(Ant).setMobile(true).setTurnable(false)
-      b.headingRadians = 0
-      b.position = {x: 170, y:400}
-      b.setHitAreas()
-
-      const a = addEnt(Apple)
-      a.position = {x: 200, y:400}
-      a.setHitAreas()
-      return {a, b}
-    }
-
-    const testSnekEatAntCarry = () => {
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      let {a,b} = testAntCarry()
-      b.setMobile(false)
-      b.position = {x: 190, y:400}
-    }
-
-    const testSnekEatWalkingAntCarry = () => {
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      let {a,b} = testAntCarry()
-      b.setMobile(true)
-      b.position = {x: 240, y:400}
-      b.headingDegrees = 180
-    }
-
-    const testSnekEatAllFruit = () => {
-      const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      addEnt(Apple)
-      addEnt(Mango)
-      addEnt(Banana)
-    }
-
-    const testSnekEatWalkingAnt = () => {
-      const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-
-      const b = addEnt(Ant).setMobile(true).setTurnable(false)
-      b.position = {x: 230, y:400}
-      b.headingDegrees = 180
-      b.setHitAreas()
-    }
-
-    const testCentBiteSnek = () => {
-      const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      const f = addEnt(Centipede).setMobile(true).setTurnable(false)
-      f.headingRadians = - Math.PI/2
-      f.position = {x:150,y:550}
-    }
-
-    const testForcePass = () => {
-      const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      addEnt(Pebble)
-      addEnt(Apple)
-    }
-
-    const testDetachedSegmentsDigestion = () => {
-      const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-      this.game.snek = snek
-      addEnt(Mango)
-      addEnt(Mango)
-
-      const f = addEnt(Centipede).setMobile(true).setTurnable(false)
-      f.headingRadians = - Math.PI/2
-      f.position = {x:250,y:650}
-
-    }
-
-    if (this.params.isDebugOn) {
-      // const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-      // this.game.snek = snek
-
-      // addEnt(Pebble)
-      // addEnt(Mango)
-      // addEnt(Apple)
-
-      // testSnekEatAllFruit()
-      // testSnekEatWalkingAnt ()
-      // testAntCarry()
-      // testSnekEatAntCarry()
-      // testSnekEatWalkingAntCarry()
-      // testCentBiteSnek()
-      // testDetachedSegmentsDigestion()
-    }
-  }
 }

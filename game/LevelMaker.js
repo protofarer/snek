@@ -1,6 +1,7 @@
 import Apple from './immobs/Apple'
 import Mango from './immobs/Mango'
 import Pebble from './immobs/Pebble'
+import Scenarios from './tools/Scenarios'
 
 import Centipede from './mobs/Centipede'
 import Ant from './mobs/Ant'
@@ -12,13 +13,27 @@ export default class LevelMaker {
 
   spawn(level, snek) {
     switch (level) {
+      case 0:   // debug level
+        this.spawnLevelZero()
+        break
       case 1:
         this.spawnLevelOne(snek)
         break
-      case 's':
-        console.log(`survival mode init spawn`, )
+      case 's': // survival init
+        console.log(`ohno`, )
         break
     }
+  }
+
+  spawnLevelZero() {
+    this.case = new Scenarios(this.game)
+    this.case.base()
+
+    // this.game.world.spawnEnts(Apple, 45)
+    // this.game.world.spawnEnts(Pebble, 55)
+    // this.game.world.spawnEnts(Mango, 5)
+    // this.game.world.spawnEnts(Ant, 25)
+    // this.game.world.spawnEnts(Centipede, 2)
   }
 
   spawnLevelOne(snek) {

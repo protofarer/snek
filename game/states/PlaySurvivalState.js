@@ -8,19 +8,14 @@ import Snek from '../mobs/Snek'
  * @property {Number} score - number of items snek has swallowed
  */
 export class PlaySurvivalState extends BaseState {
-  mode
-  level
-
   constructor(game, params) {
     super()
     this.game = game
 
     this.snek = params?.snek
       || new Snek(this.game.ctx, null, this.game)
-    this.game.world.snek = this.snek 
-    this.game.panel.snek = this.snek
+    this.game.setSnek(this.snek)
 
-    this.mode = params.mode
     this.level = params.level
     this.score = params.score
     this.game.phase = CONSTANTS.PHASE_PLAY
