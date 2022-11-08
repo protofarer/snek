@@ -11,7 +11,7 @@ export default defineConfig({
     open: true,
     host: '0.0.0.0',
     port: 3000,
-    usePolling: true
+    // usePolling: true,
   },
   build: {
     rollupOptions: {

@@ -31,13 +31,14 @@ export default class DebugGUI {
       gameTickMultiplier: 1,
       isGridVisible: false,
       isSnekInitialized: false,
+      isDebugGUIShown: true,
       set gameSpeed(val) { game.params.speed = val},
       get gameSpeed() { return game.params.speed }
     }
 
     const resetGame = this.game.resetGame
 
-    this.setParamsFromSessionStorage()
+    this.setParamsFromSessionStorage(this.params)
     this.invokeOnDebugGameStart(resetGame)
 
     const rectpos = {
@@ -133,10 +134,12 @@ export default class DebugGUI {
         case '`':
           if (gui._hidden === true) {
             gui.show()
-            window.sessionStorage.setItem('isDebugGUIHidden', 'true' )
+            window.sessionStorage.setItem('isDebugGUIShown', 'true')
+            this.params.isDebugGUIShown = true
           } else {
             gui.hide()
-            window.sessionStorage.setItem('isDebugGUIHidden', 'false' )
+            window.sessionStorage.setItem('isDebugGUIShown', 'false')
+            this.params.isDebugGUIShown = false
           }
           break
         case 'r':
@@ -205,19 +208,24 @@ export default class DebugGUI {
         paramVal = true
       } else if (sessionVal === 'false') {
         paramVal = false
-      } else if (!isNaN(sessionVal && sessionVal)) {
+      } else if (parseInt(sessionVal) > 0) {
         paramVal = Number(sessionVal)
-      } else if (sessionVal === 'undefined') {
+      } else if (sessionVal == undefined) {
         // Clean out undefined's, they break lil-gui gui.add()
         window.sessionStorage.removeItem(key)
-        // window.sessionStorage.setItem()
       }
-      if (this.params.isDebugOn) console.log(`window.sessionStorage: ${key}: ${sessionVal}`)
-      this.params[key] = paramVal ? paramVal : this.params[key]
+
+      if (this.params.isDebugOn) console.log(`win.sessStore: ${key}: ${sessionVal}; paramVal:${paramVal}`)
+
+      // * diverge from defaults
+      if (paramVal != null) {
+        this.params[key] = paramVal
+      }
+      
     }
 
     for (const key of Object.keys(this.params)) {
-      setParamFromSession(key)
+      setParamFromSession(key, this.params)
     }
   }
 
@@ -330,6 +338,13 @@ export default class DebugGUI {
       for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
         this.game.update()
       }
+    }
+
+    console.log(`this.paramsisdebugguishown`, this.params.isDebugGUIShown)
+    if (this.params.isDebugGUIShown) {
+      this.gui.show()
+    } else {
+      this.gui.hide()
     }
   }
 
