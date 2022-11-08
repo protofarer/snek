@@ -49,9 +49,7 @@ export default class World {
 
     ent.isMobile = false
 
-    // * Handle setting hit area when position arg specified since immobs
-    // * set it only once during their instantiation by design
-    if (entClass.entGroup === 'immob') ent.setHitAreas()
+    ent.setHitAreas()   // for good measure
     return ent
   }
 

@@ -24,7 +24,7 @@ export default class Ant extends Mob {
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)
 
-    this.r = 4
+    this.r = 6
     this.primaryColor = 'black'
 
     this.baseExp = 10

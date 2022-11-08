@@ -6,7 +6,7 @@ export default class Pebble extends Immob {
 
   // * "r" is the canonical size descriptor. All ents can be compared to each
   // * other and thus states inferred from this attribute.
-  r = 3
+  r = 5
 
   primaryColor = 'hsl(220, 10%, 48%)'
 

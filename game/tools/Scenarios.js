@@ -5,6 +5,7 @@ import Apple from '../immobs/Apple'
 import Mango from '../immobs/Mango'
 import Pebble from '../immobs/Pebble'
 import Banana from '../immobs/Banana'
+import Poop from '../immobs/Poop'
 
 export default class Scenarios {
   constructor(game) {
@@ -22,31 +23,35 @@ export default class Scenarios {
 
   base() {
     this.addEnt(Apple)
+    this.addEnt(Mango)
+    this.addEnt(Banana)
+    this.addEnt(Pebble)
+    this.addEnt(Poop)
+    this.addEnt(Ant)
+    // const cent = this.addEnt(Centipede).setMobile(true)
+    // cent.headingDegrees = -90
+    // cent.setTurnable(false)
   }
 
   antCarry() {
-    // const b = this.addEnt(Ant).setMobile(true).setTurnable(false)
-    // b.headingRadians = 0
-    // b.position = {x: 170, y:400}
-    // b.setHitAreas()
+    const b = this.addEnt(Ant).setMobile(true).setTurnable(false)
+    b.headingRadians = 0
+    b.position = {x: 170, y:400}
+    b.setHitAreas()
   
-    // const a = this.addEnt(Apple)
-    // a.position = {x: 200, y:400}
-    // a.setHitAreas()
-    // return {a, b}
+    const a = this.addEnt(Apple)
+    a.position = {x: 200, y:400}
+    a.setHitAreas()
+    return {a, b}
   }
 
   snekEatAntCarry() {
-    const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-    this.game.snek = snek
     let {b} = this.antCarry()
     b.setMobile(false)
     b.position = {x: 190, y:400}
   }
   
   snekEatWalkingAntCarry() {
-    const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-    this.game.snek = snek
     let {b} = this.antCarry()
     b.setMobile(true)
     b.position = {x: 240, y:400}
@@ -54,17 +59,12 @@ export default class Scenarios {
   }
 
   snekEatAllFruit() {
-    const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-    this.game.snek = snek
     this.addEnt(Apple)
     this.addEnt(Mango)
     this.addEnt(Banana)
   }
 
   snekEatWalkingAnt() {
-    const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-    this.game.snek = snek
-
     const b = this.addEnt(Ant).setMobile(true).setTurnable(false)
     b.position = {x: 230, y:400}
     b.headingDegrees = 180
@@ -72,23 +72,17 @@ export default class Scenarios {
   }
 
   centBiteSnek() {
-    const snek = new Snek(this.game.ctx, {x:120,y:400}, this.game).setMobile(true)
-    this.game.snek = snek
     const f = this.addEnt(Centipede).setMobile(true).setTurnable(false)
     f.headingRadians = - Math.PI/2
     f.position = {x:150,y:550}
   }
 
   forcePass() {
-    const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-    this.game.snek = snek
     this.addEnt(Pebble)
     this.addEnt(Apple)
   }
 
   detachedSegmentsDigestion() {
-    const snek = new Snek(this.game.ctx, {x:180,y:400}, this.game).setMobile(true)
-    this.game.snek = snek
     this.addEnt(Mango)
     this.addEnt(Mango)
 

@@ -5,7 +5,7 @@ export default class Mango extends Immob {
   static species = 'mango'
   species = 'mango'
 
-  r = 6
+  r = 9
   digestion = {
     timeLeft: 16000,
     baseTime: 16000
