@@ -51,21 +51,23 @@ body {
   display: inline-flex;
   flex-flow: column nowrap;
   justify-content: flex-start;
-  gap: 0.8em;
+  align-items: center;
+  gap: 1em;
 }
 
 #expbar {
   display: flex;
   flex-flow: row nowrap;
   gap: 3px;
-  flex: 1 1;
+  flex: 0 1;
+  width: 100%;
 }
 
 .expSegment {
   border-radius: 3px;
   border: 1px solid green;
   flex: 1 1;
-  max-height: 10px;
+  height: 1vh;
 }
 
 button {
@@ -74,6 +76,8 @@ button {
   font-size: larger;
   font-family: Arial;
   border: none;
+  width: 25%;
+  flex: 0 1;
 }
 
 button:hover {
@@ -92,39 +96,26 @@ button:hover {
   padding: 0.3em;
 
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
   flex-grow: 0;
-  /* gap: 0.3em; */
+  gap: 0.5em;
 }
 
-#info-score {
-  padding: 0.3em;
-
+.infoSubBox {
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-evenly;
+  gap: 2em;
 }
 
-
-#info-game {
-  padding: 0.3em;
-
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-evenly;
+/* #infoA {
+  border: 1px dotted red;
 }
 
-#info-msg {
-  position: relative;
-  width: 12em;
-  min-height: 3em;
-  padding: 0.7em;
-  font-size: smaller;
-  background: white;
-  /* flex: 1 1 auto; */
-}
+#infoB {
+  border: 1px dotted orange;
+} */
 
 @media screen and (min-width: 980px) {
   body {

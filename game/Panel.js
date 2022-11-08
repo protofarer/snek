@@ -6,17 +6,22 @@
  * @property {HTMLDivElement} score - displays score for current level
  * @property {HTMLDivElement} level - displays Snek's level
  * @property {HTMLDivElement} gameInfo - displays Snek's exp numerically
- * @property {HTMLDivElement} statusMsg - displays textual information
  * @property {HTMLButtonElement} newGameButton - starts a new game
 */
 export default class Panel {
   panelContainer = document.createElement('div')
   expbar = document.createElement('div')
+
   infobox = document.createElement('div')
-  score = document.createElement('div')
+
+  infoA = document.createElement('div')
   level = document.createElement('div')
-  gameInfo = document.createElement('div')
-  statusMsg = document.createElement('div')
+  exp = document.createElement('div')
+
+  infoB = document.createElement('div')
+  score = document.createElement('div')
+  lifespan = document.createElement('div')
+
   newGameButton = document.createElement('button')
 
   constructor(game) {
@@ -37,33 +42,39 @@ export default class Panel {
     this.infobox.id = 'infobox'
     this.panelContainer.appendChild(this.infobox)
   
-    this.score.id = 'info-score'
-    this.infobox.appendChild(this.score)
+    this.infoA.id = 'infoA'
+    this.infoA.className = 'infoSubBox'
+    this.infobox.appendChild(this.infoA)
 
     this.level.id = 'info-level'
-    this.infobox.appendChild(this.level)
-  
-    this.gameInfo.id = 'info-game'
-    this.infobox.appendChild(this.gameInfo)
-  
-    // this.statusMsg.id = 'info-msg'
-    // this.infobox.appendChild(this.statusMsg)
+    this.infoA.appendChild(this.level)
 
+    this.exp.id = 'info-exp'
+    this.infoA.appendChild(this.exp)
+
+    this.infoB.id = 'infoB'
+    this.infoB.className = 'infoSubBox'
+    this.infobox.appendChild(this.infoB)
+
+    this.score.id = 'info-score'
+    this.infoB.appendChild(this.score)
+
+    this.lifespan.id = 'info-lifespan'
+    this.infoB.appendChild(this.lifespan)
+  
     this.newGameButton.id = 'newGameButton'
     this.newGameButton.innerText = 'New Game'
-    this.infobox.appendChild(this.newGameButton)
+    this.panelContainer.appendChild(this.newGameButton)
   
   
     // before init, for debug
     this.infobox.style.color = 'lawngreen'
-    this.statusMsg.innerText = '$msg'
-    this.score.innerText = '$score'
     this.level.innerText = '$level'
-    this.gameInfo.innerText = '$exp'
-    console.info('%cUI initializing', 'color: orange')
+    this.exp.innerText = '$exp'
+    this.score.innerText = '$score'
+    this.lifespan.innerText = '$lifespan'
 
     this.setupEventListeners()
-    this.updateMsg()
   }
 
   setupEventListeners() {
@@ -72,21 +83,14 @@ export default class Panel {
     })
   }
 
-  // Full panel display update outside of step
-  // ! unused
-  updateMsg() {
-    this.statusMsg.innerHTML = `${this.game.msg}`
-    
-    const delayClr = (delay) => new Promise(res => setTimeout(res, delay))
-    delayClr(4000)
-      .then(() => this.statusMsg.innerHTML = '')
-  }
-
   render() {
-    this.score.innerHTML = `score: ${this.game.stateMachine.current?.score}`
+    this.score.innerHTML = `Score: ${this.game.stateMachine.current?.score}`
+
     if (this.snek) {
-      this.level.innerHTML = `snek level: ${this.snek.level}`
-      this.gameInfo.innerHTML = `exp: ${Math.trunc(this.snek.currExp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
+      this.level.innerHTML = `Snek!'s level: ${this.snek.level}`
+      this.exp.innerHTML = `Exp for level up: ${Math.trunc(this.snek.expForLevel(this.snek.level + 1) - this.snek.currExp)}`
+      this.lifespan.innerHTML = `Lifespan: ${this.game.clock.getElapsedSeconds()}s`
+
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(
           10* this.snek.expGainedThisLevelOnly
