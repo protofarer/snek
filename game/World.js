@@ -174,17 +174,14 @@ export default class World {
             }
           ]) 
 
-          if (ent.species === 'centipede' && Array.from(sneksegs.values()).length > 0) {
-
+          if (this.snek.enemySpecies.includes(ent.species) && Array.from(sneksegs.values()).length > 0) {
             for(let snekseg of sneksegs.values()) {
-
               this.collisionResolver(ent, snekseg, () => {
-                snekseg.detach()
+                // snekseg.detach()
+                snekseg.harm()
                 ent.chomp(snekseg)
               })
-
             }
-
           }
 
         }

@@ -311,8 +311,22 @@ export default class Segment extends Immob {
     this.entUnderDigestion?.render()
   }
 
+  harm() {
+    console.log(`harm@seg#${this.id}`, )
+    
+    let curr = this
+    while (curr?.downstreamSegment) {
+      console.log(`found downseg#${curr.downstreamSegment.id}`, )
+      
+      curr = curr.downstreamSegment
+    }
+    curr?.detach()
+  }
+
   detach() {
-  // * Digestion: halt, reverse effects, maintain digestion contents state
+    // * Digestion: halt, reverse effects, maintain digestion contents state
+
+    // only if connected to something upstream like a head,... tighten this up to only detach if connected to a living being aka has a head
     if (this.upstreamSegment) {
 
       // TODO use force-pass all downstream segs instead of weirdly having them excrete
@@ -323,7 +337,7 @@ export default class Segment extends Immob {
         currSeg.excrete()
       }
 
-      console.log('seg detaching')
+      console.log(`detach seg(${this.id})`)
       this.cancelUnderDigestionBooleanEffects()
 
       this.upstreamSegment.downstreamSegment = null

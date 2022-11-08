@@ -21,15 +21,32 @@ export default class Scenarios {
   }
 
   base() {
+    this.harmSegByCent(2)
+  }
+
+  harmHeadByCent() {
+    const cent = this.addEnt(Centipede).setMobile(true)
+    cent.position = { x: this.game.canvas.width*.2, y: this.game.canvas.height*.7}
+    cent.headingDegrees = -90
+    cent.setTurnable(false)
+  }
+
+  harmSegByCent(n) {
+    const cent = this.addEnt(Centipede).setMobile(true)
+    cent.position = { 
+      x: this.game.canvas.width*.26 - ((n-1)*.05*this.game.canvas.width), 
+      y: this.game.canvas.height*.9
+    }
+    cent.headingDegrees = -90
+    cent.setTurnable(false)
+  }
+
+  eatAllImmobs() {
     this.addEnt(Apple)
     this.addEnt(Mango)
     this.addEnt(Banana)
     this.addEnt(Pebble)
     this.addEnt(Poop)
-    this.addEnt(Ant)
-    // const cent = this.addEnt(Centipede).setMobile(true)
-    // cent.headingDegrees = -90
-    // cent.setTurnable(false)
   }
 
   antCarry() {

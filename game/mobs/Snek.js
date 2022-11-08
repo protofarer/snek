@@ -12,6 +12,7 @@ export default class Snek extends Mob {
   species = 'snek'
 
   swallowables = [ 'apple', 'mango', 'ant', 'pebble', 'banana' ]
+  enemySpecies = ['centipede']
 
   r = 10
 
@@ -74,6 +75,7 @@ export default class Snek extends Mob {
 
   addSegments(n) {
     for(let i = 0; i < n; i++) {
+      // TODO for death implement, segmentless snake is considered dead
       if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
         this.downstreamSegment.subSpecies = 'snek'
