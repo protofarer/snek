@@ -22,8 +22,7 @@ export default class Background {
     // this.ctx.fillStyle = 'white'
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
-    const n = 1000
-    for(let i = 0; i < n; i++) {
+    for(let i = 0; i < this.canvas.width; i++) {
       // Choose random coordinates
       const ry = Math.random() * this.canvas.height
       const rx = Math.random() * this.canvas.width
