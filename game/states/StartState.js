@@ -24,8 +24,9 @@ export default class StartState extends BaseState {
           this.game.mode = this.modes[this.mode]
           this.game.stateMachine.change('play', {
             mode: this.modes[this.mode],
-            snek: new Snek(this.game.ctx),
-            level: 0
+            snek: new Snek(this.game.ctx, null, this.game),
+            level: 1,
+            score: 0
           })
           break
       }

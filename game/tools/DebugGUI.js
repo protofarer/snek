@@ -359,7 +359,7 @@ export default class DebugGUI {
    * @function
    */
   addTestObjects() {
-    const spawnEnts = this.game.spawnEnts.bind(this.game)
+    const spawnEnts = this.game.world.spawnEnts.bind(this.game)
     const addEnt = this.game.addEnt.bind(this.game)
 
     const testAntCarry = () => {

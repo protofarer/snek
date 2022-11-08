@@ -7,19 +7,12 @@ import Background from './Background'
 import Entity from './Entity'
 import World from './World'
 
-import Apple from './immobs/Apple'
-import Mango from './immobs/Mango'
-import Pebble from './immobs/Pebble'
-
-import Snek from './mobs/Snek'
-import Centipede from './mobs/Centipede'
-import Ant from './mobs/Ant'
-
-import { moveEdgeWrap } from './behaviors/movements'
 
 import StateMachine from './StateMachine'
 import StartState from './states/StartState'
 import PlayState from './states/PlayState'
+
+import LevelMaker from './LevelMaker'
 
 /** 
  * Game object is used to:
@@ -36,7 +29,6 @@ import PlayState from './states/PlayState'
  * @property {Number} params.speed - speed game can be tweaked to run for debug purposes, range is [0.005, 1]
  * @property {string} msg - information for player
  * @property {Number} phase - the phase that the game is currently in
- * @property {Number} score - number of items snek has swallowed
  */
 export default class Game {
   constructor (container) {
@@ -57,10 +49,6 @@ export default class Game {
     }
 
     this.msg = ''
-    this.phase = CONSTANTS.PHASE_PLAY
-    this.score = 0
-
-    this.snek = null
 
     new Background(container, 'hsl(51, 50%, 20%)')
     this.clock = new Clock(this.ctx, this)
@@ -71,6 +59,10 @@ export default class Game {
     const Sounds = Audio()
     this.play = Sounds.play
 
+    this.phase = 1
+
+    this.levelMaker = new LevelMaker(this)
+
     this.stateMachine = new StateMachine({
         start: StartState,
         play: PlayState
@@ -79,12 +71,6 @@ export default class Game {
     )
 
     this.stateMachine.change('start')
-
-    // this.initSpawn()
-  }
-
-  isContactingMouth(objHitArea, mouthCoords) {
-    return this.ctx.isPointInPath(objHitArea, mouthCoords.x, mouthCoords.y)
   }
 
   clr() {
@@ -135,31 +121,6 @@ export default class Game {
     return ent
   }
 
-  /** Randomized ent placement in world
-   * @method
-   */
-  spawnEnts(entClass, n=1, position=null) {
-    const ents = []
-    for(let i = 0; i < n; i++) {
-      const ent = new entClass(
-        this.ctx, 
-        position || 
-        {
-          x:Math.random()*this.canvas.width - 1,
-          y:Math.random()*this.canvas.height - 1,
-        }, 
-        this
-      )
-
-      if (ent.entGroup === 'mob') {
-        ent.headingDegrees = Math.random() * 360
-      }
-      ents.push(ent)
-    }
-    
-    return ents
-  }
-
   removeEnt(id) {
     // ! Placeholder until ent recycling in working order
     Entity.stack.delete(id)
@@ -167,14 +128,7 @@ export default class Game {
 
   render() {
     this.clock.render()
-
     this.stateMachine.render()
-
-    // for(const ent of Entity.stack.values()) {
-    //   ent.render()
-    // }
-
-    // this.panel.render()
   }
 
   update(loopID) {
@@ -190,71 +144,7 @@ export default class Game {
     // **********************************************************************
 
     this.clock.update()
-
-    for(const ent of Entity.stack.values()) {
-
-      // Generally, immobs don't have an update function since they are *acted
-      // upon* or manipulated by other ents
-      ent.update?.()
-
-      // **********************************************************************
-      // * Hit Detection
-      // * - only when parent = game
-      // **********************************************************************
-
-      if (ent.parent === this) {
-
-        if (ent.species === 'ant' && !ent.carriedEnt) {
-
-          let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])
-          for(let sweet of sweets.values()) {
-            this.collisionResolver(ent, sweet, () => ent.grab(sweet))
-          }
-
-        }
-  
-        if (ent.entGroup === 'mob') {
-          
-          moveEdgeWrap.call(ent)
-
-          const sneksegs = Entity.bySpecies([
-            {
-              species: 'segment',
-              subSpecies: 'snek'
-            }
-          ]) 
-
-          if (ent.species === 'centipede' && Array.from(sneksegs.values()).length > 0) {
-
-            for(let snekseg of sneksegs.values()) {
-
-              this.collisionResolver(ent, snekseg, () => {
-                snekseg.detach()
-                ent.chomp(snekseg)
-              })
-
-            }
-
-          }
-
-        }
-
-        if (this.snek && this.snek.swallowables.includes(ent.species)) {
-
-          this.collisionResolver(this.snek, ent, () => {
-
-            if (this.snek.swallowables.includes(ent.species)) {
-              this.snek.chomp(ent)
-              this.play.playRandomSwallowSound()
-              this.score++
-            }
-
-          })
-
-        }
-      }
-    }
-
+    this.stateMachine.update()
 
     // **********************************************************************
     // * 3. Update UI
@@ -272,40 +162,4 @@ export default class Game {
     }
   }
 
-  /** Determine whether ent mouth is contacting another ent's body 
-   * @function
-   * @param {Entity} aggressor - entity with an initiating action, 
-   *    e.g. chomp or carry
-   * @param {Entity} defender - entity being initiated upon
-   * @param {function} resolver - aggressor ent initiating action method
-  */
-  collisionResolver(aggressor, defender, resolver) {
-    const isContacting = this.isContactingMouth(
-      defender.hitArea,
-      aggressor.mouthCoords,
-    )
-    isContacting && resolver()
-  }
-
-  /** Initial spawn method used for playable game/levels.
-   * @method
-   */
-  initSpawn() {
-    if (this.isDebugOn === 'false' || this.isDebugOn === null) {
-      this.snek = new Snek(this.ctx, null, this)
-      this.snek.position = { x: 200, y: 400 }
-
-      this.spawnEnts(Apple, 45)
-      this.spawnEnts(Pebble, 55)
-      this.spawnEnts(Mango, 5)
-      this.spawnEnts(Ant, 25)
-      this.spawnEnts(Centipede, 2)
-
-      // this.spawnEnts(Apple, 50)
-      // this.spawnEnts(Pebble, 75)
-      // this.spawnEnts(Ant, 70)
-      // this.spawnEnts(Mango, 25)
-      // this.spawnEnts(Centipede, 5)
-    }
-  }
 }
