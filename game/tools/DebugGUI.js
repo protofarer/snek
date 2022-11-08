@@ -112,7 +112,7 @@ export default class DebugGUI {
 // **********************************************************************
 // * Add Mobs
 // **********************************************************************
-    const addCentipede = () => this.game.spawnEnts(Centipede)
+    const addCentipede = () => this.game.world.spawnEnts(Centipede)
     guiGameTest.add({ addCentipede }, 'addCentipede')
 
     const endGame = () => { this.game.phase = CONSTANTS.PHASE_END }
