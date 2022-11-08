@@ -29,8 +29,8 @@ export default class World {
     const ent = new entClass(
       this.ctx, 
       {
-        x: position?.x || 170,
-        y: position?.y || 400,
+        x: position?.x || this.game.canvas.width * 0.25,
+        y: position?.y || this.game.canvas.height/2,
       }, 
       this.game
     )
@@ -44,7 +44,17 @@ export default class World {
       const minsSegsLength = Array.from(Entity.stack.values()).filter(e => 
         e.species === 'segment'
       ).length
-      ent.position.x += (this.game.canvas.width*0.3 * (ent.id - minsSegsLength))
+
+      const xInterval = this.game.canvas.width * 0.10
+      const yInterval = this.game.canvas.height * 0.10
+
+      ent.position.x += (xInterval * (ent.id - minsSegsLength))
+
+      if (ent.position.x > this.game.canvas.width) {
+        let n = Math.floor(ent.position.x / this.game.canvas.width)
+        ent.position.x -= n * this.game.canvas.width
+        ent.position.y += n * yInterval
+      }
     }
 
     ent.isMobile = false
