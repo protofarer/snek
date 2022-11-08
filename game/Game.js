@@ -46,7 +46,7 @@ export default class Game {
 
     this.msg = ''
 
-    // new Background(this.container, this.canvas.width, this.canvas.height)
+    new Background(this.container, this.canvas.width, this.canvas.height)
     this.clock = new Clock(this.ctx, this)
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)

@@ -22,6 +22,9 @@ body {
 
 #layerBackground {
   position: absolute;
+  height: calc(100vw * 3 / 2);
+  max-height: 80vh;
+  max-width: calc(80vh * 2 / 3);
   /* width: 100vw;
   height: calc(100vw * 3 / 2); */
 
@@ -31,7 +34,7 @@ body {
 
 #layerGame {
   /* border: 5vh solid hsl(28, 55%, 55%); */
-  background-color: green;
+  background-color: transparent;
   height: calc(100vw * 3 / 2);
   max-height: 80vh;
   max-width: calc(80vh * 2 / 3);
