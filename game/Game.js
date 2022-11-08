@@ -30,7 +30,8 @@ export default class Game {
     this.container = container
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'layerGame'
-    this.canvas.width = this.canvas.height = 800
+    this.canvas.width = 400
+    this.canvas.height = 500
     this.container.appendChild(this.canvas)
 
     this.ctx = this.canvas.getContext('2d')
@@ -45,7 +46,7 @@ export default class Game {
 
     this.msg = ''
 
-    new Background(container, 'hsl(51, 50%, 20%)')
+    // new Background(this.container, this.canvas.width, this.canvas.height)
     this.clock = new Clock(this.ctx, this)
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)

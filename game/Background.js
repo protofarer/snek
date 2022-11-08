@@ -4,10 +4,12 @@
  */
 export default class Background {
   canvas = document.createElement('canvas')
-  constructor(container) {
+  constructor(container, width, height) {
     this.container = container
     this.canvas.id = 'layerBackground'
-    this.canvas.width = this.canvas.height = 800
+    this.canvas.width = width
+    this.canvas.height = height
+    
     this.container.appendChild(this.canvas)
     // this.color = color
     this.ctx = this.canvas.getContext('2d')
