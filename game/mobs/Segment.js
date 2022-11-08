@@ -313,24 +313,22 @@ export default class Segment extends Immob {
 
   detach() {
   // * Digestion: halt, reverse effects, maintain digestion contents state
+    if (this.upstreamSegment) {
 
-  // TODO use force-pass all downstream segs instead of weirdly having them excrete
-    let currSeg = this
-    this.excrete()
-    while (currSeg.downstreamSegment) {
-      currSeg = currSeg.downstreamSegment
-      currSeg.excrete()
+      // TODO use force-pass all downstream segs instead of weirdly having them excrete
+      let currSeg = this
+      this.excrete()
+      while (currSeg.downstreamSegment) {
+        currSeg = currSeg.downstreamSegment
+        currSeg.excrete()
+      }
+
+      console.log('seg detaching')
+      this.cancelUnderDigestionBooleanEffects()
+
+      this.upstreamSegment.downstreamSegment = null
+      this.upstreamSegment = null
     }
-
-    console.log('seg detaching')
-    this.cancelUnderDigestionBooleanEffects()
-
-
-  // ! game crashed during normal play
-  //  if (this.upstreamSegment.downstreamSegment) {
-     this.upstreamSegment.downstreamSegment = null
-  //  } 
-    this.upstreamSegment = null
   }
 
   update() {

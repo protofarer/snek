@@ -84,18 +84,18 @@ export default class Panel {
 
   render() {
     this.score.innerHTML = `score: ${this.game.stateMachine.current?.score}`
-    if (this.game.snek) {
-      this.level.innerHTML = `snek level: ${this.game.snek.level}`
-      this.gameInfo.innerHTML = `exp: ${Math.trunc(this.game.snek.currExp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
+    if (this.snek) {
+      this.level.innerHTML = `snek level: ${this.snek.level}`
+      this.gameInfo.innerHTML = `exp: ${Math.trunc(this.snek.currExp)}&nbsp;&nbsp;&nbsp;lifespan: ${this.game.clock.getElapsedSeconds()}s`
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(
-          10* this.game.snek.expGainedThisLevelOnly
+          10* this.snek.expGainedThisLevelOnly
           / (
-            this.game.snek.expForLevel(this.game.snek.level + 1)
+            this.snek.expForLevel(this.snek.level + 1)
             - (
-              this.game.snek.level === 1 
+              this.snek.level === 1 
                 ? 0
-                : this.game.snek.expForLevel(this.game.snek.level)
+                : this.snek.expForLevel(this.snek.level)
             )
           )
         ) 

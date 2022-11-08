@@ -1,7 +1,6 @@
 import BaseState from './BaseState'
-import Snek from '../mobs/Snek'
 
-export default class StartState extends BaseState {
+export class StartState extends BaseState {
   modes = ['Normal', 'Survival']
   mode = 0
 
@@ -21,13 +20,17 @@ export default class StartState extends BaseState {
             ) % this.modes.length
           break
         case 'Enter':
-          this.game.mode = this.modes[this.mode]
-          this.game.stateMachine.change('play', {
-            mode: this.modes[this.mode],
-            snek: new Snek(this.game.ctx, null, this.game),
-            level: 1,
-            score: 0
-          })
+          if (this.modes[this.mode] === 'Survival') {
+            this.game.stateMachine.change('playSurvival', {
+              level: 's',
+              score: 0
+            })
+          } else if (this.modes[this.mode] === 'Normal') {
+            this.game.stateMachine.change('playNormal', {
+              level: 1,
+              score: 0
+            })
+          }
           break
       }
     }

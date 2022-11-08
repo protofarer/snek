@@ -9,7 +9,6 @@ import Mango from '../immobs/Mango'
 import Centipede from '../mobs/Centipede'
 import Ant from '../mobs/Ant'
 import Snek from '../mobs/Snek'
-import Poop from '../immobs/Poop'
 
 /**
  * Contains debug GUI functionality (uses lil-gui package) and includes
@@ -360,7 +359,7 @@ export default class DebugGUI {
    */
   addTestObjects() {
     const spawnEnts = this.game.world.spawnEnts.bind(this.game)
-    const addEnt = this.game.addEnt.bind(this.game)
+    const addEnt = this.game.world.addEnt.bind(this.game)
 
     const testAntCarry = () => {
       const b = addEnt(Ant).setMobile(true).setTurnable(false)

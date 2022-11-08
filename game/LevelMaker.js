@@ -10,10 +10,10 @@ export default class LevelMaker {
     this.game = game
   }
 
-  spawn(level) {
+  spawn(level, snek) {
     switch (level) {
       case 1:
-        this.spawnLevelOne()
+        this.spawnLevelOne(snek)
         break
       case 's':
         console.log(`survival mode init spawn`, )
@@ -21,19 +21,23 @@ export default class LevelMaker {
     }
   }
 
-  spawnLevelOne() {
-      this.game.snek.position = { x: 200, y: 400 }
+  spawnLevelOne(snek) {
+    snek.position = { 
+      x: this.game.canvas.width * 0.5, 
+      y: this.game.canvas.height * 0.8 
+    }
+    snek.headingDegrees = -90
 
-      this.game.world.spawnEnts(Apple, 45)
-      this.game.world.spawnEnts(Pebble, 55)
-      this.game.world.spawnEnts(Mango, 5)
-      this.game.world.spawnEnts(Ant, 25)
-      this.game.world.spawnEnts(Centipede, 2)
+    this.game.world.spawnEnts(Apple, 45)
+    this.game.world.spawnEnts(Pebble, 55)
+    this.game.world.spawnEnts(Mango, 5)
+    this.game.world.spawnEnts(Ant, 25)
+    this.game.world.spawnEnts(Centipede, 2)
 
-      // this.spawnEnts(Apple, 50)
-      // this.spawnEnts(Pebble, 75)
-      // this.spawnEnts(Ant, 70)
-      // this.spawnEnts(Mango, 25)
-      // this.spawnEnts(Centipede, 5)
+    // this.spawnEnts(Apple, 50)
+    // this.spawnEnts(Pebble, 75)
+    // this.spawnEnts(Ant, 70)
+    // this.spawnEnts(Mango, 25)
+    // this.spawnEnts(Centipede, 5)
   }
 }

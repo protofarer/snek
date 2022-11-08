@@ -3,16 +3,11 @@ import Audio from './audio'
 import Clock from './utils/Clock'
 import Panel from './Panel'
 import Background from './Background'
-
-import Entity from './Entity'
 import World from './World'
-
+import LevelMaker from './LevelMaker'
 
 import StateMachine from './StateMachine'
-import StartState from './states/StartState'
-import PlayState from './states/PlayState'
-
-import LevelMaker from './LevelMaker'
+import * as States from './states'
 
 /** 
  * Game object is used to:
@@ -21,7 +16,7 @@ import LevelMaker from './LevelMaker'
  *  - calls all entities' update and/or render functions
  *  - keeps a queryable map of all entities
  *  - defines interstitial behavior: the top level interactions between entities
- *      that don't belong to any entity itself, e.g. collision detection, etc...
+ *      that don't belong to any entity itself, e.g. eollision detection, etc...
  *  - provides entity instantiation via addEnt and spawnEnt methods
  * @param {HTMLDivElement} container - Top level container
  * @property {boolean} isDebugOn - window session stored debug mode state
@@ -64,13 +59,26 @@ export default class Game {
     this.levelMaker = new LevelMaker(this)
 
     this.stateMachine = new StateMachine({
-        start: StartState,
-        play: PlayState
+        start: States.StartState,
+        playNormal: States.PlayNormalState,
+        playSurvival: States.PlaySurvivalState,
       },
       this
     )
 
-    this.stateMachine.change('start')
+    console.log(`isdebugon`, this.isDebugOn)
+    
+    if (this.isDebugOn === 'true') {
+      this.stateMachine.change(
+        'playSurvival',
+        {
+          level: 0,
+          score: 0
+        }
+        )
+    } else {
+      this.stateMachine.change('start')
+    }
   }
 
   clr() {
@@ -86,45 +94,6 @@ export default class Game {
     location.reload()
   }
 
-  /** Controlled ent placement in world. 
-   *  - automatically positions ents for testing.
-   *  - immobilizes ent
-   * @function
-   */
-  addEnt(entClass, position=null) {
-    const ent = new entClass(
-      this.ctx, 
-      {
-        x: position?.x || 170,
-        y: position?.y || 400,
-      }, 
-      this
-    )
-    ent.parent = this
-    
-    // const bigEnt = new Entity(ent)
-    
-    if (!position) {
-      // * For testing purposes so snek segs don't count toward displacement
-      // * along x
-      const minsSegsLength = Array.from(Entity.stack.values()).filter(e => 
-        e.species === 'segment'
-      ).length
-      ent.position.x += (50 * (ent.id - minsSegsLength))
-    }
-
-    ent.isMobile = false
-
-    // * Handle setting hit area when position arg specified since immobs
-    // * set it only once during their instantiation by design
-    if (entClass.entGroup === 'immob') ent.setHitAreas()
-    return ent
-  }
-
-  removeEnt(id) {
-    // ! Placeholder until ent recycling in working order
-    Entity.stack.delete(id)
-  }
 
   render() {
     this.clock.render()
