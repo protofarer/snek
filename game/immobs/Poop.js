@@ -7,7 +7,7 @@ export default class Poop extends Immob {
   static species = 'poop'
   species = 'poop'
 
-  r = 7
+  r = 5
 
   digestion = {
     timeLeft: 2000,

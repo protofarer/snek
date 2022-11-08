@@ -9,7 +9,7 @@ export default class Centipede extends Mob {
 
   swallowables = ['snek', 'snek-segment']
 
-  r = 15
+  r = 10
   get hitR() { return this.r + 1}
 
   get headCoords() { return {

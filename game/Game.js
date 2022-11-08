@@ -50,7 +50,7 @@ export default class Game {
     this.clock = new Clock(this.ctx, this)
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
-    this.world = new World(this.ctx, this)
+    this.world = new World(this)
 
     const Sounds = Audio()
     this.play = Sounds.play

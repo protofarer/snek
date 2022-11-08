@@ -13,10 +13,10 @@ import { moveEdgeWrap } from './behaviors/movements'
 export default class World {
   species = 'world'
 
-  constructor(ctx, game) {
-    this.ctx = ctx
-    this.canvas = this.ctx.canvas
+  constructor(game) {
     this.game = game
+    this.ctx = this.game.ctx
+    this.canvas = this.ctx.canvas
     this.isSpawning = false
   }
 
@@ -32,9 +32,9 @@ export default class World {
         x: position?.x || 170,
         y: position?.y || 400,
       }, 
-      this
+      this.game
     )
-    ent.parent = this
+    ent.parent = this.game
     
     // const bigEnt = new Entity(ent)
     
@@ -44,7 +44,7 @@ export default class World {
       const minsSegsLength = Array.from(Entity.stack.values()).filter(e => 
         e.species === 'segment'
       ).length
-      ent.position.x += (50 * (ent.id - minsSegsLength))
+      ent.position.x += (this.game.canvas.width*0.3 * (ent.id - minsSegsLength))
     }
 
     ent.isMobile = false

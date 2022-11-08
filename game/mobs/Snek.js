@@ -13,7 +13,7 @@ export default class Snek extends Mob {
 
   swallowables = [ 'apple', 'mango', 'ant', 'pebble', 'banana' ]
 
-  r = 15
+  r = 10
 
   level = 1
   levelMultiplier = 2

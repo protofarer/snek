@@ -5,7 +5,7 @@ export default class Banana extends Immob {
   static species = 'banana'
   species = 'banana'
 
-  r = 10
+  r = 7
   digestion = {
     timeLeft: 6000,
     baseTime: 6000

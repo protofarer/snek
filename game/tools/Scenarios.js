@@ -11,8 +11,8 @@ export default class Scenarios {
   constructor(game) {
     this.game = game
     this.snek = this.game.world.snek
-    this.spawnEnts = this.game.world.spawnEnts.bind(this.game)
-    this.addEnt = this.game.world.addEnt.bind(this.game)
+    this.spawnEnts = this.game.world.spawnEnts.bind(this.game.world)
+    this.addEnt = this.game.world.addEnt.bind(this.game.world)
 
     this.snek.position = { 
       x: this.game.canvas.width * 0.1, 

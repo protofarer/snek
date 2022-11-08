@@ -3,7 +3,7 @@ export default class Apple extends Immob {
   static species = 'apple'
   species = 'apple'
 
-  r = 9
+  r = 6
   digestion = {
     timeLeft: 10000,
     baseTime: 10000
