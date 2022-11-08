@@ -17,9 +17,9 @@ body {
 #layerBackground {
   position: absolute;
   width: 100vw;
-  height: 120vw;
+  height: 133vw;
 
-  flex: 0 0 0%;
+  /* flex: 0 0 0%; */
   z-index: 1;
 }
 
