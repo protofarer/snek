@@ -311,18 +311,6 @@ export default class Segment extends Immob {
     this.entUnderDigestion?.render()
   }
 
-  harm() {
-    console.log(`harm@seg#${this.id}`, )
-    
-    let curr = this
-    while (curr?.downstreamSegment) {
-      console.log(`found downseg#${curr.downstreamSegment.id}`, )
-      
-      curr = curr.downstreamSegment
-    }
-    curr?.detach()
-  }
-
   detach() {
     // * Digestion: halt, reverse effects, maintain digestion contents state
 

@@ -5,6 +5,7 @@ import Centipede from './mobs/Centipede'
 import Mango from './immobs/Mango'
 import Entity from './Entity'
 import { moveEdgeWrap } from './behaviors/movements'
+import Collisions from './behaviors/Collisions'
 
 /** Runs world events and spawning behaviors
  * @class
@@ -153,51 +154,78 @@ export default class World {
       // **********************************************************************
 
       if (ent.parent === this.game) {
-
-        if (ent.species === 'ant' && !ent.carriedEnt) {
-
-          let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])
-          for(let sweet of sweets.values()) {
-            this.collisionResolver(ent, sweet, () => ent.grab(sweet))
-          }
-
-        }
-  
         if (ent.entGroup === 'mob') {
-          
+
           moveEdgeWrap.call(ent)
 
-          const sneksegs = Entity.bySpecies([
-            {
-              species: 'segment',
-              subSpecies: 'snek'
-            }
-          ]) 
-
-          if (this.snek.enemySpecies.includes(ent.species) && Array.from(sneksegs.values()).length > 0) {
-            for(let snekseg of sneksegs.values()) {
-              this.collisionResolver(ent, snekseg, () => {
-                // snekseg.detach()
-                snekseg.harm()
-                ent.chomp(snekseg)
-              })
+          if (ent.species === 'ant' && !ent.carriedEnt) {
+            let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])
+            for(let sweet of sweets.values()) {
+              this.collisionResolver(ent, sweet, () => ent.grab(sweet))
             }
           }
 
+          if (
+            this.snek.enemySpecies.includes(ent.species) && 
+            ent.canHarm === true
+          ) {
+
+            // TODO opt track segs in an array incrementally instead of a full query
+            // on every loop, or make it a snek method
+
+            // enemies vs snek segs
+            const sneksegs = Entity.bySpecies([{
+              species: 'segment',
+              subSpecies: 'snek'
+            }])
+
+            const snekSegCount = Array.from(sneksegs.values())
+              .filter(s => s.getHeadEnt().species === 'snek')
+              .length
+
+            let wasSegLost = 0
+
+            // segs still attached
+            if (snekSegCount > 0) {
+
+              // enemies vs snek head
+              if (this.collisionResolver(ent, this.snek, Collisions.harm))
+                wasSegLost++
+
+              for(let snekseg of sneksegs.values()) {
+
+                // harm attached segs
+                if (snekseg.getHeadEnt().species === 'snek') {
+                  if (this.collisionResolver(ent, snekseg, Collisions.harm))
+                    wasSegLost++
+
+                // chomp unattached segs
+                } else {
+                  this.collisionResolver(ent, snekseg, Collisions.chomp)
+                }
+              }
+            }
+
+            console.log(`sneksegs.length`, snekSegCount )
+            
+            if (wasSegLost > 0 && snekSegCount === 1) {
+              console.log(`SNEK DIES`, )
+              // TODO SNEK DED: change state to game over
+            }
+
+          }
         }
 
+
+        // snek vs swallowables
         if (this.snek && this.snek.swallowables.includes(ent.species)) {
-
           this.collisionResolver(this.snek, ent, () => {
-
             if (this.snek.swallowables.includes(ent.species)) {
-              this.snek.chomp(ent)
+              Collisions.chomp(this.snek, ent)
               this.game.play.playRandomSwallowSound()
               this.game.stateMachine.current.score++
             }
-
           })
-
         }
       }
     }
@@ -209,17 +237,18 @@ export default class World {
 
   /** Determine whether ent mouth is contacting another ent's body 
    * @function
-   * @param {Entity} aggressor - entity with an initiating action, 
+   * @param {Entity} agg aka aggressor - entity with an initiating action, 
    *    e.g. chomp or carry
-   * @param {Entity} defender - entity being initiated upon
-   * @param {function} resolver - aggressor ent initiating action method
+   * @param {Entity} def aka defender - entity being initiated upon
+   * @param {function} collider - resolves collision
   */
-  collisionResolver(aggressor, defender, resolver) {
+  collisionResolver(agg, def, collider) {
     const isContacting = this.isContactingMouth(
-      defender.hitArea,
-      aggressor.mouthCoords,
+      def.hitArea,
+      agg.mouthCoords,
     )
-    isContacting && resolver()
+    isContacting && collider(agg, def)
+    return isContacting
   }
 
 

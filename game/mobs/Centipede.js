@@ -1,7 +1,6 @@
 import Segment from './Segment'
 import { turnRandomlySmoothly } from '../behaviors/movements'
 import Mob from './Mob'
-import { chomp } from '../behaviors/collisions'
 
 export default class Centipede extends Mob {
   static species = 'centipede'
@@ -25,6 +24,7 @@ export default class Centipede extends Mob {
   nInitSegments = 5
   downstreamSegment
   postDigestionEffects = []
+  canHarm = true
 
   constructor(ctx, startPosition=null, parent=null, nInitSegments=null) {
     super(ctx, startPosition, parent)
@@ -41,8 +41,6 @@ export default class Centipede extends Mob {
 
     this.baseTurnRate = this.baseMoveSpeed + 5
     this.currTurnRate = this.baseTurnRate
-
-    this.chomp = chomp
 
     this.nInitSegments = nInitSegments || this.nInitSegments
     this.addSegments(this.nInitSegments)

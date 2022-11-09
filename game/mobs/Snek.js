@@ -1,4 +1,3 @@
-import { chomp } from '../behaviors/collisions'
 import Mob from './Mob'
 import Segment from './Segment'
 import { cancelPostDigestionEffects } from '../behaviors/digestion'
@@ -65,8 +64,6 @@ export default class Snek extends Mob {
 
     this.baseMoveSpeed = 1
     this.currMoveSpeed = this.baseMoveSpeed
-
-    this.chomp = chomp
 
     this.addSegments(initSegmentCount || this.baseSegmentCount)
     this.setHitAreas()

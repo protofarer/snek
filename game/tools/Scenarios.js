@@ -21,7 +21,15 @@ export default class Scenarios {
   }
 
   base() {
-    this.harmSegByCent(2)
+    this.killByCent()
+  }
+
+  killByCent() {
+    this.harmSegByCent(1)
+    this.harmSegByCent(3)
+    this.harmSegByCent(5)
+    this.harmSegByCent(7)
+    this.harmSegByCent(9)
   }
 
   harmHeadByCent() {
