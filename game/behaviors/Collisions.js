@@ -21,12 +21,15 @@ export default class Collisions {
   }
   
   static harm(agg, def) {
-
     console.log(`harm@seg#${def.id}`, )
     let curr = def
     while (curr?.downstreamSegment) {
       curr = curr.downstreamSegment
     }
+
+    const head = curr?.getHeadEnt()
+    console.log(`head`, head.species)
+    head.harmed?.()
 
     if (curr.species === 'segment') {
       console.log(`calling detach on seg#${curr.id}`, )
@@ -34,5 +37,6 @@ export default class Collisions {
       agg.canHarm = false
       setTimeout(() => agg.canHarm = true, 2000)
     }
+
   }
 }
