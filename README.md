@@ -29,12 +29,10 @@ You are Snek. You're small and always hungry. Your appetite is endless and so ar
 - ?: turn into PWA
 
 ## Looking far out<br>
-- 1: single player desktop<br>
-- 2: single player mobile<br>
-- 3: online dual player desktop<br>
-- 4: online dual player mobile<br>
-- 5: daily to weekly meta-gameplay, adhoc pvp, scheduled pvp
-- 6: advanced features (or new game)<br>
+- 1: single player mobile<br>
+- 2: online dual player mobile<br>
+- 3: daily to weekly meta-gameplay
+- 4: advanced features/3+ multiplayer (or new game)<br>
 
 ## Backlog
 - Survival Mode
