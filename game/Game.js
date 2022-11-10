@@ -26,6 +26,8 @@ import * as States from './states'
  * @property {Number} phase - the phase that the game is currently in
  */
 export default class Game {
+  debugGUI
+
   constructor (container) {
     this.container = container
     this.canvas = document.createElement('canvas')

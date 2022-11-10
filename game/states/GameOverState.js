@@ -8,8 +8,11 @@ import SnekEndDialog from '../ui-components/SnekEndDialog'
  * @property {Number} score - number of items snek has swallowed
  */
 export class GameOverState extends BaseState {
+  stateName = 'gameOver'
+
   constructor(game, params) {
     super()
+    
     this.game = game
 
     this.snek = params?.snek
@@ -25,9 +28,10 @@ export class GameOverState extends BaseState {
     const data = {
       level: this.level,
       score: this.score,
-      snek: this.snek
+      snek: this.snek,
+      isVictory: this.snek.countSegments >= 1
     }
-    this.endDialog = new SnekEndDialog(data)
+    this.endDialog = new SnekEndDialog(this.game, data)
     this.game.panel.render()
   }
 
@@ -44,5 +48,6 @@ export class GameOverState extends BaseState {
   }
 
   exit() {
+    window.location.reload()
   }
 }

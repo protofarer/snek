@@ -8,6 +8,8 @@ import Snek from '../mobs/Snek'
  * @property {Number} score - number of items snek has swallowed
  */
 export class PlaySurvivalState extends BaseState {
+  stateName = 'playSurvival'
+  
   constructor(game, params) {
     super()
     this.game = game

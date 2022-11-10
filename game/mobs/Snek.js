@@ -71,8 +71,6 @@ export default class Snek extends Mob {
 
     this.birthTime = this.parent.t < 0 ? 0 : this.parent.t
     this.lifeSpan = 0
-    console.log(`new snek birthtime`, this.birthTime)
-    
 
     this.addSegments(initSegmentCount || this.baseSegmentCount)
     this.setHitAreas()
@@ -317,10 +315,7 @@ export default class Snek extends Mob {
   }
 
   update(t) {
-    console.log(`t in snek`, t)
-    
-    this.lifeSpan = t - this.birthTime
-    console.log(`lifeSpan in snek`, this.lifeSpan)
+    this.lifeSpan = t - this.birthTime    // non-crit, can be updated less frequently to improve performance
 
     this.updatePostDigestionEffects()
 

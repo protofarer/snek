@@ -28,6 +28,7 @@ export function startNewGame() {
   let game = new Game(container)
 
   let debugGUI = import.meta.env.DEV ? new DebugGUI(game, draw) : null
+  game.debugGUI = debugGUI
 
   let start
   let loopID = requestAnimationFrame(draw)

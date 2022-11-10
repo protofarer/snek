@@ -1,4 +1,4 @@
-import ModalButton from './ModalButton'
+import ModalButton from '../ui-components/ModalButton'
 import Constants from '../Constants'
 
 export default class SnekEndDialog {
@@ -9,61 +9,101 @@ export default class SnekEndDialog {
   score
   lifeSpan
   snek
-  isVictory
 
-  constructor(game, data) {
-    this.game = game
+  constructor(data) {
     this.data = data
 
     this.isShown = false
     this.modalChildren = []
 
     this.size = {
-      w: this.game.canvas.width * 0.9,
-      h: this.game.canvas.height * 0.75
+      w: 600,
+      h: 400
     }
-
     this.offset = {
-      x: 25,
-      y: 25,      
+      x: 100,
+      y: 200,      
     }
-
     this.pos = {
-      top: 0,
-      left: 0,
+      top: 200,
+      left: 200,
       right: this.offset.x + this.size.w,
       bottom: this.offset.y + this.size.h
     }
 
     // **********************************************************************
-    // ******************** Start Menu Button
+    // ********************   Next Game Button
     // **********************************************************************
-    const startMenuButtonData = {
+    const nextGameButtonData = {
       origin: {
-        x: 50,
-        y: 50,
+        x: 200,
+        y: 350,
       },
-      label: 'Start Menu',
+      label: 'Next Game',
       base: {
-        w: 100
+        w: 110
       },
-      name: 'ED-startMenu',
+      name: 'ED-nextGame',
     }
 
-    this.startMenuButton = new ModalButton(
+    this.nextGameButton = new ModalButton(
       this.game.ctx,
-      startMenuButtonData,
+      nextGameButtonData,
       this.offset,
-      // TODO goto start menu... refersh
-      this.game.stateMachine.change('start'),
+      this.nextGame.bind(this),
       { once: true},
     )
+    this.modalChildren.push(this.nextGameButton)
 
-    this.modalChildren.push(this.startMenuButton)
+    // **********************************************************************
+    // ********************   Start New Match Button
+    // **********************************************************************
+    const newMatchButtonData = {
+      origin: {
+        x: 200,
+        y: 350,
+      },
+      label: 'Start New Match?',
+      base: {
+        w: 150
+      },
+      name: 'ED-newMatch'
+    }
+    this.newMatchButton = new ModalButton(
+      this.game.ctx,
+      newMatchButtonData,
+      this.offset,
+      this.resetMatch.bind(this),
+      { once: true},
+    )
+    this.modalChildren.push(this.newMatchButton)
 
     // Start this and its children initialize hidden
     this.hide()
     this.animateStep = 0
+  }
+
+  resetMatch() {
+    this.game.match.red = this.game.match.black = 0
+    this.game.match.gameNo = 0
+    this.nextGame()
+  }
+
+  nextGame() {
+    // Accessed by EndDialog button and debugGUI
+    // Solely responsible for sessionStorage management
+    //   While game is running easier to use match object
+    // console.log(`%cIN nextgame 1st line, match`, 'color:orange', this.game.match)
+    
+    if (this.game.winner !== Constants.BLANK) {
+      this.game.match.gameNo++
+    }
+
+    for (let [key, val] of Object.entries(this.game.match)) {
+      sessionStorage.setItem(key, val)
+    }
+
+    window.location.reload()
   }
 
   hide() {
@@ -77,28 +117,43 @@ export default class SnekEndDialog {
   show() {
     // This Modal Dialog start drawing in shown state 
     // (setup as needed)
-    if (this.data?.isVictory) {
+    if (this.game.winner !== Constants.BLANK) {
       this.game.play.playRandomVictorySound()
     } else {
-      // TODO play lose audio
-      // this.game.sounds.draw[0].currentTime = 0
-      // this.game.sounds.draw[0].play()
+      this.game.sounds.draw[0].currentTime = 0
+      this.game.sounds.draw[0].play()
     }
     this.isShown = true
-    this.render()
+    this.draw()
   }
 
-  drawText() {
+  drawEndOfGame() {
+    this.game.ctx.fillStyle = this.game.winner === Constants.RED 
+      ? 'crimson'
+      : this.game.winner === Constants.BLACK
+        ? 'black'
+        : 'grey'
     this.game.ctx.fillText(
-      `${this.data.isVictory
-            ? 'Snek Flourished!'
-            : 'Snek Perished!'
+      `${this.game.winner === Constants.RED 
+          ? 'RED' 
+          : this.game.winner === Constants.BLACK 
+            ? 'BLACK'
+            : 'DRAW'
         }`,
-      55, 55
+      200, 100
     )
+    if (this.game.winner !== Constants.BLANK) {
+      this.game.ctx.fillStyle = 'green'
+      if (this.game.match.gameNo < Math.ceil(this.game.match.matchLength / 2)) {
+          this.game.ctx.fillText(
+            'WINS!',
+            200, 155
+          )
+      }
+    }
   }
 
-  render() {
+  draw() {
     if (this.isShown) {
       this.game.ctx.save()
       this.game.ctx.translate(this.offset.x, this.offset.y)
@@ -109,7 +164,7 @@ export default class SnekEndDialog {
 
       this.game.ctx.font = 'bold 60px Arial'
       
-      this.drawText()
+      this.drawEndOfGame()
 
       // Present Game Number
       this.game.ctx.font = 'bold 20px Arial'

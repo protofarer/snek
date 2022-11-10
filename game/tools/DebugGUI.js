@@ -39,6 +39,8 @@ export default class DebugGUI {
 
     const resetGame = this.game.resetGame
 
+    this.listeners = {}   // list of controllers whose objects change outside of controller, (eg call debugGUI.listeners.stateName.updateDisplay)
+
     this.setParamsFromSessionStorage()
     this.invokeOnDebugGameStart(resetGame)
     this.reactToParams()
@@ -55,12 +57,15 @@ export default class DebugGUI {
     guiGamePositioning.add(this.game.canvas, 'width').name('canvas.width')
     guiGamePositioning.add(this.game.canvas,'height').name('canvas.height')
 
+    // **********************************************************************
+    // * Game State
+    // **********************************************************************
     const guiGameState = gui.addFolder('GameState')
     guiGameState.add(this.game, 'phase').name('phase').listen()
 
-// **********************************************************************
-// * Testing
-// **********************************************************************
+    // **********************************************************************
+    // * Testing
+    // **********************************************************************
     const guiTestParams = this.gui.addFolder('Test & Debug')
 
     this.setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')

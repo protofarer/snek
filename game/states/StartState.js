@@ -3,6 +3,7 @@ import BaseState from './BaseState'
 export class StartState extends BaseState {
   modes = ['Normal', 'Survival']
   mode = 0
+  stateName = 'start'
 
   constructor(game) {
     super()

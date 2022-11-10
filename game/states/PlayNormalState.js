@@ -9,6 +9,7 @@ import Snek from '../mobs/Snek'
  */
 export class PlayNormalState extends BaseState {
   level
+  stateName = 'playNormal'
 
   constructor(game, params) {
     super()
