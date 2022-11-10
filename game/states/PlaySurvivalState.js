@@ -18,15 +18,13 @@ export class PlaySurvivalState extends BaseState {
 
     this.level = params.level
     this.score = params.score
-    this.lifeSpan = 0
     this.game.phase = CONSTANTS.PHASE_PLAY
 
     this.game.levelMaker.spawn(this.level, this.snek)
   }
 
-  update() {
-    this.game.world.update()
-    this.lifeSpan = this.game.clock.getElapsedSeconds()
+  update(t) {
+    this.game.world.update(t)
   }
 
   render() {

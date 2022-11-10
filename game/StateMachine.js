@@ -18,11 +18,11 @@ export default class StateMachine {
     this.current = new this.states[stateName](this.game, params)
   }
 
-  update() {
-    this.current.update()
+  update(t) {
+    this.current.update(t)
   }
 
-  render() {
-    this.current.render()
+  render(t) {
+    this.current.render(t)
   }
 }

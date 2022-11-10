@@ -1,7 +1,7 @@
 import CONSTANTS from './Constants'
 import Audio from './audio'
 import Clock from './utils/Clock'
-import Panel from './Panel'
+import Panel from './ui-components/Panel'
 import Background from './Background'
 import World from './World'
 import LevelMaker from './LevelMaker'
@@ -56,6 +56,7 @@ export default class Game {
     this.play = Sounds.play
 
     this.phase = 1
+    this.t = -1
 
     this.levelMaker = new LevelMaker(this)
 
@@ -97,12 +98,14 @@ export default class Game {
   }
 
 
-  render() {
-    this.clock.render()
-    this.stateMachine.render()
+  render(t) {
+    this.clock.render(t)
+    this.stateMachine.render(t)
   }
 
   update(t, loopID) {
+    this.t = t
+    
     // **********************************************************************
     // * 1. Add new objects
     // **********************************************************************
@@ -115,7 +118,7 @@ export default class Game {
     // **********************************************************************
 
     this.clock.update(t)
-    this.stateMachine.update()
+    this.stateMachine.update(t)
 
     // **********************************************************************
     // * 3. Update UI

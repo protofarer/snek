@@ -46,8 +46,8 @@ export function startNewGame() {
       game.update(t, loopID)
       debugGUI && debugGUI.update(t, loopID)
 
-      game.render()
-      debugGUI && debugGUI.render()
+      game.render(t)
+      debugGUI && debugGUI.render(t)
     }
 
     loopID = requestAnimationFrame(draw)

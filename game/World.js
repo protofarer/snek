@@ -141,12 +141,12 @@ export default class World {
     }
   }
 
-  update() {
+  update(t) {
     for(const ent of Entity.stack.values()) {
 
       // Generally, immobs don't have an update function since they are *acted
       // upon* or manipulated by other ents
-      ent.update?.()
+      ent.update?.(t)
 
       // **********************************************************************
       // * Hit Detection
@@ -212,7 +212,6 @@ export default class World {
                 snek: this.game.stateMachine.current.snek,
                 level: this.game.stateMachine.current.level,
                 score: this.game.stateMachine.current.score,
-                lifeSpan: this.game.stateMachine.current.lifeSpan
               })
               // TODO SNEK DED: change state to game over
             }

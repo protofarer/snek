@@ -68,7 +68,8 @@ export default class Panel {
     this.score.innerHTML = `Score: ${this.game.stateMachine.current?.score}`
 
     if (this.snek) {
-      this.lifespan.innerHTML = `Lifespan: ${this.game.stateMachine.current?.lifeSpan}`
+      this.lifespan.innerHTML = 
+        `Lifespan: ${Math.trunc(this.snek.lifeSpan / 1000)}s`
 
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(
