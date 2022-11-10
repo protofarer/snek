@@ -33,15 +33,17 @@ export function startNewGame() {
   let loopID = requestAnimationFrame(draw)
 
   function draw(t) {
-    if (start === undefined) start = t
-    game.clock.t = t
+    if (start === undefined) {
+      start = t
+      game.clock.start(t)
+    }
 
     const elapsed = t - start
     if (elapsed > 16 / game.params.speed) {
       start = t
       game.clr()
 
-      game.update(loopID)
+      game.update(t, loopID)
       debugGUI && debugGUI.update(t, loopID)
 
       game.render()

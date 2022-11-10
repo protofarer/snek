@@ -21,10 +21,21 @@ export default class Scenarios {
   }
 
   base() {
-    this.deathByCent()
+    this.slowerDeathByCent()
+    // this.eatAllImmobs()
+  }
+  slowerDeathByCent() {
+    for (let i = 0; i < 19; ++i) {
+      const cent = this.addEnt(Centipede).setMobile(true).setTurnable(false)
+      cent.position = { 
+        x: this.game.canvas.width*.05 * (i+1), 
+        y: this.game.canvas.height*.9 + (this.game.canvas.height*0.013*(i)) 
+      }
+      cent.headingDegrees = -90
+    }
   }
 
-  deathByCent() {
+  quickDeathByCent() {
     for (let i = 0; i < 19; ++i) {
       const cent = this.addEnt(Centipede).setMobile(true).setTurnable(false)
       cent.position = { 

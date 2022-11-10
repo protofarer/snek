@@ -20,7 +20,6 @@ export default class LevelMaker {
         this.spawnLevelOne(snek)
         break
       case 's': // survival init
-        console.log(`ohno`, )
         break
     }
   }

@@ -16,6 +16,7 @@ export default class Clock {
   clockCycle5Min = 0
   isClockDrawn = false
   elapsed = 0
+  startTime
   t
   
   constructor(ctx, parent=null) {
@@ -23,8 +24,13 @@ export default class Clock {
     this.parent = parent
   }
 
+  start(startT) {
+    this.startTime = startT
+    this.t = startT
+  }
+
   getElapsedSeconds() {
-    return Math.floor(this.t / 1000)
+    return Math.trunc((this.t - this.startTime) / 1000)
   }
 
   show() {
@@ -61,7 +67,8 @@ export default class Clock {
     this.ctx.restore()
   }
 
-  update() {
+  update(t) {
+    this.t = t
     this.isClockDrawn = window.sessionStorage
       .getItem('isClockDrawn') === 'true' ? true : false
     this.clockCycle60 = this.clockCycle60 === 60 ? 0 : this.clockCycle60 + 1

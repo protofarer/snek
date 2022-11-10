@@ -63,6 +63,7 @@ export default class Game {
         start: States.StartState,
         playNormal: States.PlayNormalState,
         playSurvival: States.PlaySurvivalState,
+        gameOver: States.GameOverState
       },
       this
     )
@@ -101,7 +102,7 @@ export default class Game {
     this.stateMachine.render()
   }
 
-  update(loopID) {
+  update(t, loopID) {
     // **********************************************************************
     // * 1. Add new objects
     // **********************************************************************
@@ -113,7 +114,7 @@ export default class Game {
     // * 2. Update all objects
     // **********************************************************************
 
-    this.clock.update()
+    this.clock.update(t)
     this.stateMachine.update()
 
     // **********************************************************************
