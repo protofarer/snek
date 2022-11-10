@@ -37,3 +37,23 @@ export function recycle(ent) {
   ent.position = {x: -100, y: -100}
   Entity.remove(ent.id)
 }
+
+/**
+ * intervaled repeater
+ * do f, n times, every t milliseconds
+ * @param {number} n 
+ * @param {number} t 
+ * @param {function} f 
+ */
+export function intRep(n, t, f) {
+  let i = 0
+  let id
+
+  function limitedRepeat() {
+    (i === n - 1) && clearInterval(id)
+    f()
+    i++
+  }
+
+  id = setInterval(limitedRepeat, t)
+}

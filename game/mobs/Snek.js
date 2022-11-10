@@ -1,7 +1,7 @@
 import Mob from './Mob'
 import Segment from './Segment'
 import { cancelPostDigestionEffects } from '../behaviors/digestion'
-import { intRep } from '../utils/time'
+import { intRep } from '../utils/helpers'
 
 /**
  * The main player controllable character.

@@ -21,15 +21,18 @@ export default class Scenarios {
   }
 
   base() {
-    this.killByCent()
+    this.deathByCent()
   }
 
-  killByCent() {
-    this.harmSegByCent(1)
-    this.harmSegByCent(3)
-    this.harmSegByCent(5)
-    this.harmSegByCent(7)
-    this.harmSegByCent(9)
+  deathByCent() {
+    for (let i = 0; i < 19; ++i) {
+      const cent = this.addEnt(Centipede).setMobile(true).setTurnable(false)
+      cent.position = { 
+        x: this.game.canvas.width*.05 * (i+1), 
+        y: this.game.canvas.height*.7 + (this.game.canvas.height*0.013*(i)) 
+      }
+      cent.headingDegrees = -90
+    }
   }
 
   harmHeadByCent() {
