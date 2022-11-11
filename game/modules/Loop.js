@@ -72,13 +72,13 @@ export default class Loop {
 
     const elapsed = t - this.startT
     if (import.meta.env.DEV) {
-      if (elapsed > 16 / this.game.debugGUI.params.gameSpeed) {
+      if (elapsed > Constants.TICK / this.game.debugGUI.params.gameSpeed) {
         this.startT = t
         this.game.clr()
         this.game.update(t)
         this.game.render(t)
       }
-    } else {
+    } else if (elapsed > Constants.TICK) {
       this.startT = t
       this.game.clr()
       this.game.update(t)
