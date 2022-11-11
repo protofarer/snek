@@ -47,15 +47,28 @@ export class StartState extends BaseState {
         label: 'Normal Mode',
       },
       () => {
-        console.log(`clicked normal mode`, )
         this.game.stateMachine.change('playNormal', {
           level: 1,
           score: 0
         })
       },
     )
-    console.log(`left:${this.normalButt.left}`)
     this.normalButt.show()
+
+    this.survivalButt = new ModalButton(
+      this.game.ctx,
+      {
+        origin: { x: 25, y: 105 },
+        base: { w: 125, },
+        label: 'Survival Mode',
+      },
+      () => {
+        this.game.stateMachine.change('playSurvival', {
+          score: 0
+        })
+      },
+    )
+    this.survivalButt.show()
   }
 
   update() {
@@ -71,6 +84,7 @@ export class StartState extends BaseState {
     )
 
     this.normalButt.render()
+    this.survivalButt.render()
 
     // draw game modes
     // this.game.ctx.translate(

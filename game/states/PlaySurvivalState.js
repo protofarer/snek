@@ -18,7 +18,7 @@ export class PlaySurvivalState extends BaseState {
       || new Snek(this.game.ctx, null, this.game)
     this.game.setSnek(this.snek)
 
-    this.level = params.level
+    this.level = params?.level ?? 's'
     this.score = params.score
     this.game.phase = CONSTANTS.PHASE_PLAY
 

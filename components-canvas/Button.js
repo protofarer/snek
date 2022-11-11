@@ -23,9 +23,6 @@ export default class Button {
     if (!data?.origin?.x || !data?.origin?.y) {
       throw new TypeError('A button\'s origin coordinates weren\'t defined')
     }
-    // if (!offset?.x || !offset?.y) {
-    //   throw new TypeError('A button\'s offsets weren\'t defined')
-    // }
     // if (!handleClick) {
     //   throw new TypeError('A button\'s handleClick wasn\'t defined')
     // }
@@ -36,18 +33,19 @@ export default class Button {
 
     this.rect = this.ctx.canvas.getBoundingClientRect() 
 
-    this.origin = data.origin ?? { x: 0, y: 0 }
+    this.origin = data?.origin ?? { x: 0, y: 0 }
     this.offset = data?.offset ?? { x: 0, y: 0 }
     this.label = data.label || 'no-button-label-assigned'
-    this.baseWidth = data.base?.w || 70
-    this.baseHeight = data.base?.h || 30
-    this.stretchWidth = data.stretch?.w || 1
-    this.stretchHeight = data.stretch?.h || 1
+    this.baseWidth = data?.base?.w || 70
+    this.baseHeight = data?.base?.h || 30
+    this.stretchWidth = data?.stretch?.w || 1
+    this.stretchHeight = data?.stretch?.h || 1
 
     this.areaFill = data.areaFill || 'hsl(210,90%,85%)'
     this.labelColor = data.labelColor || 'hsl(200, 20%, 30%)'
     this.borderStroke = data.borderStroke || this.areaFill
 
+    // ! offset isnt included?
     this.top = this.origin.y
     this.bottom = this.origin.y + this.baseHeight * this.stretchHeight
     this.left = this.origin.x
@@ -59,7 +57,7 @@ export default class Button {
 
     this.setPath()
     function defaultHandleClick() {
-      console.log(`${this.label} button's default handler triggered.`)
+      console.log(`${this.label} button's click handler hasn't been defined.`)
     }
     this.handleClick = handleClick || defaultHandleClick
     this.listenerOptions = listenerOptions || {}

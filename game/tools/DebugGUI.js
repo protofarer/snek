@@ -52,7 +52,7 @@ export default class DebugGUI {
     guiGamePositioning.add(rectpos, 'top').name('rect.top').listen()
     guiGamePositioning.add(this.game.canvas, 'width').name('canvas.width')
     guiGamePositioning.add(this.game.canvas,'height').name('canvas.height')
-    guiGamePositioning.show(false)
+    guiGamePositioning.show(true)
 
     // **********************************************************************
     // * Game State
