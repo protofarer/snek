@@ -94,7 +94,7 @@ export default class SnekEndDialog {
     // This Modal Dialog start drawing in shown state 
     // (setup as needed)
     if (this.data?.isVictory) {
-      this.game.play.playRandomVictorySound()
+      // this.game.play.playRandomVictorySound()
     } else {
       // TODO play lose audio
       // this.game.sounds.draw[0].currentTime = 0
@@ -116,7 +116,7 @@ export default class SnekEndDialog {
       this.game.ctx.translate(this.offset.x, this.offset.y)
 
       this.game.ctx.beginPath()
-      this.game.ctx.fillStyle = 'hsla(220, 50%, 55%, 0.85)'
+      this.game.ctx.fillStyle = 'hsla(220, 50%, 65%, .85)'
       this.game.ctx.fillRect(0, 0, this.size.w, this.size.h)
 
       this.animatedHeadline()

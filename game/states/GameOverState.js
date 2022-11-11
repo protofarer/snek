@@ -20,8 +20,8 @@ export class GameOverState extends BaseState {
     this.game.setSnek(this.snek)
 
     const data = {
-      level: params.level,
-      score: params.score,
+      level: params?.level ?? 'null',
+      score: params?.score ?? 'null',
       snek: this.snek,
       isVictory: this.snek.countSegments >= 1
     }
