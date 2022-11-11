@@ -63,7 +63,7 @@ export default class Snek extends Mob {
     this.basePrimaryColor = 'hsl(100, 100%, 32%)'
     this.currPrimaryColor = this.basePrimaryColor
 
-    this.baseTurnRate = this.baseMoveSpeed + 5
+    this.baseTurnRate = this.baseMoveSpeed + 3
     this.currTurnRate = this.baseTurnRate
 
     this.baseMoveSpeed = 1
