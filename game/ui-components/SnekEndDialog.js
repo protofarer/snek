@@ -1,5 +1,5 @@
 import ModalButton from './ModalButton'
-import Constants from '../Constants'
+import { animatedTextLine } from '../utils/colormorph'
 
 export default class SnekEndDialog {
   // Stops and Starts the play loop
@@ -64,7 +64,11 @@ export default class SnekEndDialog {
 
     // Start this and its children initialize hidden
     this.hide()
-    this.animateStep = 0
+    this.animatedHeadline = animatedTextLine(
+      this.game.ctx,
+      'Snek! flourishes!', 
+      { x: 0, y: 15 }
+    )
   }
 
   hide() {
@@ -111,50 +115,11 @@ export default class SnekEndDialog {
       this.game.ctx.fillRect(0, 0, this.size.w, this.size.h)
 
       this.drawText()
+      this.animatedHeadline()
 
       this.game.ctx.restore()
-
-      // this.animateMatchVictoryText()
     } else {
       console.log(`Attempted to draw EndDialog while isShown=false`, )
     }
-  }
-
-  drawMatchVictoryText() {
-    // canvas.style.border = '1px dotted green'
-    this.animateStep++
-    
-    this.game.ctx.font = 'bold 48px courier'
-    this.game.ctx.fillStyle = 'hsl(0, 50%, 50%)'
-
-    const drawLetter = (char, x, y, phase=0, ) => {
-
-      const colorAngle = Math.floor((this.animateStep + phase)) % 360
-      this.game.ctx.fillStyle = `hsl(${colorAngle}, 100%, 40%)`
-      this.game.ctx.fillText(char, x + 5, y)
-
-    }
-
-    const text = 'Wins Game and Match!'
-    
-    return () => {
-      for (let i = 0; i < text.length; i++) {
-        if (text[i] !== ' ') {
-          drawLetter(text[i], i*30, 150, i*20)
-        }
-      }
-    }
-  }
-
-  animateMatchVictoryText() {
-    this.game.ctx.save()
-    this.game.ctx.translate(this.offset.x, this.offset.y)
-
-    // this.game.ctx.clearRect(0, 0, 600, 40)
-    this.drawMatchVictoryText()()
-
-    this.game.ctx.restore()
-
-    requestAnimationFrame(this.animateMatchVictoryText.bind(this))
   }
 }

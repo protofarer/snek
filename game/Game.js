@@ -96,9 +96,11 @@ export default class Game {
     if (import.meta.env.DEV) {
       window.sessionStorage.setItem('isDebugOn', toDebug)
     }
+
+    // TODO clean this up, why not just reload?
     const currURL = new URL(window.location.href)
     location.replace(currURL.toString())
-    location.reload()
+    window.location.reload()
 
     // **********************************************************************
     // * WIP restart game more cleanly (without forcing page reload)

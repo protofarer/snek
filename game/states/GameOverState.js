@@ -33,23 +33,17 @@ export class GameOverState extends BaseState {
     }
     this.endDialog = new SnekEndDialog(this.game, data)
     this.endDialog.show()
-    this.endDialog.render()
     this.game.panel.render()
   }
 
   update() {
-    // TODO endDialog.update()
   }
 
   render() {
-    // TODO endDialog.render()
-    this.game.ctx.fillText(
-      `Snek has perished!`,
-      50, 50
-    )
+    this.endDialog.render()
   }
 
   exit() {
-    window.location.reload()
+    this.game.resetGame()
   }
 }

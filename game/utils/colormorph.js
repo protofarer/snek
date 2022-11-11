@@ -62,3 +62,28 @@ export function setColorParameters({hueStart, hueEnd, satStart, satEnd, lumStart
     }
   }
 }
+
+export function animatedTextLine(ctx, text, offset) {
+  // canvas.style.border = '1px dotted green'
+  let animateStep = 0
+
+  const drawLetter = (char, superKerning, phase=0) => {
+    const colorAngle = Math.floor((animateStep + phase)) % 360
+    ctx.fillStyle = `hsl(${colorAngle}, 100%, 40%)`
+    ctx.fillText(char, superKerning + 5, 0)
+  }
+
+  return () => {
+    animateStep++
+    ctx.save()
+    ctx.translate(offset.x, offset.y)
+    ctx.font = 'bold 24px Arial'
+    ctx.fillStyle = 'hsl(0, 50%, 50%)'
+    for (let i = 0; i < text.length; i++) {
+      if (text[i] !== ' ') {
+        drawLetter(text[i], i*25, i*20)
+      }
+    }
+    ctx.restore()
+  }
+}
