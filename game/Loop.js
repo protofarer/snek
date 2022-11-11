@@ -35,25 +35,28 @@ export default class Loop {
     this.draw()
   }
 
-  access() {
-    console.log(`this.startT`, this.startT)
+  play() {
+    if (
+      this.game.phase !== Constants.PHASE_PLAY &&
+      this.game.phase !== Constants.PHASE_END
+    ) {
+      this.game.phase = Constants.PHASE_PLAY
+      this.loopID = requestAnimationFrame(this.draw.bind(this))
+      console.log(`%c*************** Game UnPaused ***************`,
+        'color: orange')
+    }
   }
 
   pause() {
-    if (this.game.phase !== Constants.PHASE_PAUSE) {
+    if (
+      this.game.phase !== Constants.PHASE_PAUSE && 
+      this.game.phase !== Constants.PHASE_END
+    ) {
       this.game.phase = Constants.PHASE_PAUSE
       cancelAnimationFrame(this.loopID)
       console.log(`%c*************** Game Paused ***************`,
         'color: orange')
     }
-  }
-
-  play() {
-    if (this.game.phase !== Constants.PHASE_PLAY)
-    this.game.phase = Constants.PHASE_PLAY
-    this.loopID = requestAnimationFrame(this.draw.bind(this))
-    console.log(`%c*************** Game UnPaused ***************`,
-      'color: orange')
   }
 
   togglePause() {
@@ -65,8 +68,9 @@ export default class Loop {
 
   stop() {
     if (this.game.phase !== Constants.PHASE_END) {
+      this.game.phase = Constants.PHASE_END
       cancelAnimationFrame(this.loopID)
-      console.log(`%c*************** Game Paused ***************`,
+      console.log(`%c*************** Game Stopped ***************`,
       'color: orange')
     }
   }

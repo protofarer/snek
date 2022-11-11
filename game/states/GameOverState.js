@@ -14,7 +14,7 @@ export class GameOverState extends BaseState {
     super()
     
     this.game = game
-    this.game.phase = Constants.PHASE_PAUSE
+    this.game.loop.stop()
 
     this.snek = params?.snek
       || new Snek(this.game.ctx, null, this.game)
@@ -24,10 +24,7 @@ export class GameOverState extends BaseState {
     this.level = params.level
     this.score = params.score
     this.lifeSpan = this.snek.lifeSpan
-    this.game.phase = Constants.PHASE_PAUSE
-    console.log(`game phase gameover`, this.game.phase)
     
-
     const data = {
       level: this.level,
       score: this.score,
