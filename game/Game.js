@@ -29,34 +29,33 @@ import Audio from './audio'
 export default class Game {
 
   constructor (container) {
-    this.setupCanvas(container)
-
-    new Background(this.container, this.canvas.width, this.canvas.height)
-    this.clock = new Clock(this.ctx, this)
-    this.world = new World(this)
-
-    const Sounds = Audio()
-    this.play = Sounds.play
-
     this.phase = Constants.PHASE_PAUSE
     this.t = -1
 
-    this.levelMaker = new LevelMaker(this)
+    this.setupCanvas(container)
+    this.load()
 
     this.stateMachine = new StateMachine({
         start: States.StartState,
         playNormal: States.PlayNormalState,
         playSurvival: States.PlaySurvivalState,
         gameOver: States.GameOverState
-      },
-      this
-    )
+      }, this)
 
     if (!this.setupDebug()) {
       this.stateMachine.change('start')
     }
 
     this.loop = new Loop(this)
+  }
+
+  load() {
+    new Background(this.container, this.canvas.width, this.canvas.height)
+    this.clock = new Clock(this.ctx, this)
+    this.world = new World(this)
+    const Sounds = Audio()
+    this.play = Sounds.play
+    this.levelMaker = new LevelMaker(this)
   }
 
   setupDebug() {
@@ -125,6 +124,7 @@ export default class Game {
   render(t) {
     this.clock.render(t)
     this.stateMachine.render(t)
+    this.debugGUI && this.debugGUI.render(t)
   }
 
   update(t) {
@@ -132,6 +132,5 @@ export default class Game {
     this.clock.update(t)
     this.stateMachine.update(t)
     this.debugGUI && this.debugGUI.update(t)
-    this.debugGUI && this.debugGUI.render(t)
   }
 }
