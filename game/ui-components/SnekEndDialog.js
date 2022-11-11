@@ -17,7 +17,7 @@ export default class SnekEndDialog {
 
     // summary stats
     this.summary = [
-      ['exp', this.data.snek.currExp],
+      ['exp', Math.trunc(this.data.snek.currExp)],
       ['level', this.data.snek.level],
       ['lifeSpan', `${Math.trunc(this.data.snek.lifeSpan / 1000)}s`],
       ['score', this.data.score],
