@@ -15,6 +15,16 @@ export default class SnekEndDialog {
     this.game = game
     this.data = data
 
+    // summary stats
+    this.summary = [
+      ['exp', this.data.snek.currExp],
+      ['level', this.data.snek.level],
+      ['lifeSpan', `${Math.trunc(this.data.snek.lifeSpan / 1000)}s`],
+      ['score', this.data.score],
+    ]
+
+    // TODO objects stats
+
     this.isShown = false
     this.modalChildren = []
 
@@ -66,8 +76,9 @@ export default class SnekEndDialog {
     this.hide()
     this.animatedHeadline = animatedTextLine(
       this.game.ctx,
-      'Snek! flourishes!', 
-      { x: 0, y: 15 }
+      { size: 16, family: 'Arial', weight: 'bold' },
+      { x: 55, y: 25 },
+      this.data.isVictory ? 'Snek! flourishes!' : 'Snek got squashed!', 
     )
   }
 
@@ -93,16 +104,10 @@ export default class SnekEndDialog {
     this.render()
   }
 
-  drawText() {
+  drawText(offset, text) {
     this.game.ctx.font = '12px Arial'
     this.game.ctx.fillStyle = 'black'
-    this.game.ctx.fillText(
-      `${this.data.isVictory
-            ? 'Snek Flourished!'
-            : 'Snek Perished!'
-        }`,
-      55, 55
-    )
+    this.game.ctx.fillText(text, offset.x, offset.y)
   }
 
   render() {
@@ -114,8 +119,12 @@ export default class SnekEndDialog {
       this.game.ctx.fillStyle = 'hsla(220, 50%, 55%, 0.85)'
       this.game.ctx.fillRect(0, 0, this.size.w, this.size.h)
 
-      this.drawText()
       this.animatedHeadline()
+
+      this.game.ctx.translate(0, 50)
+      for (let i = 0; i < this.summary.length; ++i) {
+        this.drawText({ x: 10, y: 15 * i }, `${this.summary[i][0]}: ${this.summary[i][1]}`)
+      }
 
       this.game.ctx.restore()
     } else {

@@ -53,7 +53,9 @@ export default class Game {
       this
     )
 
-    this.setupDebug() || this.stateMachine.change('start')
+    if (!this.setupDebug()) {
+      this.stateMachine.change('start')
+    }
 
     this.loop = new Loop(this)
   }
@@ -66,10 +68,13 @@ export default class Game {
 
       if (this.isDebugOn === true) {
         this.stateMachine.change('playSurvival', { level: 0, score: 0 })
+        return true
       }
 
-      return true
+      console.log(`returnung isdebug true`)
+      
     }
+      console.log(`returnung isdebug false`)
     return false
   }
 

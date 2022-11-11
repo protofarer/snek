@@ -207,7 +207,8 @@ export default class World {
             }
 
             if (wasSegLost > 0 && snekSegCount === 1) {
-              console.log(`SNEK DIES`, )
+              console.log(`now dead snek`, this.snek)
+              
               this.game.stateMachine.change('gameOver', {
                 snek: this.game.stateMachine.current.snek,
                 level: this.game.stateMachine.current.level,

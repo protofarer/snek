@@ -17,7 +17,9 @@ export class GameOverState extends BaseState {
     this.game.loop.stop()
 
     this.snek = params?.snek
-      || new Snek(this.game.ctx, null, this.game)
+      // || new Snek(this.game.ctx, null, this.game)
+      console.log(`gameover this.snek`, this.snek)
+      
 
     this.game.setSnek(this.snek)
 
@@ -31,6 +33,7 @@ export class GameOverState extends BaseState {
       snek: this.snek,
       isVictory: this.snek.countSegments >= 1
     }
+
     this.endDialog = new SnekEndDialog(this.game, data)
     this.endDialog.show()
     this.game.panel.render()

@@ -63,25 +63,28 @@ export function setColorParameters({hueStart, hueEnd, satStart, satEnd, lumStart
   }
 }
 
-export function animatedTextLine(ctx, text, offset) {
+export function animatedTextLine(ctx, font, offset, text ) {
   // canvas.style.border = '1px dotted green'
   let animateStep = 0
+  const size = font?.size || 12
+  const family = font?.family || 'Arial'
+  const weight = font?.weight || 'normal'
 
-  const drawLetter = (char, superKerning, phase=0) => {
+  const drawLetter = (char, kerning, phase=0) => {
     const colorAngle = Math.floor((animateStep + phase)) % 360
     ctx.fillStyle = `hsl(${colorAngle}, 100%, 40%)`
-    ctx.fillText(char, superKerning + 5, 0)
+    ctx.fillText(char, kerning, 0)
   }
 
   return () => {
     animateStep++
     ctx.save()
     ctx.translate(offset.x, offset.y)
-    ctx.font = 'bold 24px Arial'
+    ctx.font = `${weight} ${size}px ${family}`
     ctx.fillStyle = 'hsl(0, 50%, 50%)'
     for (let i = 0; i < text.length; i++) {
       if (text[i] !== ' ') {
-        drawLetter(text[i], i*25, i*20)
+        drawLetter(text[i], i*0.75*size, i*-20)
       }
     }
     ctx.restore()
