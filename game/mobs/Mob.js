@@ -31,6 +31,8 @@ export default class Mob extends Immob {
   baseTurnRate = this.moveSpeed + 5
   currTurnRate = this.baseTurnRate
   minTurnRate = 0
+  isTurningLeft = false
+  isTurningRight = false
 
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)

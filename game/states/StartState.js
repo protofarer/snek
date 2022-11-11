@@ -36,6 +36,7 @@ export class StartState extends BaseState {
       }
     }
     document.addEventListener('keydown', this.handleKeyDown)
+    this.game.panel.panelContainer.style.setProperty('visibility', 'hidden')
   }
 
   update() {
@@ -72,5 +73,6 @@ export class StartState extends BaseState {
 
   exit() {
     document.removeEventListener('keydown', this.handleKeyDown)
+    this.game.panel.panelContainer.style.setProperty('visibility', 'visible')
   }
 }

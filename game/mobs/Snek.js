@@ -99,16 +99,56 @@ export default class Snek extends Mob {
     const handleKeyDown = (e) => {
       switch (e.key) {
         case 'd':
-          this.turnRight()
+          this.isTurningRight = true
           break
         case 'a':
-          this.turnLeft()
+          this.isTurningLeft = true
           break
         default:
           break
       }
     }
     document.addEventListener('keydown', handleKeyDown)
+    const handleKeyUp = (e) => {
+      switch (e.key) {
+        case 'd':
+          this.isTurningRight = false
+          break
+        case 'a':
+          this.isTurningLeft = false
+          break
+        default:
+          break
+      }
+    }
+    document.addEventListener('keyup', handleKeyUp)
+
+
+    const left = document.querySelector('#left-butt')
+    const handleLeftPointerDown = (e) => {
+      this.isTurningLeft = true
+    }
+    left.addEventListener('pointerdown', handleLeftPointerDown)
+
+    const right = document.querySelector('#right-butt')
+    const handleRightPointerDown = (e) => {
+      this.isTurningRight = true
+    }
+    right.addEventListener('pointerdown', handleRightPointerDown)
+
+    const handleLeftPointerUp = (e) => {
+      this.isTurningLeft = false
+    }
+    left.addEventListener('pointerup', handleLeftPointerUp)
+
+    const handleRightPointerUp = (e) => {
+      this.isTurningRight = false
+    }
+    right.addEventListener('pointerup', handleRightPointerUp)
+
+    // const right = document.querySelector('#right-butt')
+    // const action = document.querySelector('#action-butt')
+
   }
 
   drawHitOverlays() {
@@ -316,6 +356,11 @@ export default class Snek extends Mob {
 
   update(t) {
     this.lifeSpan = t - this.birthTime    // non-crit, can be updated less frequently to improve performance
+    if (this.isTurningLeft) {
+      this.turnLeft()
+    } else if (this.isTurningRight) {
+      this.turnRight()
+    }
 
     this.updatePostDigestionEffects()
 

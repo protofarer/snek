@@ -6,7 +6,6 @@ import World from './World'
 import Clock from './modules/Clock'
 import StateMachine from './modules/StateMachine'
 import * as States from './states'
-import { newGame } from '..'
 
 import LevelMaker from './modules/LevelMaker'
 import DebugGUI from './tools/DebugGUI'

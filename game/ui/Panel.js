@@ -59,16 +59,16 @@ export default class Panel {
     this.leftButt.innerText = 'L'
     this.touchContainer.appendChild(this.leftButt)
 
-    this.rightButt.id = 'right-butt'
-    this.rightButt.className = 'touch-control'
-    this.rightButt.innerText = 'R'
-    this.touchContainer.appendChild(this.rightButt)
-
     this.actionButt.id= 'action-butt'
     this.actionButt.className = 'touch-control'
     this.actionButt.innerText = 'A'
     this.touchContainer.appendChild(this.actionButt)
   
+    this.rightButt.id = 'right-butt'
+    this.rightButt.className = 'touch-control'
+    this.rightButt.innerText = 'R'
+    this.touchContainer.appendChild(this.rightButt)
+
     // before init, for debug
     this.infobox.style.color = 'lawngreen'
     this.score.innerText = '$score'
