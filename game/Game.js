@@ -55,7 +55,7 @@ export default class Game {
 
     this.setupDebug() || this.stateMachine.change('start')
 
-    const loop = new Loop(this)
+    this.loop = new Loop(this)
   }
 
   setupDebug() {
@@ -93,14 +93,32 @@ export default class Game {
   }
 
   resetGame(toDebug=false) {
-    const currURL = new URL(window.location.href)
     if (import.meta.env.DEV) {
       window.sessionStorage.setItem('isDebugOn', toDebug)
     }
+    const currURL = new URL(window.location.href)
     location.replace(currURL.toString())
     location.reload()
+
+    // **********************************************************************
+    // * WIP restart game more cleanly (without forcing page reload)
+    // **********************************************************************
+    // this.loop.stop()
+    // const removeChilds = (parent) => {
+    //   while (parent.lastChild) {
+    //     parent.removeChild(parent.lastChild)
+    //   }
+    // }
+    // removeChilds(container)
+    // new Game(container)
+    // **********************************************************************
+    // **********************************************************************
   }
 
+  setSnek(snek) {
+    this.world.snek = snek
+    this.panel.snek = snek
+  }
 
   render(t) {
     this.clock.render(t)
@@ -109,39 +127,7 @@ export default class Game {
 
   update(t) {
     this.t = t
-    
-    // **********************************************************************
-    // * 1. Add new objects
-    // **********************************************************************
-
-    // Reserved for gameplay testing
-    // this.world.randomSpawns()
-
-    // **********************************************************************
-    // * 2. Update all objects
-    // **********************************************************************
-
     this.clock.update(t)
     this.stateMachine.update(t)
-
-    // **********************************************************************
-    // * 3. Update UI
-    // **********************************************************************
-      // this.panel.updateMsg()
-
-    // **********************************************************************
-    // * 4. Misc
-    // **********************************************************************
-
-    // * Enter PHASE_END via game.checkEndCondition()
-    if (this.phase === Constants.PHASE_END) {
-      cancelAnimationFrame(loopID)
-      this.end()
-    }
-  }
-
-  setSnek(snek) {
-    this.world.snek = snek
-    this.panel.snek = snek
   }
 }

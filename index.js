@@ -25,9 +25,9 @@ document.body.appendChild(container)
  *    function 
  */
 
-export function startNewGame() {
-  new Game(container)
+export function newGame() {
+  const game = new Game(container)
+  // TODO make this exit (return) by listening to a game property or event
 }
 
-
-startNewGame()
+newGame()

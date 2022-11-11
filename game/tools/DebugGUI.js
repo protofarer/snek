@@ -35,7 +35,7 @@ export default class DebugGUI {
       gameSpeed: 1,
     }
 
-    const resetGame = this.game.resetGame
+    const resetGame = this.game.resetGame.bind(this.game)
 
     this.listeners = {}   // list of controllers whose objects change outside of controller, (eg call debugGUI.listeners.stateName.updateDisplay)
 
@@ -149,7 +149,7 @@ export default class DebugGUI {
           }
           break
         case 'r':
-          resetGame(this.game.isDebugOn)
+          resetGame(this.game.isDebugOn, this.game.container)
           break
         case 't':
           this.game.isDebugOn = !this.game.isDebugOn
