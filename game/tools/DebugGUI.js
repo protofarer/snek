@@ -22,7 +22,6 @@ export default class DebugGUI {
     this.parent = undefined
 
     this.params = {
-      isDebugOn: false,
       showDebugOverlays: false,
       isClockDrawn: false,
       isTurningRandomly: false,
@@ -33,8 +32,7 @@ export default class DebugGUI {
       isSnekInitialized: false,
       isDebugGUIShown: true,
       isDebugGUIOpen: true,
-      set gameSpeed(val) { game.params.speed = val},
-      get gameSpeed() { return game.params.speed }
+      gameSpeed: 1,
     }
 
     const resetGame = this.game.resetGame
@@ -68,7 +66,7 @@ export default class DebugGUI {
     // **********************************************************************
     const guiTestParams = this.gui.addFolder('Test & Debug')
 
-    this.setupBooleanToggler(this.params, 'isDebugOn', guiTestParams, 'debug mode')
+    this.setupBooleanToggler(this.game, 'isDebugOn', guiTestParams, 'debug mode')
     this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
     this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
     this.setupBooleanToggler(this.params, 'showDebugOverlays', guiTestParams, 'show overlays')
@@ -125,6 +123,7 @@ export default class DebugGUI {
 
     const endGame = () => { this.game.phase = CONSTANTS.PHASE_END }
     guiGameTest.add({ endGame }, 'endGame')
+
     this.setupNumericSlider({
       obj: this.params,
       key: 'gameSpeed',
@@ -150,11 +149,11 @@ export default class DebugGUI {
           }
           break
         case 'r':
-          resetGame(this.params.isDebugOn)
+          resetGame(this.game.isDebugOn)
           break
         case 't':
-          this.params.isDebugOn = !this.params.isDebugOn
-          window.sessionStorage.setItem('isDebugOn', this.params.isDebugOn)
+          this.game.isDebugOn = !this.game.isDebugOn
+          window.sessionStorage.setItem('isDebugOn', this.game.isDebugOn)
           break
         case 'q':
           this.params.showDebugOverlays = !this.params.showDebugOverlays
@@ -215,14 +214,14 @@ export default class DebugGUI {
         paramVal = true
       } else if (sessionVal === 'false') {
         paramVal = false
-      } else if (parseInt(sessionVal) > 0) {
+      } else if (parseInt(sessionVal) > 0 || parseFloat(sessionVal) > 0) {
         paramVal = Number(sessionVal)
       } else if (sessionVal == undefined) {
         // Clean out undefined's, they break lil-gui gui.add()
         window.sessionStorage.removeItem(key)
       }
 
-      if (this.params.isDebugOn) console.log(`win.sessStore: ${key}: ${sessionVal}; paramVal:${paramVal}`)
+      if (this.game.isDebugOn) console.log(`win.sessStore: ${key}: ${sessionVal}; paramVal:${paramVal}`)
 
       // * diverge from defaults
       if (paramVal != null) {
@@ -232,7 +231,7 @@ export default class DebugGUI {
     }
 
     for (const key of Object.keys(this.params)) {
-      setParamFromSession(key, this.params)
+      setParamFromSession(key)
     }
   }
 
@@ -246,7 +245,7 @@ export default class DebugGUI {
     const setSessionNumeric = (val) => {
         window.sessionStorage.setItem(key, val)
         obj[key] = val
-        console.log(`setting windowseshstore, k/v:`,key,val )
+        console.log(`setting windowSessionStore, k/v:`,key,val )
     }
     folder.add(obj, key, minVal, maxVal, stepVal).onChange(setSessionNumeric).listen()
       .name(label || key)
@@ -309,11 +308,11 @@ export default class DebugGUI {
   }
 
   async invokeOnDebugGameStart(resetGame) {
-    if (this.params.isDebugOn) {
+    if (this.game.isDebugOn) {
       console.log(`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%`, )
       console.log(`% Running debug funcs on game start:`, )
       if (this.params.resetAfterElapsed) {
-        await setTimeout(() => resetGame(this.params.isDebugOn), this.params.timeToReset)
+        await setTimeout(() => resetGame(this.game.isDebugOn), this.params.timeToReset)
       }
       
       console.log(`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%`, )
@@ -345,7 +344,7 @@ export default class DebugGUI {
       this.initSnekStateGUI()
     }
 
-    if (this.params.isDebugOn){
+    if (this.game.isDebugOn){
       for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
         this.game.update()
       }

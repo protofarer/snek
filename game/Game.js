@@ -1,13 +1,16 @@
-import CONSTANTS from './Constants'
+import Constants from './Constants'
 import Audio from './audio'
 import Clock from './utils/Clock'
 import Panel from './ui-components/Panel'
 import Background from './Background'
 import World from './World'
 import LevelMaker from './LevelMaker'
+import DebugGUI from './tools/DebugGUI'
+import Loop from './Loop'
 
 import StateMachine from './StateMachine'
 import * as States from './states'
+
 
 /** 
  * Game object is used to:
@@ -22,42 +25,21 @@ import * as States from './states'
  * @property {boolean} isDebugOn - window session stored debug mode state
  * @property {Object} params - adjustable game parameters
  * @property {Number} params.speed - speed game can be tweaked to run for debug purposes, range is [0.005, 1]
- * @property {string} msg - information for player
  * @property {Number} phase - the phase that the game is currently in
  */
 export default class Game {
-  debugGUI
 
   constructor (container) {
-    this.container = container
-    this.canvas = document.createElement('canvas')
-    this.canvas.id = 'layerGame'
-    this.canvas.width = 400
-    this.canvas.height = 600
-    this.container.appendChild(this.canvas)
-
-    this.ctx = this.canvas.getContext('2d')
-    this.rect = this.canvas.getBoundingClientRect()
-
-    this.isDebugOn = window.sessionStorage.getItem('isDebugOn') 
-
-    // * Adjustable parameters for testing design, performance, and debugging
-    this.params = {
-      speed: 1,
-    }
-
-    this.msg = ''
+    this.setupCanvas(container)
 
     new Background(this.container, this.canvas.width, this.canvas.height)
     this.clock = new Clock(this.ctx, this)
-    this.panel = new Panel(this)
-    this.container.appendChild(this.panel.panelContainer)
     this.world = new World(this)
 
     const Sounds = Audio()
     this.play = Sounds.play
 
-    this.phase = 1
+    this.phase = Constants.PHASE_PAUSE
     this.t = -1
 
     this.levelMaker = new LevelMaker(this)
@@ -71,19 +53,39 @@ export default class Game {
       this
     )
 
-    if (this.isDebugOn === 'true') {
-      console.log(`playSurvival debug`, )
-      
-      this.stateMachine.change(
-        'playSurvival',
-        {
-          level: 0,
-          score: 0
-        }
-        )
-    } else {
-      this.stateMachine.change('start')
+    this.setupDebug() || this.stateMachine.change('start')
+
+    const loop = new Loop(this)
+  }
+
+  setupDebug() {
+    if (import.meta.env.DEV) {
+      this.isDebugOn = window.sessionStorage.getItem('isDebugOn') === 'true' ? true : false
+      this.debugGUI = new DebugGUI(this)
+      this.debugGUI.params.isDebugOn = this.isDebugOn
+
+      if (this.isDebugOn === true) {
+        this.stateMachine.change('playSurvival', { level: 0, score: 0 })
+      }
+
+      return true
     }
+    return false
+  }
+
+  setupCanvas(container) {
+    this.container = container
+    this.canvas = document.createElement('canvas')
+    this.canvas.id = 'layerGame'
+    this.canvas.width = 400
+    this.canvas.height = 600
+    this.container.appendChild(this.canvas)
+
+    this.ctx = this.canvas.getContext('2d')
+    this.rect = this.canvas.getBoundingClientRect()
+
+    this.panel = new Panel(this)
+    this.container.appendChild(this.panel.panelContainer)
   }
 
   clr() {
@@ -105,7 +107,7 @@ export default class Game {
     this.stateMachine.render(t)
   }
 
-  update(t, loopID) {
+  update(t) {
     this.t = t
     
     // **********************************************************************
@@ -132,7 +134,7 @@ export default class Game {
     // **********************************************************************
 
     // * Enter PHASE_END via game.checkEndCondition()
-    if (this.phase === CONSTANTS.PHASE_END) {
+    if (this.phase === Constants.PHASE_END) {
       cancelAnimationFrame(loopID)
       this.end()
     }

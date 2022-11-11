@@ -1,5 +1,5 @@
 import BaseState from './BaseState'
-import CONSTANTS from '../Constants'
+import Constants from '../Constants'
 import Snek from '../mobs/Snek'
 import SnekEndDialog from '../ui-components/SnekEndDialog'
 
@@ -14,6 +14,7 @@ export class GameOverState extends BaseState {
     super()
     
     this.game = game
+    this.game.phase = Constants.PHASE_PAUSE
 
     this.snek = params?.snek
       || new Snek(this.game.ctx, null, this.game)
@@ -23,7 +24,9 @@ export class GameOverState extends BaseState {
     this.level = params.level
     this.score = params.score
     this.lifeSpan = this.snek.lifeSpan
-    this.game.phase = CONSTANTS.PHASE_PAUSE
+    this.game.phase = Constants.PHASE_PAUSE
+    console.log(`game phase gameover`, this.game.phase)
+    
 
     const data = {
       level: this.level,
@@ -32,6 +35,8 @@ export class GameOverState extends BaseState {
       isVictory: this.snek.countSegments >= 1
     }
     this.endDialog = new SnekEndDialog(this.game, data)
+    this.endDialog.show()
+    this.endDialog.render()
     this.game.panel.render()
   }
 

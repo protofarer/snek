@@ -19,13 +19,14 @@ export default class SnekEndDialog {
     this.modalChildren = []
 
     this.size = {
-      w: this.game.canvas.width * 0.9,
+      w: this.game.canvas.width * 0.8,
       h: this.game.canvas.height * 0.75
     }
 
+    // coord of origin of dialog container relative to canvas origin
     this.offset = {
-      x: 25,
-      y: 25,      
+      x: this.game.canvas.width * 0.1,
+      y: this.game.canvas.height * 0.1,      
     }
 
     this.pos = {
@@ -89,6 +90,8 @@ export default class SnekEndDialog {
   }
 
   drawText() {
+    this.game.ctx.font = '12px Arial'
+    this.game.ctx.fillStyle = 'black'
     this.game.ctx.fillText(
       `${this.data.isVictory
             ? 'Snek Flourished!'
@@ -104,55 +107,14 @@ export default class SnekEndDialog {
       this.game.ctx.translate(this.offset.x, this.offset.y)
 
       this.game.ctx.beginPath()
-      this.game.ctx.fillStyle = 'hsla(0, 0%, 95%, 0.75)'
+      this.game.ctx.fillStyle = 'hsla(220, 50%, 55%, 0.85)'
       this.game.ctx.fillRect(0, 0, this.size.w, this.size.h)
 
-      this.game.ctx.font = 'bold 60px Arial'
-      
       this.drawText()
 
-      // Present Game Number
-      this.game.ctx.font = 'bold 20px Arial'
-      this.game.ctx.decoration = 'underlined'
-      this.game.ctx.fillStyle = 'black'
-      this.game.ctx.fillText(
-        `End of Game ${this.game.match.gameNo} of ${this.game.match.matchLength}`,
-        200, 200
-      )
-
-      // Present Score Summary
-      this.game.ctx.font = 'bold 20px Arial'
-      this.game.ctx.fillStyle = 'crimson'
-      this.game.ctx.fillText(
-        `RED: ${this.game.match.red}`,
-        200, 250
-      ) 
-      this.game.ctx.fillStyle = 'black'
-      this.game.ctx.fillText(
-        `BLACK: ${this.game.match.black}`,
-        200, 300
-      )
-
-      // Present appropriate action
-      if ((this.game.match.gameNo) / this.game.match.matchLength > 0.5
-        && Math.abs(this.game.match.red - this.game.match.black) > 0) {
-        this.newMatchButton.show()
-      } else {
-        this.nextGameButton.show()
-      }
       this.game.ctx.restore()
 
-      if (
-        this.game.match.red === Math.ceil(this.game.match.matchLength / 2) ||
-        this.game.match.black === Math.ceil(this.game.match.matchLength / 2)
-      ) {
-        // this.game.ctx.font = 'bold 48px Arial'
-        // this.game.ctx.fillText(
-        //   'WINS Game and Match!',
-        //   25, 155
-        // )
-        this.animateMatchVictoryText()
-      }
+      // this.animateMatchVictoryText()
     } else {
       console.log(`Attempted to draw EndDialog while isShown=false`, )
     }
