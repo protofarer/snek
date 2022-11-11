@@ -11,7 +11,6 @@ document.body.appendChild(container)
 
 export function newGame() {
   new Game(container)
-  // TODO make this exit (return) by listening to a game property or event
 }
 
 newGame()

@@ -6,6 +6,7 @@ import World from './World'
 import Clock from './utils/Clock'
 import StateMachine from './StateMachine'
 import * as States from './states'
+import { newGame } from '..'
 
 import LevelMaker from './LevelMaker'
 import DebugGUI from './tools/DebugGUI'
@@ -68,11 +69,7 @@ export default class Game {
         this.stateMachine.change('playSurvival', { level: 0, score: 0 })
         return true
       }
-
-      console.log(`returnung isdebug true`)
-      
     }
-      console.log(`returnung isdebug false`)
     return false
   }
 
@@ -109,13 +106,13 @@ export default class Game {
     // * WIP restart game more cleanly (without forcing page reload)
     // **********************************************************************
     // this.loop.stop()
-    // const removeChilds = (parent) => {
+    // const removeChildren = (parent) => {
     //   while (parent.lastChild) {
     //     parent.removeChild(parent.lastChild)
     //   }
     // }
-    // removeChilds(container)
-    // new Game(container)
+    // removeChildren(this.container)
+    // newGame()
     // **********************************************************************
     // **********************************************************************
   }
@@ -134,5 +131,7 @@ export default class Game {
     this.t = t
     this.clock.update(t)
     this.stateMachine.update(t)
+    this.debugGUI && this.debugGUI.update(t)
+    this.debugGUI && this.debugGUI.render(t)
   }
 }

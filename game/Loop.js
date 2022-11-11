@@ -71,15 +71,18 @@ export default class Loop {
     }
 
     const elapsed = t - this.startT
-    if (elapsed > 16 / this.game.debugGUI.params.gameSpeed) {
+    if (import.meta.env.DEV) {
+      if (elapsed > 16 / this.game.debugGUI.params.gameSpeed) {
+        this.startT = t
+        this.game.clr()
+        this.game.update(t)
+        this.game.render(t)
+      }
+    } else {
       this.startT = t
       this.game.clr()
-
       this.game.update(t)
-      this.game.debugGUI && this.game.debugGUI.update(t)
-
       this.game.render(t)
-      this.game.debugGUI && this.game.debugGUI.render(t)
     }
 
     this.loopID = requestAnimationFrame(this.draw.bind(this))

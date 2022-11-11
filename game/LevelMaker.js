@@ -38,11 +38,11 @@ export default class LevelMaker {
     }
     snek.headingDegrees = -90
 
-    this.game.world.spawnEnts(Apple, 45)
-    this.game.world.spawnEnts(Pebble, 55)
-    this.game.world.spawnEnts(Mango, 5)
-    this.game.world.spawnEnts(Ant, 25)
-    this.game.world.spawnEnts(Centipede, 2)
+    this.game.world.spawnEnts(Apple, 15)
+    this.game.world.spawnEnts(Pebble, 25)
+    this.game.world.spawnEnts(Mango, 3)
+    this.game.world.spawnEnts(Ant, 2)
+    this.game.world.spawnEnts(Centipede, 1)
   }
 
   /** Initial spawn method used for playable game/levels.
