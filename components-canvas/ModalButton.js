@@ -1,4 +1,4 @@
-import Button from '../../components-canvas/Button'
+import Button from './Button'
 
 export default class ModalButton extends Button {
   // Modal Button

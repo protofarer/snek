@@ -315,11 +315,7 @@ export default class Snek extends Mob {
   }
 
   update(t) {
-    console.log(`snek's t`, t)
-    
     this.lifeSpan = t - this.birthTime    // non-crit, can be updated less frequently to improve performance
-    console.log(`snek lifespan`, this.lifeSpan)
-    
 
     this.updatePostDigestionEffects()
 

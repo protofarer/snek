@@ -39,7 +39,6 @@ export class StartState extends BaseState {
   }
 
   update() {
-
   }
 
   render() {
@@ -72,7 +71,6 @@ export class StartState extends BaseState {
   }
 
   exit() {
-    // TODO disable touch eventlisteners
     document.removeEventListener('keydown', this.handleKeyDown)
   }
 }

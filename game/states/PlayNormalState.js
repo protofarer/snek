@@ -35,7 +35,6 @@ export class PlayNormalState extends BaseState {
     for(const ent of Entity.stack.values()) {
       ent.render()
     }
-
     this.game.panel.render()
   }
 

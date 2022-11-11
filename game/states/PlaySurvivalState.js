@@ -5,11 +5,11 @@ import Snek from '../mobs/Snek'
 
 /**
  * 
- * @property {Number} score - number of items snek has swallowed
+ * @property {Number} score - proportional to number of items snek has swallowed
  */
 export class PlaySurvivalState extends BaseState {
   stateName = 'playSurvival'
-  
+
   constructor(game, params) {
     super()
     this.game = game
@@ -33,7 +33,6 @@ export class PlaySurvivalState extends BaseState {
     for(const ent of Entity.stack.values()) {
       ent.render()
     }
-
     this.game.panel.render()
   }
 

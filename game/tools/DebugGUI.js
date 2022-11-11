@@ -37,8 +37,6 @@ export default class DebugGUI {
 
     const resetGame = this.game.resetGame.bind(this.game)
 
-    this.listeners = {}   // list of controllers whose objects change outside of controller, (eg call debugGUI.listeners.stateName.updateDisplay)
-
     this.setParamsFromSessionStorage()
     this.invokeOnDebugGameStart(resetGame)
     this.reactToParams()
@@ -49,55 +47,66 @@ export default class DebugGUI {
     }
 
     gui.add(this.frames, 'fps').listen()
-    const guiGamePositioning = gui.addFolder('GamePositioning') 
+    const guiGamePositioning = gui.addFolder('Positioning') 
     guiGamePositioning.add(rectpos, 'left').name('rect.left').listen()
     guiGamePositioning.add(rectpos, 'top').name('rect.top').listen()
     guiGamePositioning.add(this.game.canvas, 'width').name('canvas.width')
     guiGamePositioning.add(this.game.canvas,'height').name('canvas.height')
+    guiGamePositioning.show(false)
 
     // **********************************************************************
     // * Game State
     // **********************************************************************
     const guiGameState = gui.addFolder('GameState')
+
     guiGameState.add(this.game, 'phase').name('phase').listen()
 
     // **********************************************************************
-    // * Testing
+    // * Overlays
     // **********************************************************************
-    const guiTestParams = this.gui.addFolder('Test & Debug')
+    const guiTestParams = this.gui.addFolder('Overlays')
 
     this.setupBooleanToggler(this.game, 'isDebugOn', guiTestParams, 'debug mode')
     this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
-    this.setupBooleanToggler(this.params, 'isTurningRandomly', guiTestParams, 'rand walk snek')
     this.setupBooleanToggler(this.params, 'showDebugOverlays', guiTestParams, 'show overlays')
     this.setupBooleanToggler(this.params, 'isGridVisible', guiTestParams, 'show grid')
+
+
+    // **********************************************************************
+    // * Mutations
+    // **********************************************************************
+    const guiMutate = gui.addFolder('Mutate')
+
     this.setupNumericSlider({
       obj: this.params,
       key: 'gameTickMultiplier',
-      folder: guiTestParams,
+      folder: guiMutate,
       minVal: 1,
       maxVal: 5,
       stepVal: 1,
     })
 
-    const guiGameTest = gui.addFolder('GameTest')
-    guiGameTest.add({ resetGame }, 'resetGame')
-      .name('reset: normal')
+    this.setupNumericSlider({
+      obj: this.params,
+      key: 'gameSpeed',
+      folder: guiMutate,
+      minVal: 0.005,
+      maxVal: 1,
+      stepVal: 0.05,
+    })
 
-    guiGameTest.add({ resetGame: () => resetGame(true) }, 'resetGame')
+    guiMutate.add({ resetGame }, 'resetGame')
+    .name('reset: normal')
+
+    guiMutate.add({ resetGame: () => resetGame(true) }, 'resetGame')
       .name('reset: debug')
 
-// **********************************************************************
-// * Game Start Functions
-// **********************************************************************
+    const endGame = () => { this.game.phase = CONSTANTS.PHASE_END }
+     guiMutate.add({ endGame }, 'endGame')
+
     const guiStartFunctions = gui.addFolder('GameStartFunctions')
-    // guiStartFunctions.add(this.params, 'timeToReset', 1000, 5000, 500)
 
     this.setupBooleanToggler(this.params, 'resetAfterElapsed', guiStartFunctions, 'reset: after elapsed ms')
-
-    // guiStartFunctions.add(this.gameStartFunctions, 'resetAfterElapsed')
-    //   .name('reset after elapsed')
-
     this.setupNumericSlider({
       obj: this.params,
       key: 'timeToReset',
@@ -107,33 +116,17 @@ export default class DebugGUI {
       stepVal: 250,
     })
 
-    // TODO set sessionstorage timetoreset on init
-    // TODO onChange of timetoreset Slider, update sessionStorage
 
-    // const handleSessionBoolean = toggleSessionBoolean(obj, prop)
-    // folder.add(obj, prop).onChange(handleSessionBoolean).listen()
-    //   .name(label || prop)
+    // **********************************************************************
+    // * Ents
+    // **********************************************************************
+    const guiEnts = gui.addFolder('Ents')
 
+    this.setupBooleanToggler(this.params, 'isTurningRandomly', guiEnts , 'rand walk snek')
 
-// **********************************************************************
-// * Add Mobs
-// **********************************************************************
     const addCentipede = () => this.game.world.spawnEnts(Centipede)
-    guiGameTest.add({ addCentipede }, 'addCentipede')
+    guiEnts.add({ addCentipede }, 'addCentipede')
 
-    const endGame = () => { this.game.phase = CONSTANTS.PHASE_END }
-    guiGameTest.add({ endGame }, 'endGame')
-
-    this.setupNumericSlider({
-      obj: this.params,
-      key: 'gameSpeed',
-      folder: guiGameTest,
-      minVal: 0.005,
-      maxVal: 1,
-      stepVal: 0.05,
-    })
-
-    guiGamePositioning.show(false)
 
     document.addEventListener('keydown', async (e) => {
       switch (e.key) {
@@ -178,11 +171,6 @@ export default class DebugGUI {
       guiSnek.add(snek, 'level').listen()
       guiSnek.add(snek, 'currMoveSpeed').listen()
       guiSnek.add(snek, 'currTurnRate').listen()
-
-      // const nPostDigestionEffects = {
-      //   n: snek.postDigestionEffects.length
-      // }
-
       guiSnek.add(snek.postDigestionEffects, 'length').listen().name('nPDE')
 
       const seg = guiSnek.addFolder('Segments')
@@ -197,7 +185,6 @@ export default class DebugGUI {
       const segexpObj = { get nextSegExp() { return nextSegExp() }}
       seg.add(segexpObj, 'nextSegExp').listen()
     }
-
   }
 
   /**
@@ -227,7 +214,6 @@ export default class DebugGUI {
       if (paramVal != null) {
         this.params[key] = paramVal
       }
-      
     }
 
     for (const key of Object.keys(this.params)) {
@@ -273,10 +259,6 @@ export default class DebugGUI {
       .name(label || key)
   }
 
-  drawHitOverlays() {
-    Entity.stack.values().forEach( ent => ent.drawHitOverlays())
-  }
-
   drawGrid() {
     const ctx = this.game.ctx
     const n = 10
@@ -314,17 +296,15 @@ export default class DebugGUI {
       if (this.params.resetAfterElapsed) {
         await setTimeout(() => resetGame(this.game.isDebugOn), this.params.timeToReset)
       }
-      
       console.log(`%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%`, )
     }
   }
 
-  update(t, loopID) {
-    this.loopID = loopID
-    
+  update(t) {
     while (this.frames.times.length > 0 && this.frames.times[0] <= t - 1000) {
       this.frames.times.shift()
     }
+
     this.frames.times.push(t)
     this.frames.fps = this.frames.times.length
 
@@ -375,9 +355,5 @@ export default class DebugGUI {
         this.drawGrid()
       }
     }
-    // if (this.params.showHitOverlay) {
-    //   this.drawHitOverlays()
-    // }
   }
-
 }

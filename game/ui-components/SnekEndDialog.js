@@ -1,4 +1,4 @@
-import ModalButton from './ModalButton'
+import ModalButton from '../../components-canvas/ModalButton'
 import { animatedTextLine } from '../utils/colormorph'
 
 export default class SnekEndDialog {

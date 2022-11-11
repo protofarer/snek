@@ -1,16 +1,16 @@
 import Constants from './Constants'
-import Audio from './audio'
-import Clock from './utils/Clock'
-import Panel from './ui-components/Panel'
-import Background from './Background'
-import World from './World'
-import LevelMaker from './LevelMaker'
-import DebugGUI from './tools/DebugGUI'
 import Loop from './Loop'
-
+import Background from './Background'
+import Panel from './ui-components/Panel'
+import World from './World'
+import Clock from './utils/Clock'
 import StateMachine from './StateMachine'
 import * as States from './states'
 
+import LevelMaker from './LevelMaker'
+import DebugGUI from './tools/DebugGUI'
+
+import Audio from './audio'
 
 /** 
  * Game object is used to:
@@ -21,10 +21,8 @@ import * as States from './states'
  *  - defines interstitial behavior: the top level interactions between entities
  *      that don't belong to any entity itself, e.g. eollision detection, etc...
  *  - provides entity instantiation via addEnt and spawnEnt methods
- * @param {HTMLDivElement} container - Top level container
+ * @param {HTMLDivElement} container - root container for game area and panel
  * @property {boolean} isDebugOn - window session stored debug mode state
- * @property {Object} params - adjustable game parameters
- * @property {Number} params.speed - speed game can be tweaked to run for debug purposes, range is [0.005, 1]
  * @property {Number} phase - the phase that the game is currently in
  */
 export default class Game {

@@ -10,23 +10,6 @@ export default class Loop {
     document.addEventListener('keydown', async (e) => {
       if(e.key === 'b') {
         this.togglePause()
-        // this.game.phase = this.game.phase === Constants.PHASE_PAUSE 
-        //   ? Constants.PHASE_PLAY
-        //   : Constants.PHASE_PAUSE
-
-        // if (this.game.phase === Constants.PHASE_PAUSE) {
-        //   cancelAnimationFrame(this.loopID)
-        // } else 
-        // if (this.game.phase === Constants.PHASE_PLAY) (
-        //   this.game.loopID = requestAnimationFrame(this.game.draw)
-        // )
-
-        // console.log(`%c*************** Game ${
-        //     this.game.phase === Constants.PHASE_PAUSE 
-        //       ? 'Paused' 
-        //       : 'Playing'
-        //   } ***************`, 'color: orange'
-        // )
       }
     })
   }
@@ -75,6 +58,12 @@ export default class Loop {
     }
   }
   
+  /**
+   * @property start - time (ms) at start of a frame
+   * @property elapsed - time (ms) elapsed since start of a frame
+   * @property loopID - return value of requestAnimationFrame, used to stop the
+   *    function 
+   */
   draw(t) {
     if (this.startT == undefined) {
       this.startT = t
@@ -86,14 +75,13 @@ export default class Loop {
       this.startT = t
       this.game.clr()
 
-      this.game.update(t, this.loopID)
-      this.game.debugGUI && this.game.debugGUI.update(t, this.loopID)
+      this.game.update(t)
+      this.game.debugGUI && this.game.debugGUI.update(t)
 
       this.game.render(t)
       this.game.debugGUI && this.game.debugGUI.render(t)
     }
 
-    // bind draw here?
     this.loopID = requestAnimationFrame(this.draw.bind(this))
   }
 }

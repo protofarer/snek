@@ -24,17 +24,13 @@ export default class LevelMaker {
     }
   }
 
+  // debug level
   spawnLevelZero() {
     this.case = new Scenarios(this.game)
     this.case.base()
-
-    // this.game.world.spawnEnts(Apple, 45)
-    // this.game.world.spawnEnts(Pebble, 55)
-    // this.game.world.spawnEnts(Mango, 5)
-    // this.game.world.spawnEnts(Ant, 25)
-    // this.game.world.spawnEnts(Centipede, 2)
   }
 
+  // first normal level
   spawnLevelOne(snek) {
     snek.position = { 
       x: this.game.canvas.width * 0.5, 
@@ -47,6 +43,19 @@ export default class LevelMaker {
     this.game.world.spawnEnts(Mango, 5)
     this.game.world.spawnEnts(Ant, 25)
     this.game.world.spawnEnts(Centipede, 2)
+  }
+
+  /** Initial spawn method used for playable game/levels.
+   * @method
+   */
+  spawnSurvival() {
+    this.game.snek.position = { x: 200, y: 400 }
+
+    this.spawnEnts(Apple, 45)
+    this.spawnEnts(Pebble, 55)
+    this.spawnEnts(Mango, 5)
+    this.spawnEnts(Ant, 25)
+    this.spawnEnts(Centipede, 2)
 
     // this.spawnEnts(Apple, 50)
     // this.spawnEnts(Pebble, 75)
