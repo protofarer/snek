@@ -9,11 +9,18 @@
 */
 export default class Panel {
   panelContainer = document.createElement('div')
+
   expbar = document.createElement('div')
+
   infobox = document.createElement('div')
   infoA = document.createElement('div')
   score = document.createElement('div')
   lifespan = document.createElement('div')
+
+  touchContainer = document.createElement('div')
+  leftButt = document.createElement('button')
+  rightButt = document.createElement('button')
+  actionButt = document.createElement('button')
 
   constructor(game) {
     this.game = game
@@ -43,6 +50,24 @@ export default class Panel {
 
     this.lifespan.id = 'info-lifespan'
     this.infoA.appendChild(this.lifespan)
+
+    this.touchContainer.id = 'touch-box'
+    this.panelContainer.appendChild(this.touchContainer)
+
+    this.leftButt.id = 'left-butt'
+    this.leftButt.className = 'touch-control'
+    this.leftButt.innerText = 'L'
+    this.touchContainer.appendChild(this.leftButt)
+
+    this.rightButt.id = 'right-butt'
+    this.rightButt.className = 'touch-control'
+    this.rightButt.innerText = 'R'
+    this.touchContainer.appendChild(this.rightButt)
+
+    this.actionButt.id= 'action-butt'
+    this.actionButt.className = 'touch-control'
+    this.actionButt.innerText = 'A'
+    this.touchContainer.appendChild(this.actionButt)
   
     // before init, for debug
     this.infobox.style.color = 'lawngreen'
