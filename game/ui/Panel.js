@@ -6,16 +6,21 @@
  * @property {HTMLDivElement} score - displays score for current level
  * @property {HTMLDivElement} level - displays Snek's level
  * @property {HTMLDivElement} gameInfo - displays Snek's exp numerically
- * @property {HTMLButtonElement} newGameButton - starts a new game
 */
 export default class Panel {
   panelContainer = document.createElement('div')
+
   expbar = document.createElement('div')
+
   infobox = document.createElement('div')
   infoA = document.createElement('div')
   score = document.createElement('div')
   lifespan = document.createElement('div')
-  newGameButton = document.createElement('button')
+
+  touchContainer = document.createElement('div')
+  leftButt = document.createElement('button')
+  rightButt = document.createElement('button')
+  actionButt = document.createElement('button')
 
   constructor(game) {
     this.game = game
@@ -45,30 +50,37 @@ export default class Panel {
 
     this.lifespan.id = 'info-lifespan'
     this.infoA.appendChild(this.lifespan)
-  
-    this.newGameButton.id = 'newGameButton'
-    this.newGameButton.innerText = 'New Game'
-    this.panelContainer.appendChild(this.newGameButton)
+
+    this.touchContainer.id = 'touch-box'
+    this.panelContainer.appendChild(this.touchContainer)
+
+    this.leftButt.id = 'left-butt'
+    this.leftButt.className = 'touch-control'
+    this.leftButt.innerText = 'L'
+    this.touchContainer.appendChild(this.leftButt)
+
+    this.rightButt.id = 'right-butt'
+    this.rightButt.className = 'touch-control'
+    this.rightButt.innerText = 'R'
+    this.touchContainer.appendChild(this.rightButt)
+
+    this.actionButt.id= 'action-butt'
+    this.actionButt.className = 'touch-control'
+    this.actionButt.innerText = 'A'
+    this.touchContainer.appendChild(this.actionButt)
   
     // before init, for debug
     this.infobox.style.color = 'lawngreen'
     this.score.innerText = '$score'
     this.lifespan.innerText = '$lifespan'
-
-    this.setupEventListeners()
-  }
-
-  setupEventListeners() {
-    this.newGameButton.addEventListener('click', () => {
-      window.location.replace('/')
-    })
   }
 
   render() {
     this.score.innerHTML = `Score: ${this.game.stateMachine.current?.score}`
 
     if (this.snek) {
-      this.lifespan.innerHTML = `Lifespan: ${this.game.clock.getElapsedSeconds()}s`
+      this.lifespan.innerHTML = 
+        `Lifespan: ${Math.trunc(this.snek.lifeSpan / 1000)}s`
 
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(

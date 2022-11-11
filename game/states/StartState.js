@@ -3,6 +3,7 @@ import BaseState from './BaseState'
 export class StartState extends BaseState {
   modes = ['Normal', 'Survival']
   mode = 0
+  stateName = 'start'
 
   constructor(game) {
     super()
@@ -38,7 +39,6 @@ export class StartState extends BaseState {
   }
 
   update() {
-
   }
 
   render() {
@@ -71,7 +71,6 @@ export class StartState extends BaseState {
   }
 
   exit() {
-    // TODO disable touch eventlisteners
     document.removeEventListener('keydown', this.handleKeyDown)
   }
 }

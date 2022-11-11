@@ -37,8 +37,6 @@ export default class World {
     )
     ent.parent = this.game
     
-    // const bigEnt = new Entity(ent)
-    
     if (!position) {
       // * For testing purposes so snek segs don't count toward displacement
       // * along x
@@ -59,7 +57,6 @@ export default class World {
     }
 
     ent.isMobile = false
-
     ent.setHitAreas()   // for good measure
     return ent
   }
@@ -93,10 +90,9 @@ export default class World {
     
     return ents
   }
-  
 
   /** Base world spawning function
-   * @method
+   *  @method
    */
   async randomSpawns() {
     if (
@@ -120,33 +116,12 @@ export default class World {
     }
   }
 
-  /** Initial spawn method used for playable game/levels.
-   * @method
-   */
-  initSurvivalSpawn() {
-    if (this.game.isDebugOn === 'false' || this.isDebugOn === null) {
-      this.game.snek.position = { x: 200, y: 400 }
-
-      this.spawnEnts(Apple, 45)
-      this.spawnEnts(Pebble, 55)
-      this.spawnEnts(Mango, 5)
-      this.spawnEnts(Ant, 25)
-      this.spawnEnts(Centipede, 2)
-
-      // this.spawnEnts(Apple, 50)
-      // this.spawnEnts(Pebble, 75)
-      // this.spawnEnts(Ant, 70)
-      // this.spawnEnts(Mango, 25)
-      // this.spawnEnts(Centipede, 5)
-    }
-  }
-
-  update() {
+  update(t) {
     for(const ent of Entity.stack.values()) {
 
       // Generally, immobs don't have an update function since they are *acted
       // upon* or manipulated by other ents
-      ent.update?.()
+      ent.update?.(t)
 
       // **********************************************************************
       // * Hit Detection
@@ -206,16 +181,16 @@ export default class World {
               }
             }
 
-            console.log(`sneksegs.length`, snekSegCount )
-            
             if (wasSegLost > 0 && snekSegCount === 1) {
-              console.log(`SNEK DIES`, )
-              // TODO SNEK DED: change state to game over
+              this.game.stateMachine.change('gameOver', {
+                snek: this.game.stateMachine.current.snek,
+                level: this.game.stateMachine.current.level,
+                score: this.game.stateMachine.current.score,
+              })
             }
 
           }
         }
-
 
         // snek vs swallowables
         if (this.snek && this.snek.swallowables.includes(ent.species)) {
@@ -232,7 +207,11 @@ export default class World {
   }
 
   isContactingMouth(objHitArea, mouthCoords) {
-    return this.game.ctx.isPointInPath(objHitArea, mouthCoords.x, mouthCoords.y)
+    return this.game.ctx.isPointInPath(
+      objHitArea, 
+      mouthCoords.x, 
+      mouthCoords.y
+    )
   }
 
   /** Determine whether ent mouth is contacting another ent's body 
@@ -250,6 +229,4 @@ export default class World {
     isContacting && collider(agg, def)
     return isContacting
   }
-
-
 }

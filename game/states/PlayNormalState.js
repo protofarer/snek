@@ -9,6 +9,7 @@ import Snek from '../mobs/Snek'
  */
 export class PlayNormalState extends BaseState {
   level
+  stateName = 'playNormal'
 
   constructor(game, params) {
     super()
@@ -16,8 +17,8 @@ export class PlayNormalState extends BaseState {
 
     this.snek = params?.snek
       || new Snek(this.game.ctx, null, this.game)
-    this.game.world.snek = this.snek 
-    this.game.panel.snek = this.snek
+
+    this.game.setSnek(this.snek)
 
     this.level = params.level
     this.score = params.score
@@ -26,15 +27,14 @@ export class PlayNormalState extends BaseState {
     this.game.levelMaker.spawn(this.level, this.snek)
   }
 
-  update() {
-    this.game.world.update()
+  update(t) {
+    this.game.world.update(t)
   }
 
   render() {
     for(const ent of Entity.stack.values()) {
       ent.render()
     }
-
     this.game.panel.render()
   }
 
