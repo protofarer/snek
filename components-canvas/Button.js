@@ -16,11 +16,11 @@ export default class Button {
   //  D. set its own path aka clickArea
   // IV. Possibilities
   //  CSDR addEventListener to something more general than a canvas.context paremeter
-  constructor(ctx, buttonData, offset, handleClick=null, listenerOptions=null) {
+  constructor(ctx, data, handleClick=null, listenerOptions=null) {
     if (ctx === null || ctx === undefined || ctx === {}) {
       throw new TypeError('A button\'s context wasn\'t defined')
     }
-    if (!buttonData?.origin?.x || !buttonData?.origin?.y) {
+    if (!data?.origin?.x || !data?.origin?.y) {
       throw new TypeError('A button\'s origin coordinates weren\'t defined')
     }
     // if (!offset?.x || !offset?.y) {
@@ -30,23 +30,23 @@ export default class Button {
     //   throw new TypeError('A button\'s handleClick wasn\'t defined')
     // }
 
-    this.name = buttonData.name || 'unnamed'
+    this.name = data.name || 'unnamed'
 
     this.ctx = ctx
-    this.offset = offset
 
     this.rect = this.ctx.canvas.getBoundingClientRect() 
 
-    this.origin = buttonData.origin
-    this.label = buttonData.label || 'no-button-label-assigned'
-    this.baseWidth = buttonData.base?.w || 70
-    this.baseHeight = buttonData.base?.h || 30
-    this.stretchWidth = buttonData.stretch?.w || 1
-    this.stretchHeight = buttonData.stretch?.h || 1
+    this.origin = data.origin ?? { x: 0, y: 0 }
+    this.offset = data?.offset ?? { x: 0, y: 0 }
+    this.label = data.label || 'no-button-label-assigned'
+    this.baseWidth = data.base?.w || 70
+    this.baseHeight = data.base?.h || 30
+    this.stretchWidth = data.stretch?.w || 1
+    this.stretchHeight = data.stretch?.h || 1
 
-    this.areaFill = buttonData.areaFill || 'hsl(210,90%,85%)'
-    this.labelColor = buttonData.labelColor || 'hsl(200, 20%, 30%)'
-    this.borderStroke = buttonData.borderStroke || this.areaFill
+    this.areaFill = data.areaFill || 'hsl(210,90%,85%)'
+    this.labelColor = data.labelColor || 'hsl(200, 20%, 30%)'
+    this.borderStroke = data.borderStroke || this.areaFill
 
     this.top = this.origin.y
     this.bottom = this.origin.y + this.baseHeight * this.stretchHeight
@@ -78,6 +78,14 @@ export default class Button {
       this.baseWidth * this.stretchWidth + 4,
       this.baseHeight * this.stretchHeight + 4,
     )
+    console.log(`topleft @`, 
+      this.offset.x + this.origin.x - 2, 
+      this.offset.y + this.origin.y - 2,
+    )
+    console.log(`w/h`,
+      this.baseWidth * this.stretchWidth + 4,
+      this.baseHeight * this.stretchHeight + 4,
+     )
   }
 
   addClickListener(newHandleClick, listenerOptions) {
