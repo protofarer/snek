@@ -1,17 +1,17 @@
 import Constants from './Constants'
-import Loop from './Loop'
-import Background from './Background'
+import Loop from './modules/Loop'
+import Background from './ui-components/Background'
 import Panel from './ui-components/Panel'
 import World from './World'
-import Clock from './utils/Clock'
-import StateMachine from './StateMachine'
+import Clock from './modules/Clock'
+import StateMachine from './modules/StateMachine'
 import * as States from './states'
 import { newGame } from '..'
 
-import LevelMaker from './LevelMaker'
+import LevelMaker from './modules/LevelMaker'
 import DebugGUI from './tools/DebugGUI'
 
-import Audio from './audio'
+import Audio from './modules/audio'
 
 /** 
  * Game object is used to:

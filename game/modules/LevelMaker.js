@@ -1,10 +1,10 @@
-import Apple from './immobs/Apple'
-import Mango from './immobs/Mango'
-import Pebble from './immobs/Pebble'
-import Scenarios from './tools/Scenarios'
+import Apple from '../immobs/Apple'
+import Mango from '../immobs/Mango'
+import Pebble from '../immobs/Pebble'
+import Scenarios from '../tools/Scenarios'
 
-import Centipede from './mobs/Centipede'
-import Ant from './mobs/Ant'
+import Centipede from '../mobs/Centipede'
+import Ant from '../mobs/Ant'
 
 export default class LevelMaker {
   constructor(game) {
