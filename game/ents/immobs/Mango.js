@@ -1,61 +1,15 @@
 import Immob from './Immob'
-import Constants from '../../Constants'
+import Traits from '../Traits'
+import { loadTraits } from '../../utils/helpers'
 
 export default class Mango extends Immob {
   static species = 'mango'
   species = 'mango'
 
-  r = 6
-  digestion = {
-    timeLeft: 16000,
-    baseTime: 16000
-  }
-
-  baseExp = 40
-  currExp = this.baseExp
-
-  secondaryColor = 'green'
-
-  chompEffectWord = Constants.collisionFunctions.SMALL_CHOMP
-
-  // TODO
-  // const refreshEffect = (entAffected) => {
-  // }
-  postDigestionData = [
-    {
-      effect: 'turnRate',
-      type: 'boolean',
-      turnRate: 1,
-      duration: 32000,
-      timeLeft: 32000
-    },
-    {
-      effect: 'moveSpeed',
-      type: 'boolean',
-      moveSpeed: 0.5,
-      duration: 32000,
-      timeLeft: 32000
-    },
-    // TODO
-    // {
-    //   effect: 'refresh',
-    //   type: 'function',
-    //   refresh:
-    // }
-  ]
-
   constructor(ctx, position, parent=null) {
     super(ctx, position, parent)
-
-    this.primaryColor = {
-      hueStart: 35,
-      hueEnd: 35,
-      satStart: 100,
-      satEnd: 25,
-      lumStart: 50,
-      lumEnd: 40
-    }
-
+    loadTraits.call(this, Traits.Mango)
+    this.currExp = this.baseExp
     this.setHitAreas()
   }
 

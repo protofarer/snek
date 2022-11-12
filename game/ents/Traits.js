@@ -116,9 +116,10 @@ export default {
 
   Mango: {
     r: 6,
+    baseExp: 0,
     digestion: {
-      timeLeft: 16000,
-      baseTime: 16000
+      timeLeft: 10000,
+      baseTime: 10000
     },
     postDigestionData: [
       {
@@ -131,12 +132,15 @@ export default {
       {
         effect: 'moveSpeed',
         type: 'boolean',
-        moveSpeed: 0.5,
+        moveSpeed: 0.25,
         duration: 32000,
         timeLeft: 32000
+      },
+      {
+        effect: 'addSeg',
+        type: 'mutation',
       }
     ],
-    baseExp: 40,
     primaryColor: {
       hueStart: 35,
       hueEnd: 35,
@@ -146,7 +150,7 @@ export default {
       lumEnd: 40
     },
     secondaryColor: 'green',
-    // chompEffect: smallChompEffect,
+    chompEffect: Constants.collisionFunction.SMALL_CHOMP,
   },
   
   Mob: {

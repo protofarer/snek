@@ -57,12 +57,12 @@ export default class Snek extends Mob {
     this.currMoveSpeed = this.baseMoveSpeed
     this.birthTime = this.parent.t < 0 ? 0 : this.parent.t
 
-    this.addSegments(initSegmentCount || this.baseSegmentCount)
+    this.addSegment(initSegmentCount || this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
   }
 
-  addSegments(n) {
+  addSegment(n=1) {
     for(let i = 0; i < n; i++) {
       // TODO for death implement, segmentless snake is considered dead
       if (!this.downstreamSegment){
@@ -363,7 +363,7 @@ export default class Snek extends Mob {
     while(this.currSegExp >= this.segExpForLevel(this.countSegments + 1)
       && this.countSegments < this.maxSegmentCount) {
       console.log(`New seg from seg level up`, )
-      this.addSegments(1)
+      this.addSegment()
     }
   }
 }

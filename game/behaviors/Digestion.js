@@ -12,8 +12,10 @@ export default class Digestion {
         case 'turnRate':
           headEnt.currTurnRate += pDD.turnRate
           break
+        case 'addSeg':
+          headEnt?.addSegment()
+          break
         default:
-          console.log(`snek postDigestionEffect switch/case defaulted`, )
           throw Error(`Unhandled postDigestionEffect: ${pDD.effect}`)
       }
       console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
