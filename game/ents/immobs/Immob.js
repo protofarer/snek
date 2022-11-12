@@ -75,12 +75,9 @@ export default class Immob extends Entity {
   chompEffect = baseChompEffect
   postDigestionData = []
 
-
   primaryColorParameters = {}
-
   getPrimaryColor = getColorParameters.bind(this)
   setPrimaryColor = setColorParameters.bind(this)
-
   get primaryColor() { return this.getPrimaryColor() }
   set primaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) { 
     this.setPrimaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) 

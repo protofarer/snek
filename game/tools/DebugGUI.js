@@ -341,12 +341,6 @@ export default class DebugGUI {
       this.initSnekStateGUI()
     }
 
-    if (this.game.isDebugOn){
-      for(let i = 0; i < this.params.gameTickMultiplier - 1; i++) {
-        this.game.update()
-      }
-    }
-
     // because via hotkey, keyboard handler can toggle gui state variable
     if (this.params.isDebugGUIShown) {
       this.gui.show()

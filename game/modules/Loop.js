@@ -75,7 +75,18 @@ export default class Loop {
       if (elapsed > Constants.TICK / this.game.debugGUI.params.gameSpeed) {
         this.startT = t
         this.game.clr()
+
         this.game.update(t)
+
+        if (
+          this.game.isDebugOn && 
+          this.game.debugGUI.params.gameTickMultiplier > 1
+        ) {
+          for (let i = 0; i < this.game.debugGUI.params.gameTickMultiplier - 1; i++) {
+            this.game.update()
+          }
+        }
+
         this.game.render(t)
       }
     } else if (elapsed > Constants.TICK) {
