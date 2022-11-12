@@ -133,4 +133,5 @@ button {
   border-radius: 50%;
   background-color: grey;
   font-size:xxx-large;
+  user-select: none;
 }

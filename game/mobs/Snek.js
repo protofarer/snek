@@ -127,30 +127,22 @@ export default class Snek extends Mob {
     document.addEventListener('keyup', handleKeyUp)
 
 
+    const leftActivated = (e) => { this.isTurningLeft = true }
+    const leftDeactivated = (e) => { this.isTurningLeft = false }
+    const rightActivated = (e) => { this.isTurningRight = true }
+    const rightDeactivated = (e) => { this.isTurningRight = false }
+
     const left = document.querySelector('#left-butt')
-    const handleLeftPointerDown = (e) => {
-      this.isTurningLeft = true
-    }
-    left.addEventListener('pointerdown', handleLeftPointerDown)
+    left.addEventListener('pointerdown', leftActivated)
+    left.addEventListener('pointerup', leftDeactivated)
+    left.addEventListener('pointerout', leftDeactivated)
 
     const right = document.querySelector('#right-butt')
-    const handleRightPointerDown = (e) => {
-      this.isTurningRight = true
-    }
-    right.addEventListener('pointerdown', handleRightPointerDown)
+    right.addEventListener('pointerdown', rightActivated)
+    right.addEventListener('pointerup', rightDeactivated)
+    right.addEventListener('pointerout', rightDeactivated)
 
-    const handleLeftPointerUp = (e) => {
-      this.isTurningLeft = false
-    }
-    left.addEventListener('pointerup', handleLeftPointerUp)
-
-    const handleRightPointerUp = (e) => {
-      this.isTurningRight = false
-    }
-    right.addEventListener('pointerup', handleRightPointerUp)
-
-    // const right = document.querySelector('#right-butt')
-    // const action = document.querySelector('#action-butt')
+    // remove touch drag because it causes button to stick as if holding pressdown
 
   }
 
