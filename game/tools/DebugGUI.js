@@ -51,6 +51,7 @@ export default class DebugGUI {
     guiGamePositioning.add(this.game.canvas, 'width').name('canvas.width')
     guiGamePositioning.add(this.game.canvas,'height').name('canvas.height')
     guiGamePositioning.show(true)
+    guiGamePositioning.close()
 
     // **********************************************************************
     // * Game State

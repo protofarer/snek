@@ -174,13 +174,20 @@ export default class Segment extends Immob {
       }
 
     } else {
-
-      // * Upon fully digesting contents:
-      // * - Active Post Digestion Effects
+      // * Contents completely digested:
+      // * - Activate Post Digestion Effects at Ent's Head
+      // * - Recycle ent
+      // * - Create poop
 
       const postDigestionData = this.entUnderDigestion.postDigestionData
+      console.log(`entUnderDig`, this.entUnderDigestion.species)
+      console.log(`postDigestData`, postDigestionData)
+      
+      
 
       if (postDigestionData) {
+        console.log(`activating pDE`, )
+        
         activatePostDigestionEffects.call(this, postDigestionData, this.getHeadEnt())
       }
         
