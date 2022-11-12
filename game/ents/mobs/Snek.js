@@ -1,8 +1,8 @@
 import Mob from './Mob'
 import Segment from './Segment'
-import { cancelPostDigestionEffects } from '../../behaviors/digestion'
 import { intRep } from '../../utils/helpers'
 import Constants from '../../Constants'
+import Digestion from '../../behaviors/Digestion'
 
 /**
  * The main player controllable character.
@@ -325,7 +325,7 @@ export default class Snek extends Mob {
 
     // remove expired effects
     if (this.expiredPostDigestionEffects.length > 0) {
-      cancelPostDigestionEffects.call(this, this.expiredPostDigestionEffects)
+      Digestion.cancelPostDigestionEffects.call(this, this.expiredPostDigestionEffects)
       this.expiredPostDigestionEffects.length = 0
     }
 

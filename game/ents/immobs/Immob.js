@@ -1,7 +1,7 @@
-import { baseChompEffect } from '../../behaviors/digestion'
-import { baseAbsorbExp } from '../../behaviors/exp'
 import Entity from '../Entity'
 import { getColorParameters, setColorParameters } from '../../utils/colormorph'
+import { loadTraits } from '../../utils/helpers'
+import Traits from '../Traits'
 
 export default class Immob extends Entity {
   /**
@@ -53,26 +53,15 @@ export default class Immob extends Entity {
   
   static entGroup = 'immob'
   entGroup = 'immob'
+  static species = 'immob'
+  species = 'immob'
 
-  r = 1
-  position = { x: 25, y: 25 }
-  scale = { x: 1, y: 1 }
   get hitR() { return this.r + 3 }
 
   headingRadians = 0
   get headingDegrees() { return this.headingRadians * 180 / Math.PI }
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 
-  digestion = {
-    baseTime: 3000,
-    timeLeft: 3000,
-  }
-
-  baseExp = 0
-  currExp = this.baseExp
-
-  expEffect = baseAbsorbExp.bind(this)
-  chompEffect = baseChompEffect
   postDigestionData = null
 
   primaryColorParameters = {}
@@ -83,31 +72,13 @@ export default class Immob extends Entity {
     this.setPrimaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) 
   }
 
-  secondaryColor = ''
-
-
-  underDigestionData = [
-    {
-      effect: 'exp',
-      type: 'function',
-      exp: this.expEffect,
-    }
-  ]
-
   constructor(ctx, startPosition=null, parent=null) {
     super()
     this.ctx = ctx
     this.parent = parent || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
+    loadTraits.bind(this)(Traits.Immob)
     this.position = startPosition || this.position
-    this.primaryColor = {
-      hueStart: 125, 
-      hueEnd: 125 ,
-      satStart: 70, 
-      satEnd: 30,
-      lumStart: 50, 
-      lumEnd: 25,
-    }
-
+    this.currExp = this.baseExp
     this.setHitAreas()
   }
 

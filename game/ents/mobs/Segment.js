@@ -1,7 +1,8 @@
 import Poop from '../immobs/Poop'
 import Immob from '../immobs/Immob'
 import { recycle } from '../../utils/helpers'
-import { activatePostDigestionEffects } from '../../behaviors/digestion'
+import { getTraitFunction } from '../../utils/helpers'
+import Digestion from '../../behaviors/Digestion'
 
 export default class Segment extends Immob {
   static species = 'segment'
@@ -156,9 +157,10 @@ export default class Segment extends Immob {
             underDigestionEffect.type === 'function'
           )
 
-        functionEffects.forEach(effect => 
-          effect[effect.effect](this.getHeadEnt())
-        )
+        functionEffects.forEach(e => {
+          const effectFunction = getTraitFunction(e.effect)
+          effectFunction(this.entUnderDigestion, this.getHeadEnt())
+        })
 
         // Tick duration tickType effects
         this.underDigestionEffects = this.underDigestionEffects
@@ -182,8 +184,7 @@ export default class Segment extends Immob {
       const postDigestionData = this.entUnderDigestion.postDigestionData
 
       if (postDigestionData) {
-        console.log(`activating pDE`, )
-        activatePostDigestionEffects.call(this, postDigestionData, this.getHeadEnt())
+        Digestion.activatePostDigestionEffects.call(this, postDigestionData, this.getHeadEnt())
       }
         
       // * - If digested ent was poop, pass it immediately?
@@ -191,6 +192,10 @@ export default class Segment extends Immob {
         || this.entUnderDigestion.species === 'pebble') {
         this.pass()
       } else {
+        // * absorb remaining exp, this is current, simplified exp absorb approach
+        this.getHeadEnt().currExp += this.entUnderDigestion.currExp
+        this.entUnderDigestion.currExp = 0
+
         // * - Recycle the fully digested ent
         // * - Transform digested ent into poop
         // ! consider recycling aka ring buffer to restore disintegrated ents

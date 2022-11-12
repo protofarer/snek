@@ -1,4 +1,4 @@
-import { bigChompEffect } from '../../behaviors/digestion'
+import Constants from '../../Constants'
 import Immob from './Immob'
 
 export default class Banana extends Immob {
@@ -16,7 +16,7 @@ export default class Banana extends Immob {
 
   secondaryColor = 'black'
 
-  chompEffect = bigChompEffect
+  chompEffectWord = Constants.collisionFunction.BIG_CHOMP
 
   underDigestionData = [
     {

@@ -1,4 +1,7 @@
 import Entity from '../ents/Entity'
+import Constants from '../Constants'
+import Collisions from '../behaviors/Collisions'
+import Digestion from '../behaviors/Digestion'
 
 /**
  * Returns upstream-most entity in a segment chain, including head ents
@@ -56,4 +59,31 @@ export function intRep(n, t, f) {
   }
 
   id = setInterval(limitedRepeat, t)
+}
+
+export function loadTraits(traitObject) {
+  for (let [k,v] of Object.entries(traitObject)) {
+    if (typeof v === 'object') {
+      const os = JSON.parse(JSON.stringify(v))
+      this[k] = os
+    } else {
+      this[k] = v
+    }
+  }
+}
+
+export function getTraitFunction(name) {
+    if ([
+      Constants.collisionFunction.BASE_CHOMP,
+      Constants.collisionFunction.SMALL_CHOMP,
+      Constants.collisionFunction.BIG_CHOMP,
+    ].includes(name)
+    ) return Collisions[name]
+
+    if ([
+      Constants.underDigestionFunction.BASE_ABSORB_EXP
+    ].includes(name)
+    ) return Digestion[name]
+
+    throw Error('getTraitFunction called with invalid args')
 }

@@ -1,21 +1,22 @@
-import { bigChompEffect, smallChompEffect } from '../behaviors/digestion'
-import { baseAbsorbExp } from '../behaviors/exp'
+import Constants from '../Constants'
 
 export default {
   Immob: {
     r: 1,
+    position: {
+      x: 25,
+      y: 25
+    },
+    scale: {
+      x: 1,
+      y: 1
+    },
     digestion: {
       baseTime: 3000,
       timeLeft: 3000
     },
-    expEffect: baseAbsorbExp.bind(this),
-    underDigestionData: [
-      {
-        effect: 'exp',
-        type: 'function',
-        exp: baseAbsorbExp.bind(this),
-      }
-    ],
+    chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
+    underDigestionData: null,
     baseExp: 0,
     primaryColor: {
       hueStart: 125,
@@ -24,13 +25,14 @@ export default {
       satEnd: 30,
       lumStart: 50, 
       lumEnd: 25,
-    }
+    },
+    secondaryColor: ''
   },
   Apple: {
     r: 6,
     digestion: {
-      timeLeft: 10000,
-      baseTime: 10000
+      timeLeft: 5000,
+      baseTime: 5000
     },
     baseExp: 10,
     secondaryColor: 'hsl(95, 60%, 50%)',
@@ -45,9 +47,10 @@ export default {
     postDigestionData: [
       {
         effect: 'moveSpeed',
-        moveSpeed: 0.25,
-        duration: 20000,
-        timeLeft: 20000
+        type: 'offset',
+        moveSpeed: 0.55,
+        duration: 5000,
+        timeLeft: 5000
       }
     ],
   },
@@ -97,10 +100,10 @@ export default {
     {
       effect: 'exp',
       type: 'function',
-      exp: baseAbsorbExp.bind(this)
+      exp: Constants.underDigestionFunction.BASE_ABSORB_EXP
     }
     ],
-    chompEffect: bigChompEffect,
+    // chompEffect: bigChompEffect,
   },
 
   Mango: {
@@ -135,7 +138,7 @@ export default {
       lumEnd: 40
     },
     secondaryColor: 'green',
-    chompEffect: smallChompEffect,
+    // chompEffect: smallChompEffect,
   },
   
   Mob: {

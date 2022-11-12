@@ -7,4 +7,20 @@ export default {
   CANVAS_WIDTH: 400,
   CANVAS_HEIGHT: 600,
   HARM_COOLDOWN: 2000,
+
+  underDigestionFunction: {
+    WORD: 'underDigestionFunction',
+    BASE_ABSORB_EXP: 'baseAbsorbExp'
+  },
+
+  collisionFunction: {
+    WORD: 'collisionFunction',
+    BASE_CHOMP: 'baseChomp',
+    SMALL_CHOMP: 'smallChomp',
+    BIG_CHOMP: 'bigChomp'
+  },
+
+  postDigestionFunction: {
+
+  },
 }

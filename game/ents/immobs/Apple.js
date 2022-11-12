@@ -1,54 +1,17 @@
+import Traits from '../Traits'
 import Immob from './Immob'
+import { loadTraits } from '../../utils/helpers'
 
 export default class Apple extends Immob {
   static species = 'apple'
   species = 'apple'
 
-  r = 6
-  digestion = {
-    timeLeft: 10000,
-    baseTime: 10000
-  }
-
-  baseExp = 10
-  currExp = this.baseExp
-
-  secondaryColor = `hsl(95, 60%, 50%)`
-
   constructor(ctx, startPosition, parent) {
     super(ctx, startPosition, parent)
-    this.primaryColor = { 
-      hueStart: 0, 
-      hueEnd: 25, 
-      satStart: 70,
-      satEnd: 30,
-      lumStart: 50,
-      lumEnd: 25,
-    }
-
-    this.postDigestionData = [
-      {
-        effect: 'moveSpeed',
-        moveSpeed: 0.25,
-        duration: 5000,
-        timeLeft: 5000
-      },
-    ]
+    loadTraits.bind(this)(Traits.Apple)
+    this.currExp = this.baseExp
     this.setHitAreas()
   }
-
-  // postDigestionEffect () {
-  //   if (!this.wasExcreted) {
-  //     return {
-  //       effect: 'moveSpeed',
-  //       moveSpeed: 0.25,
-  //       duration: 12000,
-  //       timeLeft: 12000
-  //     }
-  //   } else {
-  //     return null
-  //   }
-  // }
   
   drawBody(ctx) {
     ctx.save()

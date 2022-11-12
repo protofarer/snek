@@ -9,7 +9,7 @@ import Entity from './ents/Entity'
 import { moveEdgeWrap } from './behaviors/movements'
 import Collisions from './behaviors/Collisions'
 import Constants from './Constants'
-import Traits from './ents/traits'
+import Traits from './ents/Traits'
 
 /** Runs world events and spawning behaviors
  * @class
@@ -197,11 +197,9 @@ export default class World {
         // snek vs swallowables
         if (this.snek && this.snek.swallowables.includes(ent.species)) {
           this.collisionResolver(this.snek, ent, () => {
-            if (this.snek.swallowables.includes(ent.species)) {
               Collisions.chomp(this.snek, ent)
               this.game.play.playRandomSwallowSound()
               this.game.stateMachine.current.score++
-            }
           })
         }
       }

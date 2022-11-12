@@ -1,5 +1,5 @@
-import { smallChompEffect } from '../../behaviors/digestion'
 import Immob from './Immob'
+import Constants from '../../Constants'
 
 export default class Mango extends Immob {
   static species = 'mango'
@@ -16,7 +16,7 @@ export default class Mango extends Immob {
 
   secondaryColor = 'green'
 
-  chompEffect = smallChompEffect
+  chompEffectWord = Constants.collisionFunctions.SMALL_CHOMP
 
   // TODO
   // const refreshEffect = (entAffected) => {
