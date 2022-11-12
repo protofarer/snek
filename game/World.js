@@ -50,7 +50,8 @@ export default class World {
       ent.position.y -= (yInterval * (ent.id - Traits.Snek.baseSegmentCount))
 
       if (ent.position.y < 0) {
-        let n = Math.floor(ent.position.y / this.game.canvas.height)
+        let n = Math.floor(Math.abs(ent.position.y) 
+          / this.game.canvas.height) + 1
         ent.position.y += n * this.game.canvas.height
         ent.position.x += n * xInterval
       }
