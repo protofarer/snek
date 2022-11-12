@@ -135,3 +135,7 @@ button {
   font-size:xxx-large;
   user-select: none;
 }
+
+#action-butt {
+  visibility: hidden;
+}

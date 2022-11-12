@@ -35,6 +35,9 @@ export default class LevelMaker {
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
     this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
   }
 
   // first normal level

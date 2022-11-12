@@ -1,8 +1,9 @@
 import Mob from './Mob'
 import Segment from './Segment'
-import { intRep } from '../../utils/helpers'
+import { intRep, loadTraits } from '../../utils/helpers'
 import Constants from '../../Constants'
 import Digestion from '../../behaviors/Digestion'
+import Traits from '../Traits'
 
 /**
  * The main player controllable character.
@@ -11,19 +12,6 @@ import Digestion from '../../behaviors/Digestion'
 export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'
-
-  swallowables = [ 'apple', 'mango', 'ant', 'pebble', 'banana' ]
-  enemySpecies = ['centipede']
-
-  r = 10
-
-  level = 1
-  levelMultiplier = 2
-  segLevelMultiplier = 1.25
-  baseExp = 100
-  currExp = 0
-
-  currSegExp = this.currExp
 
   expForLevel(level) {
     return (this.levelMultiplier**(level - 2)) * this.baseExp
@@ -47,7 +35,6 @@ export default class Snek extends Mob {
   isTongueOut = false
   tongueDirection = 0
 
-  baseSegmentCount = 3
   downstreamSegment
   currKnownSegmentCount = 0
   get maxSegmentCount() { return this.level }
@@ -57,24 +44,18 @@ export default class Snek extends Mob {
   expiredPostDigestionEffects = []
   isVisible = true
   wasHarmed = false
+  lifeSpan = 0
 
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)
+    loadTraits.call(this, Traits.Snek)
 
-    this.headingDegrees = -90
-    
-    this.basePrimaryColor = 'hsl(100, 100%, 32%)'
+    this.currSegExp = this.currExp
     this.currPrimaryColor = this.basePrimaryColor
-
-    this.baseTurnRate = this.baseMoveSpeed + 3
+    this.baseTurnRate = this.baseMoveSpeed + this.turnRateOffset
     this.currTurnRate = this.baseTurnRate
-
-    this.baseMoveSpeed = 1
     this.currMoveSpeed = this.baseMoveSpeed
-
     this.birthTime = this.parent.t < 0 ? 0 : this.parent.t
-    this.lifeSpan = 0
-
 
     this.addSegments(initSegmentCount || this.baseSegmentCount)
     this.setHitAreas()

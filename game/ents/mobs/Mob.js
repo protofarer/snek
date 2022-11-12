@@ -1,4 +1,6 @@
+import { loadTraits } from '../../utils/helpers'
 import Immob from '../immobs/Immob'
+import Traits from '../Traits'
 
 export default class Mob extends Immob {
   // Mobs are entities that are generally more dynamic than immobs. They can
@@ -11,31 +13,27 @@ export default class Mob extends Immob {
 
   get hitR() { return this.r + 1 }
 
-  primaryColor = 'blue'
-  secondaryColor = ''
-
+  
   // * Override in instance constructor: 1) field specify baseMS 2) this.moveSpeed = this.baseMS
   // * otherwise will be set to below
   isMobile = true
-  baseMoveSpeed = 1
   currMoveSpeed = this.baseMoveSpeed
-  minMoveSpeed = 0.3
-
+  
   // get moveSpeed() { return this.currMoveSpeed }
   // set moveSpeed(val) { this.currMoveSpeed = Math.max(this.minMoveSpeed, val)}
-
+  
   // * Override in instance constructor: 1) field specify baseTR 2) this.turnRate = this.baseTR
   // * otherwise will be set to below
   isTurnable = true
   turnDirection = 0
-  baseTurnRate = this.moveSpeed + 5
-  currTurnRate = this.baseTurnRate
-  minTurnRate = 0
   isTurningLeft = false
   isTurningRight = false
-
+  
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)
+    loadTraits.call(this, Traits.Mob)
+    this.baseTurnRate = this.moveSpeed + this.turnRateOffset
+    this.currTurnRate = this.baseTurnRate
   }
 
   setTurnable(setTurnable) {

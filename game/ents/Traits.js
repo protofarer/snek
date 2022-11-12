@@ -48,7 +48,7 @@ export default {
       {
         effect: 'moveSpeed',
         type: 'offset',
-        moveSpeed: 0.55,
+        moveSpeed: 0.25,
         duration: 5000,
         timeLeft: 5000
       }
@@ -58,8 +58,8 @@ export default {
   Pebble: {
     r: 3,
     digestion: {
-      baseTime: 600000,
-      timeLeft: 600000
+      baseTime: 60000,
+      timeLeft: 60000
     },
     primaryColor: 'hsl(220, 10%, 48%)',
   },
@@ -187,6 +187,8 @@ export default {
       timeLeft: 4000,
       duration: 4000
     },
+    swallowables: [ 'apple', 'mango', 'ant', 'pebble', 'banana' ],
+    enemySpecies: ['centipede'],
   },
 
   Centipede: {
