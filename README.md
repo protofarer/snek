@@ -4,8 +4,8 @@ You are Snek. You're small and always hungry. Your appetite is endless and so ar
 
 ## Roadmap
 - 0.1 -> 1.0:
-  - add GameOverState
-  - add touch controls
+  - [x] add GameOverState
+  - [x] add touch controls
   - fix resize to fit viewport/avail view
   - add a scripted event
   - add a detrimental swallowable

@@ -127,23 +127,18 @@ export default class Snek extends Mob {
     document.addEventListener('keyup', handleKeyUp)
 
 
-    const leftActivated = (e) => { this.isTurningLeft = true }
-    const leftDeactivated = (e) => { this.isTurningLeft = false }
-    const rightActivated = (e) => { this.isTurningRight = true }
-    const rightDeactivated = (e) => { this.isTurningRight = false }
+    const leftActivated = () => { this.isTurningLeft = true }
+    const leftDeactivated = () => { this.isTurningLeft = false }
+    const rightActivated = () => { this.isTurningRight = true }
+    const rightDeactivated = () => { this.isTurningRight = false }
 
     const left = document.querySelector('#left-butt')
     left.addEventListener('pointerdown', leftActivated)
-    // left.addEventListener('pointerup', leftDeactivated)
     left.addEventListener('pointerout', leftDeactivated)
 
     const right = document.querySelector('#right-butt')
     right.addEventListener('pointerdown', rightActivated)
-    // right.addEventListener('pointerup', rightDeactivated)
     right.addEventListener('pointerout', rightDeactivated)
-
-    // remove touch drag because it causes button to stick as if holding pressdown
-
   }
 
   drawHitOverlays() {
