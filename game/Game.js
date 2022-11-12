@@ -1,6 +1,6 @@
 import Constants from './Constants'
 import Loop from './modules/Loop'
-import Background from './ui/Background'
+import Background from './modules/Background'
 import Panel from './ui/Panel'
 import World from './World'
 import Clock from './modules/Clock'
@@ -51,7 +51,7 @@ export default class Game {
   }
 
   load() {
-    new Background(this.container, this.canvas.width, this.canvas.height)
+    new Background(this.container)
     this.clock = new Clock(this.ctx, this)
     this.world = new World(this)
     const Sounds = Audio()

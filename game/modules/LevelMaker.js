@@ -1,15 +1,10 @@
-import Apple from '../ents/immobs/Apple'
-import Mango from '../ents/immobs/Mango'
-import Pebble from '../ents/immobs/Pebble'
-import Banana from '../ents/immobs/Banana'
-import Ant from '../ents/mobs/Ant'
-import Centipede from '../ents/mobs/Centipede'
 import Constants from '../Constants'
 
 export default class LevelMaker {
   constructor(game) {
     this.game = game
     this.spawnEnts = this.game.world.spawnEnts.bind(this.game.world)
+    this.addEnt = this.game.world.addEnt.bind(this.game.world)
   }
 
   spawn(level, snek) {
@@ -26,31 +21,8 @@ export default class LevelMaker {
   }
 
   spawnRandom(ents) {
-    for (let [e, n] of Object.entries(ents)) {
-      let entClass
-      switch (e) {
-        case 'apple':
-          entClass = Apple
-          break
-        case 'mango':
-          entClass = Mango
-          break
-        case 'banana':
-          entClass = Banana
-          break
-        case 'ant':
-          entClass = Ant
-          break
-        case 'centipede':
-          entClass = Centipede
-          break
-        case 'pebble':
-          entClass = Pebble
-          break
-        default:
-          throw Error(`Invalid spawnRandom class key: ${e}`)
-      }
-      this.spawnEnts(entClass, n)
+    for (let [entWord, n] of Object.entries(ents)) {
+      this.spawnEnts(entWord, n)
     }
   }
 
@@ -62,10 +34,21 @@ export default class LevelMaker {
       x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
-    this.spawnRandom({
-      apple: 10,
-      ant: 10,
-    })
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
   }
 
   // first normal level
@@ -94,11 +77,11 @@ export default class LevelMaker {
    * @method
    */
   spawnSurvival() {
-    this.spawnEnts(Apple, 45)
-    this.spawnEnts(Pebble, 55)
-    this.spawnEnts(Mango, 5)
-    this.spawnEnts(Ant, 25)
-    this.spawnEnts(Centipede, 2)
+    this.spawnEnts('apple', 45)
+    this.spawnEnts('pebble', 55)
+    this.spawnEnts('mango', 5)
+    this.spawnEnts('ant', 25)
+    this.spawnEnts('centipede', 2)
 
     // this.spawnEnts(Apple, 50)
     // this.spawnEnts(Pebble, 75)

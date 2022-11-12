@@ -1,4 +1,5 @@
 import { bigChompEffect, smallChompEffect } from '../behaviors/digestion'
+import { baseAbsorbExp } from '../behaviors/exp'
 
 export default {
   Immob: {
@@ -7,11 +8,12 @@ export default {
       baseTime: 3000,
       timeLeft: 3000
     },
+    expEffect: baseAbsorbExp.bind(this),
     underDigestionData: [
       {
         effect: 'exp',
         type: 'function',
-        exp: this.expEffect,
+        exp: baseAbsorbExp.bind(this),
       }
     ],
     baseExp: 0,
@@ -95,7 +97,7 @@ export default {
     {
       effect: 'exp',
       type: 'function',
-      exp: this.expEffect
+      exp: baseAbsorbExp.bind(this)
     }
     ],
     chompEffect: bigChompEffect,

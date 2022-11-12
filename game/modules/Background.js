@@ -1,14 +1,15 @@
+import Constants from '../Constants'
 /** 
  * Background canvas renders at bottom-most layer in canvas stack 
  * @class
  */
 export default class Background {
   canvas = document.createElement('canvas')
-  constructor(container, width, height) {
+  constructor(container) {
     this.container = container
     this.canvas.id = 'layerBackground'
-    this.canvas.width = width
-    this.canvas.height = height
+    this.canvas.width = Constants.CANVAS_WIDTH
+    this.canvas.height = Constants.CANVAS_HEIGHT
     
     this.container.appendChild(this.canvas)
     this.ctx = this.canvas.getContext('2d')

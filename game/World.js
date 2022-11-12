@@ -1,10 +1,15 @@
 import Apple from './ents/immobs/Apple'
+import Mango from './ents/immobs/Mango'
+import Banana from './ents/immobs/Banana'
 import Pebble from './ents/immobs/Pebble'
 import Ant from './ents/mobs/Ant'
 import Centipede from './ents/mobs/Centipede'
 import Entity from './ents/Entity'
+
 import { moveEdgeWrap } from './behaviors/movements'
 import Collisions from './behaviors/Collisions'
+import Constants from './Constants'
+import Traits from './ents/traits'
 
 /** Runs world events and spawning behaviors
  * @class
@@ -25,33 +30,29 @@ export default class World {
    *  - immobilizes ent
    * @function
    */
-  addEnt(entClass, position=null) {
+  addEnt(entWord, position=null) {
+    const entClass = this.getEntClass(entWord)
     const ent = new entClass(
       this.ctx, 
       {
-        x: position?.x || this.game.canvas.width * 0.25,
-        y: position?.y || this.game.canvas.height/2,
+        x: position?.x || this.game.canvas.width * 0.5,
+        y: position?.y || this.game.canvas.height * 0.85,
       }, 
       this.game
     )
     ent.parent = this.game
     
     if (!position) {
-      // * For testing purposes so snek segs don't count toward displacement
-      // * along x
-      const minsSegsLength = Array.from(Entity.stack.values()).filter(e => 
-        e.species === 'segment'
-      ).length
 
       const xInterval = this.game.canvas.width * 0.10
       const yInterval = this.game.canvas.height * 0.10
 
-      ent.position.x += (xInterval * (ent.id - minsSegsLength))
+      ent.position.y -= (yInterval * (ent.id - Traits.Snek.baseSegmentCount))
 
-      if (ent.position.x > this.game.canvas.width) {
-        let n = Math.floor(ent.position.x / this.game.canvas.width)
-        ent.position.x -= n * this.game.canvas.width
-        ent.position.y += n * yInterval
+      if (ent.position.y < 0) {
+        let n = Math.floor(ent.position.y / this.game.canvas.height)
+        ent.position.y += n * this.game.canvas.height
+        ent.position.x += n * xInterval
       }
     }
 
@@ -68,8 +69,9 @@ export default class World {
   /** Randomized ent placement in world
    * @method
    */
-  spawnEnts(entClass, n=1, position=null) {
+  spawnEnts(entWord, n=1, position=null) {
     const ents = []
+    const entClass = this.getEntClass(entWord)
     for(let i = 0; i < n; i++) {
       const ent = new entClass(
         this.ctx, 
@@ -104,13 +106,13 @@ export default class World {
       
       const rng = Math.random()
       if (rng < 0.3) {
-        this.game.spawnEnts(Apple)
+        this.game.spawnEnts('apple')
       } else if (rng < 0.6) {
-        this.game.spawnEnts(Ant)
+        this.game.spawnEnts('ant')
       } else if (rng < 0.65 ) {
-        this.game.spawnEnts(Centipede)
+        this.game.spawnEnts('centipede')
       } else if (rng < 0.7) {
-        this.game.spawnEnts(Pebble)
+        this.game.spawnEnts('pebble')
       }
     }
   }
@@ -227,5 +229,24 @@ export default class World {
     )
     isContacting && collider(agg, def)
     return isContacting
+  }
+
+  getEntClass(entWord) {
+    switch (entWord) {
+      case 'apple':
+        return Apple
+      case 'mango':
+        return Mango
+      case 'banana':
+        return Banana
+      case 'ant':
+        return Ant
+      case 'centipede':
+        return Centipede
+      case 'pebble':
+        return Pebble
+      default:
+        throw Error(`Invalid spawnRandom class key: ${entWord}`)
+    }
   }
 }
