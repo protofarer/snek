@@ -15,7 +15,6 @@ export default {
       baseTime: 3000,
       timeLeft: 3000
     },
-    chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
     underDigestionData: null,
     baseExp: 0,
     primaryColor: {
@@ -34,6 +33,7 @@ export default {
       timeLeft: 5000,
       baseTime: 5000
     },
+    chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
     baseExp: 10,
     secondaryColor: 'hsl(95, 60%, 50%)',
     primaryColor: {
@@ -56,12 +56,19 @@ export default {
   },
   
   Pebble: {
-    r: 3,
+    r: 2,
     digestion: {
       baseTime: 60000,
       timeLeft: 60000
     },
-    primaryColor: 'hsl(220, 10%, 48%)',
+    primaryColor: {
+      hueStart: 220,
+      hueEnd: 220 ,
+      satStart: 10, 
+      satEnd: 10,
+      lumStart: 48, 
+      lumEnd: 48,
+    }
   },
 
   Poop: {
@@ -79,6 +86,7 @@ export default {
       timeLeft: 6000,
       baseTime: 6000
     },
+    chompEffectWord: Constants.collisionFunction.BIG_CHOMP,
     baseExp: 20,
     primaryColor: {
       hueStart: 65,
@@ -148,6 +156,7 @@ export default {
     minMoveSpeed: 0.3,
     turnRateOffset: 5,
     minTurnRate: 0,
+    chompEffectWord: Constants.collisionFunction.BASE_CHOMP
   },
 
   Ant: {

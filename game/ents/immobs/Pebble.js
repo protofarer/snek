@@ -1,18 +1,15 @@
+import { loadTraits } from '../../utils/helpers'
 import Immob from './Immob'
+import Traits from '../Traits'
 
 export default class Pebble extends Immob {
   static species ='pebble'
   species = 'pebble'
 
-  // * "r" is the canonical size descriptor. All ents can be compared to each
-  // * other and thus states inferred from this attribute.
-
-  chompEffect = undefined
-  expEffect = undefined
-
-  constructor(ctx, startPosition, parent, r=null) {
+  constructor(ctx, startPosition, parent) {
     super(ctx, startPosition, parent)
-    this.r = r || 2 + Math.ceil(Math.random() * 2)     // TODO skewed gaussian random dist
+    loadTraits.call(this, Traits.Pebble)
+    this.r = this.r + Math.ceil(Math.random() * 2)     // TODO skewed gaussian random dist
     this.headingDegrees = Math.random() * 359
     this.setHitAreas()
   }

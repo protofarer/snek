@@ -24,7 +24,10 @@ export default class Immob extends Entity {
    * and is usually consumed by entities of type "mob"
    * 
    * @property {string} species - used as a basic in-game type 
-   * @property {number} r - the fundamental size value
+   * @property {number} r - the fundamental size value, is the canonical size
+   *    descriptor. All ents can be compared to each, other and thus states
+   *    inferred from this attribute.
+   
    * @property {Object} position - primary x and y canvas coordinates of entity
    * @property {Object} scale - primary scale factor for canvas transforms
    * @property {function} hitR - (get) primary value for setting the hit area
