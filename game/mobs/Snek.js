@@ -134,12 +134,12 @@ export default class Snek extends Mob {
 
     const left = document.querySelector('#left-butt')
     left.addEventListener('pointerdown', leftActivated)
-    left.addEventListener('pointerup', leftDeactivated)
+    // left.addEventListener('pointerup', leftDeactivated)
     left.addEventListener('pointerout', leftDeactivated)
 
     const right = document.querySelector('#right-butt')
     right.addEventListener('pointerdown', rightActivated)
-    right.addEventListener('pointerup', rightDeactivated)
+    // right.addEventListener('pointerup', rightDeactivated)
     right.addEventListener('pointerout', rightDeactivated)
 
     // remove touch drag because it causes button to stick as if holding pressdown
