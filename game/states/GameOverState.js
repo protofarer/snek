@@ -1,5 +1,5 @@
 import BaseState from './BaseState'
-import Snek from '../mobs/Snek'
+import Snek from '../ents/mobs/Snek'
 import SnekEndDialog from '../ui/SnekEndDialog'
 
 /**

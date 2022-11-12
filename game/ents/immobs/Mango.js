@@ -1,4 +1,4 @@
-import { smallChompEffect } from '../behaviors/digestion'
+import { smallChompEffect } from '../../behaviors/digestion'
 import Immob from './Immob'
 
 export default class Mango extends Immob {

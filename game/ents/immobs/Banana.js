@@ -1,4 +1,4 @@
-import { bigChompEffect } from '../behaviors/digestion'
+import { bigChompEffect } from '../../behaviors/digestion'
 import Immob from './Immob'
 
 export default class Banana extends Immob {

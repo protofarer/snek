@@ -1,11 +1,11 @@
-import Apple from '../immobs/Apple'
-import Mango from '../immobs/Mango'
-import Pebble from '../immobs/Pebble'
-import Banana from '../immobs/Banana'
+import Apple from '../ents/immobs/Apple'
+import Mango from '../ents/immobs/Mango'
+import Pebble from '../ents/immobs/Pebble'
+import Banana from '../ents/immobs/Banana'
 import Scenarios from '../tools/Scenarios'
-import Ant from '../mobs/Ant'
-import Centipede from '../mobs/Centipede'
-import Entity from '../Entity'
+import Ant from '../ents/mobs/Ant'
+import Centipede from '../ents/mobs/Centipede'
+import Entity from '../ents/Entity'
 import Constants from '../Constants'
 
 export default class LevelMaker {

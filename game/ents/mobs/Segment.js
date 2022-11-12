@@ -1,7 +1,7 @@
 import Poop from '../immobs/Poop'
 import Immob from '../immobs/Immob'
-import { recycle } from '../utils/helpers'
-import { activatePostDigestionEffects } from '../behaviors/digestion'
+import { recycle } from '../../utils/helpers'
+import { activatePostDigestionEffects } from '../../behaviors/digestion'
 
 export default class Segment extends Immob {
   static species = 'segment'

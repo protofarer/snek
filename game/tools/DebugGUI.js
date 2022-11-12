@@ -1,8 +1,6 @@
 import GUI from 'lil-gui'
-import CONSTANTS from '../Constants'
-
-import Entity from '../Entity'
-import Centipede from '../mobs/Centipede'
+import Entity from '../ents/Entity'
+import Centipede from '../ents/mobs/Centipede'
 
 /**
  * Contains debug GUI functionality (uses lil-gui package) and includes
@@ -114,7 +112,6 @@ export default class DebugGUI {
     guiMutate.add({ resetGame: () => resetGame(true) }, 'resetGame')
       .name('reset: debug')
 
-    // const endGame = () => { this.game.phase = CONSTANTS.PHASE_END }
     const endGame = () => { this.game.stateMachine.change('gameOver')}
      guiMutate.add({ endGame }, 'endGame')
 

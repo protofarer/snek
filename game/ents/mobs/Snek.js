@@ -1,7 +1,8 @@
 import Mob from './Mob'
 import Segment from './Segment'
-import { cancelPostDigestionEffects } from '../behaviors/digestion'
-import { intRep } from '../utils/helpers'
+import { cancelPostDigestionEffects } from '../../behaviors/digestion'
+import { intRep } from '../../utils/helpers'
+import Constants from '../../Constants'
 
 /**
  * The main player controllable character.
@@ -301,9 +302,9 @@ export default class Snek extends Mob {
     this.activeEffects = this.activeEffects.filter(effect => effect.timeLeft > 0)
 
     this.activeEffects = this.activeEffects.map(effect => {
-      const timeLeft = effect.timeLeft - 17 < 0
+      const timeLeft = effect.timeLeft - Constants.TICK < 0
         ? 0
-        : effect.timeLeft - 17
+        : effect.timeLeft - Constants.TICK
       return { ...effect, timeLeft}
     })
   }

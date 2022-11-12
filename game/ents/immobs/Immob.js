@@ -1,7 +1,8 @@
-import { baseChompEffect } from '../behaviors/digestion'
-import { baseAbsorbExp } from '../behaviors/exp'
+import { baseChompEffect } from '../../behaviors/digestion'
+import { baseAbsorbExp } from '../../behaviors/exp'
 import Entity from '../Entity'
-import { getColorParameters, setColorParameters } from '../utils/colormorph'
+import { getColorParameters, setColorParameters } from '../../utils/colormorph'
+
 export default class Immob extends Entity {
   /**
    * The core interactive game entity. 

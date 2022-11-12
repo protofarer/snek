@@ -1,6 +1,6 @@
-import { turnErratically } from '../behaviors/movements'
+import { turnErratically } from '../../behaviors/movements'
 import Mob from './Mob'
-import { getGameObject } from '../utils/helpers'
+import { getGameObject } from '../../utils/helpers'
 
 export default class Ant extends Mob {
   static species = 'ant'

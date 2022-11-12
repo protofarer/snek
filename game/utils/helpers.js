@@ -1,4 +1,4 @@
-import Entity from '../Entity'
+import Entity from '../ents/Entity'
 
 /**
  * Returns upstream-most entity in a segment chain, including head ents

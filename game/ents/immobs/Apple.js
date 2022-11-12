@@ -1,4 +1,5 @@
 import Immob from './Immob'
+
 export default class Apple extends Immob {
   static species = 'apple'
   species = 'apple'

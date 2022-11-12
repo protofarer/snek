@@ -1,8 +1,8 @@
-import Apple from './immobs/Apple'
-import Pebble from './immobs/Pebble'
-import Ant from './mobs/Ant'
-import Centipede from './mobs/Centipede'
-import Entity from './Entity'
+import Apple from './ents/immobs/Apple'
+import Pebble from './ents/immobs/Pebble'
+import Ant from './ents/mobs/Ant'
+import Centipede from './ents/mobs/Centipede'
+import Entity from './ents/Entity'
 import { moveEdgeWrap } from './behaviors/movements'
 import Collisions from './behaviors/Collisions'
 
