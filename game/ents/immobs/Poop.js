@@ -1,28 +1,14 @@
+import { loadTraits } from '../../utils/helpers'
 import Immob from './Immob'
+import Traits from '../Traits'
 
 export default class Poop extends Immob {
-  static entGroup = 'immob'
-  entGroup = 'immob'
-
   static species = 'poop'
   species = 'poop'
 
-  r = 5
-
-  digestion = {
-    timeLeft: 2000,
-    baseTime: 2000,
-  }
-
-  currExp = this.baseExp
-
-  primaryColor = 'hsl(40, 100%, 13%)'
-
-  chompEffect = undefined
-  underDigestionData = []
-
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)
+    loadTraits.call(this, Traits.Poop)
   }
 
   drawBody(ctx) {

@@ -4,11 +4,11 @@ import Banana from './ents/immobs/Banana'
 import Pebble from './ents/immobs/Pebble'
 import Ant from './ents/mobs/Ant'
 import Centipede from './ents/mobs/Centipede'
+import Poop from './ents/immobs/Poop'
 import Entity from './ents/Entity'
 
 import { moveEdgeWrap } from './behaviors/movements'
 import Collisions from './behaviors/Collisions'
-import Constants from './Constants'
 import Traits from './ents/Traits'
 
 /** Runs world events and spawning behaviors
@@ -244,6 +244,8 @@ export default class World {
         return Centipede
       case 'pebble':
         return Pebble
+      case 'poop':
+        return Poop
       default:
         throw Error(`Invalid spawnRandom class key: ${entWord}`)
     }

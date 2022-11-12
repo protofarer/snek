@@ -77,17 +77,24 @@ export default {
       timeLeft: 2000,
       baseTime: 2000,
     },
-   primaryColor: 'hsl(40, 100%, 13%)' 
+   primaryColor: {
+     hueStart: 40,
+     hueEnd: 40,
+     satStart: 100,
+     satEnd: 40,
+     lumStart: 20,
+     lumEnd: 11
+   }
   },
 
   Banana: {
     r: 7,
+    baseExp: 20,
     digestion: {
       timeLeft: 6000,
       baseTime: 6000
     },
     chompEffectWord: Constants.collisionFunction.BIG_CHOMP,
-    baseExp: 20,
     primaryColor: {
       hueStart: 65,
       hueEnd: 50,
@@ -98,20 +105,14 @@ export default {
     },
     secondaryColor: 'black',
     underDigestionData: [
-    {
-      effect: 'moveSpeed',
-      type: 'boolean',
-      moveSpeed: 3,
-      duration: 3000,
-      timeLeft: 3000
-    },
-    {
-      effect: 'exp',
-      type: 'function',
-      exp: Constants.underDigestionFunction.BASE_ABSORB_EXP
-    }
+      {
+        effect: 'moveSpeed',
+        type: 'boolean',
+        moveSpeed: 4,
+        duration: 1000,
+        timeLeft: 1000
+      },
     ],
-    // chompEffect: bigChompEffect,
   },
 
   Mango: {

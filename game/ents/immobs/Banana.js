@@ -1,51 +1,17 @@
-import Constants from '../../Constants'
+import { loadTraits } from '../../utils/helpers'
 import Immob from './Immob'
+import Traits from '../Traits'
 
 export default class Banana extends Immob {
   static species = 'banana'
   species = 'banana'
 
-  r = 7
-  digestion = {
-    timeLeft: 6000,
-    baseTime: 6000
-  }
-
-  baseExp = 20
-  currExp = this.baseExp
-
-  secondaryColor = 'black'
-
-  chompEffectWord = Constants.collisionFunction.BIG_CHOMP
-
-  underDigestionData = [
-    {
-      effect: 'moveSpeed',
-      type: 'boolean',
-      moveSpeed: 3,
-      duration: 3000,
-      timeLeft: 3000
-    },
-    {
-      effect: 'exp',
-      type: 'function',
-      exp: this.expEffect
-    }
-  ]
-
   constructor(ctx, position, parent=null) {
     super(ctx, position, parent)
-    this.primaryColor = {
-      hueStart: 65,
-      hueEnd: 50,
-      satStart: 70,
-      satEnd: 0,
-      lumStart: 50,
-      lumEnd: 20
-    }
+    loadTraits.call(this, Traits.Banana)
+    this.currExp = this.baseExp
     this.setHitAreas()
   }
-
 
   drawBody(ctx) {
     ctx.save()
