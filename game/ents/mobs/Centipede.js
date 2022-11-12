@@ -21,12 +21,12 @@ export default class Centipede extends Mob {
       y: this.headCoords.y + this.r * Math.sin(this.headingRadians)
   }}
 
-  nInitSegments = 5
+  baseSegmentCount = 5
   downstreamSegment
   postDigestionEffects = []
   canHarm = true
 
-  constructor(ctx, startPosition=null, parent=null, nInitSegments=null) {
+  constructor(ctx, startPosition=null, parent=null, baseSegmentCount=null) {
     super(ctx, startPosition, parent)
 
     this.basePrimaryColor = 'hsl(35, 50%, 55%)'
@@ -42,8 +42,8 @@ export default class Centipede extends Mob {
     this.baseTurnRate = this.baseMoveSpeed + 5
     this.currTurnRate = this.baseTurnRate
 
-    this.nInitSegments = nInitSegments || this.nInitSegments
-    this.addSegments(this.nInitSegments)
+    this.baseSegmentCount = baseSegmentCount || this.baseSegmentCount
+    this.addSegments(this.baseSegmentCount)
     this.setHitAreas()
   }
 

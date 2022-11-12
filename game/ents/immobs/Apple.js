@@ -13,7 +13,7 @@ export default class Apple extends Immob {
   baseExp = 10
   currExp = this.baseExp
 
-  secondaryColor = `hsl(95 60% 50%)`
+  secondaryColor = `hsl(95, 60%, 50%)`
 
   constructor(ctx, startPosition, parent) {
     super(ctx, startPosition, parent)

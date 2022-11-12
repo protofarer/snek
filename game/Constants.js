@@ -6,4 +6,5 @@ export default {
   SNEK_START_POS: { xRatio: 0.5, yRatio: 0.9 },
   CANVAS_WIDTH: 400,
   CANVAS_HEIGHT: 600,
+  HARM_COOLDOWN: 2000,
 }

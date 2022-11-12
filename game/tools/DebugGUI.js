@@ -270,7 +270,7 @@ export default class DebugGUI {
       .add(obj, key)
       .onChange(() => { 
         handleSessionBoolean()
-        onChangeFn()
+        onChangeFn?.()
       })
       .listen()
       .name(label || key)

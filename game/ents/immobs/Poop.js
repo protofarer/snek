@@ -14,7 +14,6 @@ export default class Poop extends Immob {
     baseTime: 2000,
   }
 
-  baseExp = 0
   currExp = this.baseExp
 
   primaryColor = 'hsl(40, 100%, 13%)'

@@ -1,3 +1,5 @@
+import Constants from '../Constants'
+
 // chomp works for both segged and segless ents
 export default class Collisions {
   static chomp(agg, def) {
@@ -32,7 +34,7 @@ export default class Collisions {
     if (curr.species === 'segment') {
       curr?.detach()
       agg.canHarm = false
-      setTimeout(() => agg.canHarm = true, 2000)
+      setTimeout(() => agg.canHarm = true, Constants.HARM_COOLDOWN)
     }
   }
 }

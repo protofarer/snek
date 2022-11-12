@@ -6,6 +6,8 @@ export default class Ant extends Mob {
   static species = 'ant'
   species = 'ant'
 
+  r = 4
+  baseExp = 10
   swallowables = ['apple', 'mango', 'ant', 'pebble', ]
   get hitR() { return this.r }
 
@@ -24,10 +26,8 @@ export default class Ant extends Mob {
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)
 
-    this.r = 4
     this.primaryColor = 'black'
 
-    this.baseExp = 10
     this.currExp = this.baseExp
 
     this.baseMoveSpeed = 2

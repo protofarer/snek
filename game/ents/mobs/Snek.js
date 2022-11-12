@@ -339,7 +339,7 @@ export default class Snek extends Mob {
       )
 
       this.postDigestionEffects.forEach(postDigestionData => {
-        postDigestionData.timeLeft -= 17
+        postDigestionData.timeLeft -= Constants.TICK
       })
 
     }
