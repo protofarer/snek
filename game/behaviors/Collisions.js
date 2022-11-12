@@ -6,7 +6,7 @@ export default class Collisions {
   static chomp(agg, def) {
     def.hitArea = new Path2D()
     const chompEffect = Collisions[def.chompEffectWord]
-    chompEffect.bind(def)?.(agg)
+    chompEffect.call(def, agg)
   
     // If snek has segments, begin digestion process
     if (agg.downstreamSegment) {

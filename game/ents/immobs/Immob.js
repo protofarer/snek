@@ -76,7 +76,7 @@ export default class Immob extends Entity {
     super()
     this.ctx = ctx
     this.parent = parent || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
-    loadTraits.bind(this)(Traits.Immob)
+    loadTraits.call(this, Traits.Immob)
     this.position = startPosition || this.position
     this.currExp = this.baseExp
     this.setHitAreas()
