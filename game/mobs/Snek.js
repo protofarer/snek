@@ -59,6 +59,8 @@ export default class Snek extends Mob {
 
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)
+
+    this.headingDegrees = -90
     
     this.basePrimaryColor = 'hsl(100, 100%, 32%)'
     this.currPrimaryColor = this.basePrimaryColor
@@ -71,6 +73,7 @@ export default class Snek extends Mob {
 
     this.birthTime = this.parent.t < 0 ? 0 : this.parent.t
     this.lifeSpan = 0
+
 
     this.addSegments(initSegmentCount || this.baseSegmentCount)
     this.setHitAreas()

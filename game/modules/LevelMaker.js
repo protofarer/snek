@@ -1,20 +1,23 @@
 import Apple from '../immobs/Apple'
 import Mango from '../immobs/Mango'
 import Pebble from '../immobs/Pebble'
+import Banana from '../immobs/Banana'
 import Scenarios from '../tools/Scenarios'
-
-import Centipede from '../mobs/Centipede'
 import Ant from '../mobs/Ant'
+import Centipede from '../mobs/Centipede'
+import Entity from '../Entity'
+import Constants from '../Constants'
 
 export default class LevelMaker {
   constructor(game) {
     this.game = game
+    this.spawnEnts = this.game.world.spawnEnts.bind(this.game.world)
   }
 
   spawn(level, snek) {
     switch (level) {
       case 0:   // debug level
-        this.spawnLevelZero()
+        this.spawnLevelZero(snek)
         break
       case 1:
         this.spawnLevelOne(snek)
@@ -24,33 +27,75 @@ export default class LevelMaker {
     }
   }
 
+  spawnRandom(ents) {
+    for (let [e, n] of Object.entries(ents)) {
+      let entClass
+      switch (e) {
+        case 'apple':
+          entClass = Apple
+          break
+        case 'mango':
+          entClass = Mango
+          break
+        case 'banana':
+          entClass = Banana
+          break
+        case 'ant':
+          entClass = Ant
+          break
+        case 'centipede':
+          entClass = Centipede
+          break
+        case 'pebble':
+          entClass = Pebble
+          break
+        default:
+          throw Error(`Invalid spawnRandom class key: ${e}`)
+      }
+      this.spawnEnts(entClass, n)
+    }
+  }
+
   // debug level
-  spawnLevelZero() {
-    this.case = new Scenarios(this.game)
-    this.case.base()
+  spawnLevelZero(snek) {
+    // this.case = new Scenarios(this.game)
+    // this.case.base()
+    snek.position = { 
+      x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
+      y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
+    }
+    this.spawnRandom({
+      apple: 10,
+      ant: 10,
+    })
   }
 
   // first normal level
   spawnLevelOne(snek) {
     snek.position = { 
-      x: this.game.canvas.width * 0.5, 
-      y: this.game.canvas.height * 0.8 
+      x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
+      y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
-    snek.headingDegrees = -90
+    this.spawnRandom({
+      apple: 10,
+      pebble: 5,
+      mango: 3,
+      banana: 1,
+      ant: 2,
+      centipede: 1
+    })
 
-    this.game.world.spawnEnts(Apple, 15)
-    this.game.world.spawnEnts(Pebble, 25)
-    this.game.world.spawnEnts(Mango, 3)
-    this.game.world.spawnEnts(Ant, 2)
-    this.game.world.spawnEnts(Centipede, 1)
+    // this.spawnEnts(Apple, 15)
+    // this.spawnEnts(Pebble, 25)
+    // this.spawnEnts(Mango, 3)
+    // this.spawnEnts(Ant, 2)
+    // this.spawnEnts(Centipede, 1)
   }
 
   /** Initial spawn method used for playable game/levels.
    * @method
    */
   spawnSurvival() {
-    this.game.snek.position = { x: 200, y: 400 }
-
     this.spawnEnts(Apple, 45)
     this.spawnEnts(Pebble, 55)
     this.spawnEnts(Mango, 5)

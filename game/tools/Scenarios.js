@@ -12,12 +12,6 @@ export default class Scenarios {
     this.snek = this.game.world.snek
     this.spawnEnts = this.game.world.spawnEnts.bind(this.game.world)
     this.addEnt = this.game.world.addEnt.bind(this.game.world)
-
-    this.snek.position = { 
-      x: this.game.canvas.width * 0.1, 
-      y: this.game.canvas.height * 0.5 
-    }
-    this.snek.headingDegrees = 0
   }
 
   base() {

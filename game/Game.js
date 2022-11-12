@@ -41,7 +41,9 @@ export default class Game {
         gameOver: States.GameOverState
       }, this)
 
-    if (!this.setupDebug()) {
+    if (this.setupDebug()) {
+      this.stateMachine.change('playSurvival', { level: 0, score: 0 })
+    } else {
       this.stateMachine.change('start')
     }
 
@@ -62,11 +64,7 @@ export default class Game {
       this.isDebugOn = window.sessionStorage.getItem('isDebugOn') === 'true' ? true : false
       this.debugGUI = new DebugGUI(this)
       this.debugGUI.params.isDebugOn = this.isDebugOn
-
-      if (this.isDebugOn === true) {
-        this.stateMachine.change('playSurvival', { level: 0, score: 0 })
-        return true
-      }
+      return this.isDebugOn
     }
     return false
   }

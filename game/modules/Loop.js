@@ -15,7 +15,7 @@ export default class Loop {
   }
 
   start() {
-    this.draw()
+    this.loop()
   }
 
   play() {
@@ -24,7 +24,7 @@ export default class Loop {
       this.game.phase !== Constants.PHASE_END
     ) {
       this.game.phase = Constants.PHASE_PLAY
-      this.loopID = requestAnimationFrame(this.draw.bind(this))
+      this.loopID = requestAnimationFrame(this.loop.bind(this))
       console.log(`%c*************** Game UnPaused ***************`,
         'color: orange')
     }
@@ -64,7 +64,7 @@ export default class Loop {
    * @property loopID - return value of requestAnimationFrame, used to stop the
    *    function 
    */
-  draw(t) {
+  loop(t) {
     if (this.startT == undefined) {
       this.startT = t
       this.game.clock.start(t)
@@ -85,6 +85,6 @@ export default class Loop {
       this.game.render(t)
     }
 
-    this.loopID = requestAnimationFrame(this.draw.bind(this))
+    this.loopID = requestAnimationFrame(this.loop.bind(this))
   }
 }

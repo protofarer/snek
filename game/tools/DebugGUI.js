@@ -68,7 +68,20 @@ export default class DebugGUI {
 
     this.setupBooleanToggler(this.game, 'isDebugOn', guiTestParams, 'debug mode')
     this.setupBooleanToggler(this.params, 'isClockDrawn', guiTestParams, 'show clock')
-    this.setupBooleanToggler(this.params, 'showDebugOverlays', guiTestParams, 'show overlays')
+
+    this.setupBooleanToggler(
+      this.params, 
+      'showDebugOverlays', 
+      guiTestParams, 
+      'show overlays',
+      () => { console.log('this not workywork') }
+    )
+    // const dDO = this.drawDebugOverlays.bind(this)
+    // ctlSDO.onChange((v) => {
+    //   v && dDO()
+    //   console.log(`trigger drawDebugOverlays 2nd onchange`, )
+    // })
+
     this.setupBooleanToggler(this.params, 'isGridVisible', guiTestParams, 'show grid')
 
 
@@ -238,7 +251,7 @@ export default class DebugGUI {
       .name(label || key)
   }
 
-  setupBooleanToggler(obj, key, folder, label=null) {
+  setupBooleanToggler(obj, key, folder, label=null, onChangeFn=null) {
     const toggleSessionBoolean = () => { 
       return () => {
         if (
@@ -256,7 +269,13 @@ export default class DebugGUI {
     }
 
     const handleSessionBoolean = toggleSessionBoolean(obj, key)
-    folder.add(obj, key).onChange(handleSessionBoolean).listen()
+    return folder
+      .add(obj, key)
+      .onChange(() => { 
+        handleSessionBoolean()
+        onChangeFn()
+      })
+      .listen()
       .name(label || key)
   }
 
@@ -287,7 +306,7 @@ export default class DebugGUI {
 
   drawDebugOverlays() {
     Array.from(Entity.stack.values()).forEach( ent => ent.drawDebugOverlays())
-    this.game.world.snek?.drawDebugOverlays()
+    // this.game.world.snek?.drawDebugOverlays()
   }
 
   async invokeOnDebugGameStart(resetGame) {

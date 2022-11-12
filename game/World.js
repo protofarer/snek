@@ -2,7 +2,6 @@ import Apple from './immobs/Apple'
 import Pebble from './immobs/Pebble'
 import Ant from './mobs/Ant'
 import Centipede from './mobs/Centipede'
-import Mango from './immobs/Mango'
 import Entity from './Entity'
 import { moveEdgeWrap } from './behaviors/movements'
 import Collisions from './behaviors/Collisions'
@@ -17,7 +16,7 @@ export default class World {
   constructor(game) {
     this.game = game
     this.ctx = this.game.ctx
-    this.canvas = this.ctx.canvas
+    this.canvas = this.game.canvas
     this.isSpawning = false
   }
 

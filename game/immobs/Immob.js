@@ -54,7 +54,7 @@ export default class Immob extends Entity {
   entGroup = 'immob'
 
   r = 1
-  position = { x: 400, y: 400 }
+  position = { x: 25, y: 25 }
   scale = { x: 1, y: 1 }
   get hitR() { return this.r + 3 }
 
