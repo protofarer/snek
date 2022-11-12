@@ -30,8 +30,8 @@ export default class Apple extends Immob {
       {
         effect: 'moveSpeed',
         moveSpeed: 0.25,
-        duration: 2000,
-        timeLeft: 2000
+        duration: 5000,
+        timeLeft: 5000
       },
     ]
     this.setHitAreas()

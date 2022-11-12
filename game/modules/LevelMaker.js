@@ -35,8 +35,6 @@ export default class LevelMaker {
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
     this.addEnt('apple')
-    // this.addEnt('apple')
-    // this.addEnt('apple')
   }
 
   // first normal level
@@ -65,6 +63,7 @@ export default class LevelMaker {
    * @method
    */
   spawnSurvival() {
+    // TODO behavior
     this.spawnEnts('apple', 45)
     this.spawnEnts('pebble', 55)
     this.spawnEnts('mango', 5)
@@ -76,5 +75,15 @@ export default class LevelMaker {
     // this.spawnEnts(Ant, 70)
     // this.spawnEnts(Mango, 25)
     // this.spawnEnts(Centipede, 5)
+  }
+
+  modeSurvival() {
+    // increase apple spawn rate
+    // when apple count > 5, spawn an ant for each apple
+    // when snek gets 8 segs spawn centipede
+    // when snek has 5 segs, despawn centipede
+    // every 15sec - 1min spawn banana
+    // every ~40sec spawn mango
+    // once 40 apples eaten or snek length = 20, victory
   }
 }

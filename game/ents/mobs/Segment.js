@@ -180,14 +180,9 @@ export default class Segment extends Immob {
       // * - Create poop
 
       const postDigestionData = this.entUnderDigestion.postDigestionData
-      console.log(`entUnderDig`, this.entUnderDigestion.species)
-      console.log(`postDigestData`, postDigestionData)
-      
-      
 
       if (postDigestionData) {
         console.log(`activating pDE`, )
-        
         activatePostDigestionEffects.call(this, postDigestionData, this.getHeadEnt())
       }
         

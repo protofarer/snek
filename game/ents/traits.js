@@ -179,10 +179,10 @@ export default {
     colorRightEye: 'hsl(230, 100%, 80%)',
     effectPanic: {
       effect: 'panic',
-      moveSpeed: 3,
+      moveSpeed: 2,
       turnRate: 10,
-      timeLeft: 5000,
-      duration: 5000
+      timeLeft: 4000,
+      duration: 4000
     },
   },
 

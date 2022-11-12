@@ -54,7 +54,7 @@ export default class Snek extends Mob {
 
   activeEffects = []
   postDigestionEffects = []
-
+  expiredPostDigestionEffects = []
   isVisible = true
   wasHarmed = false
 
@@ -320,28 +320,26 @@ export default class Snek extends Mob {
   }
 
   updatePostDigestionEffects() {
-    // * Post Digestion Effects: occur after content is fully digested
+    // * Activate Post Digestion Effects after content is fully digested
+    // * Expire when effects' time runs out
 
-    // * Expire used up effects
+    // remove expired effects
+    if (this.expiredPostDigestionEffects.length > 0) {
+      cancelPostDigestionEffects.call(this, this.expiredPostDigestionEffects)
+      this.expiredPostDigestionEffects.length = 0
+    }
 
-    const expiredPostDigestionEffects = this.postDigestionEffects
-    .filter(e => 
-        e.timeLeft <= 0
-    )
-
+    // tick down active effects, designate expireds
     if (this.postDigestionEffects.length > 0 ) {
-
-      cancelPostDigestionEffects.call(this, expiredPostDigestionEffects)
-
-      this.postDigestionEffects = this
-        .postDigestionEffects.filter(postDigestionData =>
-          postDigestionData.timeLeft >= 0
-      )
-
-      this.postDigestionEffects.forEach(postDigestionData => {
-        postDigestionData.timeLeft -= Constants.TICK
-      })
-
+      for (let i = 0; i < this.postDigestionEffects.length; ++i) {
+        const pDE = this.postDigestionEffects[i]
+        pDE.timeLeft -= Constants.TICK
+        if (pDE.timeLeft <= 0) {
+          this.postDigestionEffects.splice(i,1)
+          this.expiredPostDigestionEffects.push(pDE)
+          --i
+        }
+      }
     }
   }
 
@@ -363,10 +361,10 @@ export default class Snek extends Mob {
       this.activateEffects([
         {
           effect: 'panic',
-          moveSpeed: 3,
+          moveSpeed: 2,
           turnRate: 10,
-          timeLeft: 5000,
-          duration: 5000
+          timeLeft: 4000,
+          duration: 4000
         }
       ])
       this.currKnownSegmentCount = this.countSegments
