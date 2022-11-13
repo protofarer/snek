@@ -201,6 +201,8 @@ export default {
     colorRightEye: 'hsl(230, 100%, 80%)',
     baseMoveSpeed: 1,
     turnRateOffset: 3,
+    swallowables: [ 'apple', 'mango', 'ant', 'pebble', 'banana' ],
+    enemySpecies: ['centipede'],
     effectPanic: {
       effect: 'panic',
       moveSpeed: 2,
@@ -208,14 +210,11 @@ export default {
       timeLeft: 4000,
       duration: 4000
     },
-    swallowables: [ 'apple', 'mango', 'ant', 'pebble', 'banana' ],
-    enemySpecies: ['centipede'],
   },
 
   Centipede: {
     r: 10,
     baseExp: 100,
-    swallowables: ['snek', 'snek-segment'],
     baseSegmentCount: 5,
     basePrimaryColor: 'hsl(35, 50%, 55%)',
     secondaryColor: 'hsl(30, 70%, 7%)',
@@ -223,6 +222,7 @@ export default {
     turnRateOffset: 5,
     colorLeg: 'hsl(30, 70%, 10%)',
     colorFangs: 'hsl(0, 0%, 0%)',
-    colorEyes: 'hsl(0, 100%, 50%)'
+    colorEyes: 'hsl(0, 100%, 50%)',
+    swallowables: ['snek', 'snek-segment'],
   }
 }
