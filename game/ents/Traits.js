@@ -27,15 +27,10 @@ export default {
     },
     secondaryColor: ''
   },
+
   Apple: {
     r: 6,
-    digestion: {
-      timeLeft: 5000,
-      baseTime: 5000
-    },
-    chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
     baseExp: 10,
-    secondaryColor: 'hsl(95, 60%, 50%)',
     primaryColor: {
       hueStart: 0, 
       hueEnd: 25, 
@@ -43,6 +38,12 @@ export default {
       satEnd: 30,
       lumStart: 50,
       lumEnd: 25,
+    },
+    secondaryColor: 'hsl(95, 60%, 50%)',
+    chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
+    digestion: {
+      timeLeft: 5000,
+      baseTime: 5000
     },
     postDigestionData: [
       {
@@ -57,10 +58,6 @@ export default {
   
   Pebble: {
     r: 2,
-    digestion: {
-      baseTime: 60000,
-      timeLeft: 60000
-    },
     primaryColor: {
       hueStart: 220,
       hueEnd: 220 ,
@@ -68,33 +65,32 @@ export default {
       satEnd: 10,
       lumStart: 48, 
       lumEnd: 48,
-    }
+    },
+    digestion: {
+      baseTime: 60000,
+      timeLeft: 60000
+    },
   },
 
   Poop: {
     r: 5,
+    primaryColor: {
+      hueStart: 40,
+      hueEnd: 40,
+      satStart: 100,
+      satEnd: 40,
+      lumStart: 20,
+      lumEnd: 11
+    },
     digestion: {
       timeLeft: 2000,
       baseTime: 2000,
     },
-   primaryColor: {
-     hueStart: 40,
-     hueEnd: 40,
-     satStart: 100,
-     satEnd: 40,
-     lumStart: 20,
-     lumEnd: 11
-   }
   },
 
   Banana: {
     r: 7,
     baseExp: 20,
-    digestion: {
-      timeLeft: 6000,
-      baseTime: 6000
-    },
-    chompEffectWord: Constants.collisionFunction.BIG_CHOMP,
     primaryColor: {
       hueStart: 65,
       hueEnd: 50,
@@ -104,6 +100,11 @@ export default {
       lumEnd: 20
     },
     secondaryColor: 'black',
+    chompEffectWord: Constants.collisionFunction.BIG_CHOMP,
+    digestion: {
+      timeLeft: 6000,
+      baseTime: 6000
+    },
     underDigestionData: [
       {
         effect: 'moveSpeed',
@@ -118,6 +119,16 @@ export default {
   Mango: {
     r: 6,
     baseExp: 0,
+    primaryColor: {
+      hueStart: 35,
+      hueEnd: 35,
+      satStart: 100,
+      satEnd: 25,
+      lumStart: 50,
+      lumEnd: 40
+    },
+    secondaryColor: 'green',
+    chompEffect: Constants.collisionFunction.SMALL_CHOMP,
     digestion: {
       timeLeft: 10000,
       baseTime: 10000
@@ -142,26 +153,16 @@ export default {
         type: 'mutation',
       }
     ],
-    primaryColor: {
-      hueStart: 35,
-      hueEnd: 35,
-      satStart: 100,
-      satEnd: 25,
-      lumStart: 50,
-      lumEnd: 40
-    },
-    secondaryColor: 'green',
-    chompEffect: Constants.collisionFunction.SMALL_CHOMP,
   },
   
   Mob: {
     primaryColor: 'blue',
     secondaryColor: '',
+    chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
     baseMoveSpeed: 1,
     minMoveSpeed: 0.3,
     turnRateOffset: 5,
     minTurnRate: 0,
-    chompEffectWord: Constants.collisionFunction.BASE_CHOMP
   },
 
   Ant: {
@@ -187,20 +188,19 @@ export default {
 
   Snek: {
     r: 10,
+    baseExp: 10,
     level: 1,
     levelMultiplier: 2,
     segLevelMultiplier: 1.25,
-    baseExp: 100,
     baseSegmentCount: 3,
-    headingDegrees: -90,
     basePrimaryColor: `hsl(100, 100%, 32%)`,
-    baseMoveSpeed: 1,
-    turnRateOffset: 3,
     colorTongue: 'red',
     colorEyeWhites: 'white',
     colorFangs: 'white',
     colorLeftEye: 'hsl(55, 100%, 25%)',
     colorRightEye: 'hsl(230, 100%, 80%)',
+    baseMoveSpeed: 1,
+    turnRateOffset: 3,
     effectPanic: {
       effect: 'panic',
       moveSpeed: 2,

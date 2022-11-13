@@ -50,6 +50,7 @@ export default class Snek extends Mob {
     super(ctx, startPosition, parent)
     loadTraits.call(this, Traits.Snek)
 
+    this.currExp = this.baseExp
     this.currSegExp = this.currExp
     this.currPrimaryColor = this.basePrimaryColor
     this.baseTurnRate = this.baseMoveSpeed + this.turnRateOffset
