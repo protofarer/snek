@@ -1,14 +1,15 @@
 import { turnErratically } from '../../behaviors/movements'
 import Mob from './Mob'
-import { getGameObject } from '../../utils/helpers'
+import { getGameObject, loadTraits } from '../../utils/helpers'
+import Traits from '../Traits'
 
 export default class Ant extends Mob {
   static species = 'ant'
   species = 'ant'
 
-  r = 4
-  baseExp = 10
-  swallowables = ['apple', 'mango', 'ant', 'pebble', ]
+  carriedEnt = null
+  carriedOffsetRad = null
+
   get hitR() { return this.r }
 
   get headCoords() { return { 
@@ -25,19 +26,11 @@ export default class Ant extends Mob {
 
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)
-
-    this.primaryColor = 'black'
-
+    loadTraits.call(this, Traits.Ant)
+    this.baseTurnRate = this.baseMoveSpeed + this.turnRateOffset
     this.currExp = this.baseExp
-
-    this.baseMoveSpeed = 2
     this.currMoveSpeed = this.baseMoveSpeed
-
-    this.baseTurnRate = this.baseMoveSpeed + 5
     this.currTurnRate = this.baseTurnRate
-
-    this.carriedEnt = null
-    this.carriedOffsetRad = null
     this.setHitAreas()
   }
 
@@ -50,14 +43,7 @@ export default class Ant extends Mob {
   }
 
   drop() {
-    // TODO use helper:
     this.carriedEnt.parent = getGameObject.call(this)
-    // let parent = this.parent
-    // while (parent) {
-    //   this.carriedEnt.parent = parent
-    //   parent = parent.parent
-    // }
-    
     this.carriedEnt.setHitAreas()
     this.carriedOffsetRad = null
     this.carriedEnt = null

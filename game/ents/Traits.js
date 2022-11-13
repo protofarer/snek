@@ -167,7 +167,14 @@ export default {
   Ant: {
     r: 4,
     baseExp: 10,
-    primaryColor: 'black',
+    primaryColor: {
+      hueStart: 0,
+      hueEnd: 0,
+      satStart: 0,
+      satEnd: 0,
+      lumStart: 0,
+      lumEnd: 35
+    },
     baseMoveSpeed: 2,
     turnRateOffset: 5,
     swallowables: [
