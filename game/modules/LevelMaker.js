@@ -34,7 +34,7 @@ export default class LevelMaker {
       x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
-    this.addEnt('ant')
+    this.addEnt('centipede').setMobile(true)
   }
 
   // first normal level

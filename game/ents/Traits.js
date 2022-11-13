@@ -216,7 +216,7 @@ export default {
     r: 10,
     baseExp: 100,
     swallowables: ['snek', 'snek-segment'],
-    baseSegmentCount: 3,
+    baseSegmentCount: 5,
     basePrimaryColor: 'hsl(35, 50%, 55%)',
     secondaryColor: 'hsl(30, 70%, 7%)',
     baseMoveSpeed: 3,

@@ -1,14 +1,13 @@
 import Segment from './Segment'
+import Traits from '../Traits'
 import { turnRandomlySmoothly } from '../../behaviors/movements'
 import Mob from './Mob'
+import { loadTraits } from '../../utils/helpers'
 
 export default class Centipede extends Mob {
   static species = 'centipede'
   species = 'centipede'
 
-  swallowables = ['snek', 'snek-segment']
-
-  r = 10
   get hitR() { return this.r + 1}
 
   get headCoords() { return {
@@ -28,20 +27,12 @@ export default class Centipede extends Mob {
 
   constructor(ctx, startPosition=null, parent=null, baseSegmentCount=null) {
     super(ctx, startPosition, parent)
-
-    this.basePrimaryColor = 'hsl(35, 50%, 55%)'
+    loadTraits.call(this, Traits.Centipede)
     this.currPrimaryColor = this.basePrimaryColor
-    this.secondaryColor = 'hsl(30, 70%, 7%)'
-
-    this.baseExp = 100
     this.currExp = this.baseExp
-
-    this.baseMoveSpeed = 3
     this.currMoveSpeed = this.baseMoveSpeed
-
-    this.baseTurnRate = this.baseMoveSpeed + 5
+    this.baseTurnRate = this.baseMoveSpeed + this.turnRateOffset
     this.currTurnRate = this.baseTurnRate
-
     this.baseSegmentCount = baseSegmentCount || this.baseSegmentCount
     this.addSegments(this.baseSegmentCount)
     this.setHitAreas()
@@ -49,7 +40,6 @@ export default class Centipede extends Mob {
 
   addSegments(n) {
     const drawLegs = (ctx) => {
-      const legColor = 'hsl(30, 70%, 10%)'
       ctx.save()
 
       // ! janky, need to exclude legs from scaling altogether
@@ -59,7 +49,7 @@ export default class Centipede extends Mob {
       ctx.moveTo(0, -4.2*this.r)
       ctx.lineTo(0, 4.2*this.r)
       ctx.lineWidth = 1
-      ctx.strokeStyle = legColor
+      ctx.strokeStyle = this.colorLeg
       ctx.stroke()
       ctx.restore()
     }
@@ -126,7 +116,7 @@ export default class Centipede extends Mob {
       -1,
       true
     )
-    ctx.fillStyle = 'hsl(0, 100%, 50%)'
+    ctx.fillStyle = this.colorEyes
     ctx.fill()
     ctx.beginPath()
     ctx.arc(
@@ -143,7 +133,7 @@ export default class Centipede extends Mob {
     ctx.beginPath()
     ctx.arc(.5*this.r, -1.8*this.r, 2.5 * this.r, .9, 1.6)
     ctx.lineWidth = 0.15*this.r
-    ctx.strokeStyle = 'hsl(0,0%,0%)'
+    ctx.strokeStyle = this.colorFangs
     ctx.stroke()
 
     ctx.beginPath()
@@ -165,19 +155,19 @@ export default class Centipede extends Mob {
   }
 
   move() {
-    // if (this.isMobile) {
-      // if (Math.random() < 0.005) {
-      //   this.isMobile = false
-      //   setTimeout(() => this.isMobile = true, 200 + Math.random() * 2000)
-      // } else {
+    if (this.isMobile) {
+      if (Math.random() < 0.007) {
+        this.isMobile = false
+        setTimeout(() => this.isMobile = true, 200 + Math.random() * 2000)
+      } else {
         this.position.x += this.currMoveSpeed 
           * Math.cos(this.headingRadians)
         this.position.y += this.currMoveSpeed 
           * Math.sin(this.headingRadians)
         this.isTurnable && turnRandomlySmoothly.call(this)
         this.setHitAreas()
-      // }
-    // }
+      }
+    }
   }
 
   update() {
