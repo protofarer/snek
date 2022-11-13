@@ -24,32 +24,28 @@ export default class SnekEndDialog {
       h: this.game.canvas.height * 0.75
     }
 
-    // coord of origin of dialog container relative to canvas origin
     const x = this.game.canvas.width * 0.1
     const y = this.game.canvas.height * 0.1
-    this.offset = {
-      x: x,
-      y: y,
-    }
+    this.origin = { x, y }
 
     this.pos = {
       top: 0,
       left: 0,
-      right: this.offset.x + this.size.w,
-      bottom: this.offset.y + this.size.h
+      right: this.origin.x + this.size.w,
+      bottom: this.origin.y + this.size.h
     }
 
     const startMenuButtonData = {
       origin: {
-        x: this.game.canvas.width * 0.35,
-        y: this.game.canvas.height * 0.5,
+        x: this.size.w * 0.5,
+        y: this.size.h * 0.5,
       },
       label: 'Start Menu',
       base: {
         w: 100
       },
       name: 'ED-startMenu',
-      offset: { x, y }
+      offset: { x: this.origin.x , y: this.origin.y }
     }
 
     this.startMenuButton = new ModalButton(
@@ -58,6 +54,9 @@ export default class SnekEndDialog {
       this.game.resetGame,
       { once: true},
     )
+    console.log(`start butt origin`, this.startMenuButton.origin)
+    console.log(`start butt offset`, this.startMenuButton.offset)
+    
 
     this.animatedHeadline = animatedTextLine(
       this.game.ctx,
@@ -96,7 +95,7 @@ export default class SnekEndDialog {
   render() {
     if (this.isShown) {
       this.game.ctx.save()
-      this.game.ctx.translate(this.offset.x, this.offset.y)
+      this.game.ctx.translate(this.origin.x, this.origin.y)
 
       this.game.ctx.beginPath()
       this.game.ctx.fillStyle = 'hsla(220, 50%, 65%, .85)'
