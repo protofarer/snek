@@ -152,3 +152,53 @@ You are Snek. You're small and always hungry. Your appetite is endless and so ar
 - [ ] interpolate segment position for when movespeed decreases.                                                                                             
 	- upon movespeed decrease and thus an increase in number of headTrail elements kept, check that the distance between headTrailElements is around the same as movespeed. Halve the too long distances by adding an element in between, do this for all of headtrail before the segment starts doing its catch up.
 - [ ] measure performance, address hogs, all this leading up to multiplayer: https://www.youtube.com/watch?v=Sp5_d6coiqU
+
+# .TODO
+
+11/12
+Tablification
+- memory considerations
+	- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Memory_Management
+		- reference counting GC
+			- > Circular references are a common cause of memory leaks.
+			- > Internet Explorer 6 and 7 are known to have reference-counting garbage collectors, which have caused memory leaks with circular references. No modern engine uses reference-counting for garbage collection anymore.
+		- Currently, all modern engines ship a mark-and-sweep garbage collector.
+	- https://medium.com/7factor/javascript-objects-and-memory-consumption-a3dae9c15fce
+	- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+	- > JavaScript was originally designed for use in browsers; if a random webpage could choose to allocate memory in such a way that the garbage collector would never reclaim it without manual intervention, that's basically asking for memory leaks (unintentional or malicious denial of service by the web page).
+- adhoc review: https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop
+- [x] consolidate gameplay constants
+	- cantHarm period
+- [x] JSONify ent base attributes, have ent "load" variables via a loop
+	- didnt traitify: species, subspecies
+	- should traitify: shadowcolor, shadowblur, shadowoffsets
+- [x] build an loadTraits function that each entclass can call in constructor to set them up automatically
+	- [x] when JSONparse/stringify... lose object references... it's best for literals... can structuredClone work?:: no, instead simplify TraitsFile and use Constants and Intermediate Function libraries to help
+- woohoo building methods with CONSTANTS names
+- getting more higher level and abstracted
+- What is cost of importing the whole `trait.js` for each ent class?
+
+- [ ] add new game to end dialog
+- [ ] make snek mouth half as wide as head
+- [ ] buttons for start menu
+	- [ ] click path is off... checkout checkers' use of the Button offset object
+
+- [ ] halt game before each level, flash snek, render a big snek head on the "Start/Action" button to begin playing
+- [ ] BUG: after eating apples or ants? (happened during basic 10ant 10app debug level), snek movespeed goes into negative after digestion
+	- the effect is deactivating twice for each activation, even for single apple
+- [ ] BUG: lifespan NaN
+
+Gameplay
+- [ ] get a basic survival mode working!!!!
+	- [ ] spawning behavior
+	- [ ] enddialog newgame button
+	- [ ] prettify buttons, hide A
+	- [ ] lower seg exp req
+
+
+- [ ] eating mango gives a segment, no matter what (and current exp value of remaining seg level added as result), ie save mangoes till snek is longer for big exp boost and free seg, no chomp effect
+	- [ ] abstract away difference between currExp and segCurrExp, abstract for ent so that calls to immobs and mobs modify appropriate exp types
+	- [ ] whats best method, should class fields be declared and initiated with undefined or empty objects/null/zero values
+		- IE should fields be used to init or purely for declaring?
+	- [ ] create public methods for modifying mob state
+		- movespeed, turnrate, primarycolor
