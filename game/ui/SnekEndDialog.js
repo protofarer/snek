@@ -5,11 +5,7 @@ export default class SnekEndDialog {
   // Stops and Starts the play loop
   // CSDR removing start stop and letting draw run in background
   // for simplicity sake, after playing with this approach
-  level
-  score
-  lifeSpan
-  snek
-  isVictory
+  isShown = false
 
   constructor(game, data) {
     this.game = game
@@ -23,20 +19,17 @@ export default class SnekEndDialog {
       ['score', this.data.score],
     ]
 
-    // TODO objects stats
-
-    this.isShown = false
-    this.modalChildren = []
-
     this.size = {
       w: this.game.canvas.width * 0.8,
       h: this.game.canvas.height * 0.75
     }
 
     // coord of origin of dialog container relative to canvas origin
+    const x = this.game.canvas.width * 0.1
+    const y = this.game.canvas.height * 0.1
     this.offset = {
-      x: this.game.canvas.width * 0.1,
-      y: this.game.canvas.height * 0.1,      
+      x: x,
+      y: y,
     }
 
     this.pos = {
@@ -46,34 +39,26 @@ export default class SnekEndDialog {
       bottom: this.offset.y + this.size.h
     }
 
-    // **********************************************************************
-    // ******************** Start Menu Button
-    // **********************************************************************
     const startMenuButtonData = {
       origin: {
-        x: 50,
-        y: 50,
+        x: this.game.canvas.width * 0.35,
+        y: this.game.canvas.height * 0.5,
       },
       label: 'Start Menu',
       base: {
         w: 100
       },
       name: 'ED-startMenu',
+      offset: { x, y }
     }
 
     this.startMenuButton = new ModalButton(
       this.game.ctx,
       startMenuButtonData,
-      this.offset,
-      // TODO goto start menu... refersh
-      this.game.stateMachine.change('start'),
+      this.game.resetGame,
       { once: true},
     )
 
-    this.modalChildren.push(this.startMenuButton)
-
-    // Start this and its children initialize hidden
-    this.hide()
     this.animatedHeadline = animatedTextLine(
       this.game.ctx,
       { size: 16, family: 'Arial', weight: 'bold' },
@@ -85,9 +70,6 @@ export default class SnekEndDialog {
   hide() {
     // This Modal Dialog must stop drawing when in a hidden state 
     this.isShown = false
-    this.modalChildren.forEach(c => {
-      c.isShown && c.hide()
-    })
   }
 
   show() {
@@ -102,6 +84,7 @@ export default class SnekEndDialog {
     }
     this.isShown = true
     this.render()
+    this.startMenuButton.show()
   }
 
   drawText(offset, text) {
@@ -127,6 +110,7 @@ export default class SnekEndDialog {
       }
 
       this.game.ctx.restore()
+      this.startMenuButton.render()
     } else {
       console.log(`Attempted to draw EndDialog while isShown=false`, )
     }

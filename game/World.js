@@ -156,9 +156,7 @@ export default class World {
               subSpecies: 'snek'
             }])
 
-            const snekSegCount = Array.from(sneksegs.values())
-              .filter(s => s.getHeadEnt().species === 'snek')
-              .length
+            const snekSegCount = this.snek.countSegments
 
             let wasSegLost = 0
 
@@ -203,6 +201,13 @@ export default class World {
           })
         }
       }
+    }
+    if (this.snek.countSegments === 0) {
+      this.game.stateMachine.change('gameOver', {
+        snek: this.game.stateMachine.current.snek,
+        level: this.game.stateMachine.current.level,
+        score: this.game.stateMachine.current.score,
+      })
     }
   }
 

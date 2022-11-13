@@ -13,13 +13,14 @@ export default class Snek extends Mob {
   static species = 'snek'
   species = 'snek'
 
+  currExp = 0
   expForLevel(level) {
     return (this.levelMultiplier**(level - 2)) * this.baseExp
   }
 
   // * segCount is equivalent to seg level
   segExpForLevel(segCount) {
-    return (this.segLevelMultiplier**(segCount - 2)) * this.baseExp
+    return (this.segLevelMultiplier**(Math.max(0, segCount - 2))) * this.baseExp
   }
 
   get expGainedThisLevelOnly() {
@@ -50,7 +51,6 @@ export default class Snek extends Mob {
     super(ctx, startPosition, parent)
     loadTraits.call(this, Traits.Snek)
 
-    this.currExp = this.baseExp
     this.currSegExp = this.currExp
     this.currPrimaryColor = this.basePrimaryColor
     this.baseTurnRate = this.baseMoveSpeed + this.turnRateOffset
@@ -58,7 +58,7 @@ export default class Snek extends Mob {
     this.currMoveSpeed = this.baseMoveSpeed
     this.birthTime = this.parent.t < 0 ? 0 : this.parent.t
 
-    this.addSegment(initSegmentCount || this.baseSegmentCount)
+    this.addSegment(initSegmentCount ?? this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
   }

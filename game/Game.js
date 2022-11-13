@@ -1,4 +1,5 @@
 import Constants from './Constants'
+import Snek from './ents/mobs/Snek'
 import Loop from './modules/Loop'
 import Background from './modules/Background'
 import Panel from './ui/Panel'
@@ -42,7 +43,11 @@ export default class Game {
       }, this)
 
     if (this.setupDebug()) {
-      this.stateMachine.change('playSurvival', { level: 0, score: 0 })
+      this.stateMachine.change('playSurvival', { 
+        snek: new Snek(this.ctx,null,this,0),
+        level: 0, 
+        score: 0 
+      })
     } else {
       this.stateMachine.change('start')
     }

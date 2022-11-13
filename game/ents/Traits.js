@@ -188,7 +188,7 @@ export default {
 
   Snek: {
     r: 10,
-    baseExp: 10,
+    baseExp: 100,
     level: 1,
     levelMultiplier: 2,
     segLevelMultiplier: 1.25,

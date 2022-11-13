@@ -20,10 +20,10 @@ export default class ModalButton extends Button {
   // ModalButtons gain the ability set or unset (add or kill)
   // its own clickListener. handleClick and listenerOptions must be remembered
   // when hidden and are set up again using Button's methods
-  constructor(ctx, buttonData, offset, handleClick, listenerOptions) {
+  constructor(ctx, data, handleClick, listenerOptions) {
     // isParentShown is a variable by reference (eg object property)
     // that determines whether this shows or hides
-    super(ctx, buttonData, offset, handleClick, listenerOptions)
+    super(ctx, data, handleClick, listenerOptions)
 
     // Assuming Modal Object is initialized without being shown/activated
     this.isShown = false
