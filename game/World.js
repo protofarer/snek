@@ -154,9 +154,9 @@ export default class World {
             // enemies vs snek head
             if (!this.collisionResolver(Collisions.harm, ent, this.snek)) {
               // if head not collided, check segs
-              for(let snekseg of this.snek.getSegments()) {
+              for(let i = 0; i < this.snek.segments.length; ++i) {
                 // harm attached segs
-                this.collisionResolver(Collisions.harm, ent, snekseg)
+                this.collisionResolver(Collisions.harm, ent, this.snek.segments[i])
               }
             }
 
@@ -186,7 +186,7 @@ export default class World {
       }
     }
     // catch all gameover
-    if (this.snek.countSegments === 0) {
+    if (this.snek.segments.length === 0) {
       this.game.stateMachine.change('gameOver', {
         snek: this.game.stateMachine.current.snek,
         level: this.game.stateMachine.current.level,

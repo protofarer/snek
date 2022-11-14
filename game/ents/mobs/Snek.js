@@ -18,7 +18,8 @@ export default class Snek extends Mob {
   totalExpGained = 0
   expForLevel(level) {
     // 1*0 -> 2*5 -> 3*10 -> 4*15
-    return level * ((level - 1) * 5)
+    // make baseExp equiv to desired Ent exp, then next level exp based on eating currSegCount of Ent 
+    return level * ((level - 1) * (this.baseExp / 2))
   }
 
   // // * segCount is equivalent to seg level
@@ -45,7 +46,7 @@ export default class Snek extends Mob {
   tongueDirection = 0
 
   downstreamSegment
-  currKnownSegmentCount = 0
+  // currKnownSegmentCount = 0
   // get maxSegmentCount() { return this.level }
 
   activeEffects = []
@@ -53,6 +54,7 @@ export default class Snek extends Mob {
   expiredPostDigestionEffects = []
   wasHarmed = false
   lifeSpan = 0
+  segments = []
 
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)
@@ -72,7 +74,6 @@ export default class Snek extends Mob {
 
   addSegment(n=1) {
     for(let i = 0; i < n; i++) {
-      // TODO for death implement, segmentless snake is considered dead
       if (!this.downstreamSegment){
         this.downstreamSegment = new Segment(this.ctx, this)
         this.downstreamSegment.subSpecies = 'snek'
@@ -84,7 +85,8 @@ export default class Snek extends Mob {
         newSegment.downstreamSegment = oldSegment
         this.downstreamSegment = newSegment
       }
-      this.currKnownSegmentCount++
+      this.segments.push(this.downstreamSegment)
+      // this.currKnownSegmentCount++
     }
   }
 
@@ -212,16 +214,6 @@ export default class Snek extends Mob {
     this.ctx.stroke()
   }
 
-  getSegments() {
-    let segs = []
-    let curr = this
-    while (curr?.downstreamSegment) {
-      segs.push(curr.downstreamSegment)
-      curr = curr.downstreamSegment
-    }
-    return segs
-  }
-
   harmed() {
     // Panic
     this.activateEffects([
@@ -282,7 +274,7 @@ export default class Snek extends Mob {
       const timeLeft = effect.timeLeft - Constants.TICK < 0
         ? 0
         : effect.timeLeft - Constants.TICK
-      return { ...effect, timeLeft}
+      return { ...effect, timeLeft }
     })
   }
 
@@ -349,18 +341,16 @@ export default class Snek extends Mob {
   }
 
   levelDown() {
-    let curr = this
-    while (curr?.downstreamSegment) {
-      curr = curr.downstreamSegment
-      curr?.downstreamSegment && curr.harmFlash()
+    this.segments.shift().detach()
+    for (let i = 0; i < this.segments.length; ++i) {
+      this.segments[i].harmFlash()
     }
-    curr.detach()
 
     // only set segExp if segCount changed
-    if (this.countSegments < this.currKnownSegmentCount) {
-      this.currKnownSegmentCount = this.countSegments
-      this.currSegExp = this.expForLevel(this.countSegments)
-    }
+    // if (this.countSegments < this.currKnownSegmentCount) {
+    //   this.currKnownSegmentCount = this.countSegments
+    //   this.currSegExp = this.expForLevel(this.countSegments)
+    // }
 
     this.level = Math.max(1, this.level - 1)
     this.currExp = this.level > 1 ? this.expForLevel(this.level) : 0

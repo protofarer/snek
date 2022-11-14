@@ -199,10 +199,11 @@ export default class DebugGUI {
       guiSnek.add(snek, 'currMoveSpeed').listen()
       guiSnek.add(snek, 'currTurnRate').listen()
       guiSnek.add(snek.postDigestionEffects, 'length').listen().name('nPDE')
+      guiSnek.add(snek.segments, 'length').listen()
 
-      const seg = guiSnek.addFolder('Segments')
-      seg.add(snek, 'currKnownSegmentCount').listen()
-      seg.add(snek, 'countSegments').listen()
+      // const seg = guiSnek.addFolder('Segments')
+      // seg.add(snek, 'currKnownSegmentCount').listen()
+      // seg.add(snek, 'countSegments').listen()
 
       // seg exp progression no longer a mechanic
       // seg.add(snek, 'maxSegmentCount').listen()
