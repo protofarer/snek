@@ -16,6 +16,8 @@ export default class Button {
   //  D. set its own path aka clickArea
   // IV. Possibilities
   //  CSDR addEventListener to something more general than a canvas.context paremeter
+
+  // TODO show shape of data arg
   constructor(ctx, data, handleClick=null, listenerOptions=null) {
     if (ctx === null || ctx === undefined || ctx === {}) {
       throw new TypeError('A button\'s context wasn\'t defined')
@@ -23,14 +25,9 @@ export default class Button {
     if (!data?.origin?.x || !data?.origin?.y) {
       throw new TypeError('A button\'s origin coordinates weren\'t defined')
     }
-    // if (!handleClick) {
-    //   throw new TypeError('A button\'s handleClick wasn\'t defined')
-    // }
 
     this.name = data.name || 'unnamed'
-
     this.ctx = ctx
-
     this.rect = this.ctx.canvas.getBoundingClientRect() 
 
     this.origin = data?.origin ?? { x: 0, y: 0 }
@@ -56,6 +53,7 @@ export default class Button {
     }
 
     this.setPath()
+
     function defaultHandleClick() {
       console.log(`${this.label} button's click handler hasn't been defined.`)
     }
@@ -76,26 +74,20 @@ export default class Button {
       this.baseWidth * this.stretchWidth + 4,
       this.baseHeight * this.stretchHeight + 4,
     )
-    console.log(`topleft @`, 
-      this.offset.x + this.origin.x - 2, 
-      this.offset.y + this.origin.y - 2,
-    )
-    console.log(`w/h`,
-      this.baseWidth * this.stretchWidth + 4,
-      this.baseHeight * this.stretchHeight + 4,
-     )
   }
 
   addClickListener(newHandleClick, listenerOptions) {
     // Click detection handled handled here instead of outside of it!
     // Assuming handler listening to canvas
-    // Reuses stored handleClick and listenerOpts if arguments null
-    this.handleClick = newHandleClick ? newHandleClick : this.handleClick
-    this.listenerOptions = listenerOptions ? listenerOptions : this.handleClick
+    this.handleClick = newHandleClick || this.handleClick
+    this.listenerOptions = listenerOptions || this.handleClick
 
     this.handleButtonClick = function hBC(e) {
         if (this.ctx.isPointInPath(
-          this.path, e.clientX - this.rect.left, e.clientY - this.rect.top
+          this.path, 
+          // works for display pixels aka CSS scaling
+          (e.clientX - this.rect.left) * this.ctx.canvas.width / this.ctx.canvas.clientWidth, 
+          (e.clientY - this.rect.top) * this.ctx.canvas.height / this.ctx.canvas.clientHeight
         )) {
           console.log(`${this.label}'s handleButtonClicked`, )
           this.handleClick()
@@ -110,10 +102,12 @@ export default class Button {
   }
 
   removeClickListener() {
+    // ! TODO NOT WORKING
     this.controller.abort()
+    this.ctx.canvas.removeEventListener('click', this.handleButtonClick)
   }
 
-  draw() {
+  render() {
     // Init clickArea path here because Panel draw does offset for its components
     // and I don't want to pass in more constructor arguments to this button
     // Indeed, the button is oblivious to its environment at large

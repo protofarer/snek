@@ -87,6 +87,31 @@ export default class Game {
 
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
+
+    this.pointerCoords = {
+      canvas : { x: 0, y: 0 },
+      client: { x: 0, y: 0 },
+      display: { x: 0, y: 0 }
+    }
+    const handlePointerMove = (e) => {
+      // Scrolled window is not supported
+      
+      // pointer coordinates relative to base (unscaled) canvas
+      this.pointerCoords.canvas.x = e.clientX - this.rect.left // + window.scrollX
+      this.pointerCoords.canvas.y = e.clientY - this.rect.top // + window.scrollY
+
+      // pointer coordinates relative to window
+      this.pointerCoords.client.x = e.clientX // + window.scrollX
+      this.pointerCoords.client.y = e.clientY // + window.scrollY
+
+      // pointer coordinates relative to scaled/display pixel canvas coordinates
+      this.pointerCoords.display.x = this.pointerCoords.canvas.x 
+        * this.canvas.width / this.canvas.clientWidth
+      this.pointerCoords.display.y = this.pointerCoords.canvas.y 
+        * this.canvas.height / this.canvas.clientHeight
+
+    }
+    this.canvas.addEventListener('pointermove', handlePointerMove, false)
   }
 
   clr() {

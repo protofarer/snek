@@ -39,34 +39,40 @@ export class StartState extends BaseState {
     }
     document.addEventListener('keydown', this.handleKeyDown)
 
+    const normalButtData = {
+      origin: { 
+        x: this.game.canvas.width * 0.35, 
+        y: this.game.canvas.height * 0.35, 
+      },
+      base: { w: 125, },
+      label: 'Normal Mode',
+    }
     this.normalButt = new ModalButton(
       this.game.ctx,
-      {
-        origin: { x: 25, y: 25 },
-        base: { w: 125, },
-        label: 'Normal Mode',
-      },
-      () => {
-        this.game.stateMachine.change('playNormal', {
-          level: 1,
-          score: 0
-        })
-      },
+      normalButtData,
+      () => this.game.stateMachine.change('playNormal', {
+        level: 1,
+        score: 0
+      }),
+      { once: true }
     )
     this.normalButt.show()
 
+    const survivalButtData = {
+      origin: { 
+        x: this.game.canvas.width * 0.35, 
+        y: this.game.canvas.height * 0.45, 
+      },
+      base: { w: 125, },
+      label: 'Survival Mode',
+    }
     this.survivalButt = new ModalButton(
       this.game.ctx,
-      {
-        origin: { x: 25, y: 105 },
-        base: { w: 125, },
-        label: 'Survival Mode',
-      },
-      () => {
-        this.game.stateMachine.change('playSurvival', {
-          score: 0
-        })
-      },
+      survivalButtData,
+      () => this.game.stateMachine.change('playSurvival', {
+        score: 0
+      }),
+      { once: true }
     )
     this.survivalButt.show()
   }
@@ -75,7 +81,6 @@ export class StartState extends BaseState {
   }
 
   render() {
-    this.game.ctx.save()
     this.game.ctx.beginPath()
     this.game.ctx.fillStyle = 'hsla(135, 70%, 35%, 1)'
     this.game.ctx.fillRect(
@@ -85,29 +90,17 @@ export class StartState extends BaseState {
 
     this.normalButt.render()
     this.survivalButt.render()
-
-    // draw game modes
-    // this.game.ctx.translate(
-    //   this.game.canvas.width / 3, 
-    //   this.game.canvas.height / 3
-    // )
-    // this.game.ctx.font = 'bold 20px Arial'
-    // this.game.ctx.fillStyle = 'black'
-
-    // for (let i = 0; i < this.modes.length; ++i) {
-    //   this.game.ctx.fillText(
-    //     `${this.modes[i]}`,
-    //     0, i * 100
-    //   )
-    //   if (i === this.mode) {
-    //     this.game.ctx.strokeRect(0 - 15, i * 100 - 25, 120, 35)
-    //   }
-    // }
-    this.game.ctx.restore()
   }
 
   exit() {
     document.removeEventListener('keydown', this.handleKeyDown)
+
+    // ! TODO removeEventListener in class Button not working as intended
+    this.normalButt.removeClickListener()
+    this.survivalButt.removeClickListener()
+    // ! workaround
+    this.normalButt.path = new Path2D()
+    this.survivalButt.path = new Path2D()
     this.game.panel.panelContainer.style.setProperty('visibility', 'visible')
   }
 }

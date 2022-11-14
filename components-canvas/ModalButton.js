@@ -45,7 +45,7 @@ export default class ModalButton extends Button {
 
   render() {
     if (this.isShown) {
-      super.draw()
+      super.render()
     }
   }
 }

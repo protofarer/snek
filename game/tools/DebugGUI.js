@@ -40,18 +40,32 @@ export default class DebugGUI {
     this.reactToParams()
 
     const rectpos = {
-      left: `${Math.floor(game.rect.left)}`,
-      top: `${Math.floor(game.rect.top)}`
+      left: `${Math.floor(this.game.rect.left)}`,
+      top: `${Math.floor(this.game.rect.top)}`,
+      right: `${Math.floor(this.game.rect.right)}`,
+      bottom: `${Math.floor(this.game.rect.bottom)}`,
     }
 
     gui.add(this.frames, 'fps').listen()
     const guiGamePositioning = gui.addFolder('Positioning') 
     guiGamePositioning.add(rectpos, 'left').name('rect.left').listen()
     guiGamePositioning.add(rectpos, 'top').name('rect.top').listen()
+    guiGamePositioning.add(rectpos, 'right').name('rect.right').listen()
+    guiGamePositioning.add(rectpos, 'bottom').name('rect.bottom').listen()
     guiGamePositioning.add(this.game.canvas, 'width').name('canvas.width')
     guiGamePositioning.add(this.game.canvas,'height').name('canvas.height')
     guiGamePositioning.show(true)
-    guiGamePositioning.close()
+
+    guiGamePositioning.add(this.game.pointerCoords.canvas, 'x').name('canvasX').listen()
+    guiGamePositioning.add(this.game.pointerCoords.canvas, 'y').name('canvasY').listen()
+    guiGamePositioning.add(this.game.pointerCoords.client, 'x').name('clientX').listen()
+    guiGamePositioning.add(this.game.pointerCoords.client, 'y').name('clientY').listen()
+    guiGamePositioning.add(this.game.pointerCoords.display, 'x').name('displayX').listen()
+    guiGamePositioning.add(this.game.pointerCoords.display, 'y').name('displayY').listen()
+
+
+
+    guiGamePositioning.open()
 
     // **********************************************************************
     // * Game State

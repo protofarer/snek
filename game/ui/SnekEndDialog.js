@@ -9,6 +9,7 @@ export default class SnekEndDialog {
 
   constructor(game, data) {
     this.game = game
+    
     this.data = data
 
     // summary stats
