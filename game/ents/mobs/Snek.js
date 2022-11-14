@@ -51,7 +51,6 @@ export default class Snek extends Mob {
 
   activeEffects = []
   postDigestionEffects = []
-  expiredPostDigestionEffects = []
   wasHarmed = false
   lifeSpan = 0
   segments = []
@@ -305,26 +304,17 @@ export default class Snek extends Mob {
     return n
   }
 
+
   updatePostDigestionEffects() {
     // * Activate Post Digestion Effects after content is fully digested
     // * Expire when effects' time runs out
-
-    // remove expired effects
-    if (this.expiredPostDigestionEffects.length > 0) {
-      Digestion.cancelPostDigestionEffects.call(this, this.expiredPostDigestionEffects)
-      this.expiredPostDigestionEffects.length = 0
-    }
-
-    // tick down active effects, designate expireds
-    if (this.postDigestionEffects.length > 0 ) {
-      for (let i = 0; i < this.postDigestionEffects.length; ++i) {
-        const pDE = this.postDigestionEffects[i]
-        pDE.timeLeft -= Constants.TICK
-        if (pDE.timeLeft <= 0) {
-          this.postDigestionEffects.splice(i,1)
-          this.expiredPostDigestionEffects.push(pDE)
-          --i
-        }
+    for (let i = 0; i < this.postDigestionEffects.length; ++i) {
+      const pDE = this.postDigestionEffects[i]
+      pDE.timeLeft -= Constants.TICK
+      if (pDE.timeLeft <= 0) {
+        this.postDigestionEffects.splice(i,1)
+        Digestion.cancelPostDigestionEffects.call(this, pDE )
+        --i
       }
     }
   }
@@ -365,9 +355,9 @@ export default class Snek extends Mob {
       this.turnRight()
     }
 
-    this.updatePostDigestionEffects()
-
     this.processEffects()
+
+    this.updatePostDigestionEffects()
 
     this.isMobile && this.move()
 

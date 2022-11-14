@@ -40,10 +40,10 @@ export default class DebugGUI {
     this.reactToParams()
 
     const rectpos = {
-      left: `${Math.floor(this.game.rect.left)}`,
-      top: `${Math.floor(this.game.rect.top)}`,
-      right: `${Math.floor(this.game.rect.right)}`,
-      bottom: `${Math.floor(this.game.rect.bottom)}`,
+      left: `${Math.floor(this.game.canvas.offsetLeft)}`,
+      top: `${Math.floor(this.game.canvas.offsetTop)}`,
+      right: `${Math.floor(this.game.canvas.offsetLeft + this.game.canvas.clientWidth)}`,
+      bottom: `${Math.floor(this.game.canvas.offsetTop + this.game.canvas.clientHeight)}`,
     }
 
     gui.add(this.frames, 'fps').listen()

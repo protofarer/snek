@@ -4,6 +4,8 @@ export default class Digestion {
   static activatePostDigestionEffects(postDigestionData, headEnt) {
     postDigestionData.forEach(pDD => {
       headEnt.postDigestionEffects.push(pDD)
+      console.log(`pushed pDE to headent`, headEnt.postDigestionEffects)
+      
 
       switch (pDD.effect) {
         case 'moveSpeed':
@@ -12,8 +14,8 @@ export default class Digestion {
         case 'turnRate':
           headEnt.currTurnRate += pDD.turnRate
           break
-        case 'addSeg':
-          headEnt?.addSegment()
+        case 'levelUp':
+          headEnt?.levelUp()
           break
         default:
           throw Error(`Unhandled postDigestionEffect: ${pDD.effect}`)
@@ -22,19 +24,16 @@ export default class Digestion {
     })
   }
 
-  static cancelPostDigestionEffects(expiredPostDigestionEffects) {
-    expiredPostDigestionEffects.forEach(postDigestionData => {
-    switch (postDigestionData.effect) {
+  static cancelPostDigestionEffects(expiredPostDigestionEffect) {
+    switch (expiredPostDigestionEffect.effect) {
       case 'moveSpeed':
-        this.currMoveSpeed -= postDigestionData.moveSpeed
+        this.currMoveSpeed -= expiredPostDigestionEffect.moveSpeed
         break
       case 'turnRate':
-        this.currTurnRate -= postDigestionData.turnRate
+        this.currTurnRate -= expiredPostDigestionEffect.turnRate
         break
       default:
         console.log(`snek expiredDigestionEffect switch/case defaulted`, )
     }
-    console.log(`postDigestEffect ${postDigestionData.effect} ended`, )
-    })
   }
 }

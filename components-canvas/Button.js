@@ -28,7 +28,6 @@ export default class Button {
 
     this.name = data.name || 'unnamed'
     this.ctx = ctx
-    this.rect = this.ctx.canvas.getBoundingClientRect() 
 
     this.origin = data?.origin ?? { x: 0, y: 0 }
     this.offset = data?.offset ?? { x: 0, y: 0 }
@@ -86,8 +85,8 @@ export default class Button {
         if (this.ctx.isPointInPath(
           this.path, 
           // works for display pixels aka CSS scaling
-          (e.clientX - this.rect.left) * this.ctx.canvas.width / this.ctx.canvas.clientWidth, 
-          (e.clientY - this.rect.top) * this.ctx.canvas.height / this.ctx.canvas.clientHeight
+          (e.clientX - this.ctx.canvas.offsetLeft) * this.ctx.canvas.width / this.ctx.canvas.clientWidth, 
+          (e.clientY - this.ctx.canvas.offsetTop) * this.ctx.canvas.height / this.ctx.canvas.clientHeight
         )) {
           console.log(`${this.label}'s handleButtonClicked`, )
           this.handleClick()

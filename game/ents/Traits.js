@@ -140,18 +140,18 @@ export default {
         effect: 'turnRate',
         type: 'boolean',
         turnRate: 1,
-        duration: 32000,
-        timeLeft: 32000
+        duration: 6000,
+        timeLeft: 6000
       },
       {
         effect: 'moveSpeed',
         type: 'boolean',
         moveSpeed: 0.25,
-        duration: 32000,
-        timeLeft: 32000
+        duration: 6000,
+        timeLeft: 6000
       },
       {
-        effect: 'addSeg',
+        effect: 'levelUp',
         type: 'mutation',
       }
     ],
