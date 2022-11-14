@@ -70,7 +70,7 @@ export default class Panel {
     this.touchContainer.appendChild(this.rightButt)
 
     // before init, for debug
-    this.infobox.style.color = 'lawngreen'
+    this.infobox.style.color = 'hsl(0, 70%, 55%)'
     this.score.innerText = '$score'
     this.lifespan.innerText = '$lifespan'
   }

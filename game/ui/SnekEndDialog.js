@@ -99,7 +99,7 @@ export default class SnekEndDialog {
       this.game.ctx.translate(this.origin.x, this.origin.y)
 
       this.game.ctx.beginPath()
-      this.game.ctx.fillStyle = 'hsla(220, 50%, 65%, .85)'
+      this.game.ctx.fillStyle = 'hsla(220, 70%, 65%, .75)'
       this.game.ctx.fillRect(0, 0, this.size.w, this.size.h)
 
       this.animatedHeadline()

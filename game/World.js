@@ -215,14 +215,6 @@ export default class World {
     }
   }
 
-  isContactingMouth(hitArea, mouthCoords) {
-    return this.game.ctx.isPointInPath(
-      hitArea, 
-      mouthCoords.x, 
-      mouthCoords.y
-    )
-  }
-
   /** Determine whether ent mouth is contacting another ent's body 
    * @function
    * @param {Entity} agg aka aggressor - entity with an initiating action, 
@@ -246,9 +238,10 @@ export default class World {
   }
 
   pointCollisionDetector(agg, def) {
-    return this.isContactingMouth(
-      def.hitArea,
-      agg.mouthCoords,
+    return this.game.ctx.isPointInPath(
+      def.hitArea, 
+      agg.mouthCoords.x, 
+      agg.mouthCoords.y
     )
   }
 

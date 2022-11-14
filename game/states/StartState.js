@@ -82,7 +82,7 @@ export class StartState extends BaseState {
 
   render() {
     this.game.ctx.beginPath()
-    this.game.ctx.fillStyle = 'hsla(135, 70%, 35%, 1)'
+    this.game.ctx.fillStyle = 'hsla(135, 70%, 35%)'
     this.game.ctx.fillRect(
       0, 0, 
       this.game.canvas.width, this.game.canvas.height

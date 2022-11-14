@@ -44,7 +44,7 @@ export default class Game {
 
     if (this.setupDebug()) {
       this.stateMachine.change('playSurvival', { 
-        snek: new Snek(this.ctx,null,this,0),
+        snek: new Snek(this.ctx,null,this),
         level: 0, 
         score: 0 
       })

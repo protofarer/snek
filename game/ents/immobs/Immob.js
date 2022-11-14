@@ -61,7 +61,7 @@ export default class Immob extends Entity {
 
   get hitR() { return this.r + 3 }
 
-  headingRadians = 0
+  headingRadians = - Math.PI / 2
   get headingDegrees() { return this.headingRadians * 180 / Math.PI }
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 
@@ -89,32 +89,32 @@ export default class Immob extends Entity {
    * Utility function for left hit area coordinate
    * @method
    */
-  left() {
-    return { x:this.position.x - this.hitR, y: this.position.y}
+  get left() {
+    return this.position.x - this.hitR
   }
 
   /**
    * Utility function for right hit area coordinate
    * @method
    */
-  right() {
-    return { x:this.position.x + this.hitR, y:this.position.y}
+  get right() {
+    return this.position.x + this.hitR
   }
 
   /**
    * Utility function for top hit area coordinate
    * @method
    */
-  top() {
-    return { x: this.position.x,y: this.position.y - this.hitR }
+  get top() {
+    return this.position.y - this.hitR
   }
 
   /**
    * Utility function for bottom hit area coordinate
    * @method
    */
-  bottom() {
-    return { x: this.position.x, y: this.position.y + this.hitR }
+  get bottom() {
+    return this.position.y + this.hitR
   }
 
   /**

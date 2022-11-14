@@ -47,6 +47,11 @@ export default class Snek extends Mob {
   wasHarmed = false
   lifeSpan = 0
 
+  get mouthLeft() { return this.position.x - (0.5 * this.r) }
+  get mouthRight() { return this.position.x + (0.5 * this.r) }
+  get mouthTop() { return this.position.y - (0.5 * this.r) }
+  get mouthBottom() { return this.position.y + (0.5 * this.r) }
+
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)
     loadTraits.call(this, Traits.Snek)
@@ -57,6 +62,8 @@ export default class Snek extends Mob {
     this.currTurnRate = this.baseTurnRate
     this.currMoveSpeed = this.baseMoveSpeed
     this.birthTime = this.parent.t < 0 ? 0 : this.parent.t
+
+    console.log(`mouth left`, this.mouthLeft)
 
     this.addSegment(initSegmentCount ?? this.baseSegmentCount)
     this.setHitAreas()
@@ -128,11 +135,14 @@ export default class Snek extends Mob {
     // Head Hit (from Mob)
     super.drawHitOverlays()
 
-    // Mouth Hit
+    // Point Mouth Hit
+    // this.ctx.beginPath()
+    // this.ctx.arc(this.mouthCoords.x, this.mouthCoords.y, 2, 0, 2 * Math.PI)
+    // this.ctx.fillStyle = 'blue'
+    // this.ctx.fill()
+
     this.ctx.beginPath()
-    this.ctx.arc(this.mouthCoords.x, this.mouthCoords.y, 2, 0, 2 * Math.PI)
-    this.ctx.fillStyle = 'blue'
-    this.ctx.fill()
+    this.ctx.strokeRect(this.mouthLeft, this.mouthTop, this.mouthRight - this.mouthLeft, this.mouthBottom - this.mouthTop)
   }
 
   drawDebugOverlays() {
