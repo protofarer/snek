@@ -85,8 +85,6 @@ export default class Segment extends Immob {
             default:
               console.log(`snek underDigestionEffect switch/case defaulted`, )
           }
-          console.log(`adding underdigfx`, underDigestionEffect)
-          
         }
         this.underDigestionEffects.push(underDigestionEffect)
       }
@@ -119,15 +117,14 @@ export default class Segment extends Immob {
             && underDigestionEffect.timeLeft <= 0
         )
 
-        expiredUnderDigestionEffects.length > 0 
-          && console.log(`expiredDigFx`, expiredUnderDigestionEffects)
+        // expiredUnderDigestionEffects.length > 0 
+        //   && console.log(`expiredDigFx`, expiredUnderDigestionEffects)
 
         const reversibleEffects = expiredUnderDigestionEffects.filter(e =>
           e.type === 'boolean'
         )
 
         reversibleEffects.forEach(e => {
-          console.log(`reversing underDigFx`, e)
           this.reverseDigestionEffect(e)
         })
 
@@ -230,7 +227,6 @@ export default class Segment extends Immob {
       e.type === 'boolean')
 
     reversibleEffects.forEach(d => {
-      console.log(`Reversing underDigFx`, d)
       this.reverseDigestionEffect(d)
     })
 

@@ -128,7 +128,6 @@ export default class Immob extends Entity {
   }
 
   harmed() {
-    console.log(`${this.species} harmed`, )
     this.harmFlash()
   }
 

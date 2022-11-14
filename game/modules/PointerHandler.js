@@ -34,7 +34,6 @@ export default class PointerHandler {
     }
   
     function handlePointerCancel(e) {
-      console.log(`pointercancel: id = ${e.pointerId}`, )
       const idx = this.ongoingTouchIndexById(e.pointerId)
       this.ongoingTouches.splice(idx, 1)
     }

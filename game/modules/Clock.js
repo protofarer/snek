@@ -43,7 +43,6 @@ export default class Clock {
 
   toggle() {
     this.isClockDrawn = !this.isClockDrawn
-    console.log(`clock toggled to`, this.isClockDrawn )
   }
 
   drawClock() {

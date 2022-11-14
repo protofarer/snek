@@ -68,8 +68,6 @@ export default class Snek extends Mob {
     this.addSegment(initSegmentCount ?? this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
-    console.log(`snek turnrate`, this.currTurnRate)
-    
   }
 
   levelDown() {
@@ -274,8 +272,6 @@ export default class Snek extends Mob {
   }
 
   deactivateEffect(effectData) {
-    console.log(`deactivating`, effectData.name)
-    
     for (let [k,v] of Object.entries(effectData?.offsets)) {
       if (k === 'moveSpeed') this.currMoveSpeed -= v
       else if (k === 'turnRate') this.currTurnRate -= v

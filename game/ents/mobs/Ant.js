@@ -32,8 +32,6 @@ export default class Ant extends Mob {
     this.currMoveSpeed = this.baseMoveSpeed
     this.currTurnRate = this.baseTurnRate
     this.setHitAreas()
-    console.log(`ant primarycolor`, this.primaryColor)
-    
   }
 
   grab(ent) {

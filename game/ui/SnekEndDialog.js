@@ -49,8 +49,6 @@ export default class SnekEndDialog {
       offset: { x: this.origin.x , y: this.origin.y }
     }
 
-    console.log(`game isdebugon`, this.game.isDebugOn)
-    
     this.startMenuButton = new ModalButton(
       this.game.ctx,
       startMenuButtonData,

@@ -4,9 +4,6 @@ export default class Digestion {
   static activatePostDigestionEffects(postDigestionData, headEnt) {
     postDigestionData.forEach(pDD => {
       headEnt.postDigestionEffects.push(pDD)
-      console.log(`pushed pDE to headent`, headEnt.postDigestionEffects)
-      
-
       switch (pDD.effect) {
         case 'moveSpeed':
           headEnt.currMoveSpeed += pDD.moveSpeed
@@ -20,7 +17,6 @@ export default class Digestion {
         default:
           throw Error(`Unhandled postDigestionEffect: ${pDD.effect}`)
       }
-      console.log(`postDigestEffect ${pDD.effect} from ${this.entUnderDigestion.species} activated`, )
     })
   }
 
