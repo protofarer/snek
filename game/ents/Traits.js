@@ -210,7 +210,7 @@ export default {
   Snek: {
     r: 10,
     hitOffset: 4,
-    baseExp: 25,
+    baseExp: 10,
     level: 3,
     levelMultiplier: 2,
     segLevelMultiplier: 1.25,

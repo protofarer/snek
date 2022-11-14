@@ -192,6 +192,7 @@ export default class DebugGUI {
     const snek = this.game.world.snek
     if (snek) {
       const guiSnek = this.gui.addFolder('Snek')
+      guiSnek.add(snek, 'harmed')
 
       guiSnek.add(snek, 'currExp').listen()
       guiSnek.add(snek, 'level').listen()

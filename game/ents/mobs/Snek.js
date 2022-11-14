@@ -17,7 +17,8 @@ export default class Snek extends Mob {
   currExp = 0
   totalExpGained = 0
   expForLevel(level) {
-    return (this.levelMultiplier**(level - 1)) * this.baseExp
+    // 1*0 -> 2*5 -> 3*10 -> 4*15
+    return level * ((level - 1) * 5)
   }
 
   // // * segCount is equivalent to seg level
@@ -56,7 +57,7 @@ export default class Snek extends Mob {
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)
     loadTraits.call(this, Traits.Snek)
-
+    this.currExp = this.expForLevel(this.level)
     this.currSegExp = this.currExp
     this.currPrimaryColor = this.basePrimaryColor
     this.baseTurnRate = this.baseMoveSpeed + this.turnRateOffset
@@ -362,7 +363,7 @@ export default class Snek extends Mob {
     }
 
     this.level = Math.max(1, this.level - 1)
-    this.currExp = this.expForLevel(this.level)
+    this.currExp = this.level > 1 ? this.expForLevel(this.level) : 0
   }
 
   levelUp() {
