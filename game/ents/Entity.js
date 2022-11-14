@@ -16,6 +16,7 @@ export default class Entity {
 
   static idx = 0              // Class's simple id counter
   static stack = new Map()    // Game's account of ents
+  static inactives = []
 
   constructor() {
     this.id = Entity.idx++
@@ -42,8 +43,8 @@ export default class Entity {
     for(const [k,v] of Entity.stack) {
       queryList.forEach(queryItem => {
         if (v.species === queryItem.species) {
-          if (queryItem.subSpecies) {
-            if (queryItem.subSpecies === v.subSpecies) {
+          if (queryItem?.subSpecies) {
+            if (queryItem.subSpecies === v?.subSpecies) {
               found.set(k, v)
             }
           } else {

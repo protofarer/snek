@@ -1,4 +1,5 @@
 import Apple from './ents/immobs/Apple'
+import Constants from './Constants'
 import Mango from './ents/immobs/Mango'
 import Banana from './ents/immobs/Banana'
 import Pebble from './ents/immobs/Pebble'
@@ -17,6 +18,7 @@ import Traits from './ents/Traits'
  */
 export default class World {
   species = 'world'
+  inactiveEnts = []
 
   constructor(game) {
     this.game = game
@@ -117,11 +119,23 @@ export default class World {
       }
     }
   }
+
   render() {
     for(const ent of Entity.stack.values()) {
       ent.isVisible && ent.render()
     }
   }
+
+  countAnts() {
+    return Entity.bySpecies({ species: 'ant' }).size
+  }
+
+  countSweets() {
+    const sweetsQuery = Constants.sweets.map(s => { return { species: s } })
+    let sweetsMap = Entity.bySpecies(sweetsQuery)
+    return sweetsMap.size
+  }
+
 
   update(t) {
     for(const ent of Entity.stack.values()) {
@@ -141,8 +155,9 @@ export default class World {
           moveEdgeWrap.call(ent)
 
           if (ent.species === 'ant' && !ent.carriedEnt) {
-            let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])
-            for(let sweet of sweets.values()) {
+            const sweetsQuery = Constants.sweets.map(s => { return { species: s } })
+            let sweetsMap = Entity.bySpecies(sweetsQuery)
+            for(let sweet of sweetsMap.values()) {
               this.collisionResolver(() => ent.grab(sweet), ent, sweet)
             }
           }

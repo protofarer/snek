@@ -39,6 +39,7 @@ export function recycle(ent) {
   ent.hitArea = new Path2D()
   ent.position = {x: -100, y: -100}
   Entity.remove(ent.id)
+  Entity.inactives.push(ent)
 }
 
 /**

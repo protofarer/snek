@@ -9,14 +9,20 @@ export default class LevelMaker {
   }
 
   spawn(level, snek) {
+    snek.position = { 
+      x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
+      y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
+    }
     switch (level) {
       case 0:   // debug level
-        this.spawnLevelZero(snek)
+        // this.spawnLevelZero(snek)
+        this.initSpawnSurvival()
         break
       case 1:
-        this.spawnLevelOne(snek)
+        this.spawnLevelOne()
         break
-      case 's': // survival init
+      case 's':
+        this.initSpawnSurvival()
         break
     }
   }
@@ -38,11 +44,7 @@ export default class LevelMaker {
   }
 
   // first normal level
-  spawnLevelOne(snek) {
-    snek.position = { 
-      x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
-      y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
-    }
+  spawnLevelOne() {
     this.spawnRandom({
       apple: 10,
       pebble: 5,
@@ -59,25 +61,59 @@ export default class LevelMaker {
     // this.spawnEnts(Centipede, 1)
   }
 
-  /** Initial spawn method used for playable game/levels.
+  /** Initial spawn for survival mode
    * @method
    */
-  spawnSurvival() {
-    // TODO behavior
-    this.spawnEnts('apple', 45)
-    this.spawnEnts('pebble', 55)
-    this.spawnEnts('mango', 5)
-    this.spawnEnts('ant', 25)
-    this.spawnEnts('centipede', 2)
-
-    // this.spawnEnts(Apple, 50)
-    // this.spawnEnts(Pebble, 75)
-    // this.spawnEnts(Ant, 70)
-    // this.spawnEnts(Mango, 25)
-    // this.spawnEnts(Centipede, 5)
+  initSpawnSurvival() {
+    this.spawnEnts('apple', 1)
   }
 
-  modeSurvival() {
+  /** Ongoing spawn behavior for survival mode
+   * @method
+   */
+  spawnSurvival(startT) {
+    let isAppleSpawning = false
+    let isMangoSpawning = false
+    let hasCentipedeSpawned = false
+    let isAntSpawning = false
+    let isAntSwarmSpawning = false
+    return (t) => {
+      if (!isAppleSpawning) {
+        isAppleSpawning = true
+        setTimeout(() => { 
+          this.game.world.spawnEnts('apple')
+          isAppleSpawning = false
+        }, Constants.spawnTimers.apple)
+      }
+      if (!isMangoSpawning) {
+        isMangoSpawning = true
+        setTimeout(() => { 
+          this.game.world.spawnEnts('mango')
+          isMangoSpawning = false
+        }, Constants.spawnTimers.mango)
+      }
+      
+      if (this.game.world.countSweets() > 4 && !isAntSpawning) {
+        this.game.world.spawnEnts('ant')
+        isAntSpawning = true
+        setTimeout(() => {
+          isAntSpawning = false
+        }, Constants.spawnTimers.ant)
+      }
+
+      if (this.game.world.countSweets() > 20 && !isAntSwarmSpawning) {
+        this.game.world.spawnEnts('ant', 15)
+        isAntSwarmSpawning = true
+        setTimeout(() => {
+          isAntSwarmSpawning = false
+        }, Constants.spawnTimers.antSwarm)
+      }
+
+      // if (!hasCentipedeSpawned && t - startT >= 60000) {
+      //   this.game.world.spawnEnts('centipede')
+      //   hasCentipedeSpawned = true
+      // }
+    }
     // increase apple spawn rate
     // when apple count > 5, spawn an ant for each apple
     // when snek gets 8 segs spawn centipede

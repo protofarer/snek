@@ -16,7 +16,7 @@ export default class Scenarios {
     this.addEnt('apple')
     this.addEnt('apple')
     this.addEnt('apple')
-    // this.harmSegByCent()
+    this.harmSegByCent()
     // this.quickDeathByCent()
   }
 

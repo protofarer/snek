@@ -8,6 +8,15 @@ export default {
   CANVAS_HEIGHT: 600,
   HARM_COOLDOWN: 2000,
 
+  spawnTimers: {
+    apple: 3000,
+    mango: 60000,
+    ant: 10000,
+    antSwarm: 30000
+  },
+
+  sweets: ['apple', 'banana', 'mango'],
+
   underDigestionFunction: {
     WORD: 'underDigestionFunction',
     BASE_ABSORB_EXP: 'baseAbsorbExp'
