@@ -138,7 +138,7 @@ export default class World {
           if (ent.species === 'ant' && !ent.carriedEnt) {
             let sweets = Entity.bySpecies([{species: 'apple'}, {species:'mango'},{species: 'banana'}])
             for(let sweet of sweets.values()) {
-              this.collisionResolver(ent, sweet, () => ent.grab(sweet))
+              this.collisionResolver(() => ent.grab(sweet), ent, sweet)
             }
           }
 
@@ -164,19 +164,19 @@ export default class World {
             if (snekSegCount > 0) {
 
               // enemies vs snek head
-              if (this.collisionResolver(ent, this.snek, Collisions.harm))
+              if (this.collisionResolver(Collisions.harm, ent, this.snek))
                 wasSegLost++
 
               for(let snekseg of sneksegs.values()) {
 
                 // harm attached segs
                 if (snekseg.getHeadEnt().species === 'snek') {
-                  if (this.collisionResolver(ent, snekseg, Collisions.harm))
+                  if (this.collisionResolver(Collisions.harm, ent, snekseg))
                     wasSegLost++
 
                 // chomp unattached segs
                 } else {
-                  this.collisionResolver(ent, snekseg, Collisions.chomp)
+                  this.collisionResolver(Collisions.chomp, ent, snekseg)
                 }
               }
             }
@@ -194,11 +194,15 @@ export default class World {
 
         // snek vs swallowables
         if (this.snek && this.snek.swallowables.includes(ent.species)) {
-          this.collisionResolver(this.snek, ent, () => {
+          this.collisionResolver(
+            () => {
               Collisions.chomp(this.snek, ent)
               this.game.play.playRandomSwallowSound()
               this.game.stateMachine.current.score++
-          })
+            },
+            this.snek, 
+            ent
+          )
         }
       }
     }
@@ -211,9 +215,9 @@ export default class World {
     }
   }
 
-  isContactingMouth(objHitArea, mouthCoords) {
+  isContactingMouth(hitArea, mouthCoords) {
     return this.game.ctx.isPointInPath(
-      objHitArea, 
+      hitArea, 
       mouthCoords.x, 
       mouthCoords.y
     )
@@ -226,13 +230,17 @@ export default class World {
    * @param {Entity} def aka defender - entity being initiated upon
    * @param {function} collider - resolves collision
   */
-  collisionResolver(agg, def, collider) {
-    const isContacting = this.isContactingMouth(
+  collisionResolver(resolver, agg, def, collisionDetector=this.pointCollisionDetector.bind(this)) {
+    const isContacting = collisionDetector(agg, def)
+    isContacting && resolver(agg, def)
+    return isContacting
+  }
+
+  pointCollisionDetector(agg, def) {
+    return this.isContactingMouth(
       def.hitArea,
       agg.mouthCoords,
     )
-    isContacting && collider(agg, def)
-    return isContacting
   }
 
   getEntClass(entWord) {
