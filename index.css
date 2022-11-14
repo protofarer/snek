@@ -4,6 +4,8 @@ body {
   background-color: black;
   box-sizing: border-box;
   font-family: Arial;
+  touch-action: none;
+  user-select: none;
 }
 
 #container {
