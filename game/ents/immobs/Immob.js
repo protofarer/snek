@@ -71,8 +71,12 @@ export default class Immob extends Entity {
   getPrimaryColor = getColorParameters.bind(this)
   setPrimaryColor = setColorParameters.bind(this)
   get primaryColor() { return this.getPrimaryColor() }
-  set primaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) { 
-    this.setPrimaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) 
+  set primaryColor({ 
+    hueStart, hueEnd, satStart, satEnd, lumStart, lumEnd, alphaStart, alphaEnd 
+  }) { 
+    this.setPrimaryColor({ 
+      hueStart, hueEnd, satStart, satEnd, lumStart, lumEnd, alphaStart, alphaEnd
+    }) 
   }
 
   isVisible = true
@@ -82,6 +86,8 @@ export default class Immob extends Entity {
     this.ctx = ctx
     this.parent = parent || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
     loadTraits.call(this, Traits.Immob)
+    console.log(`primaryCOlor`, this.primaryColor)
+    
     this.position = startPosition || this.position
     this.currExp = this.baseExp
     this.setHitAreas()

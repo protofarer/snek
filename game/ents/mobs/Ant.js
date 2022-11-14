@@ -32,6 +32,8 @@ export default class Ant extends Mob {
     this.currMoveSpeed = this.baseMoveSpeed
     this.currTurnRate = this.baseTurnRate
     this.setHitAreas()
+    console.log(`ant primarycolor`, this.primaryColor)
+    
   }
 
   grab(ent) {
@@ -48,16 +50,6 @@ export default class Ant extends Mob {
     this.carriedOffsetRad = null
     this.carriedEnt = null
   }
-
-  // setHitAreas() {
-  //   this.hitArea = new Path2D()
-  //   this.hitArea.rect(
-  //     this.position.x - this.hitR,
-  //     this.position.y - this.hitR,
-  //     2 * this.hitR,
-  //     2 * this.hitR
-  //   )
-  // }
 
   drawHitOverlays() {
     this.ctx.strokeStyle = 'blue'
@@ -85,18 +77,19 @@ export default class Ant extends Mob {
     // Draw Head
     ctx.beginPath()
     ctx.arc(1.1*this.r,0,0.5*this.r,0,2*Math.PI)
+    ctx.fill()
   }
 
   drawBody(ctx) {
     // Draw Thorax
     ctx.rect(this.r*-1, -this.r/4, this.r*2, this.r/2 )
+    ctx.shadowColor = 'hsl(0,0%,25%)'
+    ctx.shadowBlur = 6
+    ctx.fillStyle = this.primaryColor
     ctx.fill()
 
     // Draw Abdomen
     ctx.arc(-1.4*this.r, 0, 0.7*this.r, 0, 2 * Math.PI)
-    ctx.fillStyle = this.primaryColor
-    ctx.shadowColor = 'hsl(0,0%,25%)'
-    ctx.shadowBlur = 6
     ctx.fill()
     ctx.shadowBlur = ctx.shadowOffsetY = ctx.shadowColor = null 
   }
@@ -111,7 +104,7 @@ export default class Ant extends Mob {
     ctx.moveTo(0, -1.5*this.r)
     ctx.lineTo(0, 1.5*this.r)
     ctx.moveTo(0,0)
-    ctx.strokeStyle = 'black'
+    ctx.strokeStyle = this.primaryColor
     ctx.stroke()
   }
 

@@ -177,7 +177,9 @@ export default {
       satStart: 0,
       satEnd: 0,
       lumStart: 0,
-      lumEnd: 35
+      lumEnd: 0,
+      alphaStart: 1,
+      alphaEnd: 0.2
     },
     baseMoveSpeed: 2,
     turnRateOffset: 5,
