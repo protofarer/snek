@@ -74,6 +74,7 @@ export default class LevelMaker {
   spawnSurvival(startT) {
     let isAppleSpawning = false
     let isMangoSpawning = false
+    let isBananaSpawning = false
     let hasCentipedeSpawned = false
     let isAntSpawning = false
     let isAntSwarmSpawning = false
@@ -92,7 +93,13 @@ export default class LevelMaker {
           isMangoSpawning = false
         }, Constants.spawnTimers.mango)
       }
-      
+      if (!isBananaSpawning) {
+        isBananaSpawning = true
+        setTimeout(() => { 
+          this.game.world.spawnEnts('banana')
+          isBananaSpawning = false
+        }, Constants.spawnTimers.banana)
+      }
       if (this.game.world.countSweets() > 4 && !isAntSpawning) {
         this.game.world.spawnEnts('ant')
         isAntSpawning = true
@@ -106,7 +113,6 @@ export default class LevelMaker {
         this.game.world.spawnEnts('ant', 5)
         for (let i = 1; i < 6; ++i) {
           setTimeout(() => this.game.world.spawnEnts('ant', 3), i*1000)
-
         }
         // setTimeout(() => {
           // isAntSwarmSpawning = false

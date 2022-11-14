@@ -319,7 +319,6 @@ export default class Segment extends Immob {
         currSeg.excrete()
       }
 
-      console.log(`detach seg(${this.id})`)
       this.cancelUnderDigestionBooleanEffects()
 
       this.upstreamSegment.downstreamSegment = null

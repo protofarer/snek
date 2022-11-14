@@ -1,3 +1,4 @@
+import Constants from '../Constants'
 /** Informational and Player Controls panel external to canvas element 
  * @class
  * @property {HTMLDivElement} panelContainer - Panel's top level container
@@ -16,6 +17,7 @@ export default class Panel {
   infoA = document.createElement('div')
   score = document.createElement('div')
   lifespan = document.createElement('div')
+  segcount = document.createElement('div')
 
   touchContainer = document.createElement('div')
   leftButt = document.createElement('button')
@@ -45,11 +47,14 @@ export default class Panel {
     this.infoA.className = 'infoSubBox'
     this.infobox.appendChild(this.infoA)
 
-    this.score.id = 'info-score'
-    this.infoA.appendChild(this.score)
-
     this.lifespan.id = 'info-lifespan'
     this.infoA.appendChild(this.lifespan)
+
+    this.segcount.id = 'info-segmentcount'
+    this.infoA.appendChild(this.segcount)
+
+    this.score.id = 'info-score'
+    this.infoA.appendChild(this.score)
 
     this.touchContainer.id = 'touch-box'
     this.panelContainer.appendChild(this.touchContainer)
@@ -70,6 +75,7 @@ export default class Panel {
     this.touchContainer.appendChild(this.rightButt)
 
     // before init, for debug
+    this.segcount.innerText = '$segcount'
     this.score.innerText = '$score'
     this.lifespan.innerText = '$lifespan'
   }
@@ -80,6 +86,8 @@ export default class Panel {
     if (this.snek) {
       this.lifespan.innerHTML = 
         `Lifespan: ${Math.trunc(this.snek.lifeSpan / 1000)}s`
+      this.segcount.innerHTML =
+        `Length: <strong>${this.snek.segments.length} / ${Constants.survival.victory.segcount}</strong>`
 
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(

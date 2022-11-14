@@ -33,7 +33,7 @@ export class PlaySurvivalState extends BaseState {
     if (!this.hasCheckedLevel) {
       this.hasCheckedLevel = true
       setTimeout(() => {
-        if (this.snek.segments.length >= 4) {
+        if (this.snek.segments.length >= 20) {
           this.game.stateMachine.change('gameOver', {
             snek: this.game.stateMachine.current.snek,
             level: this.game.stateMachine.current.level,

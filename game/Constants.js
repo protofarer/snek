@@ -7,7 +7,11 @@ export default {
   CANVAS_WIDTH: 400,
   CANVAS_HEIGHT: 600,
   HARM_COOLDOWN: 2000,
-
+  survival: {
+    victory: {
+      segcount: 20
+    }
+  },
   spawnTimers: {
     apple: 3000,
     banana: 15000,
