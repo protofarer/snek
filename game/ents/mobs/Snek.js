@@ -60,16 +60,44 @@ export default class Snek extends Mob {
     super(ctx, startPosition, parent)
     loadTraits.call(this, Traits.Snek)
     this.currExp = this.expForLevel(this.level)
-    this.currSegExp = this.currExp
+    // this.currSegExp = this.currExp
     this.currPrimaryColor = this.basePrimaryColor
-    this.baseTurnRate = this.baseMoveSpeed + this.turnRateOffset
-    this.currTurnRate = this.baseTurnRate
     this.currMoveSpeed = this.baseMoveSpeed
+    this.normalizeTurnRate()
     this.birthTime = this.parent.t < 0 ? 0 : this.parent.t
 
     this.addSegment(initSegmentCount ?? this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
+    console.log(`snek turnrate`, this.currTurnRate)
+    
+  }
+
+  levelDown() {
+    this.segments.shift().detach()
+    for (let i = 0; i < this.segments.length; ++i) {
+      this.segments[i].harmFlash()
+    }
+
+    // only set segExp if segCount changed
+    // if (this.countSegments < this.currKnownSegmentCount) {
+    //   this.currKnownSegmentCount = this.countSegments
+    //   this.currSegExp = this.expForLevel(this.countSegments)
+    // }
+
+    this.level = Math.max(1, this.level - 1)
+    this.currExp = this.level > 1 ? this.expForLevel(this.level) : 0
+  }
+
+  levelUp() {
+    this.level++
+    this.addSegment()
+    this.normalizeTurnRate()
+  }
+
+  gainExp(exp) {
+    this.currExp += exp
+    this.totalExpGained += exp
   }
 
   addSegment(n=1) {
@@ -117,7 +145,6 @@ export default class Snek extends Mob {
       }
     }
     document.addEventListener('keyup', handleKeyUp)
-
 
     const leftActivated = () => { this.isTurningLeft = true }
     const leftDeactivated = () => { this.isTurningLeft = false }
@@ -338,32 +365,6 @@ export default class Snek extends Mob {
           this.ctx.restore()
       }
       this.ctx.restore()
-  }
-
-  levelDown() {
-    this.segments.shift().detach()
-    for (let i = 0; i < this.segments.length; ++i) {
-      this.segments[i].harmFlash()
-    }
-
-    // only set segExp if segCount changed
-    // if (this.countSegments < this.currKnownSegmentCount) {
-    //   this.currKnownSegmentCount = this.countSegments
-    //   this.currSegExp = this.expForLevel(this.countSegments)
-    // }
-
-    this.level = Math.max(1, this.level - 1)
-    this.currExp = this.level > 1 ? this.expForLevel(this.level) : 0
-  }
-
-  levelUp() {
-    this.level++
-    this.addSegment()
-  }
-
-  gainExp(exp) {
-    this.currExp += exp
-    this.totalExpGained += exp
   }
 
   update(t) {

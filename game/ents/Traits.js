@@ -221,8 +221,8 @@ export default {
     colorFangs: 'white',
     colorLeftEye: 'hsl(55, 100%, 25%)',
     colorRightEye: 'hsl(230, 100%, 80%)',
-    baseMoveSpeed: 1,
-    turnRateOffset: 2,
+    baseMoveSpeed: 2,
+    turnRateOffset: 9,
     swallowables: [ 'apple', 'mango', 'ant', 'pebble', 'banana' ],
     enemySpecies: ['centipede'],
     effectPanic: {

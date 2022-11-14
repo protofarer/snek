@@ -25,12 +25,15 @@ export default class Mob extends Immob {
   turnDirection = 0
   isTurningLeft = false
   isTurningRight = false
-  
+
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)
     loadTraits.call(this, Traits.Mob)
-    this.baseTurnRate = this.moveSpeed + this.turnRateOffset
-    this.currTurnRate = this.baseTurnRate
+    this.normalizeTurnRate()
+  }
+
+  normalizeTurnRate() {
+    this.currTurnRate = this.baseMoveSpeed + Math.max(this.turnRateOffset - this.level, 0)
   }
 
   setTurnable(setTurnable) {
