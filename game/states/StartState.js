@@ -1,4 +1,5 @@
 import BaseState from './BaseState'
+import Snek from '../ents/mobs/Snek'
 import ModalButton from '../../components-canvas/ModalButton'
 
 export class StartState extends BaseState {
@@ -77,9 +78,17 @@ export class StartState extends BaseState {
       { once: true }
     )
     this.survivalButt.show()
+    this.snek = new Snek(this.game.ctx, {x: 90, y: 300}, this.game, 40)
+    this.snek.currTurnRate = 1
+    this.game.setSnek(this.snek)
+    this.game.world.addEnt('apple').position = { x: 200, y: 225 }
+    this.game.world.addEnt('apple').position = { x: 200, y: 345 }
   }
 
   update() {
+    this.game.world.update()
+    // console.log(this.snek.position.x, this.snek.position.y)
+    this.snek.turnRight()
   }
 
   render() {
@@ -97,8 +106,8 @@ export class StartState extends BaseState {
     this.game.ctx.fillText('- works only in portrait orientation', 55, 100)
     this.game.ctx.fillText('- A for left, D for right on desktop', 55, 125)
     this.game.ctx.font = '12px Mono'
-    this.game.ctx.fillText('>:)', 275, 290)
     this.game.ctx.fillText('pre-alpha v0.l.0, survival prototype', 10, 550)
+    this.game.world.render()
   }
 
   exit() {
