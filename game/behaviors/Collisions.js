@@ -101,19 +101,7 @@ export default class Collisions {
   }
   
   static harm(agg, def) {
-    let curr = def
-    while (curr?.downstreamSegment) {
-      curr = curr.downstreamSegment
-    }
-
-    const head = curr?.getHeadEnt()
-
-    if (curr.species === 'segment') {
-      curr?.detach()
-    }
-
-    head.harmed?.()
-
+    def.harmed?.()
     agg.canHarm = false
     setTimeout(() => agg.canHarm = true, Constants.HARM_COOLDOWN)
   }

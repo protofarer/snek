@@ -16,16 +16,16 @@ export default class Snek extends Mob {
 
   currExp = 0
   expForLevel(level) {
-    return (this.levelMultiplier**(level - 2)) * this.baseExp
+    return (this.levelMultiplier**(level - 1)) * this.baseExp
   }
 
-  // * segCount is equivalent to seg level
-  segExpForLevel(segCount) {
-    return (
-      (this.segLevelMultiplier**(Math.max(1, segCount - 2))) 
-      * (this.baseExp - 70)
-    )
-  }
+  // // * segCount is equivalent to seg level
+  // segExpForLevel(segCount) {
+  //   return (
+  //     (this.segLevelMultiplier**(Math.max(1, segCount - 2))) 
+  //     * (this.baseExp)
+  //   )
+  // }
 
   get expGainedThisLevelOnly() {
     const expGained = this.currExp - (this.level === 1 ? 0 : this.expForLevel(this.level))
@@ -44,7 +44,7 @@ export default class Snek extends Mob {
 
   downstreamSegment
   currKnownSegmentCount = 0
-  get maxSegmentCount() { return this.level }
+  // get maxSegmentCount() { return this.level }
 
   activeEffects = []
   postDigestionEffects = []
@@ -213,7 +213,7 @@ export default class Snek extends Mob {
   getSegments() {
     let segs = []
     let curr = this
-    while (curr.downstreamSegment) {
+    while (curr?.downstreamSegment) {
       segs.push(curr.downstreamSegment)
       curr = curr.downstreamSegment
     }
@@ -234,15 +234,20 @@ export default class Snek extends Mob {
 
     intRep(16, 100, this.toggleVisibility.bind(this))
 
-    const segs = this.getSegments()
-    for (let i = 0; i < segs.length; ++i) {
-      segs[i].harmed.apply(segs[i])
+    let curr = this
+    while (curr?.downstreamSegment) {
+      curr = curr.downstreamSegment
+      curr?.downstreamSegment && curr.harmFlash()
     }
+    curr.detach()
 
+    // only set segExp if segCount changed
     if (this.countSegments < this.currKnownSegmentCount) {
       this.currKnownSegmentCount = this.countSegments
       this.currSegExp = this.expForLevel(this.countSegments)
     }
+
+    this.levelDown()
   }
 
   move() {
@@ -354,6 +359,15 @@ export default class Snek extends Mob {
       this.ctx.restore()
   }
 
+  levelDown() {
+    this.level--
+  }
+
+  levelUp() {
+    this.level++
+    this.addSegment()
+  }
+
   update(t) {
     this.lifeSpan = t - this.birthTime    // non-crit, can be updated less frequently to improve performance
     if (this.isTurningLeft) {
@@ -370,13 +384,13 @@ export default class Snek extends Mob {
 
     while(this.currExp >= this.expForLevel(this.level + 1)) {
       console.log(`Level up!`, )
-      this.level++
+      this.levelUp()
     }
     
-    while(this.currSegExp >= this.segExpForLevel(this.countSegments + 1)
-      && this.countSegments < this.maxSegmentCount) {
-      console.log(`New seg from seg level up`, )
-      this.addSegment()
-    }
+    // while(this.currSegExp >= this.segExpForLevel(this.countSegments + 1)
+    //   && this.countSegments < this.maxSegmentCount) {
+    //   console.log(`New seg from seg level up`, )
+    //   this.addSegment()
+    // }
   }
 }

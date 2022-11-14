@@ -83,7 +83,7 @@ export default class Panel {
 
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(
-          10* this.snek.expGainedThisLevelOnly
+          10 * this.snek.expGainedThisLevelOnly
           / (
             this.snek.expForLevel(this.snek.level + 1)
             - (

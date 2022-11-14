@@ -23,6 +23,7 @@ export default class Centipede extends Mob {
   baseSegmentCount = 5
   downstreamSegment
   postDigestionEffects = []
+  isIntermittentPausing = true
 
   constructor(ctx, startPosition=null, parent=null, baseSegmentCount=null) {
     super(ctx, startPosition, parent)
@@ -155,7 +156,7 @@ export default class Centipede extends Mob {
 
   move() {
     if (this.isMobile) {
-      if (Math.random() < 0.007) {
+      if (this.isIntermittentPausing && Math.random() < 0.007) {
         this.isMobile = false
         setTimeout(() => this.isMobile = true, 200 + Math.random() * 2000)
       } else {

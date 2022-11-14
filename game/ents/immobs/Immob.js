@@ -87,8 +87,6 @@ export default class Immob extends Entity {
     this.ctx = ctx
     this.parent = parent || Error(`Must place ${this.species}:${this.id} under a Parent Entity!`)
     loadTraits.call(this, Traits.Immob)
-    console.log(`primaryCOlor`, this.primaryColor)
-    
     this.position = startPosition || this.position
     this.currExp = this.baseExp
     this.setHitAreas()
@@ -126,9 +124,13 @@ export default class Immob extends Entity {
     return this.position.y + this.hitR
   }
 
+  harmFlash() {
+    intRep(16, 100, this.toggleVisibility.bind(this))
+  }
+
   harmed() {
     console.log(`${this.species} harmed`, )
-    intRep(16, 100, this.toggleVisibility.bind(this))
+    this.harmFlash()
   }
 
   toggleVisibility() {

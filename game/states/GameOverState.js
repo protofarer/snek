@@ -39,6 +39,5 @@ export class GameOverState extends BaseState {
   }
 
   exit() {
-    this.game.resetGame()
   }
 }

@@ -1,4 +1,5 @@
 import Constants from '../Constants'
+import Scenarios from '../tools/Scenarios'
 
 export default class LevelMaker {
   constructor(game) {
@@ -27,16 +28,12 @@ export default class LevelMaker {
   }
 
   // debug level
-  spawnLevelZero(snek) {
-    // this.case = new Scenarios(this.game)
-    // this.case.base()
-    snek.position = { 
-      x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
-      y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
-    }
-    this.addEnt('apple')
-    this.addEnt('apple')
-    this.addEnt('apple')
+  spawnLevelZero() {
+    this.case = new Scenarios(this.game)
+    this.case.base()
+    // this.addEnt('apple')
+    // this.addEnt('apple')
+    // this.addEnt('apple')
     // this.addEnt('centipede').setMobile(true)
   }
 

@@ -202,14 +202,15 @@ export default class DebugGUI {
       const seg = guiSnek.addFolder('Segments')
       seg.add(snek, 'currKnownSegmentCount').listen()
       seg.add(snek, 'countSegments').listen()
-      seg.add(snek, 'maxSegmentCount').listen()
 
-      seg.add(snek, 'currSegExp').listen()
-      const nextSegExp = () => {
-        return this.game.world.snek.segExpForLevel(this.game.world.snek.countSegments + 1)
-      }
-      const segexpObj = { get nextSegExp() { return nextSegExp() }}
-      seg.add(segexpObj, 'nextSegExp').listen()
+      // seg exp progression no longer a mechanic
+      // seg.add(snek, 'maxSegmentCount').listen()
+      // seg.add(snek, 'currSegExp').listen()
+      // const nextSegExp = () => {
+      //   return this.game.world.snek.segExpForLevel(this.game.world.snek.countSegments + 1)
+      // }
+      // const segexpObj = { get nextSegExp() { return nextSegExp() }}
+      // seg.add(segexpObj, 'nextSegExp').listen()
     }
   }
 

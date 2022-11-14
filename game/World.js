@@ -186,6 +186,7 @@ export default class World {
               }
             }
 
+            // ? CSDR resolving via catch all block at end of update
             if (wasSegLost > 0 && snekSegCount === 1) {
               this.game.stateMachine.change('gameOver', {
                 snek: this.game.stateMachine.current.snek,
@@ -211,6 +212,7 @@ export default class World {
         }
       }
     }
+    // catch all gameover
     if (this.snek.countSegments === 0) {
       this.game.stateMachine.change('gameOver', {
         snek: this.game.stateMachine.current.snek,

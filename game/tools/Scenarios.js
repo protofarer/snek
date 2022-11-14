@@ -1,3 +1,4 @@
+import Constants from '../Constants'
 
 export default class Scenarios {
   constructor(game) {
@@ -8,8 +9,18 @@ export default class Scenarios {
   }
 
   base() {
+    this.snek.position = { 
+      x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
+      y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
+    }
     this.addEnt('apple')
     this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    // this.addEnt('apple')
+    // this.harmSegByCent()
+    // this.quickDeathByCent()
   }
 
   slowerDeathByCent() {
@@ -24,13 +35,14 @@ export default class Scenarios {
   }
 
   quickDeathByCent() {
-    for (let i = 0; i < 19; ++i) {
+    for (let i = 0; i < 10; ++i) {
       const cent = this.addEnt('centipede').setMobile(true).setTurnable(false)
+      cent.isIntermittentPausing = false
       cent.position = { 
-        x: this.game.canvas.width*.05 * (i+1), 
-        y: this.game.canvas.height*.7 + (this.game.canvas.height*0.013*(i)) 
+        x: this.game.canvas.width*.2 - (i*15), 
+        y: this.game.canvas.height*.85 - (this.game.canvas.height*0.05*i) 
       }
-      cent.headingDegrees = -90
+      cent.headingDegrees = 0
     }
   }
 
@@ -41,14 +53,14 @@ export default class Scenarios {
     cent.setTurnable(false)
   }
 
-  harmSegByCent(n) {
-    const cent = this.addEnt('centipede').setMobile(true)
+  harmSegByCent(n=1) {
+    const cent = this.addEnt('centipede').setMobile(true).setTurnable(false)
+    cent.isIntermittentPausing = false
     cent.position = { 
-      x: this.game.canvas.width*.26 - ((n-1)*.05*this.game.canvas.width), 
-      y: this.game.canvas.height*.9
+      x: this.game.canvas.width*.1, 
+      y: this.game.canvas.height*.8 - ((n-1)*.05*this.game.canvas.height)
     }
-    cent.headingDegrees = -90
-    cent.setTurnable(false)
+    cent.headingDegrees = 0
   }
 
   eatAllImmobs() {
