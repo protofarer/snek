@@ -52,8 +52,8 @@ export default {
         effect: 'moveSpeed',
         type: 'offset',
         moveSpeed: 0.25,
-        duration: 5000,
-        timeLeft: 5000
+        duration: 8000,
+        timeLeft: 8000
       }
     ],
   },
@@ -92,7 +92,7 @@ export default {
 
   Banana: {
     r: 7,
-    baseExp: 20,
+    baseExp: 40,
     primaryColor: {
       hueStart: 65,
       hueEnd: 50,
@@ -132,23 +132,23 @@ export default {
     secondaryColor: 'green',
     chompEffect: Constants.collisionFunction.SMALL_CHOMP,
     digestion: {
-      timeLeft: 10000,
-      baseTime: 10000
+      timeLeft: 12000,
+      baseTime: 12000
     },
     postDigestionData: [
       {
         effect: 'turnRate',
         type: 'boolean',
         turnRate: 1,
-        duration: 6000,
-        timeLeft: 6000
+        duration: 12000,
+        timeLeft: 12000
       },
       {
         effect: 'moveSpeed',
         type: 'boolean',
         moveSpeed: 0.25,
-        duration: 6000,
-        timeLeft: 6000
+        duration: 12000,
+        timeLeft: 12000
       },
       {
         effect: 'levelUp',
@@ -186,8 +186,7 @@ export default {
     swallowables: [
       'apple', 
       'mango', 
-      'ant', 
-      'pebble'
+      'banana'
     ],
   },
 
@@ -222,7 +221,7 @@ export default {
     colorLeftEye: 'hsl(55, 100%, 25%)',
     colorRightEye: 'hsl(230, 100%, 80%)',
     baseMoveSpeed: 2,
-    turnRateOffset: 9,
+    turnRateOffset: 4,
     swallowables: [ 'apple', 'mango', 'ant', 'pebble', 'banana' ],
     enemySpecies: ['centipede'],
     effectPanic: {

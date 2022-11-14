@@ -13,7 +13,6 @@ export class GameOverState extends BaseState {
     super()
     
     this.game = game
-    this.game.loop.stop()
 
     this.snek = params?.snek
       || new Snek(this.game.ctx, null, this.game)

@@ -124,7 +124,10 @@ export default class DebugGUI {
     guiMutate.add({ resetGame: () => resetGame(true) }, 'resetGame')
       .name('reset: debug')
 
-    const endGame = () => { this.game.stateMachine.change('gameOver')}
+    const endGame = () => { this.game.stateMachine.change('gameOver', {
+      score: this.game.stateMachine.current.score,
+      snek: this.game.world.snek
+    })}
      guiMutate.add({ endGame }, 'endGame')
 
     const guiStartFunctions = gui.addFolder('GameStartFunctions')

@@ -76,6 +76,7 @@ export default class LevelMaker {
     let isMangoSpawning = false
     let isBananaSpawning = false
     let hasCentipedeSpawned = false
+    let hasSecondCentipedeSpawned = false
     let isAntSpawning = false
     let isAntSwarmSpawning = false
     return (t) => {
@@ -122,6 +123,11 @@ export default class LevelMaker {
       if (!hasCentipedeSpawned && t - startT >= 60000) {
         this.game.world.spawnEnts('centipede')
         hasCentipedeSpawned = true
+      }
+
+      if (!hasSecondCentipedeSpawned && this.game.world.snek.segments.length >= Constants.spawnConditionals.secondCentipede.segcount) {
+        this.game.world.spawnEnts('centipede')
+        hasSecondCentipedeSpawned = true
       }
     }
     // increase apple spawn rate

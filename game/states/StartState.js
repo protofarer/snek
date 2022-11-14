@@ -39,24 +39,25 @@ export class StartState extends BaseState {
     }
     document.addEventListener('keydown', this.handleKeyDown)
 
-    const normalButtData = {
-      origin: { 
-        x: this.game.canvas.width * 0.35, 
-        y: this.game.canvas.height * 0.35, 
-      },
-      base: { w: 125, },
-      label: 'Normal Mode',
-    }
-    this.normalButt = new ModalButton(
-      this.game.ctx,
-      normalButtData,
-      () => this.game.stateMachine.change('playNormal', {
-        level: 1,
-        score: 0
-      }),
-      { once: true }
-    )
-    this.normalButt.show()
+    // const normalButtData = {
+    //   origin: { 
+    //     x: this.game.canvas.width * 0.35, 
+    //     y: this.game.canvas.height * 0.35, 
+    //   },
+    //   base: { w: 125, },
+    //   label: 'Normal Mode',
+    // }
+    // this.normalButt = new ModalButton(
+    //   null
+    //   this.game.ctx,
+    //   normalButtData,
+    //   () => this.game.stateMachine.change('playNormal', {
+    //     level: 1,
+    //     score: 0
+    //   }),
+    //   { once: true }
+    // )
+    // this.normalButt.show()
 
     const survivalButtData = {
       origin: { 
@@ -67,6 +68,7 @@ export class StartState extends BaseState {
       label: 'Survival Mode',
     }
     this.survivalButt = new ModalButton(
+      null,
       this.game.ctx,
       survivalButtData,
       () => this.game.stateMachine.change('playSurvival', {
@@ -88,7 +90,7 @@ export class StartState extends BaseState {
       this.game.canvas.width, this.game.canvas.height
     )
 
-    this.normalButt.render()
+    // this.normalButt.render()
     this.survivalButt.render()
   }
 
@@ -96,10 +98,10 @@ export class StartState extends BaseState {
     document.removeEventListener('keydown', this.handleKeyDown)
 
     // ! TODO removeEventListener in class Button not working as intended
-    this.normalButt.removeClickListener()
+    // this.normalButt.removeClickListener()
     this.survivalButt.removeClickListener()
     // ! workaround
-    this.normalButt.path = new Path2D()
+    // this.normalButt.path = new Path2D()
     this.survivalButt.path = new Path2D()
     this.game.panel.panelContainer.style.setProperty('visibility', 'visible')
   }

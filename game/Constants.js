@@ -9,7 +9,7 @@ export default {
   HARM_COOLDOWN: 2000,
   survival: {
     victory: {
-      segcount: 20
+      segcount: 16
     }
   },
   spawnTimers: {
@@ -19,6 +19,9 @@ export default {
     antSwarm: 30000,
     mango: 60000,
     centipede: 60000,
+  },
+  spawnConditionals: {
+    secondCentipede: { segcount: 15 },
   },
 
   sweets: ['apple', 'banana', 'mango'],

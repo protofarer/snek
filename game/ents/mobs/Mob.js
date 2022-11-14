@@ -45,7 +45,7 @@ export default class Mob extends Immob {
     }
     
     this.currTurnRate = this.baseMoveSpeed 
-      + Math.max(this.turnRateOffset - this.level, 0)
+      + (this.turnRateOffset - (this.level * 0.15))
       + sumTurnRates
   }
 

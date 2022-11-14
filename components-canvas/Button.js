@@ -18,7 +18,7 @@ export default class Button {
   //  CSDR addEventListener to something more general than a canvas.context paremeter
 
   // TODO show shape of data arg
-  constructor(ctx, data, handleClick=null, listenerOptions=null) {
+  constructor(parentOrigin, ctx, data, handleClick=null, listenerOptions=null) {
     if (ctx === null || ctx === undefined || ctx === {}) {
       throw new TypeError('A button\'s context wasn\'t defined')
     }
@@ -30,7 +30,8 @@ export default class Button {
     this.ctx = ctx
 
     this.origin = data?.origin ?? { x: 0, y: 0 }
-    this.offset = data?.offset ?? { x: 0, y: 0 }
+    // needs parentOrigin for setting click path, not used for rendering
+    this.parentOrigin = parentOrigin || { x: 0, y: 0 }
     this.label = data.label || 'no-button-label-assigned'
     this.baseWidth = data?.base?.w || 70
     this.baseHeight = data?.base?.h || 30
@@ -68,8 +69,8 @@ export default class Button {
   setPath() {
     this.path = new Path2D()
     this.path.rect(
-      this.offset.x + this.origin.x - 2, 
-      this.offset.y + this.origin.y - 2,
+      this.parentOrigin.x + this.origin.x - 2, 
+      this.parentOrigin.y + this.origin.y - 2,
       this.baseWidth * this.stretchWidth + 4,
       this.baseHeight * this.stretchHeight + 4,
     )
@@ -120,7 +121,8 @@ export default class Button {
     this.ctx.shadowOffsetY = 5
 
     this.ctx.beginPath()
-    this.ctx.fillRect(this.origin.x, 
+    this.ctx.fillRect(
+      this.origin.x, 
       this.origin.y, 
       this.baseWidth * this.stretchWidth, 
       this.baseHeight * this.stretchHeight
@@ -140,7 +142,7 @@ export default class Button {
     // Finagling with centering the text here, making estimates based on
     // 16pt font size equivalent in pixels, see label.length * [numeric literal]
     this.ctx.fillText(`${this.label}`, 
-      (this.origin.x + (this.baseWidth * this.stretchWidth / 2) - (this.label.length*8/2)), this.origin.y + 20
+      (this.origin.x + (0.5 * this.baseWidth * this.stretchWidth) - (this.label.length*8/2)), this.origin.y + 20
     )
   }
 }

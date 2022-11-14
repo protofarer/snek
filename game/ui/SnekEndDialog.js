@@ -14,8 +14,8 @@ export default class SnekEndDialog {
 
     // summary stats
     this.summary = [
-      ['exp', Math.trunc(this.data.snek.currExp)],
       ['level', this.data.snek.level],
+      ['experience', Math.trunc(this.data.snek.totalExpGained)],
       ['lifeSpan', `${Math.trunc(this.data.snek.lifeSpan / 1000)}s`],
       ['score', this.data.score],
     ]
@@ -36,12 +36,12 @@ export default class SnekEndDialog {
       bottom: this.origin.y + this.size.h
     }
 
-    const startMenuButtonData = {
+    const newGameButtonData = {
       origin: {
-        x: this.size.w * 0.5,
+        x: this.size.w * 0.5 - 65,
         y: this.size.h * 0.5,
       },
-      label: 'Start Menu',
+      label: 'New Game  ',
       base: {
         w: 100
       },
@@ -49,18 +49,23 @@ export default class SnekEndDialog {
       offset: { x: this.origin.x , y: this.origin.y }
     }
 
-    this.startMenuButton = new ModalButton(
+    this.newGameButton = new ModalButton(
+      this.origin,
       this.game.ctx,
-      startMenuButtonData,
+      newGameButtonData,
       () => this.game.resetGame(this.game.isDebugOn),
       { once: true},
     )
+    this.newGameButton.show()
+    console.log(`topleft newGameButt: ${this.newGameButton.origin.x - 2},${this.newGameButton.origin.y - 2}`, )
+    console.log(`newGameButt parentOrigin:${this.origin.x}=${this.newGameButton.parentOrigin.x}`, )
+    
 
     this.animatedHeadline = animatedTextLine(
       this.game.ctx,
       { size: 16, family: 'Arial', weight: 'bold' },
-      { x: 55, y: 25 },
-      this.data.isVictory ? 'Snek! flourishes!' : 'Snek got squashed!', 
+      { x: 15, y: 25 },
+      this.data.isVictory ? 'Sssnek WINSSSS!' : 'Sssnek got sssquished!', 
     )
   }
 
@@ -81,12 +86,12 @@ export default class SnekEndDialog {
     }
     this.isShown = true
     this.render()
-    this.startMenuButton.show()
+    this.newGameButton.show()
   }
 
   drawText(offset, text) {
-    this.game.ctx.font = '12px Arial'
-    this.game.ctx.fillStyle = 'black'
+    this.game.ctx.font = '16px Arial'
+    this.game.ctx.fillStyle = 'white'
     this.game.ctx.fillText(text, offset.x, offset.y)
   }
 
@@ -101,13 +106,17 @@ export default class SnekEndDialog {
 
       this.animatedHeadline()
 
-      this.game.ctx.translate(0, 50)
+      this.game.ctx.save()
+      this.game.ctx.translate(0, 70)
       for (let i = 0; i < this.summary.length; ++i) {
-        this.drawText({ x: 10, y: 15 * i }, `${this.summary[i][0]}: ${this.summary[i][1]}`)
+        this.drawText({ x: this.origin.x + 75, y: 18 * i }, `${this.summary[i][0]}: ${this.summary[i][1]}`)
       }
+      this.game.ctx.restore()
+
+      this.newGameButton.render()
 
       this.game.ctx.restore()
-      this.startMenuButton.render()
+
     } else {
       console.log(`Attempted to draw EndDialog while isShown=false`, )
     }

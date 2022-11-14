@@ -1,6 +1,7 @@
 import BaseState from './BaseState'
 import CONSTANTS from '../Constants'
 import Snek from '../ents/mobs/Snek'
+import Constants from '../Constants'
 
 /**
  * 
@@ -33,7 +34,7 @@ export class PlaySurvivalState extends BaseState {
     if (!this.hasCheckedLevel) {
       this.hasCheckedLevel = true
       setTimeout(() => {
-        if (this.snek.segments.length >= 20) {
+        if (this.snek.level >= Constants.survival.victory.segcount) {
           this.game.stateMachine.change('gameOver', {
             snek: this.game.stateMachine.current.snek,
             level: this.game.stateMachine.current.level,
