@@ -101,12 +101,16 @@ export default class LevelMaker {
         }, Constants.spawnTimers.ant)
       }
 
-      if (this.game.world.countSweets() > 20 && !isAntSwarmSpawning) {
-        this.game.world.spawnEnts('ant', 10)
+      if (this.game.world.countSweets() > 15 && !isAntSwarmSpawning) {
         isAntSwarmSpawning = true
-        setTimeout(() => {
+        this.game.world.spawnEnts('ant', 5)
+        for (let i = 1; i < 6; ++i) {
+          setTimeout(() => this.game.world.spawnEnts('ant', 3), i*1000)
+
+        }
+        // setTimeout(() => {
           // isAntSwarmSpawning = false
-        }, Constants.spawnTimers.antSwarm)
+        // }, Constants.spawnTimers.antSwarm)
       }
 
       if (!hasCentipedeSpawned && t - startT >= 60000) {
@@ -116,7 +120,7 @@ export default class LevelMaker {
     }
     // increase apple spawn rate
     // when apple count > 5, spawn an ant for each apple
-    // when snek gets 8 segs spawn centipede
+    // when snek gets 8 segs spawn centipedes
     // when snek has 5 segs, despawn centipede
     // every 15sec - 1min spawn banana
     // every ~40sec spawn mango

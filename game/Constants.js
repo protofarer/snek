@@ -11,7 +11,7 @@ export default {
   spawnTimers: {
     apple: 3000,
     banana: 15000,
-    ant: 10000,
+    ant: 6000,
     antSwarm: 30000,
     mango: 60000,
     centipede: 60000,
