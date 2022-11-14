@@ -17,8 +17,8 @@ export default class Poop extends Immob {
       )
     ctx.fillStyle = this.primaryColor
     ctx.fill()
-    ctx.lineWidth = 0.5
-    ctx.stroke()
+    // ctx.lineWidth = 0.5
+    // ctx.stroke()
   }
 
   drawComponents(ctx) {

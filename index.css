@@ -68,12 +68,12 @@ body {
   flex-flow: row nowrap;
   gap: 3px;
   flex: 0 1;
-  width: 100%;
+  width: 90%;
 }
 
 .expSegment {
-  border-radius: 3px;
-  border: 1px solid green;
+  border-radius: 5px;
+  border: 1px solid darkblue;
   flex: 1 1;
   height: 1vh;
 }

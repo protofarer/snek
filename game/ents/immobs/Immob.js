@@ -61,7 +61,6 @@ export default class Immob extends Entity {
 
   get hitR() { return this.r + 7 }
 
-  headingRadians = - Math.PI / 2
   get headingDegrees() { return this.headingRadians * 180 / Math.PI }
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 

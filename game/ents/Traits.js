@@ -11,6 +11,7 @@ export default {
       x: 1,
       y: 1
     },
+    headingDegrees: 0,
     digestion: {
       baseTime: 3000,
       timeLeft: 3000
@@ -156,6 +157,7 @@ export default {
   },
   
   Mob: {
+    headingDegrees: -90,
     primaryColor: 'blue',
     secondaryColor: '',
     chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
