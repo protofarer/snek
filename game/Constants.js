@@ -10,9 +10,11 @@ export default {
 
   spawnTimers: {
     apple: 3000,
-    mango: 60000,
+    banana: 15000,
     ant: 10000,
-    antSwarm: 30000
+    antSwarm: 30000,
+    mango: 60000,
+    centipede: 60000,
   },
 
   sweets: ['apple', 'banana', 'mango'],

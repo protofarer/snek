@@ -102,17 +102,17 @@ export default class LevelMaker {
       }
 
       if (this.game.world.countSweets() > 20 && !isAntSwarmSpawning) {
-        this.game.world.spawnEnts('ant', 15)
+        this.game.world.spawnEnts('ant', 10)
         isAntSwarmSpawning = true
         setTimeout(() => {
-          isAntSwarmSpawning = false
+          // isAntSwarmSpawning = false
         }, Constants.spawnTimers.antSwarm)
       }
 
-      // if (!hasCentipedeSpawned && t - startT >= 60000) {
-      //   this.game.world.spawnEnts('centipede')
-      //   hasCentipedeSpawned = true
-      // }
+      if (!hasCentipedeSpawned && t - startT >= 60000) {
+        this.game.world.spawnEnts('centipede')
+        hasCentipedeSpawned = true
+      }
     }
     // increase apple spawn rate
     // when apple count > 5, spawn an ant for each apple
