@@ -15,6 +15,7 @@ export default class Snek extends Mob {
   species = 'snek'
 
   currExp = 0
+  totalExpGained = 0
   expForLevel(level) {
     return (this.levelMultiplier**(level - 1)) * this.baseExp
   }
@@ -234,19 +235,6 @@ export default class Snek extends Mob {
 
     intRep(16, 100, this.toggleVisibility.bind(this))
 
-    let curr = this
-    while (curr?.downstreamSegment) {
-      curr = curr.downstreamSegment
-      curr?.downstreamSegment && curr.harmFlash()
-    }
-    curr.detach()
-
-    // only set segExp if segCount changed
-    if (this.countSegments < this.currKnownSegmentCount) {
-      this.currKnownSegmentCount = this.countSegments
-      this.currSegExp = this.expForLevel(this.countSegments)
-    }
-
     this.levelDown()
   }
 
@@ -360,12 +348,31 @@ export default class Snek extends Mob {
   }
 
   levelDown() {
-    this.level--
+    let curr = this
+    while (curr?.downstreamSegment) {
+      curr = curr.downstreamSegment
+      curr?.downstreamSegment && curr.harmFlash()
+    }
+    curr.detach()
+
+    // only set segExp if segCount changed
+    if (this.countSegments < this.currKnownSegmentCount) {
+      this.currKnownSegmentCount = this.countSegments
+      this.currSegExp = this.expForLevel(this.countSegments)
+    }
+
+    this.level = Math.max(1, this.level - 1)
+    this.currExp = this.expForLevel(this.level)
   }
 
   levelUp() {
     this.level++
     this.addSegment()
+  }
+
+  gainExp(exp) {
+    this.currExp += exp
+    this.totalExpGained += exp
   }
 
   update(t) {

@@ -211,7 +211,7 @@ export default {
     r: 10,
     hitOffset: 4,
     baseExp: 25,
-    level: 1,
+    level: 3,
     levelMultiplier: 2,
     segLevelMultiplier: 1.25,
     baseSegmentCount: 3,

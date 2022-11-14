@@ -28,18 +28,18 @@ export default class Collisions {
     const chompRatio = 0.5
     if (this.currExp / this.baseExp > 0.25) {
       const expDiff = this.currExp * chompRatio
-      entAffected.currExp += expDiff
+      entAffected.gainExp(expDiff)
       if (entAffected.currSegExp != undefined) {
-        entAffected.currSegExp += expDiff
+        entAffected.gainExp(expDiff)
       }
       this.currExp -= expDiff
       this.digestion.timeLeft *= 1 - chompRatio
 
     } else {
     // Consume all on the 3rd clean bite or when ent low on digestable material
-      entAffected.currExp += this.currExp
+      entAffected.gainExp(this.currExp)
       if (entAffected.currSegExp != undefined) {
-        entAffected.currSegExp += this.currExp
+        entAffected.gainExp(this.currExp)
       }
       this.currExp = 0
       // ! VIGIL coupling of digestion time and ent lifecycle
@@ -54,19 +54,19 @@ export default class Collisions {
     if (this.digestion.timeLeft === this.digestion.baseTime) {
 
       const expDiff = this.currExp * chompRatio
-      entAffected.currExp += expDiff
+      entAffected.gainExp(expDiff)
       if (entAffected.currSegExp != undefined) {
-        entAffected.currSegExp += expDiff
+        entAffected.gainExp(expDiff)
       }
       this.currExp -= expDiff
       this.digestion.timeLeft *= 1 - chompRatio
 
     } else {
 
-      entAffected.currExp += this.currExp
+      entAffected.gainExp(this.currExp)
       this.currExp = 0
       if (entAffected.currSegExp != undefined) {
-        entAffected.currSegExp += this.currExp
+        entAffected.gainExp(this.currExp)
       }
       this.digestion.timeLeft = 0
       recycle(this)
@@ -80,18 +80,18 @@ export default class Collisions {
     if (this.digestion.timeLeft/this.digestion.baseTime > 0.60) {
 
       const expDiff = this.currExp * chompRatio
-      entAffected.currExp += expDiff
+      entAffected.gainExp(expDiff)
       if (entAffected.currSegExp != undefined) {
-        entAffected.currSegExp += expDiff
+        entAffected.gainExp(expDiff)
       }
       this.currExp -= expDiff
       this.digestion.timeLeft *= 1 - chompRatio
 
     } else {
 
-      entAffected.currExp += this.currExp
+      entAffected.gainExp(this.currExp)
       if (entAffected.currSegExp != undefined) {
-        entAffected.currSegExp += this.currExp
+        entAffected.gainExp(this.currExp)
       }
       this.currExp = 0
       this.digestion.timeLeft = 0

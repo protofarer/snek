@@ -151,50 +151,23 @@ export default class World {
             this.snek.enemySpecies.includes(ent.species) && 
             ent.canHarm === true
           ) {
-
-            // TODO opt track segs in an array incrementally instead of a full query
-            // on every loop, or make it a snek method
-
-            // enemies vs snek segs
-            const sneksegs = Entity.bySpecies([{
-              species: 'segment',
-              subSpecies: 'snek'
-            }])
-
-            const snekSegCount = this.snek.countSegments
-
-            let wasSegLost = 0
-
-            // segs still attached
-            if (snekSegCount > 0) {
-
-              // enemies vs snek head
-              if (this.collisionResolver(Collisions.harm, ent, this.snek))
-                wasSegLost++
-
-              for(let snekseg of sneksegs.values()) {
-
+            // enemies vs snek head
+            if (!this.collisionResolver(Collisions.harm, ent, this.snek)) {
+              // if head not collided, check segs
+              for(let snekseg of this.snek.getSegments()) {
                 // harm attached segs
-                if (snekseg.getHeadEnt().species === 'snek') {
-                  if (this.collisionResolver(Collisions.harm, ent, snekseg))
-                    wasSegLost++
-
-                // chomp unattached segs
-                } else {
-                  this.collisionResolver(Collisions.chomp, ent, snekseg)
-                }
+                this.collisionResolver(Collisions.harm, ent, snekseg)
               }
             }
 
             // ? CSDR resolving via catch all block at end of update
-            if (wasSegLost > 0 && snekSegCount === 1) {
-              this.game.stateMachine.change('gameOver', {
-                snek: this.game.stateMachine.current.snek,
-                level: this.game.stateMachine.current.level,
-                score: this.game.stateMachine.current.score,
-              })
-            }
-
+            // if (wasSegLost > 0 && snekSegCount === 1) {
+            //   this.game.stateMachine.change('gameOver', {
+            //     snek: this.game.stateMachine.current.snek,
+            //     level: this.game.stateMachine.current.level,
+            //     score: this.game.stateMachine.current.score,
+            //   })
+            // }
           }
         }
 
