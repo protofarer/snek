@@ -36,13 +36,7 @@ export default class LevelMaker {
     }
     this.addEnt('apple')
     this.addEnt('apple')
-    this.addEnt('ant')
-    this.addEnt('ant')
-    this.addEnt('ant')
-    this.addEnt('ant')
-    // this.addEnt('apple')
-    // this.spawnEnts('apple',3)
-    // this.spawnEnts('ant')
+    this.addEnt('apple')
     // this.addEnt('centipede').setMobile(true)
   }
 

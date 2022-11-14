@@ -80,6 +80,7 @@ export default class Immob extends Entity {
   }
 
   isVisible = true
+  canHarm = true
 
   constructor(ctx, startPosition=null, parent=null) {
     super()

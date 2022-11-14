@@ -6,7 +6,8 @@ import Digestion from '../../behaviors/Digestion'
 import Traits from '../Traits'
 
 /**
- * The main player controllable character.
+ * @description The main player controllable character.
+ * Segs are gained via exp progression separate from Snek
  * @property {String[]} swallowables - defines what Snek can swallow
  */
 export default class Snek extends Mob {
@@ -20,7 +21,10 @@ export default class Snek extends Mob {
 
   // * segCount is equivalent to seg level
   segExpForLevel(segCount) {
-    return (this.segLevelMultiplier**(Math.max(0, segCount - 2))) * this.baseExp
+    return (
+      (this.segLevelMultiplier**(Math.max(1, segCount - 2))) 
+      * (this.baseExp - 70)
+    )
   }
 
   get expGainedThisLevelOnly() {
@@ -217,10 +221,27 @@ export default class Snek extends Mob {
   }
 
   harmed() {
+    // Panic
+    this.activateEffects([
+      {
+        effect: 'panic',
+        moveSpeed: 2,
+        turnRate: 10,
+        timeLeft: 4000,
+        duration: 4000
+      }
+    ])
+
     intRep(16, 100, this.toggleVisibility.bind(this))
+
     const segs = this.getSegments()
     for (let i = 0; i < segs.length; ++i) {
       segs[i].harmed.apply(segs[i])
+    }
+
+    if (this.countSegments < this.currKnownSegmentCount) {
+      this.currKnownSegmentCount = this.countSegments
+      this.currSegExp = this.expForLevel(this.countSegments)
     }
   }
 
@@ -343,23 +364,6 @@ export default class Snek extends Mob {
 
     this.updatePostDigestionEffects()
 
-    // * currKnownSegmentCount updated on a need to know basis, eg
-    // * when segCount decrease event occurs or manually via growth adds aka
-    // * segExp level ups
-    if (this.countSegments < this.currKnownSegmentCount) {
-      // Panic
-      this.activateEffects([
-        {
-          effect: 'panic',
-          moveSpeed: 2,
-          turnRate: 10,
-          timeLeft: 4000,
-          duration: 4000
-        }
-      ])
-      this.currKnownSegmentCount = this.countSegments
-      this.currSegExp = this.expForLevel(this.countSegments)
-    }
     this.processEffects()
 
     this.isMobile && this.move()

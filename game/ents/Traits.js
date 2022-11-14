@@ -157,22 +157,6 @@ export default {
     ],
   },
 
-  Segment: {
-    baseExp: 20,
-    digestion: {
-      timeLeft: 20000,
-      baseTime: 20000
-    },
-    postDigestionData: [
-      {
-        effect: 'moveSpeed',
-        moveSpeed: 0.5,
-        duration: 20000,
-        timeLeft: 20000
-      },
-    ],
-  },
-  
   Mob: {
     headingDegrees: -90,
     primaryColor: 'blue',
@@ -204,6 +188,22 @@ export default {
       'mango', 
       'ant', 
       'pebble'
+    ],
+  },
+
+  Segment: {
+    baseExp: 20,
+    digestion: {
+      timeLeft: 20000,
+      baseTime: 20000
+    },
+    postDigestionData: [
+      {
+        effect: 'moveSpeed',
+        moveSpeed: 0.5,
+        duration: 20000,
+        timeLeft: 20000
+      },
     ],
   },
 

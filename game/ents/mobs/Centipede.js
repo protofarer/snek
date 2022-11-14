@@ -23,7 +23,6 @@ export default class Centipede extends Mob {
   baseSegmentCount = 5
   downstreamSegment
   postDigestionEffects = []
-  canHarm = true
 
   constructor(ctx, startPosition=null, parent=null, baseSegmentCount=null) {
     super(ctx, startPosition, parent)
