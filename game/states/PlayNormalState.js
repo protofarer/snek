@@ -1,6 +1,5 @@
 import BaseState from './BaseState'
 import CONSTANTS from '../Constants'
-import Entity from '../ents/Entity'
 import Snek from '../ents/mobs/Snek'
 
 /**
@@ -32,9 +31,7 @@ export class PlayNormalState extends BaseState {
   }
 
   render() {
-    for(const ent of Entity.stack.values()) {
-      ent.render()
-    }
+    this.game.world.render()
     this.game.panel.render()
   }
 

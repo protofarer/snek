@@ -1,6 +1,5 @@
 import BaseState from './BaseState'
 import CONSTANTS from '../Constants'
-import Entity from '../ents/Entity'
 import Snek from '../ents/mobs/Snek'
 
 /**

@@ -107,12 +107,14 @@ export default class Collisions {
     }
 
     const head = curr?.getHeadEnt()
-    head.harmed?.()
 
     if (curr.species === 'segment') {
       curr?.detach()
-      agg.canHarm = false
-      setTimeout(() => agg.canHarm = true, Constants.HARM_COOLDOWN)
     }
+
+    head.harmed?.()
+
+    agg.canHarm = false
+    setTimeout(() => agg.canHarm = true, Constants.HARM_COOLDOWN)
   }
 }
