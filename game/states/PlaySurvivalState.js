@@ -24,11 +24,26 @@ export class PlaySurvivalState extends BaseState {
     this.startT = this.game.t
     this.game.levelMaker.spawn(this.level, this.snek)
     this.spawner = this.game.levelMaker.spawnSurvival(this.startT)
+    this.hasCheckedLevel = false
   }
 
   update(t) {
     this.game.world.update(t)
     this.spawner(t)
+    if (!this.hasCheckedLevel) {
+      this.hasCheckedLevel = true
+      setTimeout(() => {
+        if (this.snek.segments.length >= 4) {
+          this.game.stateMachine.change('gameOver', {
+            snek: this.game.stateMachine.current.snek,
+            level: this.game.stateMachine.current.level,
+            score: this.game.stateMachine.current.score,
+            isVictory: true,
+          })
+        }
+        this.hasCheckedLevel = false
+      }, 200)
+    }
   }
 
   render() {

@@ -23,7 +23,7 @@ export class GameOverState extends BaseState {
       level: params?.level ?? 'null',
       score: params?.score ?? 'null',
       snek: this.snek,
-      isVictory: this.snek.countSegments >= 1
+      isVictory: params?.isVictory
     }
 
     this.endDialog = new SnekEndDialog(this.game, data)
