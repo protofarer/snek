@@ -1,4 +1,4 @@
-import Segment from './Segment'
+import Segment from '../immobs/Segment'
 import Traits from '../Traits'
 import { turnRandomlySmoothly } from '../../behaviors/movements'
 import Mob from './Mob'

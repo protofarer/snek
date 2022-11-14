@@ -1,5 +1,5 @@
 import Mob from './Mob'
-import Segment from './Segment'
+import Segment from '../immobs/Segment'
 import { intRep, loadTraits } from '../../utils/helpers'
 import Constants from '../../Constants'
 import Digestion from '../../behaviors/Digestion'
@@ -306,10 +306,6 @@ export default class Snek extends Mob {
   }
 
   render() {
-    // ! game should end before downstreamSegment is gone?
-    // this.downstreamSegment.render()
-
-    // if (this.isVisible) {
       this.ctx.save()
       this.ctx.translate(this.position.x, this.position.y)
       this.ctx.rotate(this.headingRadians)
@@ -335,7 +331,6 @@ export default class Snek extends Mob {
           this.ctx.restore()
       }
       this.ctx.restore()
-    // }
   }
 
   update(t) {
