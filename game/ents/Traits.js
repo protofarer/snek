@@ -218,7 +218,7 @@ export default {
     baseSegmentCount: 5,
     basePrimaryColor: 'hsl(35, 50%, 55%)',
     secondaryColor: 'hsl(30, 70%, 7%)',
-    baseMoveSpeed: 3,
+    baseMoveSpeed: 2,
     turnRateOffset: 5,
     colorLeg: 'hsl(30, 70%, 10%)',
     colorFangs: 'hsl(0, 0%, 0%)',

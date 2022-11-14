@@ -62,10 +62,7 @@ export default class DebugGUI {
     guiGamePositioning.add(this.game.pointerCoords.client, 'y').name('clientY').listen()
     guiGamePositioning.add(this.game.pointerCoords.display, 'x').name('displayX').listen()
     guiGamePositioning.add(this.game.pointerCoords.display, 'y').name('displayY').listen()
-
-
-
-    guiGamePositioning.open()
+    guiGamePositioning.close()
 
     // **********************************************************************
     // * Game State
