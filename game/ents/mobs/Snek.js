@@ -87,6 +87,7 @@ export default class Snek extends Mob {
 
     this.level = Math.max(1, this.level - 1)
     this.currExp = this.level > 1 ? this.expForLevel(this.level) : 0
+    this.normalizeTurnRate()
   }
 
   levelUp() {
@@ -242,16 +243,15 @@ export default class Snek extends Mob {
   }
 
   harmed() {
-    // Panic
-    this.activateEffects([
-      {
-        effect: 'panic',
+    this.activateEffect({
+      name: 'panic',
+      offsets: {
         moveSpeed: 2,
         turnRate: 10,
-        timeLeft: 4000,
-        duration: 4000
-      }
-    ])
+      },
+      timeLeft: 3000,
+      duration: 3000
+    })
 
     intRep(16, 100, this.toggleVisibility.bind(this))
 
@@ -266,43 +266,33 @@ export default class Snek extends Mob {
     this.setHitAreas()
   }
 
-  activateEffects(effectDataList) {
-    effectDataList.forEach( effectData => {
-      switch (effectData.effect) {
-        case 'panic':
-          this.currMoveSpeed += effectData.moveSpeed
-          this.currTurnRate += effectData.turnRate
-          this.activeEffects.push(effectData)
-          break
-        default:
-          console.log(`snek defaulted on activateEffects data`, )
-      }
-    })
+  activateEffect(effectData) {
+    for (let [k,v] of Object.entries(effectData?.offsets)) {
+      if (k === 'moveSpeed') this.currMoveSpeed += v
+      else if (k === 'turnRate') this.currTurnRate += v
+    }
+    this.activeEffects.push(effectData)
   }
 
   deactivateEffect(effectData) {
-    switch (effectData.effect) {
-      case 'panic':
-        this.currMoveSpeed -= effectData.moveSpeed
-        this.currTurnRate -= effectData.turnRate
-        break
-      default:
-        console.log(`snek default deactivateEffect`, )
+    console.log(`deactivating`, effectData.name)
+    
+    for (let [k,v] of Object.entries(effectData?.offsets)) {
+      if (k === 'moveSpeed') this.currMoveSpeed -= v
+      else if (k === 'turnRate') this.currTurnRate -= v
     }
   }
 
   processEffects() {
-    const expiredEffects = this.activeEffects.filter(effect => effect.timeLeft === 0)
-    expiredEffects.forEach(effect => this.deactivateEffect(effect))
-
-    this.activeEffects = this.activeEffects.filter(effect => effect.timeLeft > 0)
-
-    this.activeEffects = this.activeEffects.map(effect => {
-      const timeLeft = effect.timeLeft - Constants.TICK < 0
-        ? 0
-        : effect.timeLeft - Constants.TICK
-      return { ...effect, timeLeft }
-    })
+    for (let i = 0; i < this.activeEffects.length; ++i) {
+      if (this.activeEffects[i].timeLeft <= 0) {
+        this.deactivateEffect(this.activeEffects[i])
+        this.activeEffects.splice(i, 1)
+        i--
+      } else {
+        this.activeEffects[i].timeLeft = Math.max(0, this.activeEffects[i].timeLeft - Constants.TICK)
+      }
+    }
   }
 
   get countSegments() {

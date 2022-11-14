@@ -25,6 +25,7 @@ export default class Mob extends Immob {
   turnDirection = 0
   isTurningLeft = false
   isTurningRight = false
+  activeEffects = []
 
   constructor(ctx, startPosition=null, parent=null) {
     super(ctx, startPosition, parent)
@@ -33,7 +34,19 @@ export default class Mob extends Immob {
   }
 
   normalizeTurnRate() {
-    this.currTurnRate = this.baseMoveSpeed + Math.max(this.turnRateOffset - this.level, 0)
+    let sumTurnRates = 0
+    if (this.activeEffects.length > 0) {
+      sumTurnRates = this.activeEffects.reduce((prev, curr) => {
+        if (curr?.offsets?.turnRate) {
+          return prev + curr.offsets.turnRate
+        }
+        return prev
+      }, 0)
+    }
+    
+    this.currTurnRate = this.baseMoveSpeed 
+      + Math.max(this.turnRateOffset - this.level, 0)
+      + sumTurnRates
   }
 
   setTurnable(setTurnable) {

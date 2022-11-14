@@ -65,8 +65,6 @@ export default class Immob extends Entity {
   get headingDegrees() { return this.headingRadians * 180 / Math.PI }
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
 
-  postDigestionData = null
-
   primaryColorParameters = {}
   getPrimaryColor = getColorParameters.bind(this)
   setPrimaryColor = setColorParameters.bind(this)
@@ -81,6 +79,7 @@ export default class Immob extends Entity {
 
   isVisible = true
   canHarm = true
+  postDigestionData = []
 
   constructor(ctx, startPosition=null, parent=null) {
     super()

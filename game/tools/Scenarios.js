@@ -13,12 +13,9 @@ export default class Scenarios {
       x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
-    this.addEnt('apple')
-    this.addEnt('apple')
-    this.addEnt('apple')
-    this.addEnt('apple')
-    this.addEnt('apple')
-    this.addEnt('apple')
+    // this.addEnt('apple')
+    // this.addEnt('apple')
+    // this.addEnt('apple')
     // this.harmSegByCent()
     // this.quickDeathByCent()
   }
@@ -57,7 +54,7 @@ export default class Scenarios {
     const cent = this.addEnt('centipede').setMobile(true).setTurnable(false)
     cent.isIntermittentPausing = false
     cent.position = { 
-      x: this.game.canvas.width*.1, 
+      x: this.game.canvas.width*.3, 
       y: this.game.canvas.height*.8 - ((n-1)*.05*this.game.canvas.height)
     }
     cent.headingDegrees = 0

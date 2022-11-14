@@ -174,7 +174,7 @@ export default class Segment extends Immob {
 
       const postDigestionData = this.entUnderDigestion.postDigestionData
 
-      if (postDigestionData) {
+      if (postDigestionData.length > 0) {
         Digestion.activatePostDigestionEffects.call(this, postDigestionData, this.getHeadEnt())
       }
         
