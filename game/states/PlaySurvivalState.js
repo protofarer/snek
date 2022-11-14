@@ -31,7 +31,7 @@ export class PlaySurvivalState extends BaseState {
 
   render() {
     for(const ent of Entity.stack.values()) {
-      ent.render()
+      ent.isVisible && ent.render()
     }
     this.game.panel.render()
   }

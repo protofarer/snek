@@ -2,6 +2,7 @@ import Entity from '../Entity'
 import { getColorParameters, setColorParameters } from '../../utils/colormorph'
 import { loadTraits } from '../../utils/helpers'
 import Traits from '../Traits'
+import { intRep } from '../../utils/helpers'
 
 export default class Immob extends Entity {
   /**
@@ -74,6 +75,8 @@ export default class Immob extends Entity {
     this.setPrimaryColor({hueStart,hueEnd,satStart, satEnd, lumStart, lumEnd}) 
   }
 
+  isVisible = true
+
   constructor(ctx, startPosition=null, parent=null) {
     super()
     this.ctx = ctx
@@ -114,6 +117,15 @@ export default class Immob extends Entity {
    */
   get bottom() {
     return this.position.y + this.hitR
+  }
+
+  harmed() {
+    console.log(`${this.species} harmed`, )
+    intRep(16, 100, this.toggleVisibility.bind(this))
+  }
+
+  toggleVisibility() {
+    this.isVisible = !this.isVisible
   }
 
   /**

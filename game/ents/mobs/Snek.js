@@ -45,7 +45,6 @@ export default class Snek extends Mob {
   activeEffects = []
   postDigestionEffects = []
   expiredPostDigestionEffects = []
-  isVisible = true
   wasHarmed = false
   lifeSpan = 0
 
@@ -207,43 +206,21 @@ export default class Snek extends Mob {
     this.ctx.stroke()
   }
 
-  harmed() {
-    const toggleVis = (obj) => {
-      return () => obj.isVisible = !obj.isVisible
+  getSegments() {
+    let segs = []
+    let curr = this
+    while (curr.downstreamSegment) {
+      segs.push(curr.downstreamSegment)
+      curr = curr.downstreamSegment
     }
-    intRep(16, 100, toggleVis(this))
+    return segs
   }
 
-  render() {
-    // ! game should end before downstreamSegment is gone?
-    // this.downstreamSegment.render()
-
-    if (this.isVisible) {
-      this.ctx.save()
-      this.ctx.translate(this.position.x, this.position.y)
-      this.ctx.rotate(this.headingRadians)
-      this.ctx.save()
-      this.ctx.scale(this.scale.x, 0.8 * this.scale.y)
-  
-      this.drawHead()
-  
-      this.ctx.restore()
-  
-      if (!this.isTongueOut) {
-        if (Math.random() < 0.05) {
-          this.isTongueOut = true
-          this.tongueDirection = Math.floor(Math.random() * 3 - 1)
-          setTimeout(() => this.isTongueOut = false, 100 + Math.random()*700)
-        }
-      }
-  
-      if (this.isTongueOut) {
-          this.ctx.save()
-          this.ctx.rotate(0.3 * this.tongueDirection)
-          this.drawTongue()
-          this.ctx.restore()
-      }
-      this.ctx.restore()
+  harmed() {
+    intRep(16, 100, this.toggleVisibility.bind(this))
+    const segs = this.getSegments()
+    for (let i = 0; i < segs.length; ++i) {
+      segs[i].harmed.apply(segs[i])
     }
   }
 
@@ -326,6 +303,39 @@ export default class Snek extends Mob {
         }
       }
     }
+  }
+
+  render() {
+    // ! game should end before downstreamSegment is gone?
+    // this.downstreamSegment.render()
+
+    // if (this.isVisible) {
+      this.ctx.save()
+      this.ctx.translate(this.position.x, this.position.y)
+      this.ctx.rotate(this.headingRadians)
+      this.ctx.save()
+      this.ctx.scale(this.scale.x, 0.8 * this.scale.y)
+  
+      this.drawHead()
+  
+      this.ctx.restore()
+  
+      if (!this.isTongueOut) {
+        if (Math.random() < 0.05) {
+          this.isTongueOut = true
+          this.tongueDirection = Math.floor(Math.random() * 3 - 1)
+          setTimeout(() => this.isTongueOut = false, 100 + Math.random()*700)
+        }
+      }
+  
+      if (this.isTongueOut) {
+          this.ctx.save()
+          this.ctx.rotate(0.3 * this.tongueDirection)
+          this.drawTongue()
+          this.ctx.restore()
+      }
+      this.ctx.restore()
+    // }
   }
 
   update(t) {

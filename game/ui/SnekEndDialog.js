@@ -55,9 +55,6 @@ export default class SnekEndDialog {
       this.game.resetGame,
       { once: true},
     )
-    console.log(`start butt origin`, this.startMenuButton.origin)
-    console.log(`start butt offset`, this.startMenuButton.offset)
-    
 
     this.animatedHeadline = animatedTextLine(
       this.game.ctx,
