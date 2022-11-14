@@ -16,8 +16,8 @@ export default class Centipede extends Mob {
   }}
 
   get mouthCoords() { return {
-      x: this.headCoords.x + this.r * Math.cos(this.headingRadians),
-      y: this.headCoords.y + this.r * Math.sin(this.headingRadians)
+      x: this.headCoords.x + this.r * 0.5 * Math.cos(this.headingRadians),
+      y: this.headCoords.y + this.r * 0.5 * Math.sin(this.headingRadians)
   }}
 
   baseSegmentCount = 5
