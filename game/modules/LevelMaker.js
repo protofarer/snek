@@ -39,7 +39,8 @@ export default class LevelMaker {
     this.addEnt('apple')
     this.addEnt('apple')
     this.spawnEnts('apple',3)
-    // this.addEnt('centipede').setMobile(true)
+    this.spawnEnts('ant')
+    this.addEnt('centipede').setMobile(true)
   }
 
   // first normal level

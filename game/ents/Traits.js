@@ -3,6 +3,7 @@ import Constants from '../Constants'
 export default {
   Immob: {
     r: 1,
+    hitOffset: 7,
     position: {
       x: 25,
       y: 25
@@ -190,6 +191,7 @@ export default {
 
   Snek: {
     r: 10,
+    hitOffset: 4,
     baseExp: 100,
     level: 1,
     levelMultiplier: 2,
@@ -216,6 +218,7 @@ export default {
 
   Centipede: {
     r: 10,
+    hitOffset: 5,
     baseExp: 100,
     baseSegmentCount: 5,
     basePrimaryColor: 'hsl(35, 50%, 55%)',

@@ -10,7 +10,7 @@ export default class Ant extends Mob {
   carriedEnt = null
   carriedOffsetRad = null
 
-  get hitR() { return this.r }
+  get hitR() { return this.r + this.hitOffset }
 
   get headCoords() { return { 
     x: this.position.x 
@@ -49,15 +49,15 @@ export default class Ant extends Mob {
     this.carriedEnt = null
   }
 
-  setHitAreas() {
-    this.hitArea = new Path2D()
-    this.hitArea.rect(
-      this.position.x - 2 * this.hitR,
-      this.position.y - 2 * this.hitR,
-      4 * this.hitR,
-      4 * this.hitR
-    )
-  }
+  // setHitAreas() {
+  //   this.hitArea = new Path2D()
+  //   this.hitArea.rect(
+  //     this.position.x - this.hitR,
+  //     this.position.y - this.hitR,
+  //     2 * this.hitR,
+  //     2 * this.hitR
+  //   )
+  // }
 
   drawHitOverlays() {
     this.ctx.strokeStyle = 'blue'

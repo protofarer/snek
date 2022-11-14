@@ -147,8 +147,11 @@ export default class DebugGUI {
 
     this.setupBooleanToggler(this.params, 'isTurningRandomly', guiEnts , 'rand walk snek')
 
-    const addCentipede = () => this.game.world.spawnEnts(Centipede)
-    guiEnts.add({ addCentipede }, 'addCentipede')
+    const spawnCentipede = () => this.game.world.spawnEnts('centipede')
+    guiEnts.add({ spawnCentipede }, 'spawnCentipede')
+
+    const spawnAnt = () => this.game.world.spawnEnts('ant')
+    guiEnts.add({ spawnAnt }, 'spawnAnt')
 
 
     document.addEventListener('keydown', async (e) => {

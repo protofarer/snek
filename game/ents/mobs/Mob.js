@@ -11,9 +11,6 @@ export default class Mob extends Immob {
   static entGroup = 'mob'
   entGroup = 'mob'
 
-  get hitR() { return this.r + 1 }
-
-  
   // * Override in instance constructor: 1) field specify baseMS 2) this.moveSpeed = this.baseMS
   // * otherwise will be set to below
   isMobile = true

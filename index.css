@@ -50,7 +50,7 @@ body {
 
 #panel {
   padding: 0.5em 0 0 0;
-  background-color: hsla(135, 70%, 40%);
+  background-color: hsla(135, 75%, 35%);
   border-top: 3px solid rgb(50, 84, 255);
 
   width: 100%;
@@ -80,6 +80,7 @@ body {
 
 #infobox {
   margin: 0.3em 0 0 0;
+  color: darkblue;
 
   display: flex;
   flex-flow: column nowrap;
@@ -132,7 +133,7 @@ button {
   padding: 0;
   color: black;
   border-radius: 50%;
-  background-color: hsl(0, 100%, 59%);
+  background-color: hsl(0, 75%, 40%);
   font-size:xxx-large;
   user-select: none;
 }

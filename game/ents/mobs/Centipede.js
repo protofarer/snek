@@ -8,7 +8,7 @@ export default class Centipede extends Mob {
   static species = 'centipede'
   species = 'centipede'
 
-  get hitR() { return this.r + 1}
+  get hitR() { return this.r + this.hitOffset }
 
   get headCoords() { return {
     x: this.position.x,

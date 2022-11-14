@@ -59,7 +59,7 @@ export default class Immob extends Entity {
   static species = 'immob'
   species = 'immob'
 
-  get hitR() { return this.r + 7 }
+  get hitR() { return this.r + this.hitOffset }
 
   get headingDegrees() { return this.headingRadians * 180 / Math.PI }
   set headingDegrees(val) { this.headingRadians = val * Math.PI / 180 }
