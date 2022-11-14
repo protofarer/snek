@@ -117,6 +117,11 @@ export default class World {
       }
     }
   }
+  render() {
+    for(const ent of Entity.stack.values()) {
+      ent.isVisible && ent.render()
+    }
+  }
 
   update(t) {
     for(const ent of Entity.stack.values()) {
