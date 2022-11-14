@@ -201,7 +201,7 @@ export default class World {
               this.game.stateMachine.current.score++
             },
             this.snek, 
-            ent
+            ent,
           )
         }
       }
@@ -234,6 +234,15 @@ export default class World {
     const isContacting = collisionDetector(agg, def)
     isContacting && resolver(agg, def)
     return isContacting
+  }
+
+  AABBCollisionDetector(rect1, rect2) {
+    return !(
+      rect2.left > rect1.right
+      || rect2.right < rect1.left
+      || rect2.bottom < rect1.top 
+      || rect2.top > rect1.bottom
+    )
   }
 
   pointCollisionDetector(agg, def) {
