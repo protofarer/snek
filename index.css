@@ -89,6 +89,7 @@ body {
   align-items: center;
   flex-grow: 0;
   gap: 0.5em;
+  user-select: none;
 }
 
 .infoSubBox {

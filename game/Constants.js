@@ -13,11 +13,11 @@ export default {
     }
   },
   spawnTimers: {
-    apple: 3000,
+    apple: 2000,
     banana: 15000,
-    ant: 6000,
-    antSwarm: 30000,
-    mango: 60000,
+    ant: 5000,
+    antSwarm: 20000,
+    mango: 30000,
     centipede: 60000,
   },
   spawnConditionals: {

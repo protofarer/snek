@@ -1,6 +1,5 @@
 import GUI from 'lil-gui'
 import Entity from '../ents/Entity'
-import Centipede from '../ents/mobs/Centipede'
 
 /**
  * Contains debug GUI functionality (uses lil-gui package) and includes
