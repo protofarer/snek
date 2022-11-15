@@ -1,6 +1,7 @@
 import BaseState from './BaseState'
 import Snek from '../ents/mobs/Snek'
 import ModalButton from '../../components-canvas/ModalButton'
+import { recycle } from '../utils/helpers'
 
 export class StartState extends BaseState {
   modes = ['Normal', 'Survival']
@@ -78,17 +79,18 @@ export class StartState extends BaseState {
       { once: true }
     )
     this.survivalButt.show()
-    this.snek = new Snek(this.game.ctx, {x: 90, y: 300}, this.game, 40)
-    this.snek.currTurnRate = 1
-    this.game.setSnek(this.snek)
-    this.game.world.addEnt('apple').position = { x: 200, y: 225 }
-    this.game.world.addEnt('apple').position = { x: 200, y: 345 }
+
+    // this.snek = new Snek(this.game.ctx, {x: 90, y: 300}, this.game, 40)
+    // this.snek.currTurnRate = 1
+    // this.game.setSnek(this.snek)
+    // this.apple1 = this.game.world.addEnt('apple').position = { x: 200, y: 225 }
+    // this.apple2 = this.game.world.addEnt('apple').position = { x: 200, y: 345 }
   }
 
   update() {
-    this.game.world.update()
+    // this.game.world.update()
     // console.log(this.snek.position.x, this.snek.position.y)
-    this.snek.turnRight()
+    // this.snek.turnRight()
   }
 
   render() {
@@ -112,6 +114,10 @@ export class StartState extends BaseState {
 
   exit() {
     document.removeEventListener('keydown', this.handleKeyDown)
+
+    // recycle(this.snek)
+    // recycle(this.apple1)
+    // recycle(this.apple2)
 
     // ! TODO removeEventListener in class Button not working as intended
     // this.normalButt.removeClickListener()

@@ -5,6 +5,9 @@ body {
   box-sizing: border-box;
   font-family: Arial;
   touch-action: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 
@@ -91,7 +94,9 @@ body {
   align-items: center;
   flex-grow: 0;
   gap: 0.5em;
-  user-select: none;
+  /* -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none; */
 }
 
 .infoSubBox {
