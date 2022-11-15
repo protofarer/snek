@@ -105,10 +105,10 @@ export class StartState extends BaseState {
     this.survivalButt.render()
     this.game.ctx.font = '16px Arial'
     this.game.ctx.fillStyle = 'darkred'
-    this.game.ctx.fillText('- works only in portrait orientation', 55, 100)
-    this.game.ctx.fillText('- A for left, D for right on desktop', 55, 125)
+    this.game.ctx.fillText('- portrait orientation only', 55, 100)
+    this.game.ctx.fillText('- A = turn left, D = turn right', 55, 125)
     this.game.ctx.font = '12px Mono'
-    this.game.ctx.fillText('pre-alpha v0.l.0, survival prototype', 10, 550)
+    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', 10, 550)
     this.game.world.render()
   }
 
