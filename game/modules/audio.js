@@ -11,10 +11,8 @@ export default function Audio() {
   let sounds = {
     swallow: [],
     death: [],
+    music: [],
   }
-
-  // const music1 = document.querySelector('#introMusic1')
-  // sounds.music.push(music1)
 
   const swallowC2 = document.querySelector('#swallowC2')
   sounds.swallow.push(swallowC2)
@@ -30,7 +28,6 @@ export default function Audio() {
   
   // const playRandomMusic = playRandomSoundType(sounds.music)
 
-  function loadSounds() {
     for (let soundsOfType of Object.values(sounds)) {
       soundsOfType.forEach(s => {
         s.addEventListener(
@@ -42,10 +39,27 @@ export default function Audio() {
       })
     }
     
-    // let randomMusic = playRandomMusic()
-    // randomMusic.volume = 0.1
-  }
-  loadSounds()
+  // let randomMusic = playRandomMusic()
+  // randomMusic.volume = 0.1
+  const melody1 = document.querySelector('#melody1')
+  sounds.melody1 = melody1
+  melody1.load()
+
+  const snekExcrete = document.querySelector('#snekExcrete')
+  sounds.snekExcrete = snekExcrete
+  snekExcrete.load()
+
+  const snekLevelup = document.querySelector('#snekLevelup')
+  sounds.snekLevelup = snekLevelup
+  snekLevelup.load()
+
+  const snekLiquidExcrete = document.querySelector('#snekLiquidExcrete')
+  sounds.snekLiquidExcrete = snekLiquidExcrete
+  snekLiquidExcrete.load()
+
+  const snekPanic = document.querySelector('#snekPanic')
+  sounds.snekPanic = snekPanic
+  snekPanic.load()
 
   function soundLoadHandler() {
     assetsLoaded++
@@ -93,7 +107,7 @@ export default function Audio() {
   
   return { 
     sounds, 
-    play: {
+    random: {
       playRandomSwallowSound,
     }
   }

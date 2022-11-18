@@ -60,7 +60,8 @@ export default class Game {
     this.clock = new Clock(this.ctx, this)
     this.world = new World(this)
     const Sounds = Audio()
-    this.play = Sounds.play
+    this.randomSounds = Sounds.random
+    this.sounds = Sounds.sounds
     this.levelMaker = new LevelMaker(this)
   }
 

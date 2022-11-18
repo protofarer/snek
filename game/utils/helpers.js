@@ -24,7 +24,7 @@ export function getHead() {
  */
 export function getGameObject() {
   let currentEnt = this.parent
-  while (currentEnt.parent) {
+  while (currentEnt?.parent) {
       currentEnt = currentEnt.parent
   }
   return currentEnt

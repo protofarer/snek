@@ -12,6 +12,8 @@ export class StartState extends BaseState {
     super()
     this.game = game
     this.game.panel.panelContainer.style.setProperty('visibility', 'hidden')
+    this.game.sounds.melody1.currentTime = 0
+    this.game.sounds.melody1.play()
 
     // TODO adapt to whether user is on mobile or desktop
     this.handleKeyDown = (e) => {

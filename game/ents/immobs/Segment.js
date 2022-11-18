@@ -1,7 +1,7 @@
 import Poop from './Poop'
 import Traits from '../Traits'
 import Immob from './Immob'
-import { loadTraits, recycle } from '../../utils/helpers'
+import { getGameObject, loadTraits, recycle } from '../../utils/helpers'
 import { getTraitFunction } from '../../utils/helpers'
 import Digestion from '../../behaviors/Digestion'
 
@@ -247,6 +247,8 @@ export default class Segment extends Immob {
 
   excrete() {
     if (this.entUnderDigestion) {
+      getGameObject.call(this).sounds.snekExcrete.currentTime = 0
+      getGameObject.call(this).sounds.snekExcrete.play()
       this.entUnderDigestion.setMobile?.(true)
       this.entUnderDigestion.parent = this.getHeadEnt().parent
   

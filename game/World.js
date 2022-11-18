@@ -191,7 +191,7 @@ export default class World {
           this.collisionResolver(
             () => {
               Collisions.chomp(this.snek, ent)
-              this.game.play.playRandomSwallowSound()
+              this.game.randomSounds.playRandomSwallowSound()
               this.game.stateMachine.current.score++
             },
             this.snek, 

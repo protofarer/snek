@@ -1,6 +1,6 @@
 import Mob from './Mob'
 import Segment from '../immobs/Segment'
-import { intRep, loadTraits } from '../../utils/helpers'
+import { getGameObject, intRep, loadTraits } from '../../utils/helpers'
 import Constants from '../../Constants'
 import Digestion from '../../behaviors/Digestion'
 import Traits from '../Traits'
@@ -88,6 +88,8 @@ export default class Snek extends Mob {
   }
 
   levelUp() {
+    getGameObject.call(this).sounds.snekLevelup.currentTime = 0
+    getGameObject.call(this).sounds.snekLevelup.play()
     this.level++
     this.addSegment()
     this.normalizeTurnRate()
@@ -240,6 +242,8 @@ export default class Snek extends Mob {
   }
 
   harmed() {
+    getGameObject.call(this).sounds.snekPanic.currentTime = 0
+    getGameObject.call(this).sounds.snekPanic.play()
     this.activateEffect({
       name: 'panic',
       offsets: {
