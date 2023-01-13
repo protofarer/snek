@@ -79,8 +79,7 @@ export default function Audio() {
 
   const playRandomSwallowSound = (species) => {
     const playSwallowSound = playRandomSoundType(sounds.swallow)
-    const swallowSound = playSwallowSound(species)
-    return swallowSound
+    playSwallowSound(species)
 
     // let deathSound
     // swallowSound.addEventListener('ended', () => {

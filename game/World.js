@@ -54,7 +54,7 @@ export default class World {
       if (ent.position.y < 0) {
         let n = Math.floor(Math.abs(ent.position.y) 
           / this.game.canvas.height) + 1
-        ent.position.y += n * this.game.canvas.height
+        ent.position.y += n * this.game.canvas.height // ? is this right
         ent.position.x += n * xInterval
       }
     }
