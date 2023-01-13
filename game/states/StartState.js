@@ -115,6 +115,7 @@ export class StartState extends BaseState {
   }
 
   exit() {
+    this.game.sounds.melody1.pause()
     document.removeEventListener('keydown', this.handleKeyDown)
 
     // recycle(this.snek)
