@@ -91,31 +91,34 @@ export default class LevelMaker {
         setTimeout(() => { 
           this.game.world.spawnEnts('apple')
           isAppleSpawning = false
-        }, Constants.spawnTimers.apple)
+        }, Constants.spawnIntervals.apple.recurring)
       }
       if (!isMangoSpawning) {
         isMangoSpawning = true
         setTimeout(() => { 
           this.game.world.spawnEnts('mango')
           isMangoSpawning = false
-        }, Constants.spawnTimers.mango)
+        }, Constants.spawnIntervals.mango.recurring)
       }
       if (!isBananaSpawning) {
         isBananaSpawning = true
         setTimeout(() => { 
           this.game.world.spawnEnts('banana')
           isBananaSpawning = false
-        }, Constants.spawnTimers.banana)
+        }, Constants.spawnIntervals.banana.recurring)
       }
       if (this.game.world.countSweets() > 4 && !isAntSpawning) {
         this.game.world.spawnEnts('ant')
         isAntSpawning = true
         setTimeout(() => {
           isAntSpawning = false
-        }, Constants.spawnTimers.ant)
+        }, Constants.spawnIntervals.ant.recurring)
       }
 
-      if (this.game.world.countSweets() > 15 && !isAntSwarmSpawning) {
+      if ((this.game.world.countSweets() > 15 
+        || (t - tPlayStart) === Constants.spawnIntervals.antSwarm.initial) 
+        && !isAntSwarmSpawning
+      ) {
         isAntSwarmSpawning = true
         this.game.world.spawnEnts('ant', 5)
         for (let i = 1; i < 6; ++i) {
@@ -123,7 +126,7 @@ export default class LevelMaker {
         }
         // setTimeout(() => {
           // isAntSwarmSpawning = false
-        // }, Constants.spawnTimers.antSwarm)
+        // }, Constants.spawnIntervals.antSwarm.recurring)
       }
 
       if (!hasCentipedeSpawned && t - tPlayStart >= 60000) {

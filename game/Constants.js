@@ -12,13 +12,26 @@ export default {
       segcount: 16
     }
   },
-  spawnTimers: {
-    apple: 2000,
-    banana: 15000,
-    ant: 5000,
-    antSwarm: 20000,
-    mango: 30000,
-    centipede: 60000,
+  spawnIntervals: {
+    apple: {
+      recurring: 2000,
+    },
+    banana: {
+      recurring: 15000,
+    },
+    ant: {
+      recurring: 5000,
+    },
+    antSwarm: { 
+      initial: 120000,
+      recurring: 20000,
+    },
+    mango: {
+      recurring: 30000,
+    },
+    centipede: {
+      initial: 60000,
+    },
   },
   spawnConditionals: {
     secondCentipede: { segcount: 15 },

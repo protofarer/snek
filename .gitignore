@@ -30,4 +30,5 @@ dist-ssr
 deploy.sh
 repo.sh
 export.sh
+build-env.sh
 .env
