@@ -39,6 +39,7 @@ export default class Game {
         start: States.StartState,
         playNormal: States.PlayNormalState,
         playSurvival: States.PlaySurvivalState,
+        playTest: States.PlayTestState,
         gameOver: States.GameOverState
       }, this)
 

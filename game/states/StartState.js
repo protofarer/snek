@@ -1,10 +1,8 @@
 import BaseState from './BaseState'
-import Snek from '../ents/mobs/Snek'
 import ModalButton from '../../components-canvas/ModalButton'
-import { recycle } from '../utils/helpers'
 
 export class StartState extends BaseState {
-  modes = ['Normal', 'Survival']
+  modes = ['Normal', 'Survival', 'Test']
   mode = 0
   stateName = 'start'
 
@@ -82,6 +80,55 @@ export class StartState extends BaseState {
     )
     this.survivalButt.show()
 
+    const testButtData = {
+      origin: { 
+        x: this.game.canvas.width * 0.35, 
+        y: this.game.canvas.height * 0.55, 
+      },
+      base: { w: 125, },
+      label: 'Test: kade data',
+    }
+
+    const data = {
+      playMode: 'test',
+      state: 'gameover',
+      username: 'parmenides',
+      score: 300,
+      lifespan: 3600,
+      submitted_at: new Date().toISOString(),
+    }
+    const testAction = async () => {
+      console.log('IN testAction')
+      // can I do a web fetch without using supabase client?
+      const response = await fetch(`http://localhost:3000/snek/submit-data`, {
+        method: 'POST',
+        // change to same-origin after debug
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
+
+      const rd = await response.json()
+
+      // const rdata = await JSON.parse(response)
+
+      console.log('response:', rd)
+    }
+
+
+    this.testButt = new ModalButton(
+      null,
+      this.game.ctx,
+      testButtData,
+      testAction,
+      // () => this.game.stateMachine.change('playTest', {
+      //   score: 0
+      // }),
+      { once: true }
+    )
+    this.testButt.show()
     // this.snek = new Snek(this.game.ctx, {x: 90, y: 300}, this.game, 40)
     // this.snek.currTurnRate = 1
     // this.game.setSnek(this.snek)
@@ -105,6 +152,8 @@ export class StartState extends BaseState {
 
     // this.normalButt.render()
     this.survivalButt.render()
+    this.testButt.render()
+
     this.game.ctx.font = '16px Arial'
     this.game.ctx.fillStyle = 'darkred'
     this.game.ctx.fillText('- portrait orientation only', 55, 100)

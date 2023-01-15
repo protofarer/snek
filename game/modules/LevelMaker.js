@@ -8,23 +8,28 @@ export default class LevelMaker {
     this.addEnt = this.game.world.addEnt.bind(this.game.world)
   }
 
-  spawn(level, snek) {
+  generateLevel(level, snek) {
     snek.position = { 
       x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
     switch (level) {
-      case 0:   // debug level
-        // this.spawnLevelZero(snek)
-        this.initSpawnSurvival()
-        break
       case 1:
-        this.spawnLevelOne()
-        break
+        return this.spawnLevelOne()
       case 's':
+        return this.spawnSurvival(this.game.t)
+      case 'd':   // debug level
         this.initSpawnSurvival()
-        break
+        return this.spawnLevelZero(snek)
+      case 't':
+        return this.spawnTest()
+      default:
+        console.error('Not a valid initial spawn levelmaker code')
     }
+  }
+
+  spawnTest() {
+    this.addEnt('apple')
   }
 
   spawnRandom(ents) {
@@ -71,7 +76,8 @@ export default class LevelMaker {
   /** Ongoing spawn behavior for survival mode
    * @method
    */
-  spawnSurvival(startT) {
+  spawnSurvival(tPlayStart) {
+    this.initSpawnSurvival()
     let isAppleSpawning = false
     let isMangoSpawning = false
     let isBananaSpawning = false
@@ -120,7 +126,7 @@ export default class LevelMaker {
         // }, Constants.spawnTimers.antSwarm)
       }
 
-      if (!hasCentipedeSpawned && t - startT >= 60000) {
+      if (!hasCentipedeSpawned && t - tPlayStart >= 60000) {
         this.game.world.spawnEnts('centipede')
         hasCentipedeSpawned = true
       }

@@ -23,7 +23,7 @@ export class PlayNormalState extends BaseState {
     this.score = params.score
     this.game.phase = CONSTANTS.PHASE_PLAY
 
-    this.game.levelMaker.spawn(this.level, this.snek)
+    this.game.levelMaker.generateLevel(this.level, this.snek)
   }
 
   update(t) {

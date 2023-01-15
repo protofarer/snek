@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "NODE_ENV=production vite build",
     "preview": "vite preview",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "export": "./export.sh ~/projects/kade/public/"
   },
   "devDependencies": {
     "eslint": "8.x",

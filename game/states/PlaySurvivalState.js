@@ -22,9 +22,7 @@ export class PlaySurvivalState extends BaseState {
     this.score = params.score
     this.game.phase = CONSTANTS.PHASE_PLAY
 
-    this.startT = this.game.t
-    this.game.levelMaker.spawn(this.level, this.snek)
-    this.spawner = this.game.levelMaker.spawnSurvival(this.startT)
+    this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
     this.hasCheckedLevel = false
   }
 
