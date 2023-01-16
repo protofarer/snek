@@ -1,0 +1,16 @@
+{
+  "name": "Snek! An Arcade Web Game",
+  "short_name": "Snek!",
+  "description": "You are a snek that eats its way to survive.",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "45x45",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "index.html",
+  "display": "fullscreen",
+  "theme_color": "#00F220",
+  "background_color": "#00F220"
+}
