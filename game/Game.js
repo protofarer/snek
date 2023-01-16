@@ -77,6 +77,28 @@ export default class Game {
 
   setupPage(container) {
     this.container = container
+
+    // placeholder for Kade user/session bar
+    this.tmpKadeBar = document.createElement('div')
+    this.tmpKadeBar.id = 'kadeBar'
+    this.container.appendChild(this.tmpKadeBar)
+
+    this.tmpUserMenu = document.createElement('button')
+    this.tmpUserMenu.innerHTML = `Usr`
+    this.tmpKadeBar.appendChild(this.tmpUserMenu)
+
+    this.tmpLabel = document.createElement('button')
+    this.tmpLabel.innerHTML = `kade online`
+    this.tmpKadeBar.appendChild(this.tmpLabel)
+
+    this.tmpGameMenu = document.createElement('button')
+    this.tmpGameMenu.innerHTML = `Menu`
+    this.tmpKadeBar.appendChild(this.tmpGameMenu)
+
+    // Background aligned with  canvas
+    new Background(this.container)
+
+    // Game canvas
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'layerGame'
     this.canvas.width = Constants.CANVAS_WIDTH
@@ -86,8 +108,7 @@ export default class Game {
     this.ctx = this.canvas.getContext('2d')
     this.rect = this.canvas.getBoundingClientRect()
 
-    new Background(this.container)
-
+    // Web panel interface
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
 
