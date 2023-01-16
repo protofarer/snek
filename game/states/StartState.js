@@ -177,15 +177,22 @@ export class StartState extends BaseState {
     this.survivalButt.render()
     this.testButt.render()
 
-    const yDirections = 450
-    const xDirections = 30
+    const yInstructions = 450
+    const xInstructions = 30
     this.game.ctx.fillStyle = 'darkred'
-    this.game.ctx.fillText('portrait orientation only', xDirections, yDirections)
-    this.game.ctx.fillText('A: turn left', xDirections , yDirections + 25)
-    this.game.ctx.fillText('D: turn right', xDirections, yDirections + 50)
-    this.game.ctx.fillText('<space>: action', xDirections, yDirections + 75)
+    this.game.ctx.fillText('portrait orientation only',xInstructions,yInstructions )
+    this.game.ctx.fillText('A: turn left',xInstructions , yInstructions + 25)
+    this.game.ctx.fillText('D: turn right',xInstructions, yInstructions + 50)
+    this.game.ctx.fillText('<space>: action',xInstructions, yInstructions + 75)
     this.game.ctx.font = '12px Mono'
-    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', 10, 575)
+
+    const xFooter = 10
+    const yFooter = 570
+    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', xFooter, yFooter)
+    this.game.ctx.fillText(
+      `created by Kenny Baron @ kennybaron.net 2022-${new Date().getFullYear()}`, 
+      xFooter, yFooter + 15
+    )
 
     this.game.world.render()
   }

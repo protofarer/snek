@@ -5,7 +5,7 @@ export const ENV = new (function() {
 })()
 
 document.title = 'Snek!'
-const container = document.createElement('div')
+const container = document.createElement('main')
 container.id = 'container'
 document.body.appendChild(container)
  
