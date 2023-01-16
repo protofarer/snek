@@ -32,7 +32,7 @@ export default class Game {
     this.phase = Constants.PHASE_PAUSE
     this.t = -1
 
-    this.setupCanvas(container)
+    this.setupPage(container)
     this.load()
 
     this.stateMachine = new StateMachine({
@@ -57,7 +57,6 @@ export default class Game {
   }
 
   load() {
-    new Background(this.container)
     this.clock = new Clock(this.ctx, this)
     this.world = new World(this)
     const Sounds = Audio()
@@ -76,7 +75,7 @@ export default class Game {
     return false
   }
 
-  setupCanvas(container) {
+  setupPage(container) {
     this.container = container
     this.canvas = document.createElement('canvas')
     this.canvas.id = 'layerGame'
@@ -87,8 +86,29 @@ export default class Game {
     this.ctx = this.canvas.getContext('2d')
     this.rect = this.canvas.getBoundingClientRect()
 
+    new Background(this.container)
+
     this.panel = new Panel(this)
     this.container.appendChild(this.panel.panelContainer)
+
+    // Touch Area Controls
+    this.touchAreaContainer = document.createElement('div')
+    this.touchAreaContainer.id = 'touch-area-container'
+    this.container.appendChild(this.touchAreaContainer)
+
+    const leftTouchArea = document.createElement('button')
+    leftTouchArea.className = 'touch-area-control'
+    leftTouchArea.id = 'touch-area-control-left'
+
+    const rightTouchArea = document.createElement('button')
+    rightTouchArea.className = 'touch-area-control'
+    rightTouchArea.id = 'touch-area-control-right'
+
+    this.touchAreaContainer.appendChild(leftTouchArea)
+    this.touchAreaContainer.appendChild(rightTouchArea)
+
+    this.touchAreaContainer.style.width = '500px'
+    this.touchAreaContainer.style.height = Constants.CANVAS_HEIGHT
 
     this.pointerCoords = {
       canvas : { x: 0, y: 0 },
@@ -114,6 +134,7 @@ export default class Game {
 
     }
     this.canvas.addEventListener('pointermove', handlePointerMove, false)
+
   }
 
   clr() {

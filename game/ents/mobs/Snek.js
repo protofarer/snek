@@ -146,18 +146,27 @@ export default class Snek extends Mob {
     }
     document.addEventListener('keyup', handleKeyUp)
 
-    const leftActivated = () => { this.isTurningLeft = true }
+    const leftActivated = () => { 
+      this.isTurningLeft = true 
+      console.log(`Pressed LEFT`, )
+      
+    }
     const leftDeactivated = () => { this.isTurningLeft = false }
-    const rightActivated = () => { this.isTurningRight = true }
+    const rightActivated = () => { 
+      this.isTurningRight = true 
+      console.log(`Pressed RIGHT`, )
+    }
     const rightDeactivated = () => { this.isTurningRight = false }
 
-    const left = document.querySelector('#left-butt')
+    const left = document.querySelector('#touch-area-control-left')
     left.addEventListener('pointerdown', leftActivated)
     left.addEventListener('pointerout', leftDeactivated)
+    left.addEventListener('pointerup', leftDeactivated)
 
-    const right = document.querySelector('#right-butt')
+    const right = document.querySelector('#touch-area-control-right')
     right.addEventListener('pointerdown', rightActivated)
     right.addEventListener('pointerout', rightDeactivated)
+    right.addEventListener('pointerup', rightDeactivated)
   }
 
   drawHitOverlays() {

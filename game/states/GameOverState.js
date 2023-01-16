@@ -27,6 +27,7 @@ export class GameOverState extends BaseState {
 
     this.endDialog = new SnekEndDialog(this.game, data)
     this.endDialog.show()
+    this.game.touchAreaContainer.style.display = 'none'
     this.game.panel.render()
   }
 

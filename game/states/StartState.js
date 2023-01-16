@@ -2,7 +2,11 @@ import BaseState from './BaseState'
 import ModalButton from '../../components-canvas/ModalButton'
 
 export class StartState extends BaseState {
-  modes = ['Normal', 'Survival', 'Test']
+  modes = [
+    'Survival', 
+    'Test', 
+    // 'Normal'
+  ]
   mode = 0
   stateName = 'start'
 
@@ -30,12 +34,13 @@ export class StartState extends BaseState {
               level: 's',
               score: 0
             })
-          } else if (this.modes[this.mode] === 'Normal') {
-            this.game.stateMachine.change('playNormal', {
-              level: 1,
-              score: 0
-            })
-          }
+          } 
+          // else if (this.modes[this.mode] === 'Normal') {
+          //   this.game.stateMachine.change('playNormal', {
+          //     level: 1,
+          //     score: 0
+          //   })
+          // }
           break
       }
     }
@@ -64,7 +69,7 @@ export class StartState extends BaseState {
     const survivalButtData = {
       origin: { 
         x: this.game.canvas.width * 0.35, 
-        y: this.game.canvas.height * 0.45, 
+        y: this.game.canvas.height * 0.4444
       },
       base: { w: 125, },
       label: 'Survival Mode',
@@ -129,6 +134,8 @@ export class StartState extends BaseState {
       { once: true }
     )
     this.testButt.show()
+
+    this.game.touchAreaContainer.style.display = 'none'
     // this.snek = new Snek(this.game.ctx, {x: 90, y: 300}, this.game, 40)
     // this.snek.currTurnRate = 1
     // this.game.setSnek(this.snek)
@@ -150,16 +157,36 @@ export class StartState extends BaseState {
       this.game.canvas.width, this.game.canvas.height
     )
 
+    // show left and right touch control areas
+    this.game.ctx.strokeStyle = 'hsl(240,50%,50%)'
+    const linewidth = 4
+    this.game.ctx.lineWidth = linewidth
+    this.game.ctx.strokeRect(linewidth/2, linewidth/2, (this.game.canvas.width / 2) - (linewidth/ 2), this.game.canvas.height - (linewidth))
+    this.game.ctx.strokeRect((this.game.canvas.width / 2) + (linewidth/2), linewidth/2, (this.game.canvas.width/2) - (linewidth), this.game.canvas.height - (linewidth))
+
+    this.game.ctx.font = '16px Arial'
+    this.game.ctx.fillStyle = 'darkred'
+
+    this.game.ctx.fillText('HOLD LEFT AREA', 10, 125)
+    this.game.ctx.fillText('TO TURN LEFT', 10, 140)
+    this.game.ctx.fillText('HOLD RIGHT AREA', 215, 125)
+    this.game.ctx.fillText('TO TURN RIGHT', 215, 140)
+
+
     // this.normalButt.render()
     this.survivalButt.render()
     this.testButt.render()
 
-    this.game.ctx.font = '16px Arial'
+    const yDirections = 450
+    const xDirections = 30
     this.game.ctx.fillStyle = 'darkred'
-    this.game.ctx.fillText('- portrait orientation only', 55, 100)
-    this.game.ctx.fillText('- A = turn left, D = turn right', 55, 125)
+    this.game.ctx.fillText('portrait orientation only', xDirections, yDirections)
+    this.game.ctx.fillText('A: turn left', xDirections , yDirections + 25)
+    this.game.ctx.fillText('D: turn right', xDirections, yDirections + 50)
+    this.game.ctx.fillText('<space>: action', xDirections, yDirections + 75)
     this.game.ctx.font = '12px Mono'
-    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', 10, 550)
+    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', 10, 575)
+
     this.game.world.render()
   }
 
@@ -178,5 +205,6 @@ export class StartState extends BaseState {
     // this.normalButt.path = new Path2D()
     this.survivalButt.path = new Path2D()
     this.game.panel.panelContainer.style.setProperty('visibility', 'visible')
+    this.game.touchAreaContainer.style.display = 'flex'
   }
 }

@@ -41,4 +41,4 @@ const rawResponse = await fetch(`http://localhost:3000/snek/submit-data`, {
   console.log(`parsed response`, responseObj)
 }
 
-await af()
+// await af()
