@@ -67,6 +67,7 @@ body {
 }
 
 #touch-area-container {
+  margin-top: 7vh;
   position: absolute;
   height: calc(100vw * 3 / 2);
   max-height: 80vh;
@@ -80,6 +81,7 @@ body {
 
 .touch-area-control {
   background-color: transparent;
+  border: 3px dotted purple;
   flex: 1 0;
 }
 

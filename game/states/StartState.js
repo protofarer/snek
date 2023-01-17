@@ -136,11 +136,10 @@ export class StartState extends BaseState {
     this.testButt.show()
 
     this.game.touchAreaContainer.style.display = 'none'
-    // this.snek = new Snek(this.game.ctx, {x: 90, y: 300}, this.game, 40)
-    // this.snek.currTurnRate = 1
-    // this.game.setSnek(this.snek)
-    // this.apple1 = this.game.world.addEnt('apple').position = { x: 200, y: 225 }
-    // this.apple2 = this.game.world.addEnt('apple').position = { x: 200, y: 345 }
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+      get: (searchParams, prop) => searchParams.get(prop)
+    })
+    this.appMode = params.mode
   }
 
   update() {
@@ -177,7 +176,7 @@ export class StartState extends BaseState {
     this.survivalButt.render()
     this.testButt.render()
 
-    const yInstructions = 450
+    const yInstructions = 420
     const xInstructions = 30
     this.game.ctx.fillStyle = 'darkred'
     this.game.ctx.fillText('portrait orientation only',xInstructions,yInstructions )
@@ -187,11 +186,12 @@ export class StartState extends BaseState {
     this.game.ctx.font = '12px Mono'
 
     const xFooter = 10
-    const yFooter = 570
-    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', xFooter, yFooter)
+    const yFooter = 540
+    this.game.ctx.fillText(`app mode: ${this.appMode}`, xFooter, yFooter)
+    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', xFooter, yFooter + 15)
     this.game.ctx.fillText(
       `created by Kenny Baron @ kennybaron.net 2022-${new Date().getFullYear()}`, 
-      xFooter, yFooter + 15
+      xFooter, yFooter + 30
     )
 
     this.game.world.render()
@@ -213,5 +213,7 @@ export class StartState extends BaseState {
     this.survivalButt.path = new Path2D()
     this.game.panel.panelContainer.style.setProperty('visibility', 'visible')
     this.game.touchAreaContainer.style.display = 'flex'
+    // this.game.rightTouchArea.style.visibility = 'hidden'
+    // this.game.leftTouchArea.style.visibility = 'hidden'
   }
 }

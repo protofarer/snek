@@ -117,16 +117,16 @@ export default class Game {
     this.touchAreaContainer.id = 'touch-area-container'
     this.container.appendChild(this.touchAreaContainer)
 
-    const leftTouchArea = document.createElement('button')
-    leftTouchArea.className = 'touch-area-control'
-    leftTouchArea.id = 'touch-area-control-left'
+    this.leftTouchArea = document.createElement('button')
+    this.leftTouchArea.className = 'touch-area-control'
+    this.leftTouchArea.id = 'touch-area-control-left'
 
-    const rightTouchArea = document.createElement('button')
-    rightTouchArea.className = 'touch-area-control'
-    rightTouchArea.id = 'touch-area-control-right'
+    this.rightTouchArea = document.createElement('button')
+    this.rightTouchArea.className = 'touch-area-control'
+    this.rightTouchArea.id = 'touch-area-control-right'
 
-    this.touchAreaContainer.appendChild(leftTouchArea)
-    this.touchAreaContainer.appendChild(rightTouchArea)
+    this.touchAreaContainer.appendChild(this.leftTouchArea)
+    this.touchAreaContainer.appendChild(this.rightTouchArea)
 
     this.touchAreaContainer.style.width = '500px'
     this.touchAreaContainer.style.height = Constants.CANVAS_HEIGHT
