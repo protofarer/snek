@@ -1,5 +1,5 @@
 import Game from './game/Game'
-
+import './index.css';   // vitejs injects into page https://vitejs.dev/guide/features.html#css
 
 export const ENV = new (function() {
   this.MODE = import.meta.env ? import.meta.env.MODE : 'production' 
