@@ -1,13 +1,14 @@
 {
   "name": "a-new-game",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.2.0",
   "scripts": {
     "dev": "vite",
     "build": "NODE_ENV=production vite build",
     "preview": "vite preview",
     "lint": "eslint src",
-    "export": "./export.sh ~/projects/kade/public/"
+    "export": "./export.sh ~/projects/kade/public/",
+    "version": "echo $npm_package_version"
   },
   "devDependencies": {
     "eslint": "8.x",

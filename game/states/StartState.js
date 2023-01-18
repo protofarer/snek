@@ -1,5 +1,6 @@
 import BaseState from './BaseState'
 import ModalButton from '../../components-canvas/ModalButton'
+import Constants from '../Constants.js'
 
 export class StartState extends BaseState {
   modes = [
@@ -183,12 +184,12 @@ export class StartState extends BaseState {
     this.game.ctx.fillText('A: turn left',xInstructions , yInstructions + 25)
     this.game.ctx.fillText('D: turn right',xInstructions, yInstructions + 50)
     this.game.ctx.fillText('<space>: action',xInstructions, yInstructions + 75)
-    this.game.ctx.font = '12px Mono'
 
+    this.game.ctx.font = '10px Mono'
     const xFooter = 10
     const yFooter = 540
     this.game.ctx.fillText(`app mode: ${this.appMode}`, xFooter, yFooter)
-    this.game.ctx.fillText('pre-alpha v0.l.x, survival prototype', xFooter, yFooter + 15)
+    this.game.ctx.fillText(`prototype v${import.meta.env.VITE_APP_VERSION}: ${Constants.VERSION_DESCRIPTION}`, xFooter, yFooter + 15)
     this.game.ctx.fillText(
       `created by Kenny Baron @ kennybaron.net 2022-${new Date().getFullYear()}`, 
       xFooter, yFooter + 30

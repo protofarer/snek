@@ -54,4 +54,5 @@ export default {
   postDigestionFunction: {
 
   },
+  VERSION_DESCRIPTION: 'survival gameplay and kade integration'
 }
