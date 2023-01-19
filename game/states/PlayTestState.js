@@ -17,17 +17,18 @@ export class PlayTestState extends BaseState {
       || new Snek(this.game.ctx, null, this.game)
     this.game.setSnek(this.snek)
 
-    this.level = params?.level ?? 's'
     this.game.phase = CONSTANTS.PHASE_PLAY
 
     this.startT = this.game.t
+
+    this.level = 't'
     this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
     this.hasCheckedLevel = false
   }
 
   update(t) {
     this.game.world.update(t)
-    this.spawner(t)
+    this.spawner?.(t)
     if (!this.hasCheckedLevel) {
       this.hasCheckedLevel = true
       setTimeout(() => {

@@ -26,7 +26,7 @@ export class PlaySurvivalState extends BaseState {
 
   update(t) {
     this.game.world.update(t)
-    this.spawner?.a(t)
+    this.spawner?.(t)
     if (!this.hasCheckedLevel) {
       this.hasCheckedLevel = true
       setTimeout(() => {

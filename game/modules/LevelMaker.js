@@ -33,6 +33,9 @@ export default class LevelMaker {
 
   spawnTest() {
     this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
+    this.addEnt('apple')
   }
 
   spawnRandom(ents) {

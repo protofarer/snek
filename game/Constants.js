@@ -9,7 +9,7 @@ export default {
   HARM_COOLDOWN: 2000,
   survival: {
     victory: {
-      segcount: 16
+      segcount: 12
     }
   },
   spawnIntervals: {

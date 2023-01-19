@@ -44,7 +44,6 @@ export default class World {
       }, 
       this.game
     )
-    ent.parent = this.game
     
     if (!position) {
 
@@ -77,6 +76,7 @@ export default class World {
   spawnEnts(entWord, n=1, position=null) {
     const ents = []
     const entClass = this.getEntClass(entWord)
+
     for(let i = 0; i < n; i++) {
       const ent = new entClass(
         this.ctx, 
@@ -195,7 +195,7 @@ export default class World {
             () => {
               Collisions.chomp(this.snek, ent)
               this.game.randomSounds.playRandomSwallowSound()
-              this.interstitial.dScore(this.snek.position, 10)
+              this.interstitial.dScore(this.snek, 10)
             },
             this.snek, 
             ent,

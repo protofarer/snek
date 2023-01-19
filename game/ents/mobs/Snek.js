@@ -16,7 +16,6 @@ export default class Snek extends Mob {
 
   currExp = 0
   totalExpGained = 0
-  score = 0
 
   expForLevel(level) {
     // 1*0 -> 2*5 -> 3*10 -> 4*15
@@ -56,6 +55,7 @@ export default class Snek extends Mob {
   wasHarmed = false
   lifeSpan = 0
   segments = []
+  score = 0
 
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)

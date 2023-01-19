@@ -69,7 +69,7 @@ export default class DebugGUI {
     const guiGameState = gui.addFolder('GameState')
 
     guiGameState.add(this.game, 'phase').name('phase').listen()
-    guiGameState.add(this.game.stateMachine?.current, 'stateName').name('current state').listen()
+    guiGameState.add(this.game.stateMachine.current, 'stateName').listen()
 
     // **********************************************************************
     // * Overlays
