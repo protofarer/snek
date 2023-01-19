@@ -2,27 +2,59 @@
  * @description - Game behavior that runs in the space between World, Graphics, Ents. Active glue.
  */
 
+import Constants from "../Constants.js"
 import Animations from "./Animations.js"
 
 export default class Interstitial {
   renderProcesses = []
   updateProcesses = []
 
-  constructor(ctx) {
-    this.ctx = ctx
+  constructor(game) {
+    this.game = game
+    this.ctx = game.ctx
   }
 
-  dScore(ent, dPoints) {
-    ent.score += dPoints
+  dScore(agg, def) {
+    const dPoints = def.points
+    agg.points += dPoints
+    def.points -= dPoints
     this.renderProcesses.push(
-      Animations.risePointsInPlace(ent, dPoints, this.ctx)
+      Animations.risePointsInPlace(agg.position, dPoints, this.ctx)
     )
+  }
+
+  startPoopificationCountdown() {
+    this.renderProcesses.push(
+      Animations.poopificationCountdown(this.ctx)
+    )
+    this.updateProcesses.push(
+      this.poopificationCountdown(this.game)
+    )
+  }
+
+  poopificationCountdown(game) {
+    let t = 0
+    return {
+      hasCompleted: false,
+      step() {
+        t += Constants.TICK
+        if (t >= Constants.survival.poopification.countdownMS) {
+          game.stateMachine.change('gameOver', {
+            snek: game.world.snek,
+            score: game.world.snek.points,
+            defeatCondition: Constants.survival.defeatConditions.POOPIFICATION
+          })
+        }
+      }
+    }
   }
 
   stepRenderProcesses() {
     for (let i = this.renderProcesses.length; i >= 0; i--) {
       this.renderProcesses[i]?.step()
-      if (this.renderProcesses[i]?.hasCompleted) this.renderProcesses.splice(i, 1)
+      if (this.renderProcesses[i]?.hasCompleted) {
+        this.renderProcesses.splice(i, 1)
+      }
     }
   }
 
@@ -32,4 +64,5 @@ export default class Interstitial {
       if (this.updateProcesses[i]?.hasCompleted) this.updateProcesses.splice(i, 1)
     }
   }
+
 }

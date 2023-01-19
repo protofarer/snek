@@ -26,7 +26,7 @@ export default class World {
     this.ctx = this.game.ctx
     this.canvas = this.game.canvas
     this.isSpawning = false
-    this.interstitial = new Interstitial(this.ctx)
+    this.interstitial = new Interstitial(game)
   }
 
   /** Controlled ent placement in world. 
@@ -195,7 +195,7 @@ export default class World {
             () => {
               Collisions.chomp(this.snek, ent)
               this.game.randomSounds.playRandomSwallowSound()
-              this.interstitial.dScore(this.snek, 10)
+              this.interstitial.dScore(this.snek, ent)
             },
             this.snek, 
             ent,
@@ -210,6 +210,7 @@ export default class World {
     if (this.snek.segments.length === 0) {
       this.game.stateMachine.change('gameOver', {
         snek: this.game.stateMachine.current.snek,
+        score: this.game.snek.points,
         level: this.game.stateMachine.current.level,
       })
     }

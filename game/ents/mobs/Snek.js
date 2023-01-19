@@ -55,7 +55,7 @@ export default class Snek extends Mob {
   wasHarmed = false
   lifeSpan = 0
   segments = []
-  score = 0
+  poopExcretionCount = 0
 
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)

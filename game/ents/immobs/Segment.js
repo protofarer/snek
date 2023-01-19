@@ -259,6 +259,10 @@ export default class Segment extends Immob {
       
       this.entUnderDigestion.entGroup === 'immob' 
         && this.entUnderDigestion.setHitAreas()
+
+      if (this.entUnderDigestion.species === 'poop') {
+        this.getHeadEnt().poopExcretionCount++
+      }
   
       this.entUnderDigestion = null
       this.scale = { x: 1, y: 1 }

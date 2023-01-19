@@ -34,7 +34,7 @@ export class PlaySurvivalState extends BaseState {
           this.game.stateMachine.change('gameOver', {
             snek: this.game.stateMachine.current.snek,
             level: this.game.stateMachine.current.level,
-            score: this.snek.score,
+            score: this.snek.points,
             isVictory: true,
           })
         }

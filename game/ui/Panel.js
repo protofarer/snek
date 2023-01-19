@@ -69,7 +69,7 @@ export default class Panel {
   }
 
   render() {
-    this.score.innerHTML = `Score: ${this.game.stateMachine.current.snek.score}`
+    this.score.innerHTML = `Score: ${this.game.stateMachine.current.snek.points}`
 
     if (this.snek) {
       this.lifespan.innerHTML = 

@@ -45,4 +45,43 @@ export default class Animations {
       }
     }  
   }
+
+  static poopificationCountdown(ctx) {
+    let totalFrames = Math.floor(Constants.survival.poopification.countdownMS / Constants.TICK)
+    let currentFrame = 0
+    const x0 = Constants.CANVAS_WIDTH * 0.01
+    const y0 = Constants.CANVAS_HEIGHT * 0.2
+    const font = '16px Arial'
+    const fillStyle = 'red'
+
+    const visibilityIntervalFrames = 500 / Constants.TICK
+    let visibilityAccumFrames = 0
+
+    const text1 = `YOU WILL DIE FROM POOPIFICATION IN:`
+    const text2 = `${Math.ceil((totalFrames - currentFrame) * Constants.TICK / 1000)} seconds!!!`
+
+    return {
+      hasCompleted: false,
+      isVisible: true,
+      step() {
+        if (this.isVisible) {
+          ctx.save()
+          ctx.translate(x0, y0)
+          ctx.font = '20px Arial'
+          ctx.fillStyle = fillStyle
+    
+          ctx.fillText(text1, 0, 0)
+          ctx.fillText(text2, Constants.CANVAS_WIDTH * 0.35, 20)
+          ctx.restore()
+        }
+        currentFrame++
+        visibilityAccumFrames++
+        if (visibilityAccumFrames >= visibilityIntervalFrames) {
+          this.isVisible = !this.isVisible
+          visibilityAccumFrames = 0
+        }
+        if (currentFrame === totalFrames) this.hasCompleted = true
+      }
+    }
+  }
 }

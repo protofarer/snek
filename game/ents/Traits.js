@@ -32,6 +32,7 @@ export default {
 
   Apple: {
     r: 6,
+    points: 10,
     baseExp: 10,
     primaryColor: {
       hueStart: 0, 
@@ -92,6 +93,7 @@ export default {
 
   Banana: {
     r: 7,
+    points: 50,
     baseExp: 40,
     primaryColor: {
       hueStart: 65,
@@ -120,6 +122,7 @@ export default {
 
   Mango: {
     r: 6,
+    points: 100,
     baseExp: 0,
     primaryColor: {
       hueStart: 35,
@@ -170,6 +173,7 @@ export default {
 
   Ant: {
     r: 4,
+    points: 5,
     baseExp: 10,
     primaryColor: {
       hueStart: 0,
@@ -208,6 +212,7 @@ export default {
 
   Snek: {
     r: 10,
+    points: 0,
     hitOffset: 4,
     baseExp: 10,
     level: 3,
@@ -235,6 +240,7 @@ export default {
 
   Centipede: {
     r: 10,
+    points: 500,
     hitOffset: 5,
     baseExp: 100,
     baseSegmentCount: 5,

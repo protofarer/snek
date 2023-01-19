@@ -24,11 +24,15 @@ export class PlayTestState extends BaseState {
     this.level = 't'
     this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
     this.hasCheckedLevel = false
+    this.poopificationStartTime
+    this.hasCheckedPoopification = false
   }
 
   update(t) {
     this.game.world.update(t)
     this.spawner?.(t)
+
+    // level check every 200ms
     if (!this.hasCheckedLevel) {
       this.hasCheckedLevel = true
       setTimeout(() => {
@@ -36,13 +40,28 @@ export class PlayTestState extends BaseState {
           this.game.stateMachine.change('gameOver', {
             snek: this.game.stateMachine.current.snek,
             level: this.game.stateMachine.current.level,
-            score: this.snek.score,
+            score: this.snek.points,
             isVictory: true,
           })
+        } else {
+          this.hasCheckedLevel = false
         }
-        this.hasCheckedLevel = false
       }, 200)
     }
+
+    // poopification check every 200ms
+    if (!this.hasCheckedPoopification) {
+      this.hasCheckedPoopification = true
+      setTimeout(() => {
+        if (this.snek.poopExcretionCount > Constants.survival.poopification.limit) {
+          this.game.world.interstitial.startPoopificationCountdown()
+          // TODO show poopification countdown timer, flash on screen until dead
+        } else {
+          this.hasCheckedPoopification = false
+        }
+      }, 200)
+    }
+
   }
 
   render() {

@@ -10,6 +10,14 @@ export default {
   survival: {
     victory: {
       segcount: 12
+    },
+    defeatConditions: {
+      POOPIFICATION: 'POOPIFICATION',
+      KILLED: 'KILLED'
+    },
+    poopification: {
+      limit: 2,
+      countdownMS: 5000,
     }
   },
   spawnIntervals: {
