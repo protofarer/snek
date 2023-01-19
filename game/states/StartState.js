@@ -33,13 +33,11 @@ export class StartState extends BaseState {
           if (this.modes[this.mode] === 'Survival') {
             this.game.stateMachine.change('playSurvival', {
               level: 's',
-              score: 0
             })
           } 
           // else if (this.modes[this.mode] === 'Normal') {
           //   this.game.stateMachine.change('playNormal', {
           //     level: 1,
-          //     score: 0
           //   })
           // }
           break
@@ -61,7 +59,6 @@ export class StartState extends BaseState {
     //   normalButtData,
     //   () => this.game.stateMachine.change('playNormal', {
     //     level: 1,
-    //     score: 0
     //   }),
     //   { once: true }
     // )
@@ -80,7 +77,6 @@ export class StartState extends BaseState {
       this.game.ctx,
       survivalButtData,
       () => this.game.stateMachine.change('playSurvival', {
-        score: 0
       }),
       { once: true }
     )
@@ -130,7 +126,6 @@ export class StartState extends BaseState {
       testButtData,
       testAction,
       // () => this.game.stateMachine.change('playTest', {
-      //   score: 0
       // }),
       { once: true }
     )

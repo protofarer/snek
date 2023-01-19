@@ -4,7 +4,6 @@ import SnekEndDialog from '../ui/SnekEndDialog'
 
 /**
  * 
- * @property {Number} score - number of items snek has swallowed
  */
 export class GameOverState extends BaseState {
   stateName = 'gameOver'
@@ -20,7 +19,6 @@ export class GameOverState extends BaseState {
 
     const data = {
       level: params?.level ?? 'null',
-      score: params?.score ?? 'null',
       snek: this.snek,
       isVictory: params?.isVictory
     }

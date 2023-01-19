@@ -2,6 +2,7 @@ export default class StateMachine {
   constructor(states, game) {
     this.states = states
     this.current = {
+      stateName: 'base',
       render() {},
       update() {},
       enter() {},
@@ -14,6 +15,8 @@ export default class StateMachine {
     if (!Object.keys(this.states).includes(stateName)) {
       throw Error('Cannot change state, invalid state name')
     }
+    console.log(`change state to`, stateName)
+    
     this.current.exit()
     this.current = new this.states[stateName](this.game, params)
   }

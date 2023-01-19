@@ -16,6 +16,8 @@ export default class Snek extends Mob {
 
   currExp = 0
   totalExpGained = 0
+  score = 0
+
   expForLevel(level) {
     // 1*0 -> 2*5 -> 3*10 -> 4*15
     // make baseExp equiv to desired Ent exp, then next level exp based on eating currSegCount of Ent 
@@ -146,16 +148,9 @@ export default class Snek extends Mob {
     }
     document.addEventListener('keyup', handleKeyUp)
 
-    const leftActivated = () => { 
-      this.isTurningLeft = true 
-      console.log(`Pressed LEFT`, )
-      
-    }
+    const leftActivated = () => { this.isTurningLeft = true }
     const leftDeactivated = () => { this.isTurningLeft = false }
-    const rightActivated = () => { 
-      this.isTurningRight = true 
-      console.log(`Pressed RIGHT`, )
-    }
+    const rightActivated = () => { this.isTurningRight = true }
     const rightDeactivated = () => { this.isTurningRight = false }
 
     const left = document.querySelector('#touch-area-control-left')

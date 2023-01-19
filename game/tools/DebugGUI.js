@@ -69,6 +69,7 @@ export default class DebugGUI {
     const guiGameState = gui.addFolder('GameState')
 
     guiGameState.add(this.game, 'phase').name('phase').listen()
+    guiGameState.add(this.game.stateMachine?.current, 'stateName').name('current state').listen()
 
     // **********************************************************************
     // * Overlays
@@ -124,7 +125,6 @@ export default class DebugGUI {
       .name('reset: debug')
 
     const endGame = () => { this.game.stateMachine.change('gameOver', {
-      score: this.game.stateMachine.current.score,
       snek: this.game.world.snek
     })}
      guiMutate.add({ endGame }, 'endGame')

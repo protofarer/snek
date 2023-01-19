@@ -5,10 +5,9 @@ import Constants from '../Constants'
 
 /**
  * 
- * @property {Number} score - proportional to number of items snek has swallowed
  */
 export class PlayTestState extends BaseState {
-  stateName = 'playSurvival'
+  stateName = 'playTest'
 
   constructor(game, params) {
     super()
@@ -19,7 +18,6 @@ export class PlayTestState extends BaseState {
     this.game.setSnek(this.snek)
 
     this.level = params?.level ?? 's'
-    this.score = params.score
     this.game.phase = CONSTANTS.PHASE_PLAY
 
     this.startT = this.game.t
@@ -37,7 +35,7 @@ export class PlayTestState extends BaseState {
           this.game.stateMachine.change('gameOver', {
             snek: this.game.stateMachine.current.snek,
             level: this.game.stateMachine.current.level,
-            score: this.game.stateMachine.current.score,
+            score: this.snek.score,
             isVictory: true,
           })
         }

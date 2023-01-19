@@ -4,7 +4,6 @@ import Snek from '../ents/mobs/Snek'
 
 /**
  * 
- * @property {Number} score - number of items snek has swallowed
  */
 export class PlayNormalState extends BaseState {
   level
@@ -20,7 +19,6 @@ export class PlayNormalState extends BaseState {
     this.game.setSnek(this.snek)
 
     this.level = params.level
-    this.score = params.score
     this.game.phase = CONSTANTS.PHASE_PLAY
 
     this.game.levelMaker.generateLevel(this.level, this.snek)

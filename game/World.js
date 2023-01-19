@@ -11,6 +11,7 @@ import Entity from './ents/Entity'
 import { moveEdgeWrap } from './behaviors/movements'
 import Collisions from './behaviors/Collisions'
 import Traits from './ents/Traits'
+import Interstitial from './modules/Interstitial.js'
 
 /** Runs world events and spawning behaviors
  * @class
@@ -25,6 +26,7 @@ export default class World {
     this.ctx = this.game.ctx
     this.canvas = this.game.canvas
     this.isSpawning = false
+    this.interstitial = new Interstitial(this.ctx)
   }
 
   /** Controlled ent placement in world. 
@@ -124,6 +126,7 @@ export default class World {
     for(const ent of Entity.stack.values()) {
       ent.isVisible && ent.render()
     }
+    this.interstitial.stepRenderProcesses()
   }
 
   countAnts() {
@@ -192,7 +195,7 @@ export default class World {
             () => {
               Collisions.chomp(this.snek, ent)
               this.game.randomSounds.playRandomSwallowSound()
-              this.game.stateMachine.current.score++
+              this.interstitial.dScore(this.snek.position, 10)
             },
             this.snek, 
             ent,
@@ -200,12 +203,14 @@ export default class World {
         }
       }
     }
+
+    this.interstitial.stepUpdateProcesses()
+
     // catch all gameover
     if (this.snek.segments.length === 0) {
       this.game.stateMachine.change('gameOver', {
         snek: this.game.stateMachine.current.snek,
         level: this.game.stateMachine.current.level,
-        score: this.game.stateMachine.current.score,
       })
     }
   }

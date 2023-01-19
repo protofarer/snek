@@ -17,7 +17,7 @@ export default class SnekEndDialog {
       ['level', this.data.snek.level],
       ['experience', Math.trunc(this.data.snek.totalExpGained)],
       ['lifeSpan', `${Math.trunc(this.data.snek.lifeSpan / 1000)}s`],
-      ['score', this.data.score],
+      ['score', this.data.snek.score],
     ]
 
     this.size = {

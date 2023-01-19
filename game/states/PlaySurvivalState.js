@@ -5,7 +5,6 @@ import Constants from '../Constants'
 
 /**
  * 
- * @property {Number} score - proportional to number of items snek has swallowed
  */
 export class PlaySurvivalState extends BaseState {
   stateName = 'playSurvival'
@@ -19,7 +18,6 @@ export class PlaySurvivalState extends BaseState {
     this.game.setSnek(this.snek)
 
     this.level = params?.level ?? 's'
-    this.score = params.score
     this.game.phase = CONSTANTS.PHASE_PLAY
 
     this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
@@ -28,7 +26,7 @@ export class PlaySurvivalState extends BaseState {
 
   update(t) {
     this.game.world.update(t)
-    this.spawner(t)
+    this.spawner?.a(t)
     if (!this.hasCheckedLevel) {
       this.hasCheckedLevel = true
       setTimeout(() => {
@@ -36,7 +34,7 @@ export class PlaySurvivalState extends BaseState {
           this.game.stateMachine.change('gameOver', {
             snek: this.game.stateMachine.current.snek,
             level: this.game.stateMachine.current.level,
-            score: this.game.stateMachine.current.score,
+            score: this.snek.score,
             isVictory: true,
           })
         }
