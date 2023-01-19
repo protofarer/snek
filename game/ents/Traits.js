@@ -45,16 +45,16 @@ export default {
     secondaryColor: 'hsl(95, 60%, 50%)',
     chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
     digestion: {
-      timeLeft: 10000,
-      baseTime: 10000
+      timeLeft: 15000,
+      baseTime: 15000
     },
     postDigestionData: [
       {
         effect: 'moveSpeed',
         type: 'offset',
         moveSpeed: 0.5,
-        duration: 15000,
-        timeLeft: 15000
+        duration: 25000,
+        timeLeft: 25000
       }
     ],
   },
@@ -135,23 +135,23 @@ export default {
     secondaryColor: 'green',
     chompEffect: Constants.collisionFunction.SMALL_CHOMP,
     digestion: {
-      timeLeft: 20000,
-      baseTime: 20000
+      timeLeft: 25000,
+      baseTime: 25000
     },
     postDigestionData: [
       {
         effect: 'turnRate',
         type: 'boolean',
         turnRate: 1,
-        duration: 12000,
-        timeLeft: 12000
+        duration: 30000,
+        timeLeft: 30000
       },
       {
         effect: 'moveSpeed',
         type: 'boolean',
         moveSpeed: 0.5,
-        duration: 30000,
-        timeLeft: 30000
+        duration: 60000,
+        timeLeft: 60000
       },
       {
         effect: 'levelUp',
