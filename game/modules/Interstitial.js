@@ -16,6 +16,9 @@ export default class Interstitial {
 
   dScore(agg, def) {
     const dPoints = def.points
+
+    if (dPoints === 0) return
+
     agg.points += dPoints
     def.points -= dPoints
     this.renderProcesses.push(

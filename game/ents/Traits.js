@@ -45,16 +45,16 @@ export default {
     secondaryColor: 'hsl(95, 60%, 50%)',
     chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
     digestion: {
-      timeLeft: 5000,
-      baseTime: 5000
+      timeLeft: 10000,
+      baseTime: 10000
     },
     postDigestionData: [
       {
         effect: 'moveSpeed',
         type: 'offset',
-        moveSpeed: 0.25,
-        duration: 8000,
-        timeLeft: 8000
+        moveSpeed: 0.5,
+        duration: 15000,
+        timeLeft: 15000
       }
     ],
   },
@@ -106,16 +106,16 @@ export default {
     secondaryColor: 'black',
     chompEffectWord: Constants.collisionFunction.BIG_CHOMP,
     digestion: {
-      timeLeft: 6000,
-      baseTime: 6000
+      timeLeft: 1000,
+      baseTime: 1000
     },
     underDigestionData: [
       {
         effect: 'moveSpeed',
         type: 'boolean',
-        moveSpeed: 4,
-        duration: 1000,
-        timeLeft: 1000
+        moveSpeed: 3,
+        duration: 2000,
+        timeLeft: 2000
       },
     ],
   },
@@ -135,8 +135,8 @@ export default {
     secondaryColor: 'green',
     chompEffect: Constants.collisionFunction.SMALL_CHOMP,
     digestion: {
-      timeLeft: 12000,
-      baseTime: 12000
+      timeLeft: 20000,
+      baseTime: 20000
     },
     postDigestionData: [
       {
@@ -149,9 +149,9 @@ export default {
       {
         effect: 'moveSpeed',
         type: 'boolean',
-        moveSpeed: 0.25,
-        duration: 12000,
-        timeLeft: 12000
+        moveSpeed: 0.5,
+        duration: 30000,
+        timeLeft: 30000
       },
       {
         effect: 'levelUp',
