@@ -26,6 +26,63 @@ export default class Interstitial {
     )
   }
 
+  addEndConditions(currentState, arrayEndWords) {
+    let endFunctions = []
+
+    if (arrayEndWords.includes(Constants.endConditions.LOSE_BY_DEATH)) {
+      endFunctions.push(() => {
+        // catch all gameover
+        if (currentState.snek.segments.length === 0) {
+          currentState.game.stateMachine.change('gameOver', {
+            snek: currentState.game.stateMachine.current.snek,
+            score: currentState.snek.points,
+            isVictory: false
+          })
+        }
+      })
+    }
+
+    if (arrayEndWords.includes(Constants.endConditions.LOSE_BY_POOP)) {
+      currentState.hasCheckedPoopification = false
+      endFunctions.push(() => {
+        // poopification check every 200ms
+        if (!currentState.hasCheckedPoopification) {
+          currentState.hasCheckedPoopification = true
+          setTimeout(() => {
+            if (currentState.snek.poopExcretionCount > Constants.survival.poopification.limit) {
+              this.startPoopificationCountdown()
+            } else {
+              currentState.hasCheckedPoopification = false
+            }
+          }, 200)
+        }
+      })
+    }
+
+    if (arrayEndWords.includes(Constants.endConditions.WIN_BY_LEVEL)) {
+      currentState.hasCheckedLevel = false
+      endFunctions.push(() => {
+        // level check every 200ms
+        if (!currentState.hasCheckedLevel) {
+          currentState.hasCheckedLevel = true
+          setTimeout(() => {
+            if (currentState.snek.level >= Constants.survival.victory.segcount) {
+              currentState.game.stateMachine.change('gameOver', {
+                snek: currentState.game.stateMachine.current.snek,
+                score: currentState.snek.points,
+                isVictory: true,
+              })
+            } else {
+              currentState.hasCheckedLevel = false
+            }
+          }, 200)
+        }
+      })
+    }
+
+    return endFunctions
+  }
+
   startPoopificationCountdown() {
     this.renderProcesses.push(
       Animations.poopificationCountdown(this.ctx)
@@ -45,7 +102,8 @@ export default class Interstitial {
           game.stateMachine.change('gameOver', {
             snek: game.world.snek,
             score: game.world.snek.points,
-            defeatCondition: Constants.survival.defeatConditions.POOPIFICATION
+            loseCondition: Constants.survival.loseConditions.POOPIFICATION,
+            isVictory: false,
           })
         }
       }
@@ -53,18 +111,18 @@ export default class Interstitial {
   }
 
   stepRenderProcesses() {
-    for (let i = this.renderProcesses.length; i >= 0; i--) {
-      this.renderProcesses[i]?.step()
-      if (this.renderProcesses[i]?.hasCompleted) {
+    for (let i = this.renderProcesses.length - 1; i >= 0; i--) {
+      this.renderProcesses[i].step()
+      if (this.renderProcesses[i].hasCompleted) {
         this.renderProcesses.splice(i, 1)
       }
     }
   }
 
   stepUpdateProcesses() {
-    for (let i = this.updateProcesses.length; i >= 0; i--) {
-      this.updateProcesses[i]?.step();
-      if (this.updateProcesses[i]?.hasCompleted) this.updateProcesses.splice(i, 1)
+    for (let i = this.updateProcesses.length - 1; i >= 0; i--) {
+      this.updateProcesses[i].step();
+      if (this.updateProcesses[i].hasCompleted) this.updateProcesses.splice(i, 1)
     }
   }
 

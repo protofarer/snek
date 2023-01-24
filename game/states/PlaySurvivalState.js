@@ -21,26 +21,18 @@ export class PlaySurvivalState extends BaseState {
     this.game.phase = CONSTANTS.PHASE_PLAY
 
     this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
-    this.hasCheckedLevel = false
+
+    this.endConditionFunctions = this.game.world.interstitial.addEndConditions(this, [
+      Constants.endConditions.LOSE_BY_DEATH,
+      Constants.endConditions.LOSE_BY_POOP,
+      Constants.endConditions.WIN_BY_LEVEL,
+    ])
   }
 
   update(t) {
     this.game.world.update(t)
     this.spawner?.(t)
-    if (!this.hasCheckedLevel) {
-      this.hasCheckedLevel = true
-      setTimeout(() => {
-        if (this.snek.level >= Constants.survival.victory.segcount) {
-          this.game.stateMachine.change('gameOver', {
-            snek: this.game.stateMachine.current.snek,
-            level: this.game.stateMachine.current.level,
-            score: this.snek.points,
-            isVictory: true,
-          })
-        }
-        this.hasCheckedLevel = false
-      }, 200)
-    }
+    this.endConditionFunctions.forEach(f => f())
   }
 
   render() {

@@ -9,16 +9,22 @@ export default {
   HARM_COOLDOWN: 2000,
   survival: {
     victory: {
-      segcount: 12
+      segcount: 10
     },
-    defeatConditions: {
+    loseConditions: {
       POOPIFICATION: 'POOPIFICATION',
       KILLED: 'KILLED'
     },
     poopification: {
-      limit: 2,
+      limit: 75,
       countdownMS: 5000,
     }
+  },
+  endConditions: {
+    LOSE_BY_POOP: 'LOSE_BY_POOP',
+    LOSE_BY_DEATH: 'LOSE_BY_DEATH',
+    WIN_BY_LEVEL: 'WIN_BY_LEVEL',
+    WIN_BY_TIME_ALIVE: 'WIN_BY_TIME_ALIVE',
   },
   spawnIntervals: {
     apple: {

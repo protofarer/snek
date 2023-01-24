@@ -95,6 +95,7 @@ export class StartState extends BaseState {
       playMode: 'test',
       state: 'gameover',
       username: 'parmenides',
+      isVictory: true,
       score: 300,
       lifespan: 3600,
       submitted_at: new Date().toISOString(),

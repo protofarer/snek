@@ -83,7 +83,7 @@ export default class Loop {
           this.game.debugGUI.params.gameTickMultiplier > 1
         ) {
           for (let i = 0; i < this.game.debugGUI.params.gameTickMultiplier - 1; i++) {
-            this.game.update()
+            this.game.update(t)
           }
         }
 

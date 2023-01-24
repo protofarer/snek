@@ -70,6 +70,8 @@ export default class Snek extends Mob {
     this.addSegment(initSegmentCount ?? this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
+    console.log(`points`, this.points)
+    
   }
 
   levelDown() {
@@ -353,6 +355,7 @@ export default class Snek extends Mob {
 
   update(t) {
     this.lifeSpan = t - this.birthTime    // non-crit, can be updated less frequently to improve performance
+    
     if (this.isTurningLeft) {
       this.turnLeft()
     } else if (this.isTurningRight) {

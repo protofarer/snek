@@ -18,7 +18,7 @@ export class GameOverState extends BaseState {
     this.game.setSnek(this.snek)
 
     const data = {
-      level: params?.level ?? 'null',
+      // level: params?.level ?? 'null',
       snek: this.snek,
       isVictory: params?.isVictory
     }

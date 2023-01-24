@@ -206,14 +206,6 @@ export default class World {
 
     this.interstitial.stepUpdateProcesses()
 
-    // catch all gameover
-    if (this.snek.segments.length === 0) {
-      this.game.stateMachine.change('gameOver', {
-        snek: this.game.stateMachine.current.snek,
-        score: this.game.snek.points,
-        level: this.game.stateMachine.current.level,
-      })
-    }
   }
 
   /** Determine whether ent mouth is contacting another ent's body 
