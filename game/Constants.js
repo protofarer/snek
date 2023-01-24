@@ -22,13 +22,13 @@ export default {
   },
   spawnIntervals: {
     apple: {
-      recurring: 2000,
+      recurring: 7000,
     },
     banana: {
-      recurring: 15000,
+      recurring: 20000,
     },
     ant: {
-      recurring: 5000,
+      recurring: 10000,
     },
     antSwarm: { 
       initial: 120000,

@@ -52,9 +52,9 @@ export default {
       {
         effect: 'moveSpeed',
         type: 'offset',
-        moveSpeed: 0.5,
-        duration: 25000,
-        timeLeft: 25000
+        moveSpeed: 0.25,
+        duration: 30000,
+        timeLeft: 30000
       }
     ],
   },
