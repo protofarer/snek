@@ -83,6 +83,20 @@ export default class Interstitial {
     return endFunctions
   }
 
+  startCentSwarmCountdown() {
+    this.renderProcesses.push(
+      Animations.centSwarmCountdown(this.ctx)
+    )
+    this.updateProcesses.push(
+      this.centSwarmCountdown(this.game)
+    )
+  }
+
+  centSwarmCountdown(game) {
+    console.log(`implement centswarmcountdown`, )
+    
+  }
+
   startPoopificationCountdown() {
     this.renderProcesses.push(
       Animations.poopificationCountdown(this.ctx)
