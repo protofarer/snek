@@ -75,7 +75,7 @@ export default class Panel {
       this.lifespan.innerHTML = 
         `Lifespan: ${Math.trunc(this.snek.lifeSpan / 1000)}s`
       this.segcount.innerHTML =
-        `Length: <strong>${this.snek.segments.length} / ${Constants.survival.victory.segcount}</strong>`
+        `Length: <strong>${this.snek.segments.length} / ${Constants.survival.endConditions.winByLevel.segCount}</strong>`
 
       this.expSegments.forEach((seg, idx) => {
         const segmentsFilled = Math.floor(

@@ -12,6 +12,7 @@ export class PlayTestState extends BaseState {
   constructor(game, params) {
     super()
     this.game = game
+    this.game.mode = 'survival'
     this.game.phase = CONSTANTS.PHASE_PLAY
     this.startT = this.game.t
     this.level = 't'
@@ -28,9 +29,9 @@ export class PlayTestState extends BaseState {
     )
 
     this.endConditionFunctions = this.game.world.interstitial.addEndConditions(this, [
-      Constants.endConditions.LOSE_BY_DEATH,
-      Constants.endConditions.LOSE_BY_POOP,
-      Constants.endConditions.WIN_BY_LEVEL,
+      Constants.survival.endConditions.loseByDeath.WORD,
+      Constants.survival.endConditions.loseByPoop.WORD,
+      Constants.survival.endConditions.winByLevel.WORD,
     ])
   }
 

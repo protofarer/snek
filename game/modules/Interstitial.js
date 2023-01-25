@@ -29,7 +29,7 @@ export default class Interstitial {
   addEndConditions(currentState, arrayEndWords) {
     let endFunctions = []
 
-    if (arrayEndWords.includes(Constants.endConditions.LOSE_BY_DEATH)) {
+    if (arrayEndWords.includes(Constants[this.game.mode].endConditions.loseByDeath.WORD)) {
       endFunctions.push(() => {
         // catch all gameover
         if (currentState.snek.segments.length === 0) {
@@ -42,15 +42,15 @@ export default class Interstitial {
       })
     }
 
-    if (arrayEndWords.includes(Constants.endConditions.LOSE_BY_POOP)) {
+    if (arrayEndWords.includes(Constants[this.game.mode].endConditions.loseByPoop.WORD)) {
       currentState.hasCheckedPoopification = false
       endFunctions.push(() => {
         // poopification check every 200ms
         if (!currentState.hasCheckedPoopification) {
           currentState.hasCheckedPoopification = true
           setTimeout(() => {
-            if (currentState.snek.poopExcretionCount > Constants.survival.poopification.limit) {
-              this.startPoopificationCountdown()
+            if (currentState.snek.poopExcretionCount > Constants.survival.endConditions.loseByPoop.limit) {
+              this.initializePoopification()
             } else {
               currentState.hasCheckedPoopification = false
             }
@@ -59,14 +59,14 @@ export default class Interstitial {
       })
     }
 
-    if (arrayEndWords.includes(Constants.endConditions.WIN_BY_LEVEL)) {
+    if (arrayEndWords.includes(Constants[this.game.mode].endConditions.winByLevel.WORD)) {
       currentState.hasCheckedLevel = false
       endFunctions.push(() => {
         // level check every 200ms
         if (!currentState.hasCheckedLevel) {
           currentState.hasCheckedLevel = true
           setTimeout(() => {
-            if (currentState.snek.level >= Constants.survival.victory.segcount) {
+            if (currentState.snek.level >= Constants[this.game.mode].endConditions.winByLevel.segCount) {
               currentState.game.stateMachine.change('gameOver', {
                 snek: currentState.game.stateMachine.current.snek,
                 score: currentState.snek.points,
@@ -87,7 +87,7 @@ export default class Interstitial {
     // countdown to begin 1 min in advance of swarm
     this.renderProcesses.push(Animations.countdown(
       this.ctx, 
-      'A centipede swarm is coming for you!', 
+      'A centipede swarm is coming for you in:', 
       Constants.events.centipedeSwarm.warningDuration,
       {
         delayMS: Constants.events.centipedeSwarm.initial 
@@ -113,31 +113,32 @@ export default class Interstitial {
   }
 
 
-  startPoopificationCountdown() {
+  initializePoopification() {
     this.renderProcesses.push(
-      Animations.poopificationCountdown(this.ctx)
+      Animations.countdown(
+        this.ctx,
+        'You will be overpowered by the toxicity emanating \
+          from the prolifically strewn poop in:',
+        Constants[this.game.mode].endConditions.loseByPoop.warningDuration,
+      )
     )
-    this.updateProcesses.push(
-      this.countdownPoopification(this.game)
-    )
-  }
-
-  countdownPoopification(game) {
-    let t = 0
-    return {
-      hasCompleted: false,
-      step() {
-        t += Constants.TICK
-        if (t >= Constants.survival.poopification.countdownMS) {
-          game.stateMachine.change('gameOver', {
-            snek: game.world.snek,
-            score: game.world.snek.points,
-            loseCondition: Constants.survival.loseConditions.POOPIFICATION,
-            isVictory: false,
-          })
+    this.updateProcesses.push(((game) => {
+      let t = 0
+      return {
+        hasCompleted: false,
+        step() {
+          t += Constants.TICK
+          if (t >= Constants[game.mode].endConditions.loseByPoop.warningDuration) {
+            game.stateMachine.change('gameOver', {
+              snek: game.world.snek,
+              score: game.world.snek.points,
+              loseCondition: Constants[game.mode].endConditions.loseByPoop.WORD,
+              isVictory: false,
+            })
+          }
         }
       }
-    }
+    })(this.game))
   }
 
   stepRenderProcesses() {

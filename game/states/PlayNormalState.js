@@ -12,6 +12,7 @@ export class PlayNormalState extends BaseState {
   constructor(game, params) {
     super()
     this.game = game
+    this.game.mode = 'normal'
 
     this.snek = params?.snek
       || new Snek(this.game.ctx, null, this.game)

@@ -7,25 +7,42 @@ export default {
   CANVAS_WIDTH: 400,
   CANVAS_HEIGHT: 600,
   HARM_COOLDOWN: 2000,
+
   survival: {
-    victory: {
-      segcount: 10
-    },
-    loseConditions: {
-      POOPIFICATION: 'POOPIFICATION',
-      KILLED: 'KILLED'
-    },
-    poopification: {
-      limit: 75,
-      countdownMS: 5000,
+    endConditions: {
+      winByLevel: {
+        WORD: 'WIN_BY_LEVEL',
+        segCount: 4
+      },
+      loseByPoop: {
+        WORD: 'LOSE_BY_POOP',
+        limit: 3,
+        warningDuration: 60000,
+      },
+      loseByDeath: {
+        WORD: 'LOSE_BY_DEATH'
+      },
     }
   },
-  endConditions: {
-    LOSE_BY_POOP: 'LOSE_BY_POOP',
-    LOSE_BY_DEATH: 'LOSE_BY_DEATH',
-    WIN_BY_LEVEL: 'WIN_BY_LEVEL',
-    WIN_BY_TIME_ALIVE: 'WIN_BY_TIME_ALIVE',
+
+  normal: {
+    endConditions: {
+      loseByPoop: {
+        WORD: 'LOSE_BY_POOP',
+        warningDuration: 60000
+      },
+      loseByDeath: {
+        WORD: 'LOSE_BY_DEATH'
+      },
+      winByLevel: {
+        WORD: 'WIN_BY_LEVEL',
+      },
+      winByLifespan: {
+        WORD: 'WIN_BY_TIME_ALIVE', 
+      },
+    },
   },
+
   events: {
     centipedeSwarm: {
       WORD: 'CENTIPEDE_SWARM',
@@ -38,6 +55,7 @@ export default {
       cooldown: 30000,
     }
   },
+
   spawnIntervals: {
     apple: {
       recurring: 2000,
@@ -55,6 +73,7 @@ export default {
       initial: 60000,
     },
   },
+
   spawnConditionals: {
     secondCentipede: { segcount: 15 },
   },

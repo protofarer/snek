@@ -99,7 +99,7 @@ export default class Animations {
             }
             const timeLeftSec = Math.floor((totalFrames - currentFrame) * Constants.TICK / 1000)
             const timeLeftMS = Math.floor((totalFrames - currentFrame) * Constants.TICK / 100) % 10
-            const timeLeftText = `${timeLeftSec}.${timeLeftMS} seconds left!`
+            const timeLeftText = `${timeLeftSec}.${timeLeftMS} seconds!`
             ctx.fillText(timeLeftText, Constants.CANVAS_WIDTH * 0.25, 25 * lines.length)
             ctx.restore()
           }

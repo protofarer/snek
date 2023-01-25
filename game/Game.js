@@ -25,14 +25,13 @@ import Audio from './modules/audio'
  * @param {HTMLDivElement} container - root container for game area and panel
  * @property {boolean} isDebugOn - window session stored debug mode state
  * @property {Number} phase - the phase that the game is currently in
+ * @property {string} mode - which kind of play mode is in session, set by state machine
  */
 export default class Game {
-
+  mode
   constructor (container) {
-    this.phase = Constants.PHASE_PAUSE
-    this.t = -1
-
     this.setupPage(container)
+    this.init()
     this.load()
 
     this.stateMachine = new StateMachine({
@@ -54,13 +53,18 @@ export default class Game {
     this.loop = new Loop(this)
   }
 
-  load() {
+  init() {
+    this.phase = Constants.PHASE_PAUSE
+    this.t = -1
     this.clock = new Clock(this.ctx, this)
     this.world = new World(this)
+    this.levelMaker = new LevelMaker(this)
+  }
+
+  load() {
     const Sounds = Audio()
     this.randomSounds = Sounds.random
     this.sounds = Sounds.sounds
-    this.levelMaker = new LevelMaker(this)
   }
 
   setupDebug() {
@@ -164,25 +168,10 @@ export default class Game {
     if (import.meta.env.DEV) {
       window.sessionStorage.setItem('isDebugOn', toDebug)
     }
-
     // TODO clean this up, why not just reload?
     const currURL = new URL(window.location.href)
     location.replace(currURL.toString())
     window.location.reload()
-
-    // **********************************************************************
-    // * WIP restart game more cleanly (without forcing page reload)
-    // **********************************************************************
-    // this.loop.stop()
-    // const removeChildren = (parent) => {
-    //   while (parent.lastChild) {
-    //     parent.removeChild(parent.lastChild)
-    //   }
-    // }
-    // removeChildren(this.container)
-    // newGame()
-    // **********************************************************************
-    // **********************************************************************
   }
 
   setSnek(snek) {
