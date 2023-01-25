@@ -126,8 +126,7 @@ export default class Interstitial {
       renderProcesses.push(
         Animations.countdown(
           this.ctx,
-          'You will be overpowered by the toxicity emanating \
-            from the prolifically strewn poop in:',
+          'You will be overpowered by the toxicity emanating from the prolifically strewn poop in:',
           Constants[game.mode].endConditions.loseByPoop.warningDuration,
         )
       )

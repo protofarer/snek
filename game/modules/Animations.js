@@ -50,14 +50,14 @@ export default class Animations {
     font: '20px Arial',
     fillStyle: 'red',
     x: Constants.CANVAS_WIDTH * 0.1,
-    y: Constants.CANVAS_HEIGHT * 0.1,
+    y: Constants.CANVAS_HEIGHT * 0.09,
     isFlashing: true,
     delayMS: 0,
   }) {
     const font = params?.font || '20px Arial'
     const fillStyle = params?.fillStyle || 'red'
     const x = params?.x || Constants.CANVAS_WIDTH * 0.1
-    const y = params?.y || Constants.CANVAS_HEIGHT * 0.1
+    const y = params?.y || Constants.CANVAS_HEIGHT * 0.09
     const isFlashing = Object.hasOwn(params, 'isFlashing') 
       ? params.isFlashing 
       : true
@@ -99,8 +99,9 @@ export default class Animations {
             }
             const timeLeftSec = Math.floor((totalFrames - currentFrame) * Constants.TICK / 1000)
             const timeLeftMS = Math.floor((totalFrames - currentFrame) * Constants.TICK / 100) % 10
-            const timeLeftText = `${timeLeftSec}.${timeLeftMS} seconds!`
-            ctx.fillText(timeLeftText, Constants.CANVAS_WIDTH * 0.25, 25 * lines.length)
+            const timeLeftText = `${timeLeftSec}.${timeLeftMS}`
+            ctx.font = 'bold 30px Arial'
+            ctx.fillText(timeLeftText, Constants.CANVAS_WIDTH * 0.35, 25 * lines.length + 15)
             ctx.restore()
           }
           currentFrame++

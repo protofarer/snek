@@ -16,7 +16,7 @@ export default {
       },
       loseByPoop: {
         WORD: 'LOSE_BY_POOP',
-        limit: 3,
+        limit: 1,
         warningDuration: 60000,
       },
       loseByDeath: {
