@@ -20,7 +20,8 @@ export class PlayTestState extends BaseState {
       || new Snek(this.game.ctx, null, this.game)
     this.game.setSnek(this.snek)
 
-    this.spawner = this.game.levelMaker.generateLevel(
+    // need a better name than spawner, since it includes events
+    this.levelUpdate = this.game.levelMaker.generateLevel(
       this.level, 
       this.snek, 
       this.startT
@@ -35,7 +36,7 @@ export class PlayTestState extends BaseState {
 
   update(t) {
     this.game.world.update(t)
-    this.spawner?.(t)
+    this.levelUpdate(t)
     this.endConditionFunctions.forEach(f => f())
   }
 

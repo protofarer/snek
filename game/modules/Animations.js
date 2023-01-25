@@ -46,12 +46,86 @@ export default class Animations {
     }  
   }
 
+  static countdown(ctx, text, durationMS, params={
+    font: '20px Arial',
+    fillStyle: 'red',
+    x: Constants.CANVAS_WIDTH * 0.1,
+    y: Constants.CANVAS_HEIGHT * 0.1,
+    isFlashing: true,
+    delayMS: 0,
+  }) {
+    const font = params?.font || '20px Arial'
+    const fillStyle = params?.fillStyle || 'red'
+    const x = params?.x || Constants.CANVAS_WIDTH * 0.1
+    const y = params?.y || Constants.CANVAS_HEIGHT * 0.1
+    const isFlashing = Object.hasOwn(params, 'isFlashing') 
+      ? params.isFlashing 
+      : true
+    const delayMS = Object.hasOwn(params, 'delayMS')
+      ? params.delayMS
+      : 0
+    
+    let timePassedMS = 0
+    let totalFrames = Math.floor((durationMS) / Constants.TICK)
+    let currentFrame = 0
+    const visibilityIntervalFrames = 250 / Constants.TICK
+    let visibilityAccumFrames = 0
+
+    let words = text.split(' ')
+    let lines = words.reduce((prev, curr) => {
+      if (prev[prev.length - 1]?.length + curr.length + 1 <= 40) {
+        prev[prev.length - 1] = prev[prev.length - 1] + " " + curr
+        return prev
+      } else {
+          prev.push(curr)
+        return prev
+      }
+    }, [])
+
+    return {
+      hasCompleted: false,
+      isVisible: true,
+      step() {
+        timePassedMS += Constants.TICK
+        if (timePassedMS >= delayMS) {
+          if (this.isVisible) {
+            ctx.save()
+            ctx.translate(x, y)
+            ctx.font = font
+            ctx.fillStyle = fillStyle
+      
+            for (let i = 0; i < lines.length; ++i) {
+              ctx.fillText(lines[i], 0, 25*i)
+            }
+            const timeLeftSec = Math.floor((totalFrames - currentFrame) * Constants.TICK / 1000)
+            const timeLeftMS = Math.floor((totalFrames - currentFrame) * Constants.TICK / 100) % 10
+            const timeLeftText = `${timeLeftSec}.${timeLeftMS} seconds left!`
+            ctx.fillText(timeLeftText, Constants.CANVAS_WIDTH * 0.25, 25 * lines.length)
+            ctx.restore()
+          }
+          currentFrame++
+  
+          if (isFlashing) {
+            visibilityAccumFrames++
+            if (visibilityAccumFrames >= visibilityIntervalFrames) {
+              this.isVisible = !this.isVisible
+              visibilityAccumFrames = 0
+            }
+          }
+          if (currentFrame === totalFrames) this.hasCompleted = true
+        }
+      }
+    }
+
+  }
+
+
   static poopificationCountdown(ctx) {
     let totalFrames = Math.floor(Constants.survival.poopification.countdownMS / Constants.TICK)
     let currentFrame = 0
     const x0 = Constants.CANVAS_WIDTH * 0.01
     const y0 = Constants.CANVAS_HEIGHT * 0.2
-    const font = '16px Arial'
+    const font = '20px Arial'
     const fillStyle = 'red'
 
     const visibilityIntervalFrames = 500 / Constants.TICK
@@ -67,7 +141,7 @@ export default class Animations {
         if (this.isVisible) {
           ctx.save()
           ctx.translate(x0, y0)
-          ctx.font = '20px Arial'
+          ctx.font = font
           ctx.fillStyle = fillStyle
     
           ctx.fillText(text1, 0, 0)

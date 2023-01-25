@@ -12,26 +12,23 @@ export default class LevelMaker {
       x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
     }
-    console.log(`level`, level)
-    
-    
     switch (level) {
       case 1:
         return this.spawnLevelOne()
       case 's':
-        return this.spawnSurvival(playStartT)
+        return this.initializeSurvivalLevel(playStartT)
       case 'd':   // debug level
         this.initSpawnSurvival()
-        return this.spawnLevelZero(snek)
+        return this.initializeLevelZero(snek)
       case 't':
-        return this.spawnTest(playStartT)
+        return this.initializeTestLevel(playStartT)
       default:
         console.error('Not a valid initial spawn levelmaker code')
     }
   }
 
-  spawnOnInterval(entSpeciesWord, spawnStartT, world) {
-    let lastSpawnT = spawnStartT
+  spawnOnInterval(entSpeciesWord, playStartT, world) {
+    let lastSpawnT = playStartT
 
     const spawnCondition = this.game.world.getEntClass(entSpeciesWord)
       .spawnCondition?.(this.game.world)
@@ -65,35 +62,49 @@ export default class LevelMaker {
     }
   }
 
-  spawnTest(playStartT) {
+  spawnOnCondition(spawnEventWord, playStartT, world) {
+    switch (spawnEventWord) {
+      case Constants.events.antSwarm.WORD:
+        // TODO move to Ant
+        return world.getEntClass('ant').swarmListener(playStartT, world)
+      default:
+        console.log(`Invalid spawn event word`, )
+    }
+  }
+
+  spawnsOnCondition(listOfSpawnEvents, playStartT) {
+    const conditionalSpawners = listOfSpawnEvents.map(spawnEventWord => this.spawnOnCondition(
+      spawnEventWord,
+      playStartT,
+      this.game.world
+    ))
+
+    return (t) => {
+      for (let i = 0; i < conditionalSpawners.length; ++i) {
+        conditionalSpawners[i](t)
+      }
+    }
+  }
+
+  initializeTestLevel(playStartT) {
     this.initSpawnSurvival()
     const intervalSpawner = this.spawnsOnInterval([
       'apple', 'mango', 'banana', 'ant'
     ], playStartT)
 
-    // const eventSpawner = this.spawnE
+    const conditionalSpawner = this.spawnsOnCondition([
+      Constants.events.antSwarm.WORD,
+    ], playStartT)
+
+    this.game.world.interstitial.initializeSurvivalCentSwarmCountdown()
 
     // entWord and a condition to check before spawning
     let hasCentipedeSpawned = false
     let hasSecondCentipedeSpawned = false
-    let isAntSwarmSpawning = false
 
     return (t) => {
       intervalSpawner(t)
-
-      if ((this.game.world.countSweets() > 15 
-        || (t - playStartT) === Constants.spawnIntervals.antSwarm.initial) 
-        && !isAntSwarmSpawning
-      ) {
-        isAntSwarmSpawning = true
-        this.game.world.spawnEnts('ant', 5)
-        for (let i = 1; i < 6; ++i) {
-          setTimeout(() => this.game.world.spawnEnts('ant', 3), i*1000)
-        }
-        // setTimeout(() => {
-          // isAntSwarmSpawning = false
-        // }, Constants.spawnIntervals.antSwarm.recurring)
-      }
+      conditionalSpawner(t)
 
       if (!hasCentipedeSpawned && t - playStartT >= 60000) {
         this.game.world.spawnEnts('centipede')
@@ -121,7 +132,7 @@ export default class LevelMaker {
   }
 
   // debug level
-  spawnLevelZero() {
+  initializeLevelZero() {
     this.case = new Scenarios(this.game)
     this.case.base()
     // this.addEnt('apple')
@@ -158,7 +169,7 @@ export default class LevelMaker {
   /** Ongoing spawn behavior for survival mode
    * @method
    */
-  spawnSurvival(tPlayStart) {
+  initializeSurvivalLevel(tPlayStart) {
     this.initSpawnSurvival()
     let isAppleSpawning = false
     let isMangoSpawning = false
@@ -208,7 +219,7 @@ export default class LevelMaker {
         }
         // setTimeout(() => {
           // isAntSwarmSpawning = false
-        // }, Constants.spawnIntervals.antSwarm.recurring)
+        // }, Constants.spawnIntervals.antSwarm.cooldown)
       }
 
       if (!hasCentipedeSpawned && t - tPlayStart >= 60000) {

@@ -83,34 +83,46 @@ export default class Interstitial {
     return endFunctions
   }
 
-  detectTimeForEvent(t) {
+  initializeSurvivalCentSwarmCountdown() {
+    // countdown to begin 1 min in advance of swarm
+    this.renderProcesses.push(Animations.countdown(
+      this.ctx, 
+      'A centipede swarm is coming for you!', 
+      Constants.events.centipedeSwarm.warningDuration,
+      {
+        delayMS: Constants.events.centipedeSwarm.initial 
+          - Constants.events.centipedeSwarm.warningDuration
+      }
+    ))
 
-  }
-
-  startCentSwarmCountdown() {
-    this.renderProcesses.push(
-      Animations.centSwarmCountdown(this.ctx)
+    // actual swarm
+    this.updateProcesses.push(((world) => {
+      let t = 0
+      return {
+        hasCompleted: false,
+        step() {
+          t += Constants.TICK
+          if (t >= Constants.events.centipedeSwarm.initial) {
+            world.getEntClass('centipede').spawnSwarm(world)
+            this.hasCompleted = true
+          }
+        }
+      }
+    })(this.game.world)
     )
-    this.updateProcesses.push(
-      this.centSwarmCountdown(this.game)
-    )
   }
 
-  centSwarmCountdown(game) {
-    console.log(`implement centswarmcountdown`, )
-    
-  }
 
   startPoopificationCountdown() {
     this.renderProcesses.push(
       Animations.poopificationCountdown(this.ctx)
     )
     this.updateProcesses.push(
-      this.poopificationCountdown(this.game)
+      this.countdownPoopification(this.game)
     )
   }
 
-  poopificationCountdown(game) {
+  countdownPoopification(game) {
     let t = 0
     return {
       hasCompleted: false,

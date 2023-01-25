@@ -27,7 +27,16 @@ export default {
     WIN_BY_TIME_ALIVE: 'WIN_BY_TIME_ALIVE',
   },
   events: {
-    CENTIPEDE_SWARM: 'CENTIPEDE_SWARM',
+    centipedeSwarm: {
+      WORD: 'CENTIPEDE_SWARM',
+      initial: 7*60000,
+      // initial: 10000,
+      warningDuration: 60000
+    },
+    antSwarm: {
+      WORD: 'ANT_SWARM',
+      cooldown: 30000,
+    }
   },
   spawnIntervals: {
     apple: {
@@ -38,10 +47,6 @@ export default {
     },
     ant: {
       recurring: 3000,
-    },
-    antSwarm: { 
-      initial: 120000,
-      recurring: 20000,
     },
     mango: {
       recurring: 30000,

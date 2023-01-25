@@ -1,3 +1,4 @@
+import Constants from '../../Constants.js'
 import Segment from '../immobs/Segment'
 import Traits from '../Traits'
 import { turnRandomlySmoothly } from '../../behaviors/movements'
@@ -36,6 +37,35 @@ export default class Centipede extends Mob {
     this.baseSegmentCount = baseSegmentCount || this.baseSegmentCount
     this.addSegments(this.baseSegmentCount)
     this.setHitAreas()
+  }
+
+  static swarmListener(playStartT, world) {
+    let lastSpawnT = playStartT
+
+    let tickCount = 0
+    let tick1 = null
+    // let tickDetected = null
+
+    return (t) => {
+      if (tickCount < 30) {
+        tickCount++
+        if (tickCount === 29) tick1 = t
+      } else if (tickCount === 30 && tick1 > 0) {
+        tickDetected = t - tick1
+        tick1 = null
+      }
+
+      if (t - lastSpawnT >= Constants.events.centipedeSwarm.initial) {
+        lastSpawnT = Infinity
+        Centipede.spawnSwarm()
+      }
+    }
+  }
+
+  static spawnSwarm(world) {
+    for (let i = 1; i < 5; ++i) {
+      setTimeout(() => world.spawnEnts('centipede', 3), i*1000)
+    }
   }
 
   addSegments(n) {

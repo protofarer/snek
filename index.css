@@ -81,7 +81,7 @@ body {
 
 .touch-area-control {
   background-color: transparent;
-  border: 3px dotted purple;
+  /* border: 3px dotted purple; */
   flex: 1 0;
 }
 
@@ -187,10 +187,6 @@ button {
   background-color: hsl(0, 75%, 40%);
   font-size:xxx-large;
   user-select: none;
-}
-
-.touch-control-area {
-  /* user-select: none; */
 }
 
 #action-butt {

@@ -2,6 +2,7 @@ import { turnErratically } from '../../behaviors/movements'
 import Mob from './Mob'
 import { getGameObject, loadTraits } from '../../utils/helpers'
 import Traits from '../Traits'
+import Constants from '../../Constants.js'
 
 export default class Ant extends Mob {
   static species = 'ant'
@@ -36,6 +37,35 @@ export default class Ant extends Mob {
 
   static spawnCondition(world) {
     return () => world.countSweets() > 4
+  }
+
+  static swarmListener(playStartT, world) {
+    let lastSpawnT = playStartT
+
+    let tickCount = 0
+    let tick1 = null
+    let tickDetected = null
+
+    return (t) => {
+      if (tickCount < 30) {
+        tickCount++
+        if (tickCount === 29) tick1 = t
+      }      
+      if (tickCount === 30 && tick1 > 0) {
+        tickDetected = t - tick1
+        tick1 = null
+      }
+      if (t !== playStartT && tickDetected === null) {
+        tickDetected = t - playStartT
+      }
+      if (world.countSweets() > 5 && (t - lastSpawnT >= Constants.events.antSwarm.cooldown)) {
+        lastSpawnT = t
+        world.spawnEnts('ant', 5)
+        for (let i = 1; i < 6; ++i) {
+          setTimeout(() => world.spawnEnts('ant', 3), i*1000*(tickDetected/Constants.TICK))
+        }
+      }
+    }
   }
 
   grab(ent) {

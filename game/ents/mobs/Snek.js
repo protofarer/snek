@@ -70,8 +70,6 @@ export default class Snek extends Mob {
     this.addSegment(initSegmentCount ?? this.baseSegmentCount)
     this.setHitAreas()
     this.initEventListeners()
-    console.log(`points`, this.points)
-    
   }
 
   levelDown() {
