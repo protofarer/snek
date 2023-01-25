@@ -43,3 +43,7 @@ const rawResponse = await fetch(`http://localhost:3000/snek/submit-data`, {
 }
 
 // await af()
+
+console.log(`sessionstore`, window.sessionStorage)
+console.log(`localstore`, window.localStorage)
+

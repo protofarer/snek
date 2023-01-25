@@ -25,10 +25,4 @@ dist-ssr
 *.sln
 *.sw?
 
-
-
-deploy.sh
-repo.sh
-export.sh
-build-env.sh
 .env

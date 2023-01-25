@@ -175,6 +175,14 @@ export default class Segment extends Immob {
         Digestion.activatePostDigestionEffects.call(this, postDigestionData, this.getHeadEnt())
       }
         
+      if (this.entUnderDigestion.species !== 'poop') {
+        const map = this.getHeadEnt().entsDigested
+        const keyExists = map.has(this.entUnderDigestion.species)
+        map.set(this.entUnderDigestion.species, keyExists 
+          ? map.get(this.entUnderDigestion.species) + 1
+          : 1
+        )
+      }
       // * - If digested ent was poop, pass it immediately?
       if (this.entUnderDigestion.species === 'poop'
         || this.entUnderDigestion.species === 'pebble') {

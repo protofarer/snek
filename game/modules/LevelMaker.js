@@ -88,6 +88,10 @@ export default class LevelMaker {
 
   initializeTestLevel(playStartT) {
     this.initSpawnSurvival()
+    this.addEnt('banana')
+    this.addEnt('mango')
+    this.addEnt('apple')
+
     const intervalSpawner = this.spawnsOnInterval([
       'apple', 'mango', 'banana', 'ant'
     ], playStartT)

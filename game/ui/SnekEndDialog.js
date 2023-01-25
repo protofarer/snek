@@ -11,6 +11,8 @@ export default class SnekEndDialog {
     this.game = game
     
     this.data = data
+    console.log(`dialogdata`, data)
+    
 
     // summary stats
     this.summary = [
@@ -20,6 +22,7 @@ export default class SnekEndDialog {
       ['score', this.data.snek.points],
     ]
 
+    this.linesEntsDigested = data.linesEntsDigested
     this.size = {
       w: this.game.canvas.width * 0.8,
       h: this.game.canvas.height * 0.75
@@ -57,9 +60,6 @@ export default class SnekEndDialog {
       { once: true},
     )
     this.newGameButton.show()
-    console.log(`topleft newGameButt: ${this.newGameButton.origin.x - 2},${this.newGameButton.origin.y - 2}`, )
-    console.log(`newGameButt parentOrigin:${this.origin.x}=${this.newGameButton.parentOrigin.x}`, )
-    
 
     this.animatedHeadline = animatedTextLine(
       this.game.ctx,
@@ -107,11 +107,22 @@ export default class SnekEndDialog {
       this.animatedHeadline()
 
       this.game.ctx.save()
-      this.game.ctx.translate(0, 70)
+      this.game.ctx.translate(this.origin.x + 75, 70)
       for (let i = 0; i < this.summary.length; ++i) {
-        this.drawText({ x: this.origin.x + 75, y: 18 * i }, `${this.summary[i][0]}: ${this.summary[i][1]}`)
+        this.drawText(
+          { x: 0, y: 18 * i }, 
+          `${this.summary[i][0]}: ${this.summary[i][1]}`
+        )
       }
       this.game.ctx.restore()
+
+      this.game.ctx.save()
+      this.game.ctx.translate(this.origin.x + 75, 150)
+      for (let i = 0; i < this.linesEntsDigested.length; ++i) {
+        this.drawText({x:0,y:i*20}, this.linesEntsDigested[i])
+      }
+      this.game.ctx.restore()
+
 
       this.newGameButton.render()
 

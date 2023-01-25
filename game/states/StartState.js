@@ -91,46 +91,16 @@ export class StartState extends BaseState {
       label: 'Test: kade data',
     }
 
-    const data = {
-      playMode: 'test',
-      state: 'gameover',
-      username: 'parmenides',
-      isVictory: true,
-      score: 300,
-      lifespan: 3600,
-      submitted_at: new Date().toISOString(),
-    }
-    const testAction = async () => {
-      console.log('IN testAction')
-      // can I do a web fetch without using supabase client?
-      const response = await fetch(`http://localhost:3000/snek/submit-data`, {
-        method: 'POST',
-        // change to same-origin after debug
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data),
-      })
-
-      const rd = await response.json()
-
-      // const rdata = await JSON.parse(response)
-
-      console.log('response:', rd)
-    }
-
-
-    this.testButt = new ModalButton(
-      null,
-      this.game.ctx,
-      testButtData,
-      testAction,
-      // () => this.game.stateMachine.change('playTest', {
-      // }),
-      { once: true }
-    )
-    this.testButt.show()
+    // this.testButt = new ModalButton(
+    //   null,
+    //   this.game.ctx,
+    //   testButtData,
+    //   testAction,
+    //   // () => this.game.stateMachine.change('playTest', {
+    //   // }),
+    //   { once: true }
+    // )
+    // this.testButt.show()
 
     this.game.touchAreaContainer.style.display = 'none'
     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -171,7 +141,7 @@ export class StartState extends BaseState {
 
     // this.normalButt.render()
     this.survivalButt.render()
-    this.testButt.render()
+    // this.testButt.render()
 
     const yInstructions = 420
     const xInstructions = 30

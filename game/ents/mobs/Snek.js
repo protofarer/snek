@@ -56,6 +56,7 @@ export default class Snek extends Mob {
   lifeSpan = 0
   segments = []
   poopExcretionCount = 0
+  entsDigested = new Map()
 
   constructor(ctx, startPosition=null, parent=null, initSegmentCount=null) {
     super(ctx, startPosition, parent)

@@ -125,7 +125,8 @@ export default class DebugGUI {
       .name('reset: debug')
 
     const endGame = () => { this.game.stateMachine.change('gameOver', {
-      snek: this.game.world.snek
+      snek: this.game.world.snek,
+      isVictory: true
     })}
      guiMutate.add({ endGame }, 'endGame')
 
