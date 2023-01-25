@@ -20,7 +20,11 @@ export class PlayTestState extends BaseState {
       || new Snek(this.game.ctx, null, this.game)
     this.game.setSnek(this.snek)
 
-    this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
+    this.spawner = this.game.levelMaker.generateLevel(
+      this.level, 
+      this.snek, 
+      this.startT
+    )
 
     this.endConditionFunctions = this.game.world.interstitial.addEndConditions(this, [
       Constants.endConditions.LOSE_BY_DEATH,

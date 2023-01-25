@@ -83,6 +83,10 @@ export default class Interstitial {
     return endFunctions
   }
 
+  detectTimeForEvent(t) {
+
+  }
+
   startCentSwarmCountdown() {
     this.renderProcesses.push(
       Animations.centSwarmCountdown(this.ctx)

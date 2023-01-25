@@ -26,15 +26,18 @@ export default {
     WIN_BY_LEVEL: 'WIN_BY_LEVEL',
     WIN_BY_TIME_ALIVE: 'WIN_BY_TIME_ALIVE',
   },
+  events: {
+    CENTIPEDE_SWARM: 'CENTIPEDE_SWARM',
+  },
   spawnIntervals: {
     apple: {
-      recurring: 7000,
+      recurring: 2000,
     },
     banana: {
       recurring: 20000,
     },
     ant: {
-      recurring: 10000,
+      recurring: 3000,
     },
     antSwarm: { 
       initial: 120000,

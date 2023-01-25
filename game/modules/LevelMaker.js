@@ -7,7 +7,7 @@ export default class LevelMaker {
     this.addEnt = this.game.world.addEnt.bind(this.game.world)
   }
 
-  generateLevel(level, snek) {
+  generateLevel(level, snek, playStartT) {
     snek.position = { 
       x: Constants.SNEK_START_POS.xRatio * this.game.canvas.width,
       y: Constants.SNEK_START_POS.yRatio * this.game.canvas.height
@@ -19,21 +19,99 @@ export default class LevelMaker {
       case 1:
         return this.spawnLevelOne()
       case 's':
-        return this.spawnSurvival(this.game.t)
+        return this.spawnSurvival(playStartT)
       case 'd':   // debug level
         this.initSpawnSurvival()
         return this.spawnLevelZero(snek)
       case 't':
-        return this.spawnTest()
+        return this.spawnTest(playStartT)
       default:
         console.error('Not a valid initial spawn levelmaker code')
     }
   }
 
-  spawnTest() {
-    this.addEnt('apple')
-    this.addEnt('apple')
-    this.addEnt('banana')
+  spawnOnInterval(entSpeciesWord, spawnStartT, world) {
+    let lastSpawnT = spawnStartT
+
+    const spawnCondition = this.game.world.getEntClass(entSpeciesWord)
+      .spawnCondition?.(this.game.world)
+
+    return (t) => {
+      if (t - lastSpawnT >= Constants.spawnIntervals[entSpeciesWord].recurring) {
+        if (spawnCondition) {
+          if (spawnCondition()) {
+            world.spawnEnts(entSpeciesWord)
+            lastSpawnT = t
+          }
+        } else {
+          world.spawnEnts(entSpeciesWord)
+          lastSpawnT = t
+        }
+      }
+    }
+  }
+
+  spawnsOnInterval(listOfEnts, playStartT) {
+    const intervalSpawners = listOfEnts.map(entWord => this.spawnOnInterval(
+        entWord, 
+        playStartT, 
+        this.game.world
+    ))
+
+    return (t) => {
+      for (let i = 0; i < intervalSpawners.length; ++i) {
+        intervalSpawners[i](t)
+      }
+    }
+  }
+
+  spawnTest(playStartT) {
+    this.initSpawnSurvival()
+    const intervalSpawner = this.spawnsOnInterval([
+      'apple', 'mango', 'banana', 'ant'
+    ], playStartT)
+
+    // const eventSpawner = this.spawnE
+
+    // entWord and a condition to check before spawning
+    let hasCentipedeSpawned = false
+    let hasSecondCentipedeSpawned = false
+    let isAntSwarmSpawning = false
+
+    return (t) => {
+      intervalSpawner(t)
+
+      if ((this.game.world.countSweets() > 15 
+        || (t - playStartT) === Constants.spawnIntervals.antSwarm.initial) 
+        && !isAntSwarmSpawning
+      ) {
+        isAntSwarmSpawning = true
+        this.game.world.spawnEnts('ant', 5)
+        for (let i = 1; i < 6; ++i) {
+          setTimeout(() => this.game.world.spawnEnts('ant', 3), i*1000)
+        }
+        // setTimeout(() => {
+          // isAntSwarmSpawning = false
+        // }, Constants.spawnIntervals.antSwarm.recurring)
+      }
+
+      if (!hasCentipedeSpawned && t - playStartT >= 60000) {
+        this.game.world.spawnEnts('centipede')
+        hasCentipedeSpawned = true
+      }
+
+      if (!hasSecondCentipedeSpawned && this.game.world.snek.segments.length >= Constants.spawnConditionals.secondCentipede.segcount) {
+        this.game.world.spawnEnts('centipede')
+        hasSecondCentipedeSpawned = true
+      }
+    }
+    // increase apple spawn rate
+    // when apple count > 5, spawn an ant for each apple
+    // when snek gets 8 segs spawn centipedes
+    // when snek has 5 segs, despawn centipede
+    // every 15sec - 1min spawn banana
+    // every ~40sec spawn mango
+    // once 40 apples eaten or snek length = 20, victory
   }
 
   spawnRandom(ents) {

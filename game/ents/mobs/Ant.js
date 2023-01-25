@@ -34,6 +34,10 @@ export default class Ant extends Mob {
     this.setHitAreas()
   }
 
+  static spawnCondition(world) {
+    return () => world.countSweets() > 4
+  }
+
   grab(ent) {
     this.carriedEnt = ent
     this.carriedEnt.parent = this
@@ -110,8 +114,6 @@ export default class Ant extends Mob {
     this.drawLegs(ctx)
     this.drawBody(ctx)
     this.drawHead(ctx)
-    // console.log(`render carriedEnt?`,this?.carriedEnt )
-    
   }
   render() {
     this.drawInitWrapper(this.headingRadians)
