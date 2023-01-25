@@ -12,7 +12,7 @@ export default {
     endConditions: {
       winByLevel: {
         WORD: 'WIN_BY_LEVEL',
-        segCount: 4
+        segCount: 12
       },
       loseByPoop: {
         WORD: 'LOSE_BY_POOP',
@@ -41,6 +41,10 @@ export default {
         WORD: 'WIN_BY_TIME_ALIVE', 
       },
     },
+  },
+
+  endConditions: {
+    frequencyMS: 200
   },
 
   events: {

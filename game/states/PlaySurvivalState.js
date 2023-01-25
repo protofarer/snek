@@ -23,7 +23,7 @@ export class PlaySurvivalState extends BaseState {
 
     this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
 
-    this.endConditionFunctions = this.game.world.interstitial.addEndConditions(this, [
+    this.game.world.interstitial.initializeEndConditions(this, [
       Constants[this.game.mode].endConditions.loseByDeath.WORD,
       Constants[this.game.mode].endConditions.loseByPoop.WORD,
       Constants[this.game.mode].endConditions.winByLevel.WORD,
@@ -33,7 +33,6 @@ export class PlaySurvivalState extends BaseState {
   update(t) {
     this.game.world.update(t)
     this.spawner?.(t)
-    this.endConditionFunctions.forEach(f => f())
   }
 
   render() {

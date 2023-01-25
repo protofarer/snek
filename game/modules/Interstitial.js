@@ -16,9 +16,7 @@ export default class Interstitial {
 
   dScore(agg, def) {
     const dPoints = def.points
-
     if (dPoints === 0) return
-
     agg.points += dPoints
     def.points -= dPoints
     this.renderProcesses.push(
@@ -26,61 +24,70 @@ export default class Interstitial {
     )
   }
 
-  addEndConditions(currentState, arrayEndWords) {
-    let endFunctions = []
-
-    if (arrayEndWords.includes(Constants[this.game.mode].endConditions.loseByDeath.WORD)) {
-      endFunctions.push(() => {
-        // catch all gameover
-        if (currentState.snek.segments.length === 0) {
-          currentState.game.stateMachine.change('gameOver', {
-            snek: currentState.game.stateMachine.current.snek,
-            score: currentState.snek.points,
-            isVictory: false
-          })
+  initializeEndConditions(currentState, arrayEndWords) {
+    if (arrayEndWords.includes(Constants[currentState.game.mode].endConditions.loseByDeath.WORD)) {
+      this.updateProcesses.push({
+        hasCompleted: false,
+        step() {
+          if (currentState.snek.segments.length === 0) {
+            this.hasCompleted = true
+            currentState.game.stateMachine.change('gameOver', {
+              snek: currentState.game.stateMachine.current.snek,
+              score: currentState.snek.points,
+              isVictory: false
+            })
+          }
         }
       })
     }
 
-    if (arrayEndWords.includes(Constants[this.game.mode].endConditions.loseByPoop.WORD)) {
-      currentState.hasCheckedPoopification = false
-      endFunctions.push(() => {
-        // poopification check every 200ms
-        if (!currentState.hasCheckedPoopification) {
-          currentState.hasCheckedPoopification = true
-          setTimeout(() => {
-            if (currentState.snek.poopExcretionCount > Constants.survival.endConditions.loseByPoop.limit) {
-              this.initializePoopification()
-            } else {
-              currentState.hasCheckedPoopification = false
+    if (arrayEndWords.includes(Constants[currentState.game.mode].endConditions.loseByPoop.WORD)) {
+      this.updateProcesses.push(
+        ((initializePoopification) => {
+          return {
+            hasCompleted: false,
+            wasRecentlyChecked: false,
+            step() {
+              if (!this.wasRecentlyChecked) {
+                this.wasRecentlyChecked = true
+                setTimeout(() => {
+                  if (currentState.snek.poopExcretionCount > Constants[currentState.game.mode].endConditions.loseByPoop.limit) {
+                    this.hasCompleted = true
+                    initializePoopification()
+                  } else {
+                    this.wasRecentlyChecked = false
+                  }
+                }, Constants.endConditions.frequencyMS)
+              }
             }
-          }, 200)
+          }
+        })(this.setupPoopification(this.updateProcesses, this.renderProcesses))
+      )
+    }
+
+    if (arrayEndWords.includes(Constants[currentState.game.mode].endConditions.winByLevel.WORD)) {
+      this.updateProcesses.push({
+        hasCompleted: false,
+        wasRecentlyChecked: false,
+        step() {
+          if (!this.wasRecentlyChecked) {
+            this.wasRecentlyChecked = true
+            setTimeout(() => {
+              if (currentState.snek.level >= Constants[currentState.game.mode].endConditions.winByLevel.segCount) {
+                this.hasCompleted = true
+                currentState.game.stateMachine.change('gameOver', {
+                  snek: currentState.game.stateMachine.current.snek,
+                  score: currentState.snek.points,
+                  isVictory: true,
+                })
+              } else {
+                this.wasRecentlyChecked = false
+              }
+            }, Constants.endConditions.frequencyMS)
+          }
         }
       })
     }
-
-    if (arrayEndWords.includes(Constants[this.game.mode].endConditions.winByLevel.WORD)) {
-      currentState.hasCheckedLevel = false
-      endFunctions.push(() => {
-        // level check every 200ms
-        if (!currentState.hasCheckedLevel) {
-          currentState.hasCheckedLevel = true
-          setTimeout(() => {
-            if (currentState.snek.level >= Constants[this.game.mode].endConditions.winByLevel.segCount) {
-              currentState.game.stateMachine.change('gameOver', {
-                snek: currentState.game.stateMachine.current.snek,
-                score: currentState.snek.points,
-                isVictory: true,
-              })
-            } else {
-              currentState.hasCheckedLevel = false
-            }
-          }, 200)
-        }
-      })
-    }
-
-    return endFunctions
   }
 
   initializeSurvivalCentSwarmCountdown() {
@@ -113,32 +120,37 @@ export default class Interstitial {
   }
 
 
-  initializePoopification() {
-    this.renderProcesses.push(
-      Animations.countdown(
-        this.ctx,
-        'You will be overpowered by the toxicity emanating \
-          from the prolifically strewn poop in:',
-        Constants[this.game.mode].endConditions.loseByPoop.warningDuration,
+  setupPoopification(updateProcesses, renderProcesses) {
+    const game = this.game
+    return () => {
+      renderProcesses.push(
+        Animations.countdown(
+          this.ctx,
+          'You will be overpowered by the toxicity emanating \
+            from the prolifically strewn poop in:',
+          Constants[game.mode].endConditions.loseByPoop.warningDuration,
+        )
       )
-    )
-    this.updateProcesses.push(((game) => {
-      let t = 0
-      return {
-        hasCompleted: false,
-        step() {
-          t += Constants.TICK
-          if (t >= Constants[game.mode].endConditions.loseByPoop.warningDuration) {
-            game.stateMachine.change('gameOver', {
-              snek: game.world.snek,
-              score: game.world.snek.points,
-              loseCondition: Constants[game.mode].endConditions.loseByPoop.WORD,
-              isVictory: false,
-            })
+  
+      updateProcesses.push((() => {
+        let t = 0
+        return {
+          hasCompleted: false,
+          step() {
+            t += Constants.TICK
+            if (t >= Constants[game.mode].endConditions.loseByPoop.warningDuration) {
+              game.stateMachine.change('gameOver', {
+                snek: game.world.snek,
+                score: game.world.snek.points,
+                loseCondition: Constants[game.mode].endConditions.loseByPoop.WORD,
+                isVictory: false,
+              })
+            }
           }
         }
-      }
-    })(this.game))
+      })())
+
+    }
   }
 
   stepRenderProcesses() {

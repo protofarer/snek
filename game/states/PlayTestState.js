@@ -28,7 +28,7 @@ export class PlayTestState extends BaseState {
       this.startT
     )
 
-    this.endConditionFunctions = this.game.world.interstitial.addEndConditions(this, [
+    this.game.world.interstitial.initializeEndConditions(this, [
       Constants.survival.endConditions.loseByDeath.WORD,
       Constants.survival.endConditions.loseByPoop.WORD,
       Constants.survival.endConditions.winByLevel.WORD,
@@ -38,7 +38,6 @@ export class PlayTestState extends BaseState {
   update(t) {
     this.game.world.update(t)
     this.levelUpdate(t)
-    this.endConditionFunctions.forEach(f => f())
   }
 
   render() {
