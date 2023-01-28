@@ -10,27 +10,20 @@ REMOTE_USER='kenny'
 REMOTE_HOST='knet'
 SSH_NICKNAME='knet'
 
+REMOTE_SERVE_DIR=/var/www/lab2.kennybaron.net/html
+REMOTE_BUILD_DIR=~/snek-build
 # REMOTE_DIR='~'
 
-ssh knet 'rm -rf ~/snek-build && mkdir -p ~/snek-build'
-# ssh knet 'mkdir -p ~/snek-build'
-
 echo "Copying to deployment site..."
-# Web stuff
-scp index.html kenny@knet:~/snek-build/index.html
-scp index.css kenny@knet:~/snek-build/index.css
-
-# Game
-GAMEBUNDLE=$(find ./dist/assets/ -regex ".*index.*\.js$")
-scp $GAMEBUNDLE kenny@knet:~/snek-build/index.js
+ssh knet 'rm -rf ~/snek-build && mkdir ~/snek-build'
+scp -r dist/* kenny@knet:"$REMOTE_BUILD_DIR"
 
 # Sounds
-case "$1" in
--s) ssh knet 'cd /var/www/lab2.kennybaron.net/html && mkdir -p game/assets/audio' && scp -r game/assets/audio/* kenny@knet:/var/www/lab2.kennybaron.net/html/game/assets/audio && echo "Sound files copied"
-;;
-esac
+# case "$1" in
+# -s) ssh knet 'cd /var/www/lab2.kennybaron.net/html && mkdir -p game/assets/audio' && scp -r game/assets/audio/* kenny@knet:/var/www/lab2.kennybaron.net/html/game/assets/audio && echo "Sound files copied"
+# ;;
+# esac
 
 echo "Deploying to virtual host..."
-ssh -t knet "cd /var/www/lab2.kennybaron.net/html \
-  && sudo rm index.js index.html index.css \
-  && sudo mv ~/snek-build/* /var/www/lab2.kennybaron.net/html/"
+ssh -t knet "sudo rm -rf $REMOTE_SERVE_DIR/* && \
+  sudo mv $REMOTE_BUILD_DIR/* $REMOTE_SERVE_DIR/"

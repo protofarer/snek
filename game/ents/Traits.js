@@ -14,8 +14,8 @@ export default {
     },
     headingDegrees: 0,
     digestion: {
-      baseTime: 3000,
-      timeLeft: 3000
+      baseTime: 10000,
+      timeLeft: 10000
     },
     underDigestionData: null,
     baseExp: 0,
@@ -45,8 +45,8 @@ export default {
     secondaryColor: 'hsl(95, 60%, 50%)',
     chompEffectWord: Constants.collisionFunction.BASE_CHOMP,
     digestion: {
-      timeLeft: 15000,
-      baseTime: 15000
+      timeLeft: 20000,
+      baseTime: 20000
     },
     postDigestionData: [
       {
@@ -135,21 +135,21 @@ export default {
     secondaryColor: 'green',
     chompEffect: Constants.collisionFunction.SMALL_CHOMP,
     digestion: {
-      timeLeft: 25000,
-      baseTime: 25000
+      timeLeft: 30000,
+      baseTime: 30000
     },
     postDigestionData: [
       {
         effect: 'turnRate',
         type: 'boolean',
         turnRate: 1,
-        duration: 30000,
-        timeLeft: 30000
+        duration: 60000,
+        timeLeft: 60000
       },
       {
         effect: 'moveSpeed',
         type: 'boolean',
-        moveSpeed: 0.5,
+        moveSpeed: 0.25,
         duration: 60000,
         timeLeft: 60000
       },

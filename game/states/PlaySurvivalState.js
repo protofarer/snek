@@ -13,15 +13,19 @@ export class PlaySurvivalState extends BaseState {
     super()
     this.game = game
     this.game.mode = 'survival'
+    this.game.phase = CONSTANTS.PHASE_PLAY
+    this.startT = this.game.t
+    this.level = 's'
 
     this.snek = params?.snek
       || new Snek(this.game.ctx, null, this.game)
     this.game.setSnek(this.snek)
 
-    this.level = params?.level ?? 's'
-    this.game.phase = CONSTANTS.PHASE_PLAY
-
-    this.spawner = this.game.levelMaker.generateLevel(this.level, this.snek)
+    this.levelUpdate = this.game.levelMaker.generateLevel(
+      this.level, 
+      this.snek,
+      this.startT
+    )
 
     this.game.world.interstitial.initializeEndConditions(this, [
       Constants[this.game.mode].endConditions.loseByDeath.WORD,
@@ -32,7 +36,7 @@ export class PlaySurvivalState extends BaseState {
 
   update(t) {
     this.game.world.update(t)
-    this.spawner?.(t)
+    this.levelUpdate(t)
   }
 
   render() {

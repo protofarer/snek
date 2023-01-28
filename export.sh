@@ -1,14 +1,11 @@
 #! /bin/bash
 
-DIR="$1"/snek
-echo $DIR
+# 1st arg: path to project's /public dir
+TARGET_DIR="$1"
 
-rm -rf $DIR
-mkdir -p $DIR
-cp index.html index.css $DIR
+rm -rf "$TARGET_DIR/"
 
-GAMEBUNDLE=$(find ./dist/assets/ -regex ".*index.*\.js$")
-cp $GAMEBUNDLE $DIR/index.js
-
-mkdir -p $DIR/game/assets/audio
-cp game/assets/audio/* $DIR/game/assets/audio
+# use vite artifacts
+LOCAL_BUILD_DIR=./dist
+rsync -av "$LOCAL_BUILD_DIR/" "$TARGET_DIR/"
+cp -r ./icons "$TARGET_DIR/icons"

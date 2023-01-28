@@ -31,9 +31,7 @@ export class StartState extends BaseState {
           break
         case 'Enter':
           if (this.modes[this.mode] === 'Survival') {
-            this.game.stateMachine.change('playSurvival', {
-              level: 's',
-            })
+            this.game.stateMachine.change('playSurvival')
           } 
           // else if (this.modes[this.mode] === 'Normal') {
           //   this.game.stateMachine.change('playNormal', {

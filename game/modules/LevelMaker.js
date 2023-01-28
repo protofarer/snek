@@ -17,11 +17,10 @@ export default class LevelMaker {
         return this.spawnLevelOne()
       case 's':
         return this.initializeSurvivalLevel(playStartT)
-      case 'd':   // debug level
-        this.initSpawnSurvival()
-        return this.initializeLevelZero(snek)
       case 't':
         return this.initializeTestLevel(playStartT)
+      case 'd':   // debug level
+        return this.initializeLevelZero(snek)
       default:
         console.error('Not a valid initial spawn levelmaker code')
     }
@@ -87,7 +86,6 @@ export default class LevelMaker {
   }
 
   initializeTestLevel(playStartT) {
-    this.initSpawnSurvival()
     this.addEnt('banana')
     this.addEnt('mango')
     this.addEnt('apple')
@@ -120,13 +118,43 @@ export default class LevelMaker {
         hasSecondCentipedeSpawned = true
       }
     }
-    // increase apple spawn rate
-    // when apple count > 5, spawn an ant for each apple
-    // when snek gets 8 segs spawn centipedes
-    // when snek has 5 segs, despawn centipede
-    // every 15sec - 1min spawn banana
-    // every ~40sec spawn mango
-    // once 40 apples eaten or snek length = 20, victory
+  }
+
+  /** Ongoing spawn behavior for survival mode
+   * @method
+   */
+  initializeSurvivalLevel(playStartT) {
+    this.spawnEnts('apple')
+
+    const intervalSpawner = this.spawnsOnInterval([
+      'apple', 'mango', 'banana', 'ant'
+    ], playStartT)
+
+    const conditionalSpawner = this.spawnsOnCondition([
+      Constants.events.antSwarm.WORD,
+    ], playStartT)
+
+    this.game.world.interstitial.initializeSurvivalCentSwarmCountdown()
+
+    // entWord and a condition to check before spawning
+    let hasCentipedeSpawned = false
+    let hasSecondCentipedeSpawned = false
+
+    return (t) => {
+      intervalSpawner(t)
+      conditionalSpawner(t)
+
+      if (!hasCentipedeSpawned && t - playStartT >= 60000) {
+        this.game.world.spawnEnts('centipede')
+        hasCentipedeSpawned = true
+      }
+
+      if (!hasSecondCentipedeSpawned && this.game.world.snek.segments.length >= Constants.spawnConditionals.secondCentipede.segcount) {
+        this.game.world.spawnEnts('centipede')
+        hasSecondCentipedeSpawned = true
+      }
+    }
+    // when snek gets 7 segs spawn centipedes
   }
 
   spawnRandom(ents) {
@@ -161,88 +189,6 @@ export default class LevelMaker {
     // this.spawnEnts(Mango, 3)
     // this.spawnEnts(Ant, 2)
     // this.spawnEnts(Centipede, 1)
-  }
-
-  /** Initial spawn for survival mode
-   * @method
-   */
-  initSpawnSurvival() {
-    this.spawnEnts('apple', 1)
-  }
-
-  /** Ongoing spawn behavior for survival mode
-   * @method
-   */
-  initializeSurvivalLevel(tPlayStart) {
-    this.initSpawnSurvival()
-    let isAppleSpawning = false
-    let isMangoSpawning = false
-    let isBananaSpawning = false
-    let hasCentipedeSpawned = false
-    let hasSecondCentipedeSpawned = false
-    let isAntSpawning = false
-    let isAntSwarmSpawning = false
-    return (t) => {
-      if (!isAppleSpawning) {
-        isAppleSpawning = true
-        setTimeout(() => { 
-          this.game.world.spawnEnts('apple')
-          isAppleSpawning = false
-        }, Constants.spawnIntervals.apple.recurring)
-      }
-      if (!isMangoSpawning) {
-        isMangoSpawning = true
-        setTimeout(() => { 
-          this.game.world.spawnEnts('mango')
-          isMangoSpawning = false
-        }, Constants.spawnIntervals.mango.recurring)
-      }
-      if (!isBananaSpawning) {
-        isBananaSpawning = true
-        setTimeout(() => { 
-          this.game.world.spawnEnts('banana')
-          isBananaSpawning = false
-        }, Constants.spawnIntervals.banana.recurring)
-      }
-      if (this.game.world.countSweets() > 4 && !isAntSpawning) {
-        this.game.world.spawnEnts('ant')
-        isAntSpawning = true
-        setTimeout(() => {
-          isAntSpawning = false
-        }, Constants.spawnIntervals.ant.recurring)
-      }
-
-      if ((this.game.world.countSweets() > 15 
-        || (t - tPlayStart) === Constants.spawnIntervals.antSwarm.initial) 
-        && !isAntSwarmSpawning
-      ) {
-        isAntSwarmSpawning = true
-        this.game.world.spawnEnts('ant', 5)
-        for (let i = 1; i < 6; ++i) {
-          setTimeout(() => this.game.world.spawnEnts('ant', 3), i*1000)
-        }
-        // setTimeout(() => {
-          // isAntSwarmSpawning = false
-        // }, Constants.spawnIntervals.antSwarm.cooldown)
-      }
-
-      if (!hasCentipedeSpawned && t - tPlayStart >= 60000) {
-        this.game.world.spawnEnts('centipede')
-        hasCentipedeSpawned = true
-      }
-
-      if (!hasSecondCentipedeSpawned && this.game.world.snek.segments.length >= Constants.spawnConditionals.secondCentipede.segcount) {
-        this.game.world.spawnEnts('centipede')
-        hasSecondCentipedeSpawned = true
-      }
-    }
-    // increase apple spawn rate
-    // when apple count > 5, spawn an ant for each apple
-    // when snek gets 8 segs spawn centipedes
-    // when snek has 5 segs, despawn centipede
-    // every 15sec - 1min spawn banana
-    // every ~40sec spawn mango
-    // once 40 apples eaten or snek length = 20, victory
   }
 }
 

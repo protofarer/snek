@@ -36,7 +36,7 @@ export default class Ant extends Mob {
   }
 
   static spawnCondition(world) {
-    return () => world.countSweets() > 4
+    return () => world.countSweets() > 3
   }
 
   static swarmListener(playStartT, world) {
@@ -58,10 +58,10 @@ export default class Ant extends Mob {
       if (t !== playStartT && tickDetected === null) {
         tickDetected = t - playStartT
       }
-      if (world.countSweets() > 5 && (t - lastSpawnT >= Constants.events.antSwarm.cooldown)) {
+      if (world.countSweets() > 9 && (t - lastSpawnT >= Constants.events.antSwarm.cooldown)) {
         lastSpawnT = t
-        world.spawnEnts('ant', 5)
-        for (let i = 1; i < 6; ++i) {
+        world.spawnEnts('ant', 4)
+        for (let i = 1; i < 4; ++i) {
           setTimeout(() => world.spawnEnts('ant', 3), i*1000*(tickDetected/Constants.TICK))
         }
       }

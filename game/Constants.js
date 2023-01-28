@@ -16,7 +16,7 @@ export default {
       },
       loseByPoop: {
         WORD: 'LOSE_BY_POOP',
-        limit: 1,
+        limit: 45,
         warningDuration: 60000,
       },
       loseByDeath: {
@@ -50,28 +50,28 @@ export default {
   events: {
     centipedeSwarm: {
       WORD: 'CENTIPEDE_SWARM',
-      initial: 7*60000,
+      initial: 5*60000,
       // initial: 10000,
       warningDuration: 60000
     },
     antSwarm: {
       WORD: 'ANT_SWARM',
-      cooldown: 30000,
+      cooldown: 60000,
     }
   },
 
   spawnIntervals: {
     apple: {
-      recurring: 2000,
+      recurring: 3500,
     },
     banana: {
       recurring: 20000,
     },
     ant: {
-      recurring: 3000,
+      recurring: 5000,
     },
     mango: {
-      recurring: 30000,
+      recurring: 40000,
     },
     centipede: {
       initial: 60000,
@@ -79,7 +79,7 @@ export default {
   },
 
   spawnConditionals: {
-    secondCentipede: { segcount: 15 },
+    secondCentipede: { segcount: 11 },
   },
 
   sweets: ['apple', 'banana', 'mango'],
