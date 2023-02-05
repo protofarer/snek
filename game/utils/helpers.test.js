@@ -8,7 +8,7 @@ describe('unit testing', () => {
     vi.restoreAllMocks()
   })
 
-  it('intrep', () => {
+  it('intRep', () => {
     // mock fn
     const n = 5
     const t = 250

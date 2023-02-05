@@ -47,7 +47,6 @@ export function setColorParameters({
   alphaStart, 
   alphaEnd 
 }) {
-  // ! Doesn't catch out of range (x < 0, x > 255)
   if (typeof hueStart === 'number' || typeof hueEnd === 'number') {
     if (typeof hueStart !== 'number' || typeof hueEnd !== 'number') {
       throw Error(`Must specify both start & end values for primaryColorParameters.hue`)
