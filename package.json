@@ -7,11 +7,15 @@
     "build": "NODE_ENV=production ~/bin/kuta.sh && vite build",
     "preview": "vite preview",
     "lint": "eslint src",
-    "export": "./export.sh ~/projects/kade/public/"
+    "export": "./export.sh ~/projects/kade/public/",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "devDependencies": {
     "eslint": "8.x",
+    "jsdom": "^21.1.0",
     "lil-gui": "0.x",
-    "vite": "3.x"
+    "vite": "3.x",
+    "vitest": "^0.28.4"
   }
 }

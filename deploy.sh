@@ -4,6 +4,7 @@
 #   noargs: Normal deploy without sounds
 #   -s: Deploys sounds along with rest of app
 
+## TODO vite build option to not include *.wav
 npm run build
 
 REMOTE_USER='kenny'

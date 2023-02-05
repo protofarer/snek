@@ -50,6 +50,18 @@ export function recycle(ent) {
  * @param {function} f 
  */
 export function intRep(n, t, f) {
+  if (!n) throw Error('intRep: missing n param')
+  if (typeof n !== 'number') throw Error('intRep: invalid n param type, must be number')
+  if (n <= 0) throw Error('intRep: invalid n param')
+
+  if (!t) throw Error('intRep: missing t param')
+  if (typeof t !== 'number') throw Error('intRep: invalid t param type, must be number')
+  if (t <= 0) throw Error('intRep: invalid t param')
+
+  if (!f) throw Error('intRep: missing f param')
+  if (typeof f !== 'function') throw Error('intRep: invalid f param, isn\'t a function')
+
+
   let i = 0
   let id
 
