@@ -4,20 +4,6 @@ import Collisions from '../behaviors/Collisions'
 import Digestion from '../behaviors/Digestion'
 
 /**
- * Returns upstream-most entity in a segment chain, including head ents
- * @function
- * @returns {Entity} upstreamSegment
- */
-export function getHead() {
-  // * For Segments
-  let upstreamSegment = this.upstreamSegment
-  while (upstreamSegment?.upstreamSegment) {
-      upstreamSegment = upstreamSegment.upstreamSegment
-  }
-  return upstreamSegment ? upstreamSegment : this
-}
-
-/**
  * Returns the topmost parent object aka game
  * @function
  * @returns Game
@@ -77,6 +63,7 @@ export function intRep(n, t, f) {
 export function loadTraits(traitObject) {
   for (let [k,v] of Object.entries(traitObject)) {
     if (typeof v === 'object') {
+      // TODO throw if any user-defined / non-prototype property is also an object, fail... until loadTraits upgraded
       const os = JSON.parse(JSON.stringify(v))
       this[k] = os
     } else {

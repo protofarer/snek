@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, vi, it } from "vitest";
-import { intRep } from "./helpers.js";
+import Traits from "../ents/Traits.js";
+import { intRep, loadTraits } from "./helpers.js";
 
 vi.useFakeTimers()
 
@@ -36,5 +37,13 @@ describe('unit testing', () => {
     expect(() => intRep(null,t,f)).toThrow()
     expect(() => intRep(n,null,f)).toThrow()
     expect(() => intRep(n,t,null)).toThrow()
+  })
+
+  it('loadTraits', () => {
+    const a = {}
+    loadTraits.call(a, Traits.Immob)
+    
+    // TODO verify loadTraits cannot "load" objects further nested within a property that is an object
+    // TODO crawl object, checking each property against the Traits[entClass] object
   })
 })

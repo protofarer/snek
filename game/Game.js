@@ -51,6 +51,7 @@ export default class Game {
     }
 
     this.loop = new Loop(this)
+    this.loop.start()
   }
 
   init() {

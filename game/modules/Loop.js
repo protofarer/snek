@@ -5,8 +5,6 @@ export default class Loop {
     this.game = game
     this.startT = null
     this.loopID = -1
-    this.start()
-
     document.addEventListener('keydown', async (e) => {
       if(e.key === 'b') {
         this.togglePause()
@@ -14,8 +12,8 @@ export default class Loop {
     })
   }
 
-  start() {
-    this.loop()
+  start(t=0) {
+    this.#loop(t)
   }
 
   play() {
@@ -24,7 +22,7 @@ export default class Loop {
       this.game.phase !== Constants.PHASE_END
     ) {
       this.game.phase = Constants.PHASE_PLAY
-      this.loopID = requestAnimationFrame(this.loop.bind(this))
+      this.loopID = requestAnimationFrame(this.#loop.bind(this))
       console.log(`%c*************** Game UnPaused ***************`,
         'color: orange')
     }
@@ -64,7 +62,9 @@ export default class Loop {
    * @property loopID - return value of requestAnimationFrame, used to stop the
    *    function 
    */
-  loop(t) {
+  #loop(t) {
+    console.log(`t`, t)
+    
     if (this.startT == undefined) {
       this.startT = t
       this.game.clock.start(t)
@@ -96,6 +96,6 @@ export default class Loop {
       this.game.render(t)
     }
 
-    this.loopID = requestAnimationFrame(this.loop.bind(this))
+    this.loopID = requestAnimationFrame(this.#loop.bind(this))
   }
 }
