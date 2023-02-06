@@ -16,7 +16,10 @@ describe('unit testing', () => {
       (
         () => {
           let i = 0 
-          return () => { console.log(++i); return i; }
+          return () => { 
+            // console.log(++i); 
+            return i; 
+          }
         }
       )()
     )

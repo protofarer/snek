@@ -2,35 +2,39 @@
  * parameters that specify how the color changes over the period of digestion 
  * @return {string} "hsl(hue, saturation, luminance)"
  */
-export function getColorParameters() { 
+export function getColorParameters(ratio) { 
   const hueString = `${
-        this.primaryColorParameters.hue.start 
-        + (this.primaryColorParameters.hue.end - this.primaryColorParameters.hue.start)
-        * (this.digestion.baseTime - this.digestion.timeLeft)
-          / this.digestion.baseTime
-      }`
-  const satString = `${
-        this.primaryColorParameters.sat.start 
-        + (this.primaryColorParameters.sat.end - this.primaryColorParameters.sat.start)
-        * (this.digestion.baseTime - this.digestion.timeLeft)
-            / this.digestion.baseTime
-      }%`
-  const lumString = `${
-        this.primaryColorParameters.lum.start
-        + (this.primaryColorParameters.lum.end - this.primaryColorParameters.lum.start)
-        * (this.digestion.baseTime - this.digestion.timeLeft)
-          / this.digestion.baseTime
-      }%`
-  let alphaString = ''
-  if (this.primaryColorParameters?.alpha) {
-    alphaString = `,${this.primaryColorParameters.alpha.start
-            + (this.primaryColorParameters.alpha.end - this.primaryColorParameters.alpha.start)
-            * (this.digestion.baseTime - this.digestion.timeLeft)
-              / this.digestion.baseTime
-        }`
+    this.primaryColorParameters.hue.start 
+    + (this.primaryColorParameters.hue.end - this.primaryColorParameters.hue.start)
+    * ratio
+    // (this.digestion.baseTime - this.digestion.timeLeft)
+    //   / this.digestion.baseTime
+  }`
 
-  }
-  return `hsl(${hueString}, ${satString}, ${lumString}${alphaString})`
+  const satString = `${
+    this.primaryColorParameters.sat.start 
+    + (this.primaryColorParameters.sat.end - this.primaryColorParameters.sat.start)
+    * ratio
+    // (this.digestion.baseTime - this.digestion.timeLeft)
+    //     / this.digestion.baseTime
+  }%`
+
+  const lumString = `${
+    this.primaryColorParameters.lum.start
+    + (this.primaryColorParameters.lum.end - this.primaryColorParameters.lum.start)
+    * ratio
+    // (this.digestion.baseTime - this.digestion.timeLeft)
+    //   / this.digestion.baseTime
+  }%`
+
+  const alphaString = `${this.primaryColorParameters.alpha.start
+    + (this.primaryColorParameters.alpha.end - this.primaryColorParameters.alpha.start)
+    * ratio
+    // (this.digestion.baseTime - this.digestion.timeLeft)
+    //   / this.digestion.baseTime
+  }`
+
+  return `hsl(${hueString}, ${satString}, ${lumString}, ${alphaString})`
 }
 
   /** Validates the colormorph parameters and sets them respectively
@@ -44,8 +48,8 @@ export function setColorParameters({
   satEnd, 
   lumStart, 
   lumEnd, 
-  alphaStart, 
-  alphaEnd 
+  alphaStart,
+  alphaEnd
 }) {
   if (typeof hueStart === 'number' || typeof hueEnd === 'number') {
     if (typeof hueStart !== 'number' || typeof hueEnd !== 'number') {
@@ -54,9 +58,9 @@ export function setColorParameters({
       throw Error(`${this.species} primaryColorParameters.hue values must be in [0,255]`)
     } else {
       this.primaryColorParameters.hue = { start: hueStart, end: hueEnd } 
-        || this.primaryColorParameters.hue
     }
   }
+
   if (typeof satStart === 'number' || typeof satEnd === 'number') {
     if (typeof satStart !== 'number' || typeof satEnd !== 'number') {
         throw Error(`Must specify both start & end values for primaryColorParameters.sat`)
@@ -64,9 +68,9 @@ export function setColorParameters({
       throw Error(`${this.species} primaryColorParameters.sat values must be in [0,100]`)
     } else {
       this.primaryColorParameters.sat = { start: satStart, end: satEnd } 
-        || this.primaryColorParameters.sat
     }
   }
+
   if (typeof lumStart === 'number' || typeof lumEnd === 'number') {
     if (typeof lumStart !== 'number' || typeof lumEnd !== 'number') {
         throw Error(`Must specify both start & end values for primaryColorParameters.lum`)
@@ -74,17 +78,16 @@ export function setColorParameters({
       throw Error(`${this.species} primaryColorParameters.lum values must be in [0,255]`)
     } else {
       this.primaryColorParameters.lum = { start: lumStart, end: lumEnd } 
-        || this.primaryColorParameters.lum
     }
   }
+
   if (typeof alphaStart === 'number' || typeof alphaEnd === 'number') {
     if (typeof alphaStart !== 'number' || typeof alphaEnd !== 'number') {
         throw Error(`Must specify both start & end values for primaryColorParameters.alpha`)
     } else if (alphaStart < 0 || alphaStart > 1 || alphaEnd < 0 || alphaEnd > 1) {
       throw Error(`${this.species} primaryColorParameters.alpha values must be in [0,1]`)
     } else {
-        this.primaryColorParameters.alpha = { start: alphaStart, end: alphaEnd } 
-          || this.primaryColorParameters.alpha
+      this.primaryColorParameters.alpha = { start: alphaStart, end: alphaEnd } 
     }
   }
 }

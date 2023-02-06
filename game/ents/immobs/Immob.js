@@ -68,7 +68,7 @@ export default class Immob extends Entity {
   primaryColorParameters = {}
   getPrimaryColor = getColorParameters.bind(this)
   setPrimaryColor = setColorParameters.bind(this)
-  get primaryColor() { return this.getPrimaryColor() }
+  get primaryColor() { return this.getPrimaryColor((this.digestion.baseTime - this.digestion.timeLeft) / this.digestion.baseTime) }
   set primaryColor({ 
     hueStart, hueEnd, satStart, satEnd, lumStart, lumEnd, alphaStart, alphaEnd 
   }) { 

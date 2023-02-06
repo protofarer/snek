@@ -26,6 +26,8 @@ export default {
       satEnd: 30,
       lumStart: 50, 
       lumEnd: 25,
+      alphaStart: 1,
+      alphaEnd: 1,
     },
     secondaryColor: ''
   },
